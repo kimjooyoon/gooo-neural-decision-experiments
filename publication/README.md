@@ -14,6 +14,15 @@ Records in this directory are separate from the immutable training/audit run:
 - `hf-publish-v1.json`: actual commit and anonymous file-verification receipt.
 - `preflight-corrections-v1.json`: two local gate integration failures fixed
   before any network mutation; no model or dataset bytes were changed.
+- `release-independent-verification-v1.json`: two byte-identical builds,
+  archive contents/checksums, model/source binding and native CLI smoke checks.
+- `github-release-v0.1.0-experimental.json`: public experimental release/tag
+  binding and anonymous SHA-256 verification of all four uploaded assets.
+
+The Go executable release is public at
+[v0.1.0-experimental](https://github.com/kimjooyoon/gooo-neural-decision-experiments/releases/tag/v0.1.0-experimental).
+It targets the frozen code commit `6d306d3aae547cb6f5bffa503303171f4145f4c0`;
+later documentation and publication receipts do not change that release.
 
 Earlier independent review records say the full bundle was not assembled at
 their review point. They remain unchanged. The publication verifier receipt

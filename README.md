@@ -32,6 +32,15 @@ verified against every allowlisted SHA-256. The publication receipt is
 `HF-MODEL-CARD.md`. This is an independent tiny-model pilot; no Laya fine-tune
 or production compiler integration is claimed.
 
+Standalone Go executables with all three model variants are available in the
+[v0.1.0-experimental release](https://github.com/kimjooyoon/gooo-neural-decision-experiments/releases/tag/v0.1.0-experimental)
+for macOS ARM64, Linux AMD64 and Linux ARM64. The release is pinned to commit
+`6d306d3aae547cb6f5bffa503303171f4145f4c0`. Two independent builds produced
+byte-identical archives; all four uploaded assets were anonymously downloaded
+and verified against their SHA-256 checksums. See the separate
+[release publication receipt](publication/github-release-v0.1.0-experimental.json)
+and [build verification](publication/release-independent-verification-v1.json).
+
 | Model | Test correct / 256 | Packed weights | Resident tensor arrays | Hot prediction, M4 |
 | --- | ---: | ---: | ---: | ---: |
 | FP32 | 256 | 50,912 B | 50,912 B | 7.86 us |
