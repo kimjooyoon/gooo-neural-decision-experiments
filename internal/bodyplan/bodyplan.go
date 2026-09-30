@@ -125,6 +125,7 @@ type Program struct {
 	slotCount       int
 	goSource        string
 	goooSource      string
+	goooBody        string
 }
 
 // Holes validates the plan and returns unique typed operator holes in
@@ -212,6 +213,7 @@ func Compile(plan Plan, choices map[string]string) (*Program, error) {
 		slotCount:       validated.slotCount,
 		goSource:        string(goSource),
 		goooSource:      goooSource,
+		goooBody:        strings.TrimSuffix(goooBody, "\n"),
 	}, nil
 }
 
@@ -220,6 +222,10 @@ func (program Program) GoSource() string { return program.goSource }
 
 // GoooSource returns the package bodyplan declaration and JSON-quoted body.
 func (program Program) GoooSource() string { return program.goooSource }
+
+// GoooBody returns the immutable compiler-owned body without replacing a
+// caller's package, declarations or stable semantic activity identity.
+func (program Program) GoooBody() string { return program.goooBody }
 
 // Evaluate executes the immutable plan with Go int64 overflow and Boolean
 // short-circuit semantics.
