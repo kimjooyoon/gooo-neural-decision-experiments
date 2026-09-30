@@ -1,0 +1,12 @@
+{
+  "schema": "gooo/typed-path-fixture-attempt/v1",
+  "status": "FAILED_BEFORE_MODEL_TRAINING_OR_NATIVE_EXECUTION",
+  "source_revision": "a0cecbcfb74887add164fde30997dead75702422",
+  "failed_checks": ["TestChooseFailsClosedForUninitializedNonNilModel", "TestValidateRejectsEveryIllTypedCandidateBeforeSelection"],
+  "cause": "The new operation/path ABI check ran before existing candidate validation and rejected an uninitialized model before its established deterministic prediction-error fallback",
+  "correction": "Validate candidates first, reject loaded non-operation contracts, and preserve the existing uninitialized-model prediction-error fallback",
+  "path_bundles_still_rejected_by_operation_selector": true,
+  "new_model_training_loops": 0,
+  "native_compiler_invocations": 0,
+  "external_provider_calls": 0
+}
