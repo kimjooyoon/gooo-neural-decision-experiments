@@ -113,7 +113,7 @@ func child(ctx context.Context, directory, program string, args ...string) (*exe
 	return cmd, stdout.Bytes(), stderr.Bytes(), stdout.Truncated || stderr.Truncated, float64(time.Since(started).Nanoseconds()) / 1e6, err
 }
 
-func executeGenerated(ctx context.Context, source, activity string, cases []testCase) ([]byte, error) {
+func executeGenerated(ctx context.Context, goBinary, source, activity string, cases []testCase) ([]byte, error) {
 	directory, err := os.MkdirTemp("", "gooo-dogfood-replay-")
 	if err != nil {
 		return nil, err
@@ -130,7 +130,7 @@ func executeGenerated(ctx context.Context, source, activity string, cases []test
 			return nil, err
 		}
 	}
-	_, stdout, stderr, truncated, _, err := child(ctx, directory, filepath.Join(runtime.GOROOT(), "bin", "go"), "test", "-count=1", "./...")
+	_, stdout, stderr, truncated, _, err := child(ctx, directory, goBinary, "test", "-count=1", "./...")
 	raw := append(append([]byte{}, stdout...), stderr...)
 	if truncated {
 		return raw, errors.New("replay output truncated")
@@ -142,7 +142,7 @@ func trace(item cell, compilerSHA string) []byte {
 	// Every IRI component below is a generated SHA, fixed identifier, or enum.
 	entity := func(kind, digest string) string { return "<urn:gooo:" + kind + ":" + digest + ">" }
 	activity := entity("generation", item.RawSHA)
-	verification := entity("verification", item.RawSHA)
+	verification := entity("verification", item.RawSHA+":"+item.VerificationSHA)
 	generated := entity("generated", item.RawSHA+":"+item.GeneratedSHA)
 	evidence := entity("evidence", item.RawSHA+":"+item.VerificationSHA)
 	agent := entity("compiler", compilerSHA)
@@ -164,12 +164,21 @@ func trace(item cell, compilerSHA string) []byte {
 func run() error {
 	binary := flag.String("compiler", "", "native Gooo executable")
 	compilerDir := flag.String("compiler-dir", "", "clean native module checkout")
+	goBinary := flag.String("go", "", "explicit Go 1.27.1 executable; required even for trimpath builds")
+	replay := flag.String("replay-only", "", "saved failed capture to adjudicate without native/model calls")
 	modelRoot := flag.String("models", "", "model bundle root; empty means deterministic baseline")
 	fixtures := flag.String("fixtures", "publication/native-tiny-body-fill-e7dc-v2/fixtures", "two disclosed regression fixtures")
 	output := flag.String("output", "", "fresh append-only output directory")
 	flag.Parse()
-	if *binary == "" || *compilerDir == "" || *output == "" || flag.NArg() != 0 {
+	if *goBinary == "" || *output == "" || flag.NArg() != 0 || (*replay == "" && (*binary == "" || *compilerDir == "")) {
 		return errors.New("compiler, compiler-dir and output are required")
+	}
+	goInfo, err := buildinfo.ReadFile(*goBinary)
+	if err != nil || goInfo.GoVersion != "go1.27.1" {
+		return errors.New("explicit Go 1.27.1 executable is required")
+	}
+	if *replay != "" {
+		return replaySaved(*replay, *fixtures, *output, *goBinary)
 	}
 	info, err := buildinfo.ReadFile(*binary)
 	if err != nil {
@@ -285,7 +294,7 @@ func run() error {
 				return err
 			}
 			ctx, cancel = context.WithTimeout(context.Background(), 30*time.Second)
-			verification, verifyErr := executeGenerated(ctx, decoded.Source, fixture.Activity, expected.Cases)
+			verification, verifyErr := executeGenerated(ctx, *goBinary, decoded.Source, fixture.Activity, expected.Cases)
 			cancel()
 			item.VerificationSHA = hash(verification)
 			if err := os.WriteFile(filepath.Join(*output, item.ID+".verification.txt"), verification, 0o644); err != nil {
