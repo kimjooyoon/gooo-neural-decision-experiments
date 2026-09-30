@@ -78,6 +78,12 @@ jobs:
           go run ./tools/package-path-model --native-review --output "$RUNNER_TEMP/path-model-reviewed-bundle"
           cmp publication/hf-typed-path-v1-reviewed/publication-manifest.json "$RUNNER_TEMP/path-model-reviewed-bundle/publication-manifest.json"
           go run ./tools/package-path-model --mode verify --bundle "$RUNNER_TEMP/path-model-reviewed-bundle" --output "$RUNNER_TEMP/path-model-reviewed-verification.json"
+          go run ./tools/package-path-model --native-direct --output "$RUNNER_TEMP/path-model-direct-bundle"
+          cmp publication/hf-typed-path-v1-native-direct/publication-manifest.json "$RUNNER_TEMP/path-model-direct-bundle/publication-manifest.json"
+          go run ./tools/package-path-model --mode verify --bundle "$RUNNER_TEMP/path-model-direct-bundle" --output "$RUNNER_TEMP/path-model-direct-verification.json"
+          go run ./tools/package-path-model --main-promotion --output "$RUNNER_TEMP/path-model-main-bundle"
+          cmp publication/hf-typed-path-v1-native-main/publication-manifest.json "$RUNNER_TEMP/path-model-main-bundle/publication-manifest.json"
+          go run ./tools/package-path-model --mode verify --bundle "$RUNNER_TEMP/path-model-main-bundle" --output "$RUNNER_TEMP/path-model-main-verification.json"
       - uses: actions/upload-artifact@v7
         with:
           name: go-model-validation
@@ -93,6 +99,8 @@ jobs:
             ${{ runner.temp }}/path-reserved-probe-tdd
             ${{ runner.temp }}/path-model-bundle-verification.json
             ${{ runner.temp }}/path-model-reviewed-verification.json
+            ${{ runner.temp }}/path-model-direct-verification.json
+            ${{ runner.temp }}/path-model-main-verification.json
           if-no-files-found: error
 
   compiler-model-dogfood:
