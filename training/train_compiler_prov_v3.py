@@ -47,7 +47,8 @@ def fit(state, xs, ys, rows, epochs, seed, qat):
     cx = torch.from_numpy(xs["calibration"]).to("mps")
     # Repeated optimization exposure is explicit, not extra unique examples.
     repair_indices = [i for i, row in enumerate(rows["train"]) if row["template_id"].startswith("compiler-repair-")]
-    indices = np.concatenate([np.arange(len(y)), np.repeat(repair_indices, 127)])
+    indices = np.concatenate([np.arange(len(y), dtype=np.int64),
+                              np.repeat(np.asarray(repair_indices, dtype=np.int64), 127)])
     rng = np.random.default_rng(seed)
     best, best_loss, history = None, float("inf"), []
     allocated_peak, driver_peak = 0, 0
