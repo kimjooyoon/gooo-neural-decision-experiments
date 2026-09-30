@@ -194,7 +194,7 @@ func validateParity(models map[string]*decision.Model, raw []byte) (map[string]a
 		var features [256]float32
 		var workspace decision.Workspace
 		var output decision.Prediction
-		if err := decision.FeaturesInto(r.Text, &features); err != nil {
+		if err := model.FeaturesInto(r.Text, &features); err != nil {
 			return nil, err
 		}
 		if err := model.PredictInto(r.Text, &workspace, &output); err != nil {

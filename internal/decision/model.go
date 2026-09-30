@@ -19,12 +19,13 @@ import (
 )
 
 const (
-	MetadataSchema     = "gooo/tiny-ir-decision-model/v1"
-	PathMetadataSchema = "gooo/tiny-path-decision-model/v1"
-	FeatureDim         = 256
-	HiddenDim          = 48
-	LabelCount         = 8
-	InputMaxBytes      = 512
+	MetadataSchema                 = "gooo/tiny-ir-decision-model/v1"
+	PathMetadataSchema             = "gooo/tiny-path-decision-model/v1"
+	PositionedIntentFeatureVersion = "positioned_intent_ngrams_v1"
+	FeatureDim                     = 256
+	HiddenDim                      = 48
+	LabelCount                     = 8
+	InputMaxBytes                  = 512
 
 	DefaultConfidenceThreshold float32 = 0.5
 )
@@ -53,6 +54,7 @@ type TensorMetadata struct {
 // by Load so a newer, unreviewed contract cannot silently change runtime rules.
 type Metadata struct {
 	Schema              string           `json:"schema"`
+	FeatureVersion      string           `json:"feature_version,omitempty"`
 	Variant             string           `json:"variant"`
 	FeatureDim          int              `json:"feature_dim"`
 	HiddenDim           int              `json:"hidden_dim"`
@@ -175,6 +177,8 @@ func Labels() [LabelCount]string { return operationLabels }
 func PathLabels() [LabelCount]string { return pathLabels }
 
 func (m *Model) Schema() string { return m.metadata.Schema }
+
+func (m *Model) FeatureVersion() string { return m.metadata.FeatureVersion }
 
 func (m *Model) Variant() string { return m.metadata.Variant }
 
@@ -428,6 +432,9 @@ func validateMetadataContract(metadata Metadata, schema string, labels [LabelCou
 	if metadata.Schema != schema || metadata.FeatureDim != FeatureDim || metadata.HiddenDim != HiddenDim || metadata.MaxBytes != InputMaxBytes {
 		return errors.New("model metadata schema or fixed dimensions do not match the supported contract")
 	}
+	if metadata.FeatureVersion != "" && (schema != PathMetadataSchema || metadata.FeatureVersion != PositionedIntentFeatureVersion) {
+		return errors.New("feature version is outside the closed model contract")
+	}
 	if metadata.Variant != "fp32" && metadata.Variant != "ptq_ternary" && metadata.Variant != "qat_ternary" {
 		return fmt.Errorf("unsupported model variant %q", metadata.Variant)
 	}
@@ -574,7 +581,7 @@ func (m *Model) PredictInto(text string, workspace *Workspace, output *Predictio
 	}
 	var candidate Prediction
 	output = &candidate
-	if err := FeaturesInto(text, &workspace.features); err != nil {
+	if err := m.FeaturesInto(text, &workspace.features); err != nil {
 		return err
 	}
 	for i := 0; i < HiddenDim; i++ {
@@ -673,6 +680,31 @@ func finiteFloat32(value float32) bool {
 // caller-owned array. It accepts only nonempty, valid UTF-8 input up to 512
 // bytes and allocates nothing on the valid path.
 func FeaturesInto(text string, output *[FeatureDim]float32) error {
+	if err := validateFeatureInput(text, output); err != nil {
+		return err
+	}
+	buildFeatures(text, output)
+	return nil
+}
+
+// FeaturesInto dispatches through the exact feature ABI bound by model metadata.
+// Legacy bundles keep their original uniform ngram semantics.
+func (m *Model) FeaturesInto(text string, output *[FeatureDim]float32) error {
+	if m == nil {
+		return errors.New("model is nil")
+	}
+	if err := validateFeatureInput(text, output); err != nil {
+		return err
+	}
+	if m.metadata.FeatureVersion == PositionedIntentFeatureVersion {
+		buildPositionedIntentFeatures(text, output)
+	} else {
+		buildFeatures(text, output)
+	}
+	return nil
+}
+
+func validateFeatureInput(text string, output *[FeatureDim]float32) error {
 	if output == nil {
 		return errors.New("feature output is required")
 	}
@@ -685,8 +717,34 @@ func FeaturesInto(text string, output *[FeatureDim]float32) error {
 	if !validUTF8(text) {
 		return errors.New("instruction is not valid UTF-8")
 	}
-	buildFeatures(text, output)
 	return nil
+}
+
+func buildPositionedIntentFeatures(text string, output *[FeatureDim]float32) {
+	clear(output[:])
+	intent, context := text, ""
+	if index := strings.LastIndex(text, "intent: "); index >= 0 {
+		context, intent = text[:index], text[index+len("intent: "):]
+	}
+	for _, width := range [2]int{2, 3} {
+		for start := 0; start+width <= len(intent); start++ {
+			bucket := start * 4 / len(intent)
+			output[bucket*64+hashNgram(intent, start, width)%64]++
+		}
+		for start := 0; start+width <= len(context); start++ {
+			output[hashNgram(context, start, width)] += 0.125
+		}
+	}
+	var squareSum float64
+	for _, value := range output {
+		squareSum += float64(value * value)
+	}
+	if squareSum > 0 {
+		scale := float32(1 / math.Sqrt(squareSum))
+		for index := range output {
+			output[index] *= scale
+		}
+	}
 }
 
 func (m *Model) PredictLabel(output *Prediction) string {

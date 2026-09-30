@@ -17,8 +17,8 @@ var Families = [5]string{pathplan.LocalReference, pathplan.AssignmentTarget, pat
 func Parameters(config int) (offset, factor int64) { return int64(config - 32), int64(2 + config%7) }
 
 func Fixture(family string, config int, intent string) (pathplan.Plan, error) {
-	if config < 0 || config >= 64 {
-		return pathplan.Plan{}, fmt.Errorf("configuration outside 0..63")
+	if config < 0 || config >= 96 {
+		return pathplan.Plan{}, fmt.Errorf("configuration outside 0..95")
 	}
 	a, b := Parameters(config)
 	input := bodyplan.Expr{Kind: bodyplan.ExprInput, Name: "input"}
@@ -85,8 +85,8 @@ func GoldLabel(family string, reverse bool) string {
 }
 
 func Oracle(family string, reverse bool, config int, input int64) (int64, error) {
-	if config < 0 || config >= 64 {
-		return 0, fmt.Errorf("configuration outside 0..63")
+	if config < 0 || config >= 96 {
+		return 0, fmt.Errorf("configuration outside 0..95")
 	}
 	a, b := Parameters(config)
 	switch family {
@@ -128,6 +128,44 @@ func Oracle(family string, reverse bool, config int, input int64) (int64, error)
 	default:
 		return 0, fmt.Errorf("unknown structural family")
 	}
+}
+
+// ProbeInstruction is reserved for configurations 64..95 and new templates.
+// These examples are never included in training/checkpoint calibration.
+func ProbeInstruction(family string, reverse bool, config int, language string) (string, error) {
+	if config < 64 || config >= 96 || language != "en" && language != "ko" {
+		return "", fmt.Errorf("probe outside reserved group")
+	}
+	var en, ko [2]string
+	switch family {
+	case pathplan.LocalReference:
+		en = [2]string{"Take the sum of both locals and add another copy of the first one.", "Take the sum of both locals and add another copy of the second one."}
+		ko = [2]string{"두 지역 변수의 합에 첫째 변수 값을 추가로 합친다.", "두 지역 변수의 합에 둘째 변수 값을 추가로 합친다."}
+	case pathplan.AssignmentTarget:
+		en = [2]string{"Send the update into the first variable and leave the other as it is.", "Send the update into the second variable and leave the other as it is."}
+		ko = [2]string{"첫째 변수만 새 값으로 갱신하고 나머지 변수는 그대로 둔다.", "둘째 변수만 새 값으로 갱신하고 나머지 변수는 그대로 둔다."}
+	case pathplan.OperandOrder:
+		en = [2]string{"Subtract the offset from the input.", "Subtract the input from the offset."}
+		ko = [2]string{"입력값에서 오프셋을 차감한다.", "오프셋에서 입력값을 차감한다."}
+	case pathplan.BranchLayout:
+		en = [2]string{"When the comparison holds use multiplication, otherwise use addition.", "When the comparison holds use addition, otherwise use multiplication."}
+		ko = [2]string{"조건을 만족하면 곱하고, 그렇지 않으면 더한다.", "조건을 만족하면 더하고, 그렇지 않으면 곱한다."}
+	case pathplan.RootOrder:
+		en = [2]string{"Execute the first variable update, followed by the second.", "Execute the second variable update, followed by the first."}
+		ko = [2]string{"첫째 변수 갱신을 끝낸 다음 둘째 변수 갱신에 착수한다.", "둘째 변수 갱신을 끝낸 다음 첫째 변수 갱신에 착수한다."}
+	default:
+		return "", fmt.Errorf("unknown probe structural family")
+	}
+	index := 0
+	if reverse {
+		index = 1
+	}
+	text := en[index]
+	if language == "ko" {
+		text = ko[index]
+	}
+	a, b := Parameters(config)
+	return fmt.Sprintf("%s [offset=%d; factor=%d; updated_offset=%d]", text, a, b, a+7), nil
 }
 
 func Inputs(config int) []int64 {

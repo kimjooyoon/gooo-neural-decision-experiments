@@ -1,0 +1,21 @@
+{
+  "schema": "gooo/positioned-path-study-plan/v1",
+  "basis": "Uniform byte-ngram counts collapse some opposing assignment-order instructions into identical feature vectors",
+  "feature_version": "positioned_intent_ngrams_v1",
+  "feature_layout": "Four relative-position buckets of 64 features for intent; context ngrams contribute weight 0.125; one normalized flat 256-float array",
+  "training_configurations": [0, 39],
+  "calibration_configurations": [40, 47],
+  "reused_development_test_configurations": [48, 63],
+  "reused_test_is_untouched_holdout": false,
+  "planned_initializations": ["hidden_transfer", "random"],
+  "epochs_per_fp32_and_qat_loop": 60,
+  "parent_initialization_coordinate_semantics_preserved": false,
+  "recommendation_selection": "Calibration NLL only; probe and reused development test excluded",
+  "new_probe_configurations": [64, 95],
+  "new_probe_templates": "Reserved ProbeInstruction English/Korean templates",
+  "planned_new_probe_unique_program_configurations": 320,
+  "planned_new_probe_original_instructions": 640,
+  "planned_new_probe_views": 1920,
+  "probe_materialization_and_evaluation_after_models_frozen": true,
+  "external_provider_calls_planned": 0
+}

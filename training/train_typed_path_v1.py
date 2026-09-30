@@ -3,6 +3,7 @@
 import argparse
 import copy
 import json
+import math
 from pathlib import Path
 
 import numpy as np
@@ -14,6 +15,27 @@ PATH_LABELS = ["reference_first", "reference_second", "assign_first", "assign_se
                "layout_forward", "layout_reverse", "schedule_forward", "schedule_reverse"]
 OLD_LABELS = list(core.LABELS)
 core.LABELS = PATH_LABELS
+
+
+def positioned_features(text):
+    raw = text.encode("utf-8")
+    core.require(1 <= len(raw) <= 512, "bounded positioned feature input")
+    marker = raw.rfind(b"intent: ")
+    raw = bytes(c + 32 if 65 <= c <= 90 else c for c in raw)
+    context, intent = (raw[:marker], raw[marker + 8:]) if marker >= 0 else (b"", raw)
+    counts = np.zeros(256, dtype=np.float32)
+    for width in (2, 3):
+        for data, weight, positioned in ((intent, 1.0, True), (context, 0.125, False)):
+            for start in range(max(0, len(data) - width + 1)):
+                value = 2166136261
+                for c in data[start:start + width]:
+                    value = ((value ^ c) * 16777619) & 0xffffffff
+                index = (start * 4 // len(data)) * 64 + value % 64 if positioned else value % 256
+                counts[index] += np.float32(weight)
+    norm = math.sqrt(sum(float(c) ** 2 for c in counts))
+    if norm:
+        counts *= np.float32(1 / norm)
+    return counts
 
 
 def transferred_state(parent, seed):
@@ -47,6 +69,8 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--epochs", type=int, default=60)
     parser.add_argument("--seed", type=int, default=20261002)
+    parser.add_argument("--feature-version", choices=("uniform", "positioned_intent_ngrams_v1"), default="uniform")
+    parser.add_argument("--initialization", choices=("hidden_transfer", "random"), default="hidden_transfer")
     args = parser.parse_args()
     core.require(1 <= args.epochs <= 120 and torch.backends.mps.is_available(), "bounded epochs and MPS GPU required")
     core.require(not args.output.exists(), "output must be fresh")
@@ -74,9 +98,16 @@ def main():
     root = Path(__file__).resolve().parents[1]
     for path, expected in manifest["generator_source_sha256"].items():
         core.require(core.sha((root / path).read_bytes()) == expected, "generator source drift")
-    xs = {key: np.stack([core.features(r["text"]) for r in value]) for key, value in rows.items()}
+    feature_fn = positioned_features if args.feature_version != "uniform" else core.features
+    xs = {key: np.stack([feature_fn(r["text"]) for r in value]) for key, value in rows.items()}
     ys = {key: np.array([PATH_LABELS.index(r["label"]) for r in value], dtype=np.int64) for key, value in rows.items()}
     initial, parent = transferred_state(args.parent, args.seed)
+    if args.initialization == "random":
+        torch.manual_seed(args.seed)
+        initial = core.Model().state_dict()
+        parent.update(transferred_tensors=[], initialized_from_parent=False)
+    else:
+        parent["initialized_from_parent"] = True
     args.output.mkdir(parents=True)
     sources = {path: core.sha((root / path).read_bytes()) for path in
                ("training/train_typed_path_v1.py", "training/train_compiler_prov_v3.py", "training/train_pilot_v2.py")}
@@ -84,7 +115,9 @@ def main():
         "schema": "gooo/typed-path-training-preexecution/v1", "dataset_sha256": core.sha(raw), "manifest_sha256": core.sha(manifest_raw),
         "parent": parent, "training_sources_sha256": sources, "epochs_per_variant": args.epochs, "seed": args.seed,
         "device": "mps", "torch": torch.__version__, "numpy": np.__version__, "test_used_for_training_or_checkpoint_selection": False,
-        "contract": "Separate structural ABI; parent feature layer transfer, new output head, no old operation-label reinterpretation",
+        "feature_version": args.feature_version, "initialization": args.initialization,
+        "contract": "Separate structural ABI and new head. Positioned features change input-coordinate semantics; transferring the old hidden tensors is an initialization experiment, not an equivalent feature-layer reuse.",
+        "development_test_disclosure": "The original uniform experiment's test results informed this representation change; reused 960 views are development evaluation, not an untouched final holdout",
         "split_counts": manifest["rows"], "unique_test_instructions": 320, "unique_test_program_configurations": 160})
     torch.set_num_threads(2)
     models, training = {}, {}
@@ -101,6 +134,8 @@ def main():
         temperature, threshold = core.calibrate(core.exported_logits(directory, xs["calibration"]), ys["calibration"])
         metadata = json.loads((directory / "model.json").read_text())
         metadata.update(schema="gooo/tiny-path-decision-model/v1", temperature=temperature, confidence_threshold=threshold)
+        if args.feature_version != "uniform":
+            metadata["feature_version"] = args.feature_version
         core.save_json(directory / "model.json", metadata)
         results[variant] = {"scores": {key: core.scores(core.exported_logits(directory, value), ys[key], temperature) for key, value in xs.items()},
                             "temperature": temperature, "confidence_threshold": threshold, "weights_bytes": (directory / "weights.bin").stat().st_size,
@@ -117,6 +152,7 @@ def main():
     report = {"schema": "gooo/typed-path-training-report/v1", "status": "TRAINED_AND_EXPORTED", "preexecution_sha256": core.sha((args.output / "preexecution.json").read_bytes()),
               "training": training, "variants": results,
               "limitations": ["960 test views represent 320 instructions and 160 structural program configurations",
+                              "Uniform-model test results informed representation development; repeated evaluation is not an untouched final holdout",
                               "Synthetic templates and numerical configurations are disjoint; arbitrary natural language remains unmeasured",
                               "PROV-O context is vocabulary conditioning, not an OWL reasoner",
                               "Structural selection does not generate new identifiers or arbitrary source fragments",
