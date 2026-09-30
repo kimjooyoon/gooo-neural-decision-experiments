@@ -47,6 +47,21 @@ audit makes separate adaptive prediction loops. Go-only adjudication invokes
 no native compiler or model. The six model cells use two known repair-training
 intents under three variants, not six unseen tasks.
 
+Those counts describe the local training iteration. The independent Linux CI
+run [36759253245](https://github.com/kimjooyoon/gooo-neural-decision-experiments/actions/runs/36759253245)
+at source `e04eeb36f9679ac80be26785aef9fc102dde58bf` separately made six native
+model invocations and two disconnected invocations, passing 36/36 and 12/12
+finite generated-Go cases. All three CI jobs passed. Each subsequent CI run
+repeats its own cohort; it is not included in the 14 local invocation count.
+The path-neutral [CI reports](../publication/compiler-prov-v2-ci-e04/) retain
+their own compiler/toolchain bindings and resources.
+
+The HF bundle is public at immutable revision
+`0635717235c38a15b444f020283768c6122a6cb1`. A Go verifier sent no credentials,
+checked the public repository inventory, and fetched all 23 allowlisted files
+against the local SHA-256 and byte counts. See the
+[anonymous verification receipt](../publication/hf-compiler-prov-v2-public-verification.json).
+
 ## Measurements
 
 The two 60-epoch MPS optimization loops took 1.824 and 1.323 seconds. End-of-epoch
