@@ -118,6 +118,12 @@ jobs:
           task_go_bin=$(command -v go)
           "$RUNNER_TEMP/compiler-dogfood" --compiler "$RUNNER_TEMP/gooo-native-tiny" --compiler-dir "$GITHUB_WORKSPACE/.native-tiny" --go "$task_go_bin" --models runs/compiler-prov-v3-mps-20261001/models --output "$RUNNER_TEMP/compiler-dogfood-model"
           "$RUNNER_TEMP/compiler-dogfood" --compiler "$RUNNER_TEMP/gooo-native-tiny" --compiler-dir "$GITHUB_WORKSPACE/.native-tiny" --go "$task_go_bin" --output "$RUNNER_TEMP/compiler-dogfood-offline"
+      - name: Replay saved bilingual structural paths through native codegen and Go
+        run: |
+          task_go_bin=$(command -v go)
+          task_go_sha=$(sha256sum "$task_go_bin" | cut -d ' ' -f 1)
+          task_native_sha=$(sha256sum "$RUNNER_TEMP/gooo-native-tiny" | cut -d ' ' -f 1)
+          go run ./tools/replay-path-probe --compiler "$RUNNER_TEMP/gooo-native-tiny" --compiler-sha "$task_native_sha" --go "$task_go_bin" --go-sha "$task_go_sha" --output "$RUNNER_TEMP/path-native-replay" --source-revision "$GITHUB_SHA"
       - uses: actions/upload-artifact@v7
         if: always()
         with:
@@ -125,6 +131,7 @@ jobs:
           path: |
             ${{ runner.temp }}/compiler-dogfood-model
             ${{ runner.temp }}/compiler-dogfood-offline
+            ${{ runner.temp }}/path-native-replay
           if-no-files-found: error
 
   native-body-integration:
