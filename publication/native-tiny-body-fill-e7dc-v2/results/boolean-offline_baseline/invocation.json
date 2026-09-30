@@ -1,0 +1,372 @@
+{
+  "schema": "gooo/native-tiny-go-body-smoke/v2",
+  "status": "CAPTURED_WITH_VALIDATION_ERRORS",
+  "execution_mode": "offline_baseline",
+  "fixture_id": "boolean",
+  "activity": "BooleanHole",
+  "fixture_file": "boolean.gooo",
+  "fixture_sha256": "1b2e12bc510ec7215f49e84b23cc00e4da3adadd7244030596671d7cb78af6f1",
+  "plan_file": "boolean.plan.json",
+  "plan_file_sha256": "a3f68051f964ee8b2917879e7fcec1d81b0c5bec20a975b2344410b08898e694",
+  "plan_semantic_sha256": "773eea8ffd8ae1f1ed7e1327edd91f0a6c535a89ea90fd95ee5061a15674a1b6",
+  "run_plan_sha256": "1c5a86b321eacf9549d03f4b7df2c94f8ea8171b7dbb04f384094895869c3a58",
+  "compiler_source_sha256_expected": "e7dc8198600f27fa3d6fc07d2a8fd8b6a4af3b27",
+  "compiler_source_sha256_observed": "e7dc8198600f27fa3d6fc07d2a8fd8b6a4af3b27",
+  "cli_binary_sha256_expected": "5e7f75badf8079d15d971bc05f65c08516a9b79c4bb0539036ccb318c093f79c",
+  "cli_binary_sha256_observed": "5e7f75badf8079d15d971bc05f65c08516a9b79c4bb0539036ccb318c093f79c",
+  "cli_binary_sha256_after": "5e7f75badf8079d15d971bc05f65c08516a9b79c4bb0539036ccb318c093f79c",
+  "runner_source_sha256": "a23c785113a4eacec67c29317e1091af2a655b50e87b2ad871079a88a4e9ffeb",
+  "runner_source_file": "capture.go",
+  "runner_binary_sha256": "fe1b55cc8cd513e40d8d6bba22d4746c59c256df4b66f698c87dff6b76fac7a6",
+  "runner_source_bytes": 46703,
+  "model_variant": "",
+  "model_metadata_sha256": "",
+  "model_metadata_sha256_after": "",
+  "model_weights_sha256": "",
+  "model_weights_sha256_after": "",
+  "model_weights_bytes": 0,
+  "model_metadata_file": "",
+  "laya_url_child_environment": "unset",
+  "laya_key_child_environment": "unset",
+  "child_count": 1,
+  "child_timeout_ms": 30000,
+  "path_neutral_command": [
+    "gooo",
+    "body-codegen",
+    "--json",
+    "--fill-plan",
+    "boolean.plan.json",
+    "--activity",
+    "BooleanHole",
+    "boolean.gooo"
+  ],
+  "exit_code": 0,
+  "cli_active_wall_ms": 6.662125,
+  "child_user_cpu_ms": 3.589,
+  "child_system_cpu_ms": 2.064,
+  "child_max_rss": 16662528,
+  "child_max_rss_unit": "bytes",
+  "resource_scope": "one native gooo body-codegen child only; model metadata/weights are hashed before child timing when tiny_go; RUSAGE_CHILDREN CPU is delta around this sole child; max RSS belongs to this sole child",
+  "stdout_bytes": 17721,
+  "stdout_sha256": "2f97171eaec06056b7f24f6c088b5d0d29f6a78a1ab35c30af7cf2ed00e93eea",
+  "stderr_bytes": 0,
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "validation_errors": [
+    "offline baseline completeness scope is not deterministic and local",
+    "completeness receipt counts tiny_go as a Laya decision"
+  ],
+  "decision": {
+    "provider": "deterministic",
+    "mode": "deterministic_fallback",
+    "fallback_reason": "NOT_CONFIGURED",
+    "proposed_candidate_id": "less_than",
+    "proposed_accuracy_percent": 83.33333333333333,
+    "proposed_score_semantics": "deterministic_no_model_fallback_score",
+    "selected_candidate_id": "less_equal",
+    "best_candidate_id": "less_equal",
+    "best_candidate_accuracy_percent": 100,
+    "selection_regret_percentage_points": 16.66666666666667,
+    "selection_adjustment": "replaced_with_best_scoring_candidate",
+    "tiny_go_variant": "",
+    "tiny_go_weights_sha256": "",
+    "tiny_go_metadata_sha256": "",
+    "request_sha256": "sha256:e0ed1a3bcd9690b0871eafc46ba788b29dc9396910fe05d772862f522b7863c7",
+    "local_model_predictions": 0,
+    "external_provider_calls": 0,
+    "external_provider_calls_known": true,
+    "tiny_decision_ms": 0,
+    "bodycodegen_total_ms": 0.712333
+  },
+  "gold_operation": "less_equal",
+  "finite_suite": {
+    "cases": [
+      {
+        "input": -9223372036854775808,
+        "expected": 2
+      },
+      {
+        "input": -7,
+        "expected": 2
+      },
+      {
+        "input": -1,
+        "expected": 2
+      },
+      {
+        "input": 0,
+        "expected": 2
+      },
+      {
+        "input": 1,
+        "expected": 0
+      },
+      {
+        "input": 9223372036854775807,
+        "expected": 0
+      }
+    ],
+    "candidate_scores": [
+      {
+        "id": "less_than",
+        "expression": "input \u003c 0",
+        "typecheck_passed": true,
+        "test_cases_passed": 5,
+        "test_cases_total": 6,
+        "accuracy_percent": 83.33333333333333
+      },
+      {
+        "id": "less_equal",
+        "expression": "input \u003c= 0",
+        "typecheck_passed": true,
+        "test_cases_passed": 6,
+        "test_cases_total": 6,
+        "accuracy_percent": 100
+      },
+      {
+        "id": "equal",
+        "expression": "input == 0",
+        "typecheck_passed": true,
+        "test_cases_passed": 3,
+        "test_cases_total": 6,
+        "accuracy_percent": 50
+      }
+    ],
+    "reported_selected_case_results": [
+      {
+        "input": -9223372036854775808,
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      },
+      {
+        "input": -7,
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      },
+      {
+        "input": -1,
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      },
+      {
+        "input": 0,
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      },
+      {
+        "input": 1,
+        "expected": 0,
+        "actual": 0,
+        "passed": true
+      },
+      {
+        "input": 9223372036854775807,
+        "expected": 0,
+        "actual": 0,
+        "passed": true
+      }
+    ],
+    "independent_candidate_scores": [
+      {
+        "id": "less_than",
+        "expression": "input \u003c 0",
+        "passed": 5,
+        "total": 6
+      },
+      {
+        "id": "less_equal",
+        "expression": "input \u003c= 0",
+        "passed": 6,
+        "total": 6
+      },
+      {
+        "id": "equal",
+        "expression": "input == 0",
+        "passed": 3,
+        "total": 6
+      }
+    ],
+    "independent_selected_case_results": [
+      {
+        "input": -9223372036854775808,
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      },
+      {
+        "input": -7,
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      },
+      {
+        "input": -1,
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      },
+      {
+        "input": 0,
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      },
+      {
+        "input": 1,
+        "expected": 0,
+        "actual": 0,
+        "passed": true
+      },
+      {
+        "input": 9223372036854775807,
+        "expected": 0,
+        "actual": 0,
+        "passed": true
+      }
+    ],
+    "selected_cases_passed": 6,
+    "selected_cases_total": 6,
+    "functional_accuracy_percent": 100
+  },
+  "completeness": {
+    "decision_provider": "deterministic",
+    "laya_provider": "deterministic",
+    "dimensions": [
+      {
+        "id": "declaration_coverage",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      },
+      {
+        "id": "generation_coverage",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      },
+      {
+        "id": "source_ast_coverage",
+        "status": "PASS",
+        "numerator": 25,
+        "denominator": 25
+      },
+      {
+        "id": "route_semantic_equivalence",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      },
+      {
+        "id": "typecheck_coverage",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      },
+      {
+        "id": "internal_replay_coverage",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      },
+      {
+        "id": "route_choice_protocol",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      },
+      {
+        "id": "provenance_integrity",
+        "status": "PASS",
+        "numerator": 8,
+        "denominator": 8
+      },
+      {
+        "id": "repository_write_boundary",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      },
+      {
+        "id": "execution_boundary",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      {
+        "id": "permission_boundary",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      {
+        "id": "external_network_boundary",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      },
+      {
+        "id": "laya_decision_observation",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      {
+        "id": "use_case_coverage",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      {
+        "id": "reverse_observation_coverage",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      {
+        "id": "full_domain_semantics",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      {
+        "id": "route_quality",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      {
+        "id": "resource_observation",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      {
+        "id": "resource_baseline_comparison",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      {
+        "id": "semantic_profile_delta",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      {
+        "id": "declared_suite_functional_accuracy",
+        "status": "PASS",
+        "numerator": 6,
+        "denominator": 6
+      },
+      {
+        "id": "provider_execution_accounting",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      }
+    ]
+  }
+}

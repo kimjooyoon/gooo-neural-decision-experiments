@@ -1,0 +1,113 @@
+{
+  "schema": "gooo/native-tiny-go-offline-baseline-audit/v1",
+  "status": "PREFLIGHT_REJECTED_NO_GENERATED_COMPILE",
+  "auditor_source_sha256": "0d047afdd95e753a3f64832cbe1d67a09f168fbced67a0530baf030b1173b414",
+  "auditor_binary_sha256": "a351a913a89f004a554aba2377ea362cd89ce52a0002211a93444a10af804297",
+  "capture_runner_source_sha256": "a23c785113a4eacec67c29317e1091af2a655b50e87b2ad871079a88a4e9ffeb",
+  "capture_runner_binary_sha256": "fe1b55cc8cd513e40d8d6bba22d4746c59c256df4b66f698c87dff6b76fac7a6",
+  "base_replay_runner_source_sha256": "d3aa7f2e07c681203fc57b40cea94d3bac468f579189bf9428fc932ec997174d",
+  "base_replay_runner_binary_sha256": "3e5fd623e3f5f5d960b7821c75f23bb1eb3d90fe94ad43282290649bf58783d0",
+  "compiler_source_sha256": "e7dc8198600f27fa3d6fc07d2a8fd8b6a4af3b27",
+  "cli_binary_sha256": "5e7f75badf8079d15d971bc05f65c08516a9b79c4bb0539036ccb318c093f79c",
+  "run_plan_sha256": "1c5a86b321eacf9549d03f4b7df2c94f8ea8171b7dbb04f384094895869c3a58",
+  "go_version": "go version go1.27.0 darwin/arm64",
+  "planned_cells": 2,
+  "observed_cells": 0,
+  "passed_cells": 0,
+  "cases_planned": 12,
+  "cases_observed": 0,
+  "cases_passed": 0,
+  "cases_failed": 0,
+  "cases_unknown_from_planned_denominator": 0,
+  "preflight_status": "PASS_EXACT_KNOWN_COMPLETENESS_MISMATCH",
+  "preflight_errors": [],
+  "capture_summary_sha256": "405f782ee8866be0bf6b2f4e342b2a6986783295d653436fe95a8bb566dd3e57",
+  "scope": "adjudicate only the two saved offline_baseline rows that have exactly the known completeness-validator mismatch; independently verify raw no-provider route and completeness, then compile and execute their generated Go against six frozen finite cases each; no model, native CLI, or provider calls",
+  "cells": null,
+  "preflight_cells": [
+    {
+      "cell_id": "arithmetic-offline_baseline",
+      "fixture_id": "arithmetic",
+      "capture_status": "CAPTURED_WITH_VALIDATION_ERRORS",
+      "known_validation_errors": [
+        "offline baseline completeness scope is not deterministic and local",
+        "completeness receipt counts tiny_go as a Laya decision"
+      ],
+      "wrapper_exit_code": -1,
+      "cli_exit_code": 0,
+      "raw_cli_sha256": "f385945693c3af25c259d7abec8297af2204adf82f8d11ea0c3dc665517341b1",
+      "capture_receipt_sha256": "6e6fe9dd834b6164ec50fed0d20cf56abc9b7b20dbe6d4f9ca3e2cd0ac2795d4",
+      "fixture_sha256": "7896b7f65db047bf077a03920901ff4487576582896f492fabe5d1fc82c1d748",
+      "plan_file_sha256": "685b22ffb073ad0e8fb597bd008ecbf7dd7696137d3a2e0d9418ab25ee7468e5",
+      "plan_semantic_sha256": "edd319c1f8e85a1d9e28455d5f118c188594d7d3400d53768f343324b39d6aaf",
+      "generated_source_sha256": "bedff51d4d1a575e51e393af7ff4e77bf7017b989ada4592e36b1d4be58e1a1b",
+      "laya_provider": "deterministic",
+      "laya_decision_observation": {
+        "id": "laya_decision_observation",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      "external_network_boundary": {
+        "id": "external_network_boundary",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      },
+      "provider_execution_accounting": {
+        "id": "provider_execution_accounting",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      },
+      "local_model_predictions": 0,
+      "external_provider_calls": 0,
+      "external_provider_calls_known": true,
+      "proposed_candidate_id": "",
+      "selected_candidate_id": "",
+      "errors": null
+    },
+    {
+      "cell_id": "boolean-offline_baseline",
+      "fixture_id": "boolean",
+      "capture_status": "CAPTURED_WITH_VALIDATION_ERRORS",
+      "known_validation_errors": [
+        "offline baseline completeness scope is not deterministic and local",
+        "completeness receipt counts tiny_go as a Laya decision"
+      ],
+      "wrapper_exit_code": -1,
+      "cli_exit_code": 0,
+      "raw_cli_sha256": "2f97171eaec06056b7f24f6c088b5d0d29f6a78a1ab35c30af7cf2ed00e93eea",
+      "capture_receipt_sha256": "35a0e5db1d565bba2d78a96cfdcc531a97c0e542a58f79ee28ccc7f2b88c431e",
+      "fixture_sha256": "1b2e12bc510ec7215f49e84b23cc00e4da3adadd7244030596671d7cb78af6f1",
+      "plan_file_sha256": "a3f68051f964ee8b2917879e7fcec1d81b0c5bec20a975b2344410b08898e694",
+      "plan_semantic_sha256": "773eea8ffd8ae1f1ed7e1327edd91f0a6c535a89ea90fd95ee5061a15674a1b6",
+      "generated_source_sha256": "d10295d4d643348152cf2f7656c1558db4feb1b801c615360c273b69b65ceb9f",
+      "laya_provider": "deterministic",
+      "laya_decision_observation": {
+        "id": "laya_decision_observation",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      "external_network_boundary": {
+        "id": "external_network_boundary",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      },
+      "provider_execution_accounting": {
+        "id": "provider_execution_accounting",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      },
+      "local_model_predictions": 0,
+      "external_provider_calls": 0,
+      "external_provider_calls_known": true,
+      "proposed_candidate_id": "",
+      "selected_candidate_id": "",
+      "errors": null
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "schema": "gooo/body-codegen-ir-fill-plan/v1",
+  "intent": "Add the input and two before the conditional adjustment.",
+  "hole_id": "arithmetic",
+  "candidates": [
+    {"id": "sum", "expression": "input + 2"},
+    {"id": "difference", "expression": "input - 2"},
+    {"id": "product", "expression": "input * 2"}
+  ],
+  "test_cases": [
+    {"input": -9223372036854775808, "expected": -9223372036854775804},
+    {"input": -9, "expected": -5},
+    {"input": -1, "expected": 3},
+    {"input": 0, "expected": 2},
+    {"input": 6, "expected": 8},
+    {"input": 9223372036854775807, "expected": -9223372036854775807}
+  ]
+}

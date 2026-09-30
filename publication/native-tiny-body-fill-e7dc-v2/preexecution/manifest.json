@@ -1,0 +1,166 @@
+{
+  "schema": "gooo/native-tiny-go-smoke-preexecution/v2",
+  "run_state": "capture_authorized_before_first_cell",
+  "native_source_commit": "e7dc8198600f27fa3d6fc07d2a8fd8b6a4af3b27",
+  "native_cli_binary_sha256": "5e7f75badf8079d15d971bc05f65c08516a9b79c4bb0539036ccb318c093f79c",
+  "actual_native_cli_calls": 0,
+  "actual_model_calls": 0,
+  "actual_external_provider_calls": 0,
+  "planned_native_cli_calls": 8,
+  "planned_model_predictions": 6,
+  "planned_offline_baselines": 2,
+  "planned_warmups": 0,
+  "planned_retries": 0,
+  "go_version": "go version go1.27.0 darwin/arm64",
+  "frozen_run_plan_sha256": "1c5a86b321eacf9549d03f4b7df2c94f8ea8171b7dbb04f384094895869c3a58",
+  "capture_runner_source_sha256": "a23c785113a4eacec67c29317e1091af2a655b50e87b2ad871079a88a4e9ffeb",
+  "capture_runner_binary_sha256": "fe1b55cc8cd513e40d8d6bba22d4746c59c256df4b66f698c87dff6b76fac7a6",
+  "replay_runner_source_sha256": "d3aa7f2e07c681203fc57b40cea94d3bac468f579189bf9428fc932ec997174d",
+  "replay_runner_binary_sha256": "3e5fd623e3f5f5d960b7821c75f23bb1eb3d90fe94ad43282290649bf58783d0",
+  "runner_test_source_sha256": {
+    "capture_test.go": "d8e710681ac6e42f0719a0e28c0392b0934d1d888838f2693a0a4481b32dcbb2",
+    "replay_test.go": "78e2a319385512dee18766d197b335d5d222e29297ff78d39b1dc2e671bec27c"
+  },
+  "preexecution_runner_source_archive": "source/",
+  "source_archive_matches_working_sources": true,
+  "superseded_runner_drafts": [
+    {
+      "manifest_path": "superseded-draft-v1/manifest.json",
+      "manifest_sha256": "1c74ef96dcea6c58c716c9845368e09bb107e50393f2d348e4f01b0a51e7ba51",
+      "reason": "replay receipt was extended to independently record mapped proposal score and final observed accuracy; no native calls occurred under the draft"
+    },
+    {
+      "manifest_path": "superseded-draft-v2/manifest.json",
+      "manifest_sha256": "350a5cc508d97d25db55fe93f9f84af502fb36779ca180fb54461c5b3bf50dcf",
+      "reason": "replay summary now keeps the planned 48-case denominator when capture is missing or invalid; no native calls occurred under the draft"
+    },
+    {
+      "manifest_path": "superseded-draft-v3/manifest.json",
+      "manifest_sha256": "9b6fdee65a4936483b6776ef86374c9fb0c2ea2cab127e7c5f428c7118d913dc",
+      "reason": "before-call draft preserved when review required per-cell denominator initialization before mkdir and exact frozen run-plan model bundle pins in capture and replay; zero native/model calls"
+    }
+  ],
+  "old_v1_run_untouched": true,
+  "files": {
+    "README.md": {
+      "bytes": 4746,
+      "sha256": "ca281520e22dd5d4e3a618d1848b29d3dcdcf64de5b9b7492e8e50b9a30d1dab"
+    },
+    "capture-runner": {
+      "bytes": 4479218,
+      "sha256": "fe1b55cc8cd513e40d8d6bba22d4746c59c256df4b66f698c87dff6b76fac7a6"
+    },
+    "capture.go": {
+      "bytes": 46703,
+      "sha256": "a23c785113a4eacec67c29317e1091af2a655b50e87b2ad871079a88a4e9ffeb"
+    },
+    "capture_test.go": {
+      "bytes": 1929,
+      "sha256": "d8e710681ac6e42f0719a0e28c0392b0934d1d888838f2693a0a4481b32dcbb2"
+    },
+    "fixtures/arithmetic.gooo": {
+      "bytes": 296,
+      "sha256": "7896b7f65db047bf077a03920901ff4487576582896f492fabe5d1fc82c1d748"
+    },
+    "fixtures/arithmetic.plan.json": {
+      "bytes": 620,
+      "sha256": "685b22ffb073ad0e8fb597bd008ecbf7dd7696137d3a2e0d9418ab25ee7468e5"
+    },
+    "fixtures/boolean.gooo": {
+      "bytes": 282,
+      "sha256": "1b2e12bc510ec7215f49e84b23cc00e4da3adadd7244030596671d7cb78af6f1"
+    },
+    "fixtures/boolean.plan.json": {
+      "bytes": 601,
+      "sha256": "a3f68051f964ee8b2917879e7fcec1d81b0c5bec20a975b2344410b08898e694"
+    },
+    "preexecution/pre-call-manifest-v2.json": {
+      "bytes": 6059,
+      "sha256": "b2f9e95ed377dbc331f55c2a7766ff2e0030715c6de689dfc089afafcf5ed039"
+    },
+    "preexecution/source/capture.go": {
+      "bytes": 46703,
+      "sha256": "a23c785113a4eacec67c29317e1091af2a655b50e87b2ad871079a88a4e9ffeb"
+    },
+    "preexecution/source/replay.go": {
+      "bytes": 35782,
+      "sha256": "d3aa7f2e07c681203fc57b40cea94d3bac468f579189bf9428fc932ec997174d"
+    },
+    "preexecution/superseded-draft-v1/manifest.json": {
+      "bytes": 2689,
+      "sha256": "1c74ef96dcea6c58c716c9845368e09bb107e50393f2d348e4f01b0a51e7ba51"
+    },
+    "preexecution/superseded-draft-v1/source/capture.go": {
+      "bytes": 43701,
+      "sha256": "d1d30f3743452bf02893805d677ef92be4416177873229c2ae2e2b657ce44dfb"
+    },
+    "preexecution/superseded-draft-v1/source/replay.go": {
+      "bytes": 30350,
+      "sha256": "e2eddaa464f582bfb1e19318112bd1b3d28d96dca91149ca8ee519c853d4c3c0"
+    },
+    "preexecution/superseded-draft-v2/manifest.json": {
+      "bytes": 3598,
+      "sha256": "350a5cc508d97d25db55fe93f9f84af502fb36779ca180fb54461c5b3bf50dcf"
+    },
+    "preexecution/superseded-draft-v2/source/capture.go": {
+      "bytes": 44984,
+      "sha256": "05aab361c0e08a8bdb5a3653d0b0ca808551d22d9591d4606811a8daa967b98b"
+    },
+    "preexecution/superseded-draft-v2/source/replay.go": {
+      "bytes": 32662,
+      "sha256": "449e4b82196f8ef7c843d6356fc8069c6c972c2962637af94e30a7e78974871f"
+    },
+    "preexecution/superseded-draft-v3/manifest.json": {
+      "bytes": 4445,
+      "sha256": "9b6fdee65a4936483b6776ef86374c9fb0c2ea2cab127e7c5f428c7118d913dc"
+    },
+    "preexecution/superseded-draft-v3/source/capture.go": {
+      "bytes": 44984,
+      "sha256": "05aab361c0e08a8bdb5a3653d0b0ca808551d22d9591d4606811a8daa967b98b"
+    },
+    "preexecution/superseded-draft-v3/source/replay.go": {
+      "bytes": 33143,
+      "sha256": "44f296db050f8c1459f37571c9dcbe25eba85efaaaa586f338276cf1f1131b3c"
+    },
+    "publication-allowlist.tsv": {
+      "bytes": 2382,
+      "sha256": "29dae78722306eb532ffbe55871e6b3f25d2f0e4a611444e7559cae6f6cce960"
+    },
+    "replay-runner": {
+      "bytes": 4407474,
+      "sha256": "3e5fd623e3f5f5d960b7821c75f23bb1eb3d90fe94ad43282290649bf58783d0"
+    },
+    "replay.go": {
+      "bytes": 35782,
+      "sha256": "d3aa7f2e07c681203fc57b40cea94d3bac468f579189bf9428fc932ec997174d"
+    },
+    "replay_test.go": {
+      "bytes": 2805,
+      "sha256": "78e2a319385512dee18766d197b335d5d222e29297ff78d39b1dc2e671bec27c"
+    },
+    "run-plan.json": {
+      "bytes": 3610,
+      "sha256": "1c5a86b321eacf9549d03f4b7df2c94f8ea8171b7dbb04f384094895869c3a58"
+    }
+  },
+  "capture_authorization": "parent-authorized exact eight-cell run; six tiny_go variants in frozen order, then two offline baselines; no warmups or retries",
+  "model_bundle_pins": {
+    "fp32": {
+      "metadata_sha256": "c5867ee872cbf0fb8227015bd3e94540415786437704ed01b66e6bb0b421c930",
+      "weights_sha256": "854da0f8fc0dcf5560d1f1b8838ea30081752020dbc2005772207217c5d1d17a"
+    },
+    "ptq_ternary": {
+      "metadata_sha256": "5766a32a9d70ef16c895e7cf8765d7884d59ab6241fcfa225ac2291731a77a4e",
+      "weights_sha256": "3c60ab7154f02f04a94b1bc68274e05c4ae86f10185b19dbe7251c26610a5c8b"
+    },
+    "qat_ternary": {
+      "metadata_sha256": "4746fc7cbd2864e9536b43d779c7ecc39aa35f8f6f64943c73b951f9e967c8a7",
+      "weights_sha256": "bd4444d5233f07c18168a4dfa0053afde180ce97e390a993e4e0fbb33fb88337"
+    }
+  },
+  "pre_call_manifest_archive": {
+    "path": "pre-call-manifest-v2.json",
+    "sha256": "b2f9e95ed377dbc331f55c2a7766ff2e0030715c6de689dfc089afafcf5ed039",
+    "reason": "exact prepared manifest before native source/binary pins were frozen; zero calls at that time"
+  }
+}

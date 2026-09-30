@@ -1,0 +1,18 @@
+{
+  "schema": "gooo/body-codegen-ir-fill-plan/v1",
+  "intent": "Use the less-than-or-equal comparison to select zero and negative inputs.",
+  "hole_id": "boolean",
+  "candidates": [
+    {"id": "less_than", "expression": "input < 0"},
+    {"id": "less_equal", "expression": "input <= 0"},
+    {"id": "equal", "expression": "input == 0"}
+  ],
+  "test_cases": [
+    {"input": -9223372036854775808, "expected": 2},
+    {"input": -7, "expected": 2},
+    {"input": -1, "expected": 2},
+    {"input": 0, "expected": 2},
+    {"input": 1, "expected": 0},
+    {"input": 9223372036854775807, "expected": 0}
+  ]
+}

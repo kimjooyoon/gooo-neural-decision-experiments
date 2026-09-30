@@ -1,0 +1,916 @@
+{
+  "schema": "gooo/native-tiny-go-smoke-capture-summary/v2",
+  "status": "CAPTURED_WITH_VALIDATION_ERRORS",
+  "native_source_commit": "e7dc8198600f27fa3d6fc07d2a8fd8b6a4af3b27",
+  "native_cli_binary_sha256": "5e7f75badf8079d15d971bc05f65c08516a9b79c4bb0539036ccb318c093f79c",
+  "capture_runner_source_sha256": "a23c785113a4eacec67c29317e1091af2a655b50e87b2ad871079a88a4e9ffeb",
+  "capture_runner_binary_sha256": "fe1b55cc8cd513e40d8d6bba22d4746c59c256df4b66f698c87dff6b76fac7a6",
+  "run_plan_sha256": "1c5a86b321eacf9549d03f4b7df2c94f8ea8171b7dbb04f384094895869c3a58",
+  "planned_cells": 8,
+  "captured_cli_children": 8,
+  "wrapper_successful_cells": 6,
+  "wrapper_cells_with_validation_errors": 2,
+  "planned_warmups": 0,
+  "planned_retries": 0,
+  "actual_warmups": 0,
+  "actual_retries": 0,
+  "local_model_predictions": 6,
+  "external_provider_calls": 0,
+  "finite_cases_planned": 48,
+  "per_cell_finite_cases_planned": 6,
+  "raw_operation_gold_matches": 0,
+  "raw_operation_gold_match_denominator": 6,
+  "model_prediction_applied_count": 2,
+  "tiny_go_prediction_denominator": 6,
+  "model_applied_candidate_score": {
+    "passed": 0,
+    "planned": 12,
+    "cells_scored": 2,
+    "semantics": "score of model-applied candidate only; deterministic fallbacks excluded"
+  },
+  "deterministic_fallback_candidate_score": {
+    "passed": 21,
+    "planned": 24,
+    "cells_scored": 4,
+    "semantics": "fallback candidate finite score; not model-choice accuracy"
+  },
+  "raw_operation_mapped_candidate_score": {
+    "passed": 3,
+    "planned": 18,
+    "cells_scored": 3,
+    "semantics": "candidate corresponding to raw closed operation where an offered candidate exists, whether or not low-confidence policy applied it"
+  },
+  "tdd_selected_tiny_finite_score": {
+    "passed": 36,
+    "planned": 36,
+    "cells_scored": 6
+  },
+  "resource_summary": {
+    "scope": "one child process per row; individual process observations, not host CPU increase or a statistical latency benchmark",
+    "cli_active_wall_ms": {
+      "min": 6.209125,
+      "median": 6.618104,
+      "max": 463.7855,
+      "samples": 8
+    },
+    "child_user_cpu_ms": {
+      "total": 37.972,
+      "samples": 8
+    },
+    "child_system_cpu_ms": {
+      "total": 30.585,
+      "samples": 8
+    },
+    "child_max_rss_bytes": {
+      "max": 16990208,
+      "samples": 8
+    },
+    "warning": "Single sequential observations include process startup and model loading; no warmups or replication. The runner reports child CPU time and per-child maximum RSS. These values do not measure host-wide CPU increase or steady-state inference-kernel latency."
+  },
+  "rows": [
+    {
+      "cell_id": "arithmetic-fp32",
+      "fixture_id": "arithmetic",
+      "execution_mode": "tiny_go",
+      "model_variant": "fp32",
+      "wrapper_exit_code": 0,
+      "cli_exit_code": 0,
+      "capture_status": "CAPTURED_AND_SOURCE_BOUND",
+      "validation_errors": [],
+      "compiler_source_sha256": "e7dc8198600f27fa3d6fc07d2a8fd8b6a4af3b27",
+      "cli_binary_sha256": "5e7f75badf8079d15d971bc05f65c08516a9b79c4bb0539036ccb318c093f79c",
+      "run_plan_sha256": "1c5a86b321eacf9549d03f4b7df2c94f8ea8171b7dbb04f384094895869c3a58",
+      "model_metadata_sha256": "c5867ee872cbf0fb8227015bd3e94540415786437704ed01b66e6bb0b421c930",
+      "model_weights_sha256": "854da0f8fc0dcf5560d1f1b8838ea30081752020dbc2005772207217c5d1d17a",
+      "local_model_predictions": 1,
+      "external_provider_calls": 0,
+      "external_provider_calls_known": true,
+      "raw_predicted_operation": "or",
+      "gold_operation": "add",
+      "raw_operation_matches_gold": false,
+      "tiny_go_prediction_applied": false,
+      "provider_mode": "deterministic_fallback",
+      "fallback_reason": "TINY_GO_OPERATION_NOT_OFFERED",
+      "provider_proposal_candidate_id": "sum",
+      "proposal_score_semantics": "fallback_candidate_score_not_model_accuracy",
+      "provider_proposal_finite_score": {
+        "candidate_id": "sum",
+        "expression": "input + 2",
+        "passed": 6,
+        "total": 6
+      },
+      "raw_operation_mapped_candidate_id": null,
+      "raw_operation_mapped_finite_score": null,
+      "tdd_selected_candidate_id": "sum",
+      "tdd_selected_finite_score": {
+        "candidate_id": "sum",
+        "expression": "input + 2",
+        "passed": 6,
+        "total": 6
+      },
+      "cli_reported_selected_finite_accuracy_percent": 100,
+      "cli_active_wall_ms": 463.7855,
+      "tiny_model_load_ms": 0.576459,
+      "tiny_decision_ms": 0.087916,
+      "bodycodegen_total_ms": 2.904959,
+      "child_user_cpu_ms": 10.493,
+      "child_system_cpu_ms": 13.786,
+      "child_max_rss": 16596992,
+      "child_max_rss_unit": "bytes",
+      "resource_scope": "one native gooo body-codegen child only; model metadata/weights are hashed before child timing when tiny_go; RUSAGE_CHILDREN CPU is delta around this sole child; max RSS belongs to this sole child",
+      "artifacts": {
+        "arithmetic-fp32/prelaunch.json": {
+          "bytes": 2431,
+          "sha256": "4bb08ac32cbf94140b2a7e12ccc320d3b3c023bf942a228be6a59e1091191c58"
+        },
+        "arithmetic-fp32/raw-cli.json": {
+          "bytes": 17912,
+          "sha256": "0d1f59b922829613928bccabe5855bb4fd62d44099828d232a5a63a4423a5b93"
+        },
+        "arithmetic-fp32/raw-stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "arithmetic-fp32/invocation.json": {
+          "bytes": 10294,
+          "sha256": "8eb96a8fcd5ed70550db37e2e8c9bf7544f257a727d23c35103089843eb137c4"
+        },
+        "wrapper-launch/arithmetic-fp32.stdout.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "wrapper-launch/arithmetic-fp32.stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "cell_id": "arithmetic-ptq_ternary",
+      "fixture_id": "arithmetic",
+      "execution_mode": "tiny_go",
+      "model_variant": "ptq_ternary",
+      "wrapper_exit_code": 0,
+      "cli_exit_code": 0,
+      "capture_status": "CAPTURED_AND_SOURCE_BOUND",
+      "validation_errors": [],
+      "compiler_source_sha256": "e7dc8198600f27fa3d6fc07d2a8fd8b6a4af3b27",
+      "cli_binary_sha256": "5e7f75badf8079d15d971bc05f65c08516a9b79c4bb0539036ccb318c093f79c",
+      "run_plan_sha256": "1c5a86b321eacf9549d03f4b7df2c94f8ea8171b7dbb04f384094895869c3a58",
+      "model_metadata_sha256": "5766a32a9d70ef16c895e7cf8765d7884d59ab6241fcfa225ac2291731a77a4e",
+      "model_weights_sha256": "3c60ab7154f02f04a94b1bc68274e05c4ae86f10185b19dbe7251c26610a5c8b",
+      "local_model_predictions": 1,
+      "external_provider_calls": 0,
+      "external_provider_calls_known": true,
+      "raw_predicted_operation": "subtract",
+      "gold_operation": "add",
+      "raw_operation_matches_gold": false,
+      "tiny_go_prediction_applied": true,
+      "provider_mode": "tiny_go",
+      "fallback_reason": null,
+      "provider_proposal_candidate_id": "difference",
+      "proposal_score_semantics": "model_applied_operation_candidate",
+      "provider_proposal_finite_score": {
+        "candidate_id": "difference",
+        "expression": "input - 2",
+        "passed": 0,
+        "total": 6
+      },
+      "raw_operation_mapped_candidate_id": "difference",
+      "raw_operation_mapped_finite_score": {
+        "id": "difference",
+        "expression": "input - 2",
+        "passed": 0,
+        "total": 6
+      },
+      "tdd_selected_candidate_id": "sum",
+      "tdd_selected_finite_score": {
+        "candidate_id": "sum",
+        "expression": "input + 2",
+        "passed": 6,
+        "total": 6
+      },
+      "cli_reported_selected_finite_accuracy_percent": 100,
+      "cli_active_wall_ms": 10.135917,
+      "tiny_model_load_ms": 0.192333,
+      "tiny_decision_ms": 0.049,
+      "bodycodegen_total_ms": 0.916833,
+      "child_user_cpu_ms": 5.353,
+      "child_system_cpu_ms": 3.48,
+      "child_max_rss": 16793600,
+      "child_max_rss_unit": "bytes",
+      "resource_scope": "one native gooo body-codegen child only; model metadata/weights are hashed before child timing when tiny_go; RUSAGE_CHILDREN CPU is delta around this sole child; max RSS belongs to this sole child",
+      "artifacts": {
+        "arithmetic-ptq_ternary/prelaunch.json": {
+          "bytes": 2437,
+          "sha256": "ea93c45da5283a977be55a514b2f83ddfe3116579068ebcfdb5aac51e3131890"
+        },
+        "arithmetic-ptq_ternary/raw-cli.json": {
+          "bytes": 17848,
+          "sha256": "9fb1eca945373c9c26d3b42dba9e0eb7e8fabd7fa8550486cffeebfd4235f133"
+        },
+        "arithmetic-ptq_ternary/raw-stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "arithmetic-ptq_ternary/invocation.json": {
+          "bytes": 10428,
+          "sha256": "074b96f8ff821ca5db417a4979a3f033b27bb48ee93c335689c328896560884e"
+        },
+        "wrapper-launch/arithmetic-ptq_ternary.stdout.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "wrapper-launch/arithmetic-ptq_ternary.stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "cell_id": "arithmetic-qat_ternary",
+      "fixture_id": "arithmetic",
+      "execution_mode": "tiny_go",
+      "model_variant": "qat_ternary",
+      "wrapper_exit_code": 0,
+      "cli_exit_code": 0,
+      "capture_status": "CAPTURED_AND_SOURCE_BOUND",
+      "validation_errors": [],
+      "compiler_source_sha256": "e7dc8198600f27fa3d6fc07d2a8fd8b6a4af3b27",
+      "cli_binary_sha256": "5e7f75badf8079d15d971bc05f65c08516a9b79c4bb0539036ccb318c093f79c",
+      "run_plan_sha256": "1c5a86b321eacf9549d03f4b7df2c94f8ea8171b7dbb04f384094895869c3a58",
+      "model_metadata_sha256": "4746fc7cbd2864e9536b43d779c7ecc39aa35f8f6f64943c73b951f9e967c8a7",
+      "model_weights_sha256": "bd4444d5233f07c18168a4dfa0053afde180ce97e390a993e4e0fbb33fb88337",
+      "local_model_predictions": 1,
+      "external_provider_calls": 0,
+      "external_provider_calls_known": true,
+      "raw_predicted_operation": "subtract",
+      "gold_operation": "add",
+      "raw_operation_matches_gold": false,
+      "tiny_go_prediction_applied": true,
+      "provider_mode": "tiny_go",
+      "fallback_reason": null,
+      "provider_proposal_candidate_id": "difference",
+      "proposal_score_semantics": "model_applied_operation_candidate",
+      "provider_proposal_finite_score": {
+        "candidate_id": "difference",
+        "expression": "input - 2",
+        "passed": 0,
+        "total": 6
+      },
+      "raw_operation_mapped_candidate_id": "difference",
+      "raw_operation_mapped_finite_score": {
+        "id": "difference",
+        "expression": "input - 2",
+        "passed": 0,
+        "total": 6
+      },
+      "tdd_selected_candidate_id": "sum",
+      "tdd_selected_finite_score": {
+        "candidate_id": "sum",
+        "expression": "input + 2",
+        "passed": 6,
+        "total": 6
+      },
+      "cli_reported_selected_finite_accuracy_percent": 100,
+      "cli_active_wall_ms": 6.574083,
+      "tiny_model_load_ms": 0.125959,
+      "tiny_decision_ms": 0.035584,
+      "bodycodegen_total_ms": 0.670417,
+      "child_user_cpu_ms": 3.488,
+      "child_system_cpu_ms": 1.956,
+      "child_max_rss": 16678912,
+      "child_max_rss_unit": "bytes",
+      "resource_scope": "one native gooo body-codegen child only; model metadata/weights are hashed before child timing when tiny_go; RUSAGE_CHILDREN CPU is delta around this sole child; max RSS belongs to this sole child",
+      "artifacts": {
+        "arithmetic-qat_ternary/prelaunch.json": {
+          "bytes": 2437,
+          "sha256": "955c891a98070cdeefe462fd4e3c375bb7e4a3858046caa502388f58953b761a"
+        },
+        "arithmetic-qat_ternary/raw-cli.json": {
+          "bytes": 17855,
+          "sha256": "6d2765326c9a8a274e16ca5eb02a3f49484ebfa7b2d9c2fbda71d27f362f2658"
+        },
+        "arithmetic-qat_ternary/raw-stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "arithmetic-qat_ternary/invocation.json": {
+          "bytes": 10431,
+          "sha256": "51b90eee88df64a588ecf84cfcc0e700218e35e02065973dcb2e7978bd79f617"
+        },
+        "wrapper-launch/arithmetic-qat_ternary.stdout.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "wrapper-launch/arithmetic-qat_ternary.stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "cell_id": "boolean-fp32",
+      "fixture_id": "boolean",
+      "execution_mode": "tiny_go",
+      "model_variant": "fp32",
+      "wrapper_exit_code": 0,
+      "cli_exit_code": 0,
+      "capture_status": "CAPTURED_AND_SOURCE_BOUND",
+      "validation_errors": [],
+      "compiler_source_sha256": "e7dc8198600f27fa3d6fc07d2a8fd8b6a4af3b27",
+      "cli_binary_sha256": "5e7f75badf8079d15d971bc05f65c08516a9b79c4bb0539036ccb318c093f79c",
+      "run_plan_sha256": "1c5a86b321eacf9549d03f4b7df2c94f8ea8171b7dbb04f384094895869c3a58",
+      "model_metadata_sha256": "c5867ee872cbf0fb8227015bd3e94540415786437704ed01b66e6bb0b421c930",
+      "model_weights_sha256": "854da0f8fc0dcf5560d1f1b8838ea30081752020dbc2005772207217c5d1d17a",
+      "local_model_predictions": 1,
+      "external_provider_calls": 0,
+      "external_provider_calls_known": true,
+      "raw_predicted_operation": "add",
+      "gold_operation": "less_equal",
+      "raw_operation_matches_gold": false,
+      "tiny_go_prediction_applied": false,
+      "provider_mode": "deterministic_fallback",
+      "fallback_reason": "TINY_GO_OPERATION_NOT_OFFERED",
+      "provider_proposal_candidate_id": "less_than",
+      "proposal_score_semantics": "fallback_candidate_score_not_model_accuracy",
+      "provider_proposal_finite_score": {
+        "candidate_id": "less_than",
+        "expression": "input < 0",
+        "passed": 5,
+        "total": 6
+      },
+      "raw_operation_mapped_candidate_id": null,
+      "raw_operation_mapped_finite_score": null,
+      "tdd_selected_candidate_id": "less_equal",
+      "tdd_selected_finite_score": {
+        "candidate_id": "less_equal",
+        "expression": "input <= 0",
+        "passed": 6,
+        "total": 6
+      },
+      "cli_reported_selected_finite_accuracy_percent": 100,
+      "cli_active_wall_ms": 6.313292,
+      "tiny_model_load_ms": 0.175208,
+      "tiny_decision_ms": 0.035417,
+      "bodycodegen_total_ms": 0.671792,
+      "child_user_cpu_ms": 3.436,
+      "child_system_cpu_ms": 1.954,
+      "child_max_rss": 16957440,
+      "child_max_rss_unit": "bytes",
+      "resource_scope": "one native gooo body-codegen child only; model metadata/weights are hashed before child timing when tiny_go; RUSAGE_CHILDREN CPU is delta around this sole child; max RSS belongs to this sole child",
+      "artifacts": {
+        "boolean-fp32/prelaunch.json": {
+          "bytes": 2410,
+          "sha256": "ce2979fb1f491dff43dfdc2f5ee6c106663f4531aeb1b6b9ecf0a8ba65ae5114"
+        },
+        "boolean-fp32/raw-cli.json": {
+          "bytes": 17907,
+          "sha256": "9016b0306c3e23d14fb7423d3be90a150fba69dacb5bfc55df7f3e92095b971b"
+        },
+        "boolean-fp32/raw-stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "boolean-fp32/invocation.json": {
+          "bytes": 10202,
+          "sha256": "8da698169cb5ad2705095e219dbb333c83032019f8445689e4a9a7a1640d58b9"
+        },
+        "wrapper-launch/boolean-fp32.stdout.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "wrapper-launch/boolean-fp32.stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "cell_id": "boolean-ptq_ternary",
+      "fixture_id": "boolean",
+      "execution_mode": "tiny_go",
+      "model_variant": "ptq_ternary",
+      "wrapper_exit_code": 0,
+      "cli_exit_code": 0,
+      "capture_status": "CAPTURED_AND_SOURCE_BOUND",
+      "validation_errors": [],
+      "compiler_source_sha256": "e7dc8198600f27fa3d6fc07d2a8fd8b6a4af3b27",
+      "cli_binary_sha256": "5e7f75badf8079d15d971bc05f65c08516a9b79c4bb0539036ccb318c093f79c",
+      "run_plan_sha256": "1c5a86b321eacf9549d03f4b7df2c94f8ea8171b7dbb04f384094895869c3a58",
+      "model_metadata_sha256": "5766a32a9d70ef16c895e7cf8765d7884d59ab6241fcfa225ac2291731a77a4e",
+      "model_weights_sha256": "3c60ab7154f02f04a94b1bc68274e05c4ae86f10185b19dbe7251c26610a5c8b",
+      "local_model_predictions": 1,
+      "external_provider_calls": 0,
+      "external_provider_calls_known": true,
+      "raw_predicted_operation": "equal",
+      "gold_operation": "less_equal",
+      "raw_operation_matches_gold": false,
+      "tiny_go_prediction_applied": false,
+      "provider_mode": "deterministic_fallback",
+      "fallback_reason": "TINY_GO_LOW_CONFIDENCE",
+      "provider_proposal_candidate_id": "less_than",
+      "proposal_score_semantics": "fallback_candidate_score_not_model_accuracy",
+      "provider_proposal_finite_score": {
+        "candidate_id": "less_than",
+        "expression": "input < 0",
+        "passed": 5,
+        "total": 6
+      },
+      "raw_operation_mapped_candidate_id": "equal",
+      "raw_operation_mapped_finite_score": {
+        "id": "equal",
+        "expression": "input == 0",
+        "passed": 3,
+        "total": 6
+      },
+      "tdd_selected_candidate_id": "less_equal",
+      "tdd_selected_finite_score": {
+        "candidate_id": "less_equal",
+        "expression": "input <= 0",
+        "passed": 6,
+        "total": 6
+      },
+      "cli_reported_selected_finite_accuracy_percent": 100,
+      "cli_active_wall_ms": 6.218,
+      "tiny_model_load_ms": 0.120875,
+      "tiny_decision_ms": 0.041125,
+      "bodycodegen_total_ms": 0.633166,
+      "child_user_cpu_ms": 3.291,
+      "child_system_cpu_ms": 2.046,
+      "child_max_rss": 16990208,
+      "child_max_rss_unit": "bytes",
+      "resource_scope": "one native gooo body-codegen child only; model metadata/weights are hashed before child timing when tiny_go; RUSAGE_CHILDREN CPU is delta around this sole child; max RSS belongs to this sole child",
+      "artifacts": {
+        "boolean-ptq_ternary/prelaunch.json": {
+          "bytes": 2416,
+          "sha256": "1a1ab03621f2a34d341b4889ac3d12fb2e8e16c79d9e6fd594c1e324ec146319"
+        },
+        "boolean-ptq_ternary/raw-cli.json": {
+          "bytes": 17918,
+          "sha256": "c70e93f2d13f405b06e08bd130db8a9caecdf57e33b97c3505354df7d009300e"
+        },
+        "boolean-ptq_ternary/raw-stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "boolean-ptq_ternary/invocation.json": {
+          "bytes": 10374,
+          "sha256": "2c333a28f1fe408f0b75e5cb68010efd3d64e2b8d6c933f43d9cbd19ddaeb546"
+        },
+        "wrapper-launch/boolean-ptq_ternary.stdout.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "wrapper-launch/boolean-ptq_ternary.stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "cell_id": "boolean-qat_ternary",
+      "fixture_id": "boolean",
+      "execution_mode": "tiny_go",
+      "model_variant": "qat_ternary",
+      "wrapper_exit_code": 0,
+      "cli_exit_code": 0,
+      "capture_status": "CAPTURED_AND_SOURCE_BOUND",
+      "validation_errors": [],
+      "compiler_source_sha256": "e7dc8198600f27fa3d6fc07d2a8fd8b6a4af3b27",
+      "cli_binary_sha256": "5e7f75badf8079d15d971bc05f65c08516a9b79c4bb0539036ccb318c093f79c",
+      "run_plan_sha256": "1c5a86b321eacf9549d03f4b7df2c94f8ea8171b7dbb04f384094895869c3a58",
+      "model_metadata_sha256": "4746fc7cbd2864e9536b43d779c7ecc39aa35f8f6f64943c73b951f9e967c8a7",
+      "model_weights_sha256": "bd4444d5233f07c18168a4dfa0053afde180ce97e390a993e4e0fbb33fb88337",
+      "local_model_predictions": 1,
+      "external_provider_calls": 0,
+      "external_provider_calls_known": true,
+      "raw_predicted_operation": "add",
+      "gold_operation": "less_equal",
+      "raw_operation_matches_gold": false,
+      "tiny_go_prediction_applied": false,
+      "provider_mode": "deterministic_fallback",
+      "fallback_reason": "TINY_GO_OPERATION_NOT_OFFERED",
+      "provider_proposal_candidate_id": "less_than",
+      "proposal_score_semantics": "fallback_candidate_score_not_model_accuracy",
+      "provider_proposal_finite_score": {
+        "candidate_id": "less_than",
+        "expression": "input < 0",
+        "passed": 5,
+        "total": 6
+      },
+      "raw_operation_mapped_candidate_id": null,
+      "raw_operation_mapped_finite_score": null,
+      "tdd_selected_candidate_id": "less_equal",
+      "tdd_selected_finite_score": {
+        "candidate_id": "less_equal",
+        "expression": "input <= 0",
+        "passed": 6,
+        "total": 6
+      },
+      "cli_reported_selected_finite_accuracy_percent": 100,
+      "cli_active_wall_ms": 6.209125,
+      "tiny_model_load_ms": 0.122584,
+      "tiny_decision_ms": 0.038459,
+      "bodycodegen_total_ms": 0.633375,
+      "child_user_cpu_ms": 3.329,
+      "child_system_cpu_ms": 2.071,
+      "child_max_rss": 16859136,
+      "child_max_rss_unit": "bytes",
+      "resource_scope": "one native gooo body-codegen child only; model metadata/weights are hashed before child timing when tiny_go; RUSAGE_CHILDREN CPU is delta around this sole child; max RSS belongs to this sole child",
+      "artifacts": {
+        "boolean-qat_ternary/prelaunch.json": {
+          "bytes": 2416,
+          "sha256": "37a7c298c665722c4e5c88257b51679297d852a5b58844c6bbfd098596bd2439"
+        },
+        "boolean-qat_ternary/raw-cli.json": {
+          "bytes": 17929,
+          "sha256": "ebad3e7615516ae9cf1eb8d8e71673cbddf52b7fbcec730784af0f264700cac8"
+        },
+        "boolean-qat_ternary/raw-stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "boolean-qat_ternary/invocation.json": {
+          "bytes": 10215,
+          "sha256": "dec3024881afff220f18c9fceb5c09076b604c4da994057a3a2d213925f56856"
+        },
+        "wrapper-launch/boolean-qat_ternary.stdout.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "wrapper-launch/boolean-qat_ternary.stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "cell_id": "arithmetic-offline_baseline",
+      "fixture_id": "arithmetic",
+      "execution_mode": "offline_baseline",
+      "model_variant": null,
+      "wrapper_exit_code": 2,
+      "cli_exit_code": 0,
+      "capture_status": "CAPTURED_WITH_VALIDATION_ERRORS",
+      "validation_errors": [
+        "offline baseline completeness scope is not deterministic and local",
+        "completeness receipt counts tiny_go as a Laya decision"
+      ],
+      "compiler_source_sha256": "e7dc8198600f27fa3d6fc07d2a8fd8b6a4af3b27",
+      "cli_binary_sha256": "5e7f75badf8079d15d971bc05f65c08516a9b79c4bb0539036ccb318c093f79c",
+      "run_plan_sha256": "1c5a86b321eacf9549d03f4b7df2c94f8ea8171b7dbb04f384094895869c3a58",
+      "model_metadata_sha256": null,
+      "model_weights_sha256": null,
+      "local_model_predictions": 0,
+      "external_provider_calls": 0,
+      "external_provider_calls_known": true,
+      "raw_predicted_operation": null,
+      "gold_operation": "add",
+      "raw_operation_matches_gold": null,
+      "tiny_go_prediction_applied": null,
+      "provider_mode": "deterministic_fallback",
+      "fallback_reason": "NOT_CONFIGURED",
+      "provider_proposal_candidate_id": "sum",
+      "proposal_score_semantics": "deterministic_no_model_fallback_score",
+      "provider_proposal_finite_score": {
+        "candidate_id": "sum",
+        "expression": "input + 2",
+        "passed": 6,
+        "total": 6
+      },
+      "raw_operation_mapped_candidate_id": null,
+      "raw_operation_mapped_finite_score": null,
+      "tdd_selected_candidate_id": "sum",
+      "tdd_selected_finite_score": {
+        "candidate_id": "sum",
+        "expression": "input + 2",
+        "passed": 6,
+        "total": 6
+      },
+      "cli_reported_selected_finite_accuracy_percent": 100,
+      "cli_active_wall_ms": 9.449625,
+      "tiny_model_load_ms": null,
+      "tiny_decision_ms": 0,
+      "bodycodegen_total_ms": 0.898334,
+      "child_user_cpu_ms": 4.993,
+      "child_system_cpu_ms": 3.228,
+      "child_max_rss": 16531456,
+      "child_max_rss_unit": "bytes",
+      "resource_scope": "one native gooo body-codegen child only; model metadata/weights are hashed before child timing when tiny_go; RUSAGE_CHILDREN CPU is delta around this sole child; max RSS belongs to this sole child",
+      "artifacts": {
+        "arithmetic-offline_baseline/prelaunch.json": {
+          "bytes": 2237,
+          "sha256": "5ff4ddff9c219d3eea42ae62455c7a76f15dc51eb9ac8eab97707d4b63615144"
+        },
+        "arithmetic-offline_baseline/raw-cli.json": {
+          "bytes": 17713,
+          "sha256": "f385945693c3af25c259d7abec8297af2204adf82f8d11ea0c3dc665517341b1"
+        },
+        "arithmetic-offline_baseline/raw-stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "arithmetic-offline_baseline/invocation.json": {
+          "bytes": 9819,
+          "sha256": "6e6fe9dd834b6164ec50fed0d20cf56abc9b7b20dbe6d4f9ca3e2cd0ac2795d4"
+        },
+        "wrapper-launch/arithmetic-offline_baseline.stdout.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "wrapper-launch/arithmetic-offline_baseline.stderr.txt": {
+          "bytes": 78,
+          "sha256": "95db542bb0bac55a5533f831fa1a8ccd0f5928ba21569bcefdfa891addf7f0bf"
+        }
+      }
+    },
+    {
+      "cell_id": "boolean-offline_baseline",
+      "fixture_id": "boolean",
+      "execution_mode": "offline_baseline",
+      "model_variant": null,
+      "wrapper_exit_code": 2,
+      "cli_exit_code": 0,
+      "capture_status": "CAPTURED_WITH_VALIDATION_ERRORS",
+      "validation_errors": [
+        "offline baseline completeness scope is not deterministic and local",
+        "completeness receipt counts tiny_go as a Laya decision"
+      ],
+      "compiler_source_sha256": "e7dc8198600f27fa3d6fc07d2a8fd8b6a4af3b27",
+      "cli_binary_sha256": "5e7f75badf8079d15d971bc05f65c08516a9b79c4bb0539036ccb318c093f79c",
+      "run_plan_sha256": "1c5a86b321eacf9549d03f4b7df2c94f8ea8171b7dbb04f384094895869c3a58",
+      "model_metadata_sha256": null,
+      "model_weights_sha256": null,
+      "local_model_predictions": 0,
+      "external_provider_calls": 0,
+      "external_provider_calls_known": true,
+      "raw_predicted_operation": null,
+      "gold_operation": "less_equal",
+      "raw_operation_matches_gold": null,
+      "tiny_go_prediction_applied": null,
+      "provider_mode": "deterministic_fallback",
+      "fallback_reason": "NOT_CONFIGURED",
+      "provider_proposal_candidate_id": "less_than",
+      "proposal_score_semantics": "deterministic_no_model_fallback_score",
+      "provider_proposal_finite_score": {
+        "candidate_id": "less_than",
+        "expression": "input < 0",
+        "passed": 5,
+        "total": 6
+      },
+      "raw_operation_mapped_candidate_id": null,
+      "raw_operation_mapped_finite_score": null,
+      "tdd_selected_candidate_id": "less_equal",
+      "tdd_selected_finite_score": {
+        "candidate_id": "less_equal",
+        "expression": "input <= 0",
+        "passed": 6,
+        "total": 6
+      },
+      "cli_reported_selected_finite_accuracy_percent": 100,
+      "cli_active_wall_ms": 6.662125,
+      "tiny_model_load_ms": null,
+      "tiny_decision_ms": 0,
+      "bodycodegen_total_ms": 0.712333,
+      "child_user_cpu_ms": 3.589,
+      "child_system_cpu_ms": 2.064,
+      "child_max_rss": 16662528,
+      "child_max_rss_unit": "bytes",
+      "resource_scope": "one native gooo body-codegen child only; model metadata/weights are hashed before child timing when tiny_go; RUSAGE_CHILDREN CPU is delta around this sole child; max RSS belongs to this sole child",
+      "artifacts": {
+        "boolean-offline_baseline/prelaunch.json": {
+          "bytes": 2216,
+          "sha256": "f9d639a988cbcec3afd2e1500c35529ff916fbbfec28de75c5026eb215a45cea"
+        },
+        "boolean-offline_baseline/raw-cli.json": {
+          "bytes": 17721,
+          "sha256": "2f97171eaec06056b7f24f6c088b5d0d29f6a78a1ab35c30af7cf2ed00e93eea"
+        },
+        "boolean-offline_baseline/raw-stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "boolean-offline_baseline/invocation.json": {
+          "bytes": 9728,
+          "sha256": "35a0e5db1d565bba2d78a96cfdcc531a97c0e542a58f79ee28ccc7f2b88c431e"
+        },
+        "wrapper-launch/boolean-offline_baseline.stdout.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "wrapper-launch/boolean-offline_baseline.stderr.txt": {
+          "bytes": 78,
+          "sha256": "95db542bb0bac55a5533f831fa1a8ccd0f5928ba21569bcefdfa891addf7f0bf"
+        }
+      }
+    }
+  ],
+  "raw_artifacts": {
+    "results/arithmetic-fp32/prelaunch.json": {
+      "bytes": 2431,
+      "sha256": "4bb08ac32cbf94140b2a7e12ccc320d3b3c023bf942a228be6a59e1091191c58"
+    },
+    "results/arithmetic-fp32/raw-cli.json": {
+      "bytes": 17912,
+      "sha256": "0d1f59b922829613928bccabe5855bb4fd62d44099828d232a5a63a4423a5b93"
+    },
+    "results/arithmetic-fp32/raw-stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/arithmetic-fp32/invocation.json": {
+      "bytes": 10294,
+      "sha256": "8eb96a8fcd5ed70550db37e2e8c9bf7544f257a727d23c35103089843eb137c4"
+    },
+    "results/wrapper-launch/arithmetic-fp32.stdout.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/wrapper-launch/arithmetic-fp32.stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/arithmetic-ptq_ternary/prelaunch.json": {
+      "bytes": 2437,
+      "sha256": "ea93c45da5283a977be55a514b2f83ddfe3116579068ebcfdb5aac51e3131890"
+    },
+    "results/arithmetic-ptq_ternary/raw-cli.json": {
+      "bytes": 17848,
+      "sha256": "9fb1eca945373c9c26d3b42dba9e0eb7e8fabd7fa8550486cffeebfd4235f133"
+    },
+    "results/arithmetic-ptq_ternary/raw-stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/arithmetic-ptq_ternary/invocation.json": {
+      "bytes": 10428,
+      "sha256": "074b96f8ff821ca5db417a4979a3f033b27bb48ee93c335689c328896560884e"
+    },
+    "results/wrapper-launch/arithmetic-ptq_ternary.stdout.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/wrapper-launch/arithmetic-ptq_ternary.stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/arithmetic-qat_ternary/prelaunch.json": {
+      "bytes": 2437,
+      "sha256": "955c891a98070cdeefe462fd4e3c375bb7e4a3858046caa502388f58953b761a"
+    },
+    "results/arithmetic-qat_ternary/raw-cli.json": {
+      "bytes": 17855,
+      "sha256": "6d2765326c9a8a274e16ca5eb02a3f49484ebfa7b2d9c2fbda71d27f362f2658"
+    },
+    "results/arithmetic-qat_ternary/raw-stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/arithmetic-qat_ternary/invocation.json": {
+      "bytes": 10431,
+      "sha256": "51b90eee88df64a588ecf84cfcc0e700218e35e02065973dcb2e7978bd79f617"
+    },
+    "results/wrapper-launch/arithmetic-qat_ternary.stdout.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/wrapper-launch/arithmetic-qat_ternary.stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/boolean-fp32/prelaunch.json": {
+      "bytes": 2410,
+      "sha256": "ce2979fb1f491dff43dfdc2f5ee6c106663f4531aeb1b6b9ecf0a8ba65ae5114"
+    },
+    "results/boolean-fp32/raw-cli.json": {
+      "bytes": 17907,
+      "sha256": "9016b0306c3e23d14fb7423d3be90a150fba69dacb5bfc55df7f3e92095b971b"
+    },
+    "results/boolean-fp32/raw-stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/boolean-fp32/invocation.json": {
+      "bytes": 10202,
+      "sha256": "8da698169cb5ad2705095e219dbb333c83032019f8445689e4a9a7a1640d58b9"
+    },
+    "results/wrapper-launch/boolean-fp32.stdout.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/wrapper-launch/boolean-fp32.stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/boolean-ptq_ternary/prelaunch.json": {
+      "bytes": 2416,
+      "sha256": "1a1ab03621f2a34d341b4889ac3d12fb2e8e16c79d9e6fd594c1e324ec146319"
+    },
+    "results/boolean-ptq_ternary/raw-cli.json": {
+      "bytes": 17918,
+      "sha256": "c70e93f2d13f405b06e08bd130db8a9caecdf57e33b97c3505354df7d009300e"
+    },
+    "results/boolean-ptq_ternary/raw-stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/boolean-ptq_ternary/invocation.json": {
+      "bytes": 10374,
+      "sha256": "2c333a28f1fe408f0b75e5cb68010efd3d64e2b8d6c933f43d9cbd19ddaeb546"
+    },
+    "results/wrapper-launch/boolean-ptq_ternary.stdout.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/wrapper-launch/boolean-ptq_ternary.stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/boolean-qat_ternary/prelaunch.json": {
+      "bytes": 2416,
+      "sha256": "37a7c298c665722c4e5c88257b51679297d852a5b58844c6bbfd098596bd2439"
+    },
+    "results/boolean-qat_ternary/raw-cli.json": {
+      "bytes": 17929,
+      "sha256": "ebad3e7615516ae9cf1eb8d8e71673cbddf52b7fbcec730784af0f264700cac8"
+    },
+    "results/boolean-qat_ternary/raw-stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/boolean-qat_ternary/invocation.json": {
+      "bytes": 10215,
+      "sha256": "dec3024881afff220f18c9fceb5c09076b604c4da994057a3a2d213925f56856"
+    },
+    "results/wrapper-launch/boolean-qat_ternary.stdout.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/wrapper-launch/boolean-qat_ternary.stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/arithmetic-offline_baseline/prelaunch.json": {
+      "bytes": 2237,
+      "sha256": "5ff4ddff9c219d3eea42ae62455c7a76f15dc51eb9ac8eab97707d4b63615144"
+    },
+    "results/arithmetic-offline_baseline/raw-cli.json": {
+      "bytes": 17713,
+      "sha256": "f385945693c3af25c259d7abec8297af2204adf82f8d11ea0c3dc665517341b1"
+    },
+    "results/arithmetic-offline_baseline/raw-stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/arithmetic-offline_baseline/invocation.json": {
+      "bytes": 9819,
+      "sha256": "6e6fe9dd834b6164ec50fed0d20cf56abc9b7b20dbe6d4f9ca3e2cd0ac2795d4"
+    },
+    "results/wrapper-launch/arithmetic-offline_baseline.stdout.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/wrapper-launch/arithmetic-offline_baseline.stderr.txt": {
+      "bytes": 78,
+      "sha256": "95db542bb0bac55a5533f831fa1a8ccd0f5928ba21569bcefdfa891addf7f0bf"
+    },
+    "results/boolean-offline_baseline/prelaunch.json": {
+      "bytes": 2216,
+      "sha256": "f9d639a988cbcec3afd2e1500c35529ff916fbbfec28de75c5026eb215a45cea"
+    },
+    "results/boolean-offline_baseline/raw-cli.json": {
+      "bytes": 17721,
+      "sha256": "2f97171eaec06056b7f24f6c088b5d0d29f6a78a1ab35c30af7cf2ed00e93eea"
+    },
+    "results/boolean-offline_baseline/raw-stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/boolean-offline_baseline/invocation.json": {
+      "bytes": 9728,
+      "sha256": "35a0e5db1d565bba2d78a96cfdcc531a97c0e542a58f79ee28ccc7f2b88c431e"
+    },
+    "results/wrapper-launch/boolean-offline_baseline.stdout.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/wrapper-launch/boolean-offline_baseline.stderr.txt": {
+      "bytes": 78,
+      "sha256": "95db542bb0bac55a5533f831fa1a8ccd0f5928ba21569bcefdfa891addf7f0bf"
+    }
+  },
+  "offline_validation_discrepancy": {
+    "cells": [
+      "arithmetic-offline_baseline",
+      "boolean-offline_baseline"
+    ],
+    "wrapper_exit_code": 2,
+    "cli_exit_code": 0,
+    "raw_receipt_errors": [
+      "offline baseline completeness scope is not deterministic and local",
+      "completeness receipt counts tiny_go as a Laya decision"
+    ],
+    "handling": "Raw captures and failed-wrapper receipts are preserved unchanged; no retry or correction was performed."
+  }
+}

@@ -1,0 +1,375 @@
+{
+  "schema": "gooo/native-tiny-go-body-smoke/v2",
+  "status": "CAPTURED_AND_SOURCE_BOUND",
+  "execution_mode": "tiny_go",
+  "fixture_id": "boolean",
+  "activity": "BooleanHole",
+  "fixture_file": "boolean.gooo",
+  "fixture_sha256": "1b2e12bc510ec7215f49e84b23cc00e4da3adadd7244030596671d7cb78af6f1",
+  "plan_file": "boolean.plan.json",
+  "plan_file_sha256": "a3f68051f964ee8b2917879e7fcec1d81b0c5bec20a975b2344410b08898e694",
+  "plan_semantic_sha256": "773eea8ffd8ae1f1ed7e1327edd91f0a6c535a89ea90fd95ee5061a15674a1b6",
+  "run_plan_sha256": "1c5a86b321eacf9549d03f4b7df2c94f8ea8171b7dbb04f384094895869c3a58",
+  "compiler_source_sha256_expected": "e7dc8198600f27fa3d6fc07d2a8fd8b6a4af3b27",
+  "compiler_source_sha256_observed": "e7dc8198600f27fa3d6fc07d2a8fd8b6a4af3b27",
+  "cli_binary_sha256_expected": "5e7f75badf8079d15d971bc05f65c08516a9b79c4bb0539036ccb318c093f79c",
+  "cli_binary_sha256_observed": "5e7f75badf8079d15d971bc05f65c08516a9b79c4bb0539036ccb318c093f79c",
+  "cli_binary_sha256_after": "5e7f75badf8079d15d971bc05f65c08516a9b79c4bb0539036ccb318c093f79c",
+  "runner_source_sha256": "a23c785113a4eacec67c29317e1091af2a655b50e87b2ad871079a88a4e9ffeb",
+  "runner_source_file": "capture.go",
+  "runner_binary_sha256": "fe1b55cc8cd513e40d8d6bba22d4746c59c256df4b66f698c87dff6b76fac7a6",
+  "runner_source_bytes": 46703,
+  "model_variant": "qat_ternary",
+  "model_metadata_sha256": "4746fc7cbd2864e9536b43d779c7ecc39aa35f8f6f64943c73b951f9e967c8a7",
+  "model_metadata_sha256_after": "4746fc7cbd2864e9536b43d779c7ecc39aa35f8f6f64943c73b951f9e967c8a7",
+  "model_weights_sha256": "bd4444d5233f07c18168a4dfa0053afde180ce97e390a993e4e0fbb33fb88337",
+  "model_weights_sha256_after": "bd4444d5233f07c18168a4dfa0053afde180ce97e390a993e4e0fbb33fb88337",
+  "model_weights_bytes": 2759,
+  "model_metadata_file": "model.json",
+  "laya_url_child_environment": "unset",
+  "laya_key_child_environment": "unset",
+  "child_count": 1,
+  "child_timeout_ms": 30000,
+  "path_neutral_command": [
+    "gooo",
+    "body-codegen",
+    "--json",
+    "--tiny-model",
+    "\u003cpinned-model.json\u003e",
+    "--fill-plan",
+    "boolean.plan.json",
+    "--activity",
+    "BooleanHole",
+    "boolean.gooo"
+  ],
+  "exit_code": 0,
+  "cli_active_wall_ms": 6.209125,
+  "child_user_cpu_ms": 3.329,
+  "child_system_cpu_ms": 2.071,
+  "child_max_rss": 16859136,
+  "child_max_rss_unit": "bytes",
+  "resource_scope": "one native gooo body-codegen child only; model metadata/weights are hashed before child timing when tiny_go; RUSAGE_CHILDREN CPU is delta around this sole child; max RSS belongs to this sole child",
+  "stdout_bytes": 17929,
+  "stdout_sha256": "ebad3e7615516ae9cf1eb8d8e71673cbddf52b7fbcec730784af0f264700cac8",
+  "stderr_bytes": 0,
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "validation_errors": null,
+  "decision": {
+    "provider": "tiny_go",
+    "mode": "deterministic_fallback",
+    "fallback_reason": "TINY_GO_OPERATION_NOT_OFFERED",
+    "proposed_candidate_id": "less_than",
+    "proposed_accuracy_percent": 83.33333333333333,
+    "proposed_score_semantics": "fallback_candidate_score_not_model_accuracy",
+    "selected_candidate_id": "less_equal",
+    "best_candidate_id": "less_equal",
+    "best_candidate_accuracy_percent": 100,
+    "selection_regret_percentage_points": 16.66666666666667,
+    "selection_adjustment": "replaced_with_best_scoring_candidate",
+    "tiny_go_variant": "qat_ternary",
+    "tiny_go_weights_sha256": "bd4444d5233f07c18168a4dfa0053afde180ce97e390a993e4e0fbb33fb88337",
+    "tiny_go_metadata_sha256": "4746fc7cbd2864e9536b43d779c7ecc39aa35f8f6f64943c73b951f9e967c8a7",
+    "tiny_go_predicted_operation": "add",
+    "tiny_go_prediction_applied": false,
+    "request_sha256": "sha256:3faa9aec6971c8ea7554c2b53958bc301917c91481050be61ef2c9f0572ebb29",
+    "local_model_predictions": 1,
+    "external_provider_calls": 0,
+    "external_provider_calls_known": true,
+    "tiny_model_load_ms": 0.122584,
+    "tiny_decision_ms": 0.038459,
+    "bodycodegen_total_ms": 0.633375
+  },
+  "gold_operation": "less_equal",
+  "raw_prediction_matches_gold": false,
+  "finite_suite": {
+    "cases": [
+      {
+        "input": -9223372036854775808,
+        "expected": 2
+      },
+      {
+        "input": -7,
+        "expected": 2
+      },
+      {
+        "input": -1,
+        "expected": 2
+      },
+      {
+        "input": 0,
+        "expected": 2
+      },
+      {
+        "input": 1,
+        "expected": 0
+      },
+      {
+        "input": 9223372036854775807,
+        "expected": 0
+      }
+    ],
+    "candidate_scores": [
+      {
+        "id": "less_than",
+        "expression": "input \u003c 0",
+        "typecheck_passed": true,
+        "test_cases_passed": 5,
+        "test_cases_total": 6,
+        "accuracy_percent": 83.33333333333333
+      },
+      {
+        "id": "less_equal",
+        "expression": "input \u003c= 0",
+        "typecheck_passed": true,
+        "test_cases_passed": 6,
+        "test_cases_total": 6,
+        "accuracy_percent": 100
+      },
+      {
+        "id": "equal",
+        "expression": "input == 0",
+        "typecheck_passed": true,
+        "test_cases_passed": 3,
+        "test_cases_total": 6,
+        "accuracy_percent": 50
+      }
+    ],
+    "reported_selected_case_results": [
+      {
+        "input": -9223372036854775808,
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      },
+      {
+        "input": -7,
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      },
+      {
+        "input": -1,
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      },
+      {
+        "input": 0,
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      },
+      {
+        "input": 1,
+        "expected": 0,
+        "actual": 0,
+        "passed": true
+      },
+      {
+        "input": 9223372036854775807,
+        "expected": 0,
+        "actual": 0,
+        "passed": true
+      }
+    ],
+    "independent_candidate_scores": [
+      {
+        "id": "less_than",
+        "expression": "input \u003c 0",
+        "passed": 5,
+        "total": 6
+      },
+      {
+        "id": "less_equal",
+        "expression": "input \u003c= 0",
+        "passed": 6,
+        "total": 6
+      },
+      {
+        "id": "equal",
+        "expression": "input == 0",
+        "passed": 3,
+        "total": 6
+      }
+    ],
+    "independent_selected_case_results": [
+      {
+        "input": -9223372036854775808,
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      },
+      {
+        "input": -7,
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      },
+      {
+        "input": -1,
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      },
+      {
+        "input": 0,
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      },
+      {
+        "input": 1,
+        "expected": 0,
+        "actual": 0,
+        "passed": true
+      },
+      {
+        "input": 9223372036854775807,
+        "expected": 0,
+        "actual": 0,
+        "passed": true
+      }
+    ],
+    "selected_cases_passed": 6,
+    "selected_cases_total": 6,
+    "functional_accuracy_percent": 100
+  },
+  "completeness": {
+    "decision_provider": "tiny_go",
+    "laya_provider": "",
+    "dimensions": [
+      {
+        "id": "declaration_coverage",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      },
+      {
+        "id": "generation_coverage",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      },
+      {
+        "id": "source_ast_coverage",
+        "status": "PASS",
+        "numerator": 25,
+        "denominator": 25
+      },
+      {
+        "id": "route_semantic_equivalence",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      },
+      {
+        "id": "typecheck_coverage",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      },
+      {
+        "id": "internal_replay_coverage",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      },
+      {
+        "id": "route_choice_protocol",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      },
+      {
+        "id": "provenance_integrity",
+        "status": "PASS",
+        "numerator": 8,
+        "denominator": 8
+      },
+      {
+        "id": "repository_write_boundary",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      },
+      {
+        "id": "execution_boundary",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      {
+        "id": "permission_boundary",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      {
+        "id": "external_network_boundary",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      },
+      {
+        "id": "laya_decision_observation",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 0
+      },
+      {
+        "id": "use_case_coverage",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      {
+        "id": "reverse_observation_coverage",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      {
+        "id": "full_domain_semantics",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      {
+        "id": "route_quality",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      {
+        "id": "resource_observation",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      {
+        "id": "resource_baseline_comparison",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      {
+        "id": "semantic_profile_delta",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      {
+        "id": "declared_suite_functional_accuracy",
+        "status": "PASS",
+        "numerator": 6,
+        "denominator": 6
+      },
+      {
+        "id": "provider_execution_accounting",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      }
+    ]
+  }
+}
