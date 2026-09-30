@@ -35,7 +35,20 @@ verified against every allowlisted SHA-256. The publication receipt is
 or production compiler integration is claimed.
 
 Standalone Go executables with all three model variants are available in the
+[v0.2.0-experimental release](https://github.com/kimjooyoon/gooo-neural-decision-experiments/releases/tag/v0.2.0-experimental)
+for macOS ARM64, Linux AMD64 and Linux ARM64. It adds `gooo-body-compose` to the
+single-request and persistent-stream tools. Its source is pinned to commit
+`72813219c891285a5c6af43406cb0688d3a8b4c8`; two independent builds were
+byte-identical and all four uploaded assets passed fresh anonymous download
+verification. Darwin smoke checks executed all nine CLI/model combinations;
+Linux executables were inspected and integrity-checked, not run on this host.
+See [build verification](publication/release-independent-verification-v0.2.json),
+[public asset verification](review/release-v0.2-publication-20260930/verification-receipt.json),
+and the [small body example](examples/adjust-balance/README.md).
+
+The earlier two-tool
 [v0.1.0-experimental release](https://github.com/kimjooyoon/gooo-neural-decision-experiments/releases/tag/v0.1.0-experimental)
+remains available
 for macOS ARM64, Linux AMD64 and Linux ARM64. The release is pinned to commit
 `6d306d3aae547cb6f5bffa503303171f4145f4c0`. Two independent builds produced
 byte-identical archives; all four uploaded assets were anonymously downloaded
@@ -137,7 +150,8 @@ model choices or deterministic fallbacks. A bounded training-only search is
 optional. The [Go study runner](tools/evaluate-bodyplans/README.md) validates
 native Gooo generation and independently compiles/executes emitted Go, with
 explicit planned, observed and unknown counts. This extension is separate from
-the immutable v1 operator-model results and executable release.
+the immutable v1 operator-model results; the v0.2 executable release includes
+the new body composer while preserving the original model weights.
 
 The [frozen 128-scenario study](runs/body-plan-v1-laya-7d626b9-20260930/README.md)
 completed 1,280 native Gooo generation cells and 45,200 independent Go case
@@ -153,3 +167,10 @@ once into scoped array indices. One-plan M4 measurements improved the median
 evaluation time from 239.7 to 113.9 ns, with 544 B/5 heap allocations per call
 reduced to zero. Compilation still allocates and stores bounded slot tables;
 the benchmark does not measure full code generation or inference.
+
+The study also exposed a native compiler mismatch for inferred Integer locals.
+The fix is [merged into Gooo main](https://github.com/kimjooyoon/meta-ontology-go/pull/1106),
+with all six required machine checks and post-main CI passing. The
+[promotion receipt](publication/native-integer-main-promotion-1106.json) records
+the exact source, proof and merge bindings, the retained auxiliary dev-run
+503 failure, and the remaining Actions-only promotion limitation.

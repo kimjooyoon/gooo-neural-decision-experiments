@@ -1,0 +1,378 @@
+{
+  "derivation_definition": [
+    "Complete raw attempts were copied byte-for-byte to a private archive outside the repository; the archive is not published and its local path is intentionally omitted.",
+    "Public command records replace absolute helper/build/output paths with relative helper paths and FIRST_BUILD, SECOND_BUILD, SOURCE_SHA, VERSION, and OUTPUT placeholders.",
+    "Path-bearing hash files retain each digest and replace path labels with basenames or a relative helper label.",
+    "Original helper source copies are retained byte-for-byte with a .go.txt suffix; the replay command copies the archived source to a transient .go file before go run so it is not discovered as a package source.",
+    "stdout/stderr are byte-exact where they contain no local paths; transformations and original/derived hashes are listed per file."
+  ],
+  "derived_files": [
+    {
+      "derived_sha256": "e3adff47fd7c765f6c619e0eadc9c627a2373c341a5307b4717f00ccc467c2cf",
+      "derived_size_bytes": 38429,
+      "path": "ptq-threshold-check-original/main.go.txt",
+      "source_raw_files": [
+        {
+          "path": "ptq-threshold-check-original/main.go.txt",
+          "sha256": "e3adff47fd7c765f6c619e0eadc9c627a2373c341a5307b4717f00ccc467c2cf",
+          "size_bytes": 38429
+        }
+      ],
+      "transformation": "Exact frozen helper bytes; .go.txt suffix avoids package scanning."
+    },
+    {
+      "derived_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "derived_size_bytes": 0,
+      "path": "ptq-threshold-check-original/stdout.txt",
+      "source_raw_files": [
+        {
+          "path": "ptq-threshold-check-original/stdout.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      ],
+      "transformation": "Byte-exact; empty and contains no local paths."
+    },
+    {
+      "derived_sha256": "03c1683b69bb13a641fe499b7cad1b84f247025c784e218e6279bf564edfcb3e",
+      "derived_size_bytes": 143,
+      "path": "ptq-threshold-check-original/stderr.txt",
+      "source_raw_files": [
+        {
+          "path": "ptq-threshold-check-original/stderr.txt",
+          "sha256": "03c1683b69bb13a641fe499b7cad1b84f247025c784e218e6279bf564edfcb3e",
+          "size_bytes": 143
+        }
+      ],
+      "transformation": "Byte-exact; generic verifier failure contains no local paths."
+    },
+    {
+      "derived_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "derived_size_bytes": 2,
+      "path": "ptq-threshold-check-original/exitcode.txt",
+      "source_raw_files": [
+        {
+          "path": "ptq-threshold-check-original/observed-go-exit-code.txt",
+          "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "size_bytes": 2
+        }
+      ],
+      "transformation": "Same recorded verifier exit code, renamed to a consistent field."
+    },
+    {
+      "derived_sha256": "1b0feb88ead9b224d82ea4140c2ec2222f22ae3d84138d0badaedef3cfd868f3",
+      "derived_size_bytes": 253,
+      "path": "ptq-threshold-check-original/capture-note.txt",
+      "source_raw_files": [
+        {
+          "path": "ptq-threshold-check-original/capture-note.txt",
+          "sha256": "1b0feb88ead9b224d82ea4140c2ec2222f22ae3d84138d0badaedef3cfd868f3",
+          "size_bytes": 253
+        }
+      ],
+      "transformation": "Byte-exact; explains initial shell capture limitation without host paths."
+    },
+    {
+      "derived_sha256": "24aae9d97b75b1720f26925c076417bb3b13cf57c430d77b38177bce8286e4fe",
+      "derived_size_bytes": 162,
+      "path": "ptq-threshold-check-original/command.txt",
+      "source_raw_files": [
+        {
+          "path": "ptq-threshold-check-original/command.txt",
+          "sha256": "4eb1dfb47d8b2391592d1df4511f85ba0d3c81179efde920694d65d1957ee65c",
+          "size_bytes": 330
+        }
+      ],
+      "transformation": "Replaced absolute helper/build/output paths with the relative helper path and named placeholders."
+    },
+    {
+      "derived_sha256": "b1d579c4eb20b5461db1572dc18149b6ffb3f7b8a23b56fe9cea602e0e28ecef",
+      "derived_size_bytes": 88,
+      "path": "ptq-threshold-check-original/helper-sha256.txt",
+      "source_raw_files": [
+        {
+          "path": "ptq-threshold-check-original/helper-sha256.txt",
+          "sha256": "902a9d37dc75ce48c1ba0270cdbc833cf631ba315bdfbe3dc10a29a961950910",
+          "size_bytes": 248
+        }
+      ],
+      "transformation": "Removed absolute source-file labels; retained helper digest."
+    },
+    {
+      "derived_sha256": "dc9403ed6ae62b87fdab4144fdda6d2285f8dd8f9fbee07cb84bbc509d15d4bf",
+      "derived_size_bytes": 734,
+      "path": "ptq-threshold-check-original/input-archive-sha256.txt",
+      "source_raw_files": [
+        {
+          "path": "ptq-threshold-check-original/input-archive-sha256.txt",
+          "sha256": "7fef72098c88f7cc9506563f66daf75609aa83a8816bfa5243b5e1eab9897d94",
+          "size_bytes": 1034
+        }
+      ],
+      "transformation": "Replaced input archive absolute paths with basenames."
+    },
+    {
+      "derived_sha256": "4070b7fc8a6aefda4cbc7d734c75d3748864d85bd9e5290cbeb4c92353871dd8",
+      "derived_size_bytes": 181,
+      "path": "ptq-threshold-check-original/binding.txt",
+      "source_raw_files": [
+        {
+          "path": "ptq-threshold-check-original/binding.txt",
+          "sha256": "157b6bc7dabd04e1d61298177e312f0df752595995c51969a06d3b78fed64e58",
+          "size_bytes": 256
+        }
+      ],
+      "transformation": "Replaced local build paths with named placeholders; retained release source and helper hashes."
+    },
+    {
+      "derived_sha256": "e3adff47fd7c765f6c619e0eadc9c627a2373c341a5307b4717f00ccc467c2cf",
+      "derived_size_bytes": 38429,
+      "path": "ptq-threshold-check-original-replay/main.go.txt",
+      "source_raw_files": [
+        {
+          "path": "ptq-threshold-check-original-replay/main.go",
+          "sha256": "e3adff47fd7c765f6c619e0eadc9c627a2373c341a5307b4717f00ccc467c2cf",
+          "size_bytes": 38429
+        }
+      ],
+      "transformation": "Exact frozen helper bytes renamed from .go to .go.txt to avoid repository package discovery."
+    },
+    {
+      "derived_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "derived_size_bytes": 0,
+      "path": "ptq-threshold-check-original-replay/stdout.txt",
+      "source_raw_files": [
+        {
+          "path": "ptq-threshold-check-original-replay/stdout.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      ],
+      "transformation": "Byte-exact; empty and contains no local paths."
+    },
+    {
+      "derived_sha256": "03c1683b69bb13a641fe499b7cad1b84f247025c784e218e6279bf564edfcb3e",
+      "derived_size_bytes": 143,
+      "path": "ptq-threshold-check-original-replay/stderr.txt",
+      "source_raw_files": [
+        {
+          "path": "ptq-threshold-check-original-replay/stderr.txt",
+          "sha256": "03c1683b69bb13a641fe499b7cad1b84f247025c784e218e6279bf564edfcb3e",
+          "size_bytes": 143
+        }
+      ],
+      "transformation": "Byte-exact; generic verifier failure contains no local paths."
+    },
+    {
+      "derived_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "derived_size_bytes": 2,
+      "path": "ptq-threshold-check-original-replay/exitcode.txt",
+      "source_raw_files": [
+        {
+          "path": "ptq-threshold-check-original-replay/exitcode.txt",
+          "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "size_bytes": 2
+        }
+      ],
+      "transformation": "Byte-exact verifier process exit code."
+    },
+    {
+      "derived_sha256": "7622342a858055a37d02ae894b67df92630368874906ef673a4dd5908dae4fce",
+      "derived_size_bytes": 306,
+      "path": "ptq-threshold-check-original-replay/command.txt",
+      "source_raw_files": [
+        {
+          "path": "ptq-threshold-check-original-replay/command.txt",
+          "sha256": "f37c2925dadb5c1702cf1f48726772c1b0ac7358ac6aedb094840b467c4f45a6",
+          "size_bytes": 460
+        }
+      ],
+      "transformation": "Replaced absolute helper/build/output paths with a relative transient helper path and named placeholders; documents required .go.txt to .go copy."
+    },
+    {
+      "derived_sha256": "5044d0ab5ff3bdce20f15c0079378b58369f678969bc4c712c200ce84b0e6d7b",
+      "derived_size_bytes": 812,
+      "path": "ptq-threshold-check-original-replay/source-and-input-sha256.txt",
+      "source_raw_files": [
+        {
+          "path": "ptq-threshold-check-original-replay/source-and-input-sha256.txt",
+          "sha256": "9fea22f11170a41b4df48698641656bd0db2229cbcd2f99e9bd0fd4b6ed58a44",
+          "size_bytes": 1261
+        }
+      ],
+      "transformation": "Replaced absolute paths with basenames and renamed helper basename to match the preserved .go.txt copy."
+    },
+    {
+      "derived_sha256": "f34902c34c36ecae0aba8b60c3bb58a875dc68cfd8aa374ea5dc7d00c1f6e8fc",
+      "derived_size_bytes": 134,
+      "path": "ptq-threshold-check-revision2/stdout.txt",
+      "source_raw_files": [
+        {
+          "path": "ptq-threshold-check-revision2/stdout.txt",
+          "sha256": "f34902c34c36ecae0aba8b60c3bb58a875dc68cfd8aa374ea5dc7d00c1f6e8fc",
+          "size_bytes": 134
+        }
+      ],
+      "transformation": "Byte-exact; verifier prints only counts and receipt digest."
+    },
+    {
+      "derived_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "derived_size_bytes": 0,
+      "path": "ptq-threshold-check-revision2/stderr.txt",
+      "source_raw_files": [
+        {
+          "path": "ptq-threshold-check-revision2/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      ],
+      "transformation": "Byte-exact; empty."
+    },
+    {
+      "derived_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "derived_size_bytes": 2,
+      "path": "ptq-threshold-check-revision2/exitcode.txt",
+      "source_raw_files": [
+        {
+          "path": "ptq-threshold-check-revision2/exitcode.txt",
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "size_bytes": 2
+        }
+      ],
+      "transformation": "Byte-exact verifier process exit code."
+    },
+    {
+      "derived_sha256": "006e3b1c778dd7344831ecee44646a9d23666a0fe04a71143fe47c1c99248187",
+      "derived_size_bytes": 184,
+      "path": "ptq-threshold-check-revision2/command.txt",
+      "source_raw_files": [
+        {
+          "path": "ptq-threshold-check-revision2/command.txt",
+          "sha256": "4611e50854f6d464a055e2b5a31c46f56351868916abe5cc961f0ca7ec8be24b",
+          "size_bytes": 333
+        }
+      ],
+      "transformation": "Replaced absolute helper/build/output paths with a relative helper path and named placeholders."
+    },
+    {
+      "derived_sha256": "90f1a0a2c906a22665ccaca2c849ed647d2136dd812ffeb2c00c7a8f49b0a3fb",
+      "derived_size_bytes": 808,
+      "path": "ptq-threshold-check-revision2/source-and-input-sha256.txt",
+      "source_raw_files": [
+        {
+          "path": "ptq-threshold-check-revision2/source-and-input-sha256.txt",
+          "sha256": "f78a4b19618e0613dbee72de947372bcef074d500af8471a4ca2360021ec027a",
+          "size_bytes": 1137
+        }
+      ],
+      "transformation": "Replaced absolute helper/archive paths with basenames only; retained helper and artifact hashes."
+    }
+  ],
+  "private_raw_archive_exists": true,
+  "private_raw_archive_path_withheld": true,
+  "private_raw_attempt_count": 20,
+  "private_raw_attempts_tree_sha256": "e7985fd7a16d11f1fd401124c273345ec59f59f2f735b8fc5d413b8e97370675",
+  "raw_attempt_files": [
+    {
+      "path": "ptq-threshold-check-original/binding.txt",
+      "sha256": "157b6bc7dabd04e1d61298177e312f0df752595995c51969a06d3b78fed64e58",
+      "size_bytes": 256
+    },
+    {
+      "path": "ptq-threshold-check-original/capture-note.txt",
+      "sha256": "1b0feb88ead9b224d82ea4140c2ec2222f22ae3d84138d0badaedef3cfd868f3",
+      "size_bytes": 253
+    },
+    {
+      "path": "ptq-threshold-check-original/command.txt",
+      "sha256": "4eb1dfb47d8b2391592d1df4511f85ba0d3c81179efde920694d65d1957ee65c",
+      "size_bytes": 330
+    },
+    {
+      "path": "ptq-threshold-check-original/helper-sha256.txt",
+      "sha256": "902a9d37dc75ce48c1ba0270cdbc833cf631ba315bdfbe3dc10a29a961950910",
+      "size_bytes": 248
+    },
+    {
+      "path": "ptq-threshold-check-original/input-archive-sha256.txt",
+      "sha256": "7fef72098c88f7cc9506563f66daf75609aa83a8816bfa5243b5e1eab9897d94",
+      "size_bytes": 1034
+    },
+    {
+      "path": "ptq-threshold-check-original/main.go.txt",
+      "sha256": "e3adff47fd7c765f6c619e0eadc9c627a2373c341a5307b4717f00ccc467c2cf",
+      "size_bytes": 38429
+    },
+    {
+      "path": "ptq-threshold-check-original/observed-go-exit-code.txt",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "size_bytes": 2
+    },
+    {
+      "path": "ptq-threshold-check-original/stderr.txt",
+      "sha256": "03c1683b69bb13a641fe499b7cad1b84f247025c784e218e6279bf564edfcb3e",
+      "size_bytes": 143
+    },
+    {
+      "path": "ptq-threshold-check-original/stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "ptq-threshold-check-original-replay/command.txt",
+      "sha256": "f37c2925dadb5c1702cf1f48726772c1b0ac7358ac6aedb094840b467c4f45a6",
+      "size_bytes": 460
+    },
+    {
+      "path": "ptq-threshold-check-original-replay/exitcode.txt",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "size_bytes": 2
+    },
+    {
+      "path": "ptq-threshold-check-original-replay/main.go",
+      "sha256": "e3adff47fd7c765f6c619e0eadc9c627a2373c341a5307b4717f00ccc467c2cf",
+      "size_bytes": 38429
+    },
+    {
+      "path": "ptq-threshold-check-original-replay/source-and-input-sha256.txt",
+      "sha256": "9fea22f11170a41b4df48698641656bd0db2229cbcd2f99e9bd0fd4b6ed58a44",
+      "size_bytes": 1261
+    },
+    {
+      "path": "ptq-threshold-check-original-replay/stderr.txt",
+      "sha256": "03c1683b69bb13a641fe499b7cad1b84f247025c784e218e6279bf564edfcb3e",
+      "size_bytes": 143
+    },
+    {
+      "path": "ptq-threshold-check-original-replay/stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "ptq-threshold-check-revision2/command.txt",
+      "sha256": "4611e50854f6d464a055e2b5a31c46f56351868916abe5cc961f0ca7ec8be24b",
+      "size_bytes": 333
+    },
+    {
+      "path": "ptq-threshold-check-revision2/exitcode.txt",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size_bytes": 2
+    },
+    {
+      "path": "ptq-threshold-check-revision2/source-and-input-sha256.txt",
+      "sha256": "f78a4b19618e0613dbee72de947372bcef074d500af8471a4ca2360021ec027a",
+      "size_bytes": 1137
+    },
+    {
+      "path": "ptq-threshold-check-revision2/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "ptq-threshold-check-revision2/stdout.txt",
+      "sha256": "f34902c34c36ecae0aba8b60c3bb58a875dc68cfd8aa374ea5dc7d00c1f6e8fc",
+      "size_bytes": 134
+    }
+  ],
+  "schema": "gooo/release-verifier-attempt-derivation/v1"
+}

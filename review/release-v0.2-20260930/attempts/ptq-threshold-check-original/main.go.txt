@@ -543,13 +543,7 @@ func validateModel(metadataBytes, weights []byte, variant string) error {
 	if !ok || digest(metadataBytes) != pins[0] || digest(weights) != pins[1] || metadata.Schema != "gooo/tiny-ir-decision-model/v1" || metadata.Variant != variant || metadata.WeightsFile != "weights.bin" || metadata.WeightsSHA256 != digest(weights) {
 		return fmt.Errorf("%s model metadata or weights differ from public model pins", variant)
 	}
-	expectedThresholds := map[string]float64{
-		"fp32":        0.125,
-		"ptq_ternary": 0.5429213483146067,
-		"qat_ternary": 0.125,
-	}
-	expectedThreshold, thresholdKnown := expectedThresholds[variant]
-	if !thresholdKnown || metadata.FeatureDim != 256 || metadata.HiddenDim != 48 || metadata.MaxBytes != 512 || metadata.ConfidenceThreshold != expectedThreshold || len(metadata.Labels) != len(labels) || !equalStrings(metadata.Labels, labels) || len(metadata.Tensors) != 4 || !positiveFinite(metadata.Temperature) {
+	if metadata.FeatureDim != 256 || metadata.HiddenDim != 48 || metadata.MaxBytes != 512 || metadata.ConfidenceThreshold != 0.125 || len(metadata.Labels) != len(labels) || !equalStrings(metadata.Labels, labels) || len(metadata.Tensors) != 4 || !positiveFinite(metadata.Temperature) {
 		return fmt.Errorf("%s model dimensions, labels or numeric parameters are invalid", variant)
 	}
 	wantedTensorShapes := []tensor{{Name: "w1", Rows: 48, Cols: 256, Count: 12288}, {Name: "b1", Rows: 1, Cols: 48, Count: 48}, {Name: "w2", Rows: 8, Cols: 48, Count: 384}, {Name: "b2", Rows: 1, Cols: 8, Count: 8}}

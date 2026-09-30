@@ -1,4 +1,38 @@
-# Frozen v1 publication
+# Public models and executable releases
+
+## Body composer release v0.2
+
+The public [v0.2.0-experimental release](https://github.com/kimjooyoon/gooo-neural-decision-experiments/releases/tag/v0.2.0-experimental)
+is bound to source `72813219c891285a5c6af43406cb0688d3a8b4c8`. Each of its three
+target archives contains `gooo-decision`, `gooo-decision-stream`,
+`gooo-body-compose`, the three unchanged model bundles and source manifests.
+
+- [Independent build verification](release-independent-verification-v0.2.json):
+  two supplied builds were byte-identical, with exact archive/source/model
+  hashes and 9/9 actual
+  Darwin CLI/model smoke executions. Linux executables were inspected only.
+- [Anonymous public asset verification](../review/release-v0.2-publication-20260930/verification-receipt.json):
+  public repository/tag binding and four fresh downloaded assets matching their
+  expected SHA-256, size and API digest.
+- [Verifier revision and attempts](../review/release-v0.2-20260930/README.md):
+  the original verifier incorrectly assumed the same confidence threshold for
+  PTQ and FP32. Its failure, original helper and corrected verifier are retained.
+  Attempts that originally contained local paths are published as path-neutral
+  derived capsules with raw and derived hashes; complete originals remain in
+  a private external archive.
+- [Native Integer promotion](native-integer-main-promotion-1106.json): the study
+  found a compiler inference mismatch, repaired and merged to Gooo main with
+  six required checks, a verified proof artifact and successful post-main CI.
+
+The corrected release verifier is a later audit-tool revision. It does not
+change the frozen release binaries, tag, model weights or source manifests.
+The small [body example](../examples/adjust-balance/README.md) demonstrates
+deterministic fallback and three tiny-model decisions with training cases.
+These examples are repository files, not additional release assets or heldout
+research results. The optional upstream Laya comparison still uses its existing
+PyTorch service; the tiny-model executables need no Python runtime.
+
+## Frozen v1 publication
 
 The external Go audit, 17-file public-export verifier, read-only Hub preflight,
 and actual Go publisher completed successfully. The Hub model is public at

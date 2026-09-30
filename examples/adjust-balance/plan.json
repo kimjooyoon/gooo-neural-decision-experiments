@@ -1,0 +1,25 @@
+{
+  "schema": "gooo/typed-body-plan/v1",
+  "id": "adjust-balance-example",
+  "name": "AdjustBalance",
+  "result_type": "Int",
+  "expressions": [
+    {"kind": "input", "name": "input"},
+    {"kind": "int", "int": 3},
+    {"kind": "hole", "hole_id": "base", "left": 0, "right": 1, "text": "두 정수 피연산자를 더해서 기준값으로 만든다.", "allowed": ["add", "multiply"], "fallback": "add"},
+    {"kind": "local", "name": "result"},
+    {"kind": "int", "int": 0},
+    {"kind": "hole", "hole_id": "negative", "left": 0, "right": 4, "text": "입력이 0보다 엄격하게 작은지를 비교한다.", "allowed": ["less_than", "less_equal"], "fallback": "less_than"},
+    {"kind": "int", "int": 1},
+    {"kind": "hole", "hole_id": "decrement", "left": 3, "right": 6, "text": "왼쪽 정수에서 오른쪽 정수를 빼서 차이를 구한다.", "allowed": ["subtract", "add"], "fallback": "subtract"},
+    {"kind": "binary", "operation": "add", "left": 3, "right": 6}
+  ],
+  "statements": [
+    {"kind": "let", "name": "result", "expr": 2},
+    {"kind": "if", "expr": 5, "then": [2], "else": [3]},
+    {"kind": "assign", "name": "result", "expr": 7},
+    {"kind": "assign", "name": "result", "expr": 8},
+    {"kind": "return", "expr": 3}
+  ],
+  "root": [0, 1, 4]
+}
