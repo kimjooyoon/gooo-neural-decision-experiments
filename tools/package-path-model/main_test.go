@@ -35,4 +35,12 @@ func TestFixedPublicPathBundleAndExtraFileRejection(t *testing.T) {
 	if _, _, err := local(root); err == nil {
 		t.Fatal("modified public artifact was accepted")
 	}
+	review := filepath.Join(t.TempDir(), "review")
+	if err := assembleVersion(review, true); err != nil {
+		t.Fatal(err)
+	}
+	files, _, err = local(review)
+	if err != nil || len(files) != len(reviewedSources())+1 {
+		t.Fatalf("native review: %d %v", len(files), err)
+	}
 }

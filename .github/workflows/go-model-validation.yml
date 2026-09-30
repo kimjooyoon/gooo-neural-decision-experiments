@@ -75,6 +75,9 @@ jobs:
           go run ./tools/package-path-model --output "$RUNNER_TEMP/path-model-bundle"
           cmp publication/hf-typed-path-v1/publication-manifest.json "$RUNNER_TEMP/path-model-bundle/publication-manifest.json"
           go run ./tools/package-path-model --mode verify --bundle "$RUNNER_TEMP/path-model-bundle" --output "$RUNNER_TEMP/path-model-bundle-verification.json"
+          go run ./tools/package-path-model --native-review --output "$RUNNER_TEMP/path-model-reviewed-bundle"
+          cmp publication/hf-typed-path-v1-reviewed/publication-manifest.json "$RUNNER_TEMP/path-model-reviewed-bundle/publication-manifest.json"
+          go run ./tools/package-path-model --mode verify --bundle "$RUNNER_TEMP/path-model-reviewed-bundle" --output "$RUNNER_TEMP/path-model-reviewed-verification.json"
       - uses: actions/upload-artifact@v7
         with:
           name: go-model-validation
@@ -89,6 +92,7 @@ jobs:
             ${{ runner.temp }}/path-positioned-random-audit
             ${{ runner.temp }}/path-reserved-probe-tdd
             ${{ runner.temp }}/path-model-bundle-verification.json
+            ${{ runner.temp }}/path-model-reviewed-verification.json
           if-no-files-found: error
 
   compiler-model-dogfood:

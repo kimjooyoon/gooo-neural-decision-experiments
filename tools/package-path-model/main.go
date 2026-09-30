@@ -24,6 +24,7 @@ import (
 
 const repository = "asketeddy/gooo-typed-path-tiny-v1"
 const schema = "gooo/public-typed-path-allowlist/v1"
+const reviewedSchema = "gooo/public-typed-path-allowlist/v2"
 
 var privateText = regexp.MustCompile(`(?:hf_|ghp_|github_pat_|sk-)[A-Za-z0-9_-]{20,}|/Users/|/private/var/|Bearer\s+[A-Za-z0-9]`)
 
@@ -72,6 +73,15 @@ func sources() map[string]string {
 	}
 	return files
 }
+
+func reviewedSources() map[string]string {
+	files := sources()
+	for _, name := range []string{"report.json", "preexecution.json", "runner-binding.json"} {
+		files["native-review/"+name] = "runs/typed-path-native-replay-bound-20261001/" + name
+	}
+	files["native-review/earlier-source-binding-correction.json"] = "runs/typed-path-native-replay-20261001/source-binding-correction.json"
+	return files
+}
 func read(path string) ([]byte, error) {
 	info, err := os.Lstat(path)
 	if err != nil || !info.Mode().IsRegular() || info.Size() <= 0 || info.Size() > 4<<20 {
@@ -90,18 +100,37 @@ func save(path string, value any) error {
 	return os.WriteFile(path, append(raw, '\n'), 0644)
 }
 func assemble(output string) error {
+	return assembleVersion(output, false)
+}
+
+func assembleVersion(output string, reviewed bool) error {
 	if _, err := os.Stat(output); !os.IsNotExist(err) {
 		return errors.New("bundle output must be fresh")
 	}
 	contents := map[string][]byte{}
 	value := manifest{Schema: schema, TextScanned: true, BinaryProvenance: "All nine weight files use the disclosed public synthetic bilingual Gooo/PROV-O curriculum; no private repository text or Laya weights were used. Binary files are validated as model tensors, not scanned as text."}
-	for name, source := range sources() {
+	files := sources()
+	if reviewed {
+		value.Schema = reviewedSchema
+		files = reviewedSources()
+	}
+	for name, source := range files {
 		raw, err := read(source)
 		if err != nil {
 			return fmt.Errorf("%s: %w", name, err)
 		}
 		if !strings.HasSuffix(name, ".bin") && privateText.Match(raw) {
 			return fmt.Errorf("private text in %s", name)
+		}
+		if reviewed && name == "README.md" {
+			note, err := read("docs/hf-typed-path-v1-native-review.md")
+			if err != nil {
+				return err
+			}
+			if privateText.Match(note) {
+				return errors.New("private review text")
+			}
+			raw = append(append(raw, '\n'), note...)
 		}
 		if strings.HasSuffix(name, "/model.json") {
 			if _, err := decision.LoadPath(source); err != nil {
@@ -114,6 +143,19 @@ func assemble(output string) error {
 			}
 			if json.Unmarshal(raw, &audit) != nil || audit.Decision != "PASS" {
 				return errors.New("required numerical audit is incomplete")
+			}
+		}
+		if name == "native-review/report.json" {
+			var report struct {
+				Status      string `json:"status"`
+				Calls       int    `json:"native_compiler_calls"`
+				Passed      int    `json:"independent_cases_passed"`
+				Total       int    `json:"independent_cases_total"`
+				Predictions int    `json:"additional_local_model_predictions"`
+				Source      string `json:"runner_source_revision"`
+			}
+			if json.Unmarshal(raw, &report) != nil || report.Status != "PASS" || report.Calls != 20 || report.Passed != 240 || report.Total != 240 || report.Predictions != 0 || report.Source != "643ca6ead45cef35d85175864aa3b16556346bca" {
+				return errors.New("required native replay is incomplete or incorrectly bound")
 			}
 		}
 		contents[name] = raw
@@ -141,7 +183,10 @@ func local(root string) ([]artifact, string, error) {
 		return nil, "", err
 	}
 	expected := sources()
-	if value.Schema != schema || !value.TextScanned || value.BinaryProvenance == "" || len(value.Files) != len(expected) {
+	if value.Schema == reviewedSchema {
+		expected = reviewedSources()
+	}
+	if value.Schema != schema && value.Schema != reviewedSchema || !value.TextScanned || value.BinaryProvenance == "" || len(value.Files) != len(expected) {
 		return nil, "", errors.New("invalid fixed publication manifest")
 	}
 	seen := map[string]bool{}
@@ -277,12 +322,13 @@ func main() {
 	bundle := flag.String("bundle", "publication/hf-typed-path-v1", "fixed bundle directory")
 	output := flag.String("output", "", "fresh bundle or verification output")
 	revision := flag.String("revision", "", "optional immutable public revision")
+	reviewed := flag.Bool("native-review", false, "include separately captured native structural replay")
 	flag.Parse()
 	var err error
 	if *output == "" || flag.NArg() != 0 {
 		err = errors.New("fresh output required")
 	} else if *mode == "assemble" {
-		err = assemble(*output)
+		err = assembleVersion(*output, *reviewed)
 	} else if *mode == "verify" {
 		err = verify(*bundle, *revision, *output)
 	} else {

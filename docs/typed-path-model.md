@@ -80,6 +80,13 @@ uses the operation ABI. Native in-process structural-provider integration,
 training from arbitrary PROV-O feedback traces and production online learning
 are not implemented by this stage.
 
+The subsequent source-bound native replay is recorded in
+`runs/typed-path-native-replay-bound-20261001`: 20 generations through the actual
+compiler and 240/240 independently executed emitted-Go cases, repeating five
+unique functions across languages/arms. Native replay uses saved selections and
+makes zero additional predictions. The earlier runner revision typo and all
+captures are retained in the neighboring run with an explicit exclusion/correction.
+
 ## Evidence handling
 
 Two failed fixture checks are preserved in `preexecution/`: a missing input
