@@ -70,6 +70,11 @@ and memory accounting.
 
 ## Go inference runtime
 
+The [public Go library](docs/go-library.md) exposes the same bounded model and
+typed binary IR API for imports from other Go modules. Models remain separate
+files; each concurrent call owns its workspace. This API identifies local tiny
+predictions by variant and weights digest and makes no Laya-provider claim.
+
 `cmd/gooo-decision` loads the strict `model.json` plus sibling `weights.bin`
 bundle, validates its digest and tensor layout, then accepts one JSON request on
 stdin. The request contains an instruction and two typed identifiers. The

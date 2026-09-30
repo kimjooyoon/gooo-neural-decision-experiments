@@ -23,7 +23,7 @@ jobs:
           go-version: '1.27.0'
           cache: false
       - name: Require formatted Go
-        run: test -z "$(gofmt -l cmd internal tools)"
+        run: test -z "$(gofmt -l cmd internal tools decision)"
       - name: Go vet
         run: go vet ./...
       - name: Runtime and publication regression tests
