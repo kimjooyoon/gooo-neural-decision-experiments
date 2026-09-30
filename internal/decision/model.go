@@ -527,6 +527,13 @@ func (m *Model) PredictInto(text string, workspace *Workspace, output *Predictio
 	}
 	destination := output
 	*destination = Prediction{}
+	if len(m.floatWeights) != 0 {
+		if len(m.floatWeights) != FeatureDim*HiddenDim+HiddenDim+HiddenDim*LabelCount+LabelCount {
+			return errors.New("model float tensor layout is uninitialized or invalid")
+		}
+	} else if len(m.ternaryWeights) != FeatureDim*HiddenDim+HiddenDim*LabelCount || len(m.biases) != HiddenDim+LabelCount {
+		return errors.New("model ternary tensor layout is uninitialized or invalid")
+	}
 	var candidate Prediction
 	output = &candidate
 	if err := FeaturesInto(text, &workspace.features); err != nil {

@@ -1,0 +1,98 @@
+{
+  "cartesian_search_space_sizes": {
+    "18": 4,
+    "27": 4,
+    "3": 50,
+    "6": 20,
+    "81": 4,
+    "9": 46
+  },
+  "case_sign_counts": {
+    "heldout": {
+      "negative": 640,
+      "positive": 640,
+      "zero": 0
+    },
+    "training": {
+      "negative": 1503,
+      "positive": 1609,
+      "zero": 128
+    }
+  },
+  "cohort_sha256": "e517b948a8c1d744cf832b5d711918dd2fef0b90cd951126f579ac54ada427a9",
+  "distinct_canonical_intents": 128,
+  "earlier_intermediate_not_retained": {
+    "cohort_sha256": "56b43b9845ad45dcbdaa230e797228b54d998810ed9c5a35d2d198b07b141956",
+    "generator_sha256": "1273ccedbbbd84d6fb3ecfbc2921c73dc1cad4b2508ad59e6851f690c153ac22",
+    "status": "OBSERVED_HASHES_ONLY_NOT_RETAINED"
+  },
+  "fallback_policy": "Fallback is a deterministic valid allowed operation chosen by rotating the declared option list from an index-based offset and skipping the gold operation. It deliberately differs from gold to make the unassisted fallback baseline informative; it is not a model prediction and is excluded from inference input.",
+  "families": {
+    "arithmetic-pipeline": 16,
+    "boolean-composition": 16,
+    "nested-branch": 16,
+    "piecewise-branch": 16,
+    "polynomial-order": 16,
+    "reassignment": 16,
+    "signed-boundary": 16,
+    "threshold-comparison": 16
+  },
+  "generator_sha256": "d7d83e96595c94e67eb51b0ce24d7633fbca58317889e547dbe5b95dae78b59e",
+  "heldout_case_count": 1280,
+  "maxima": {
+    "expressions": 15,
+    "holes": 4,
+    "statements": 5
+  },
+  "model_input_boundary": "For each hole, inference receives only its natural-language Text and the descriptions of its Allowed operations, within the plan's required type context. Do not provide IDs, family, oracle_operations, fallback, expected values, training cases, heldout cases, or manifest fields to the model. Training cases may be used only by the bounded search arm after the model proposes initial choices.",
+  "native_preflight": {
+    "candidate_mappings_compiled": 1188,
+    "gold_evaluation_cases": 4520,
+    "plans": 128
+  },
+  "plan_count": 128,
+  "plan_schema": "gooo/typed-body-plan/v1",
+  "plans_over_64_candidate_mappings": 4,
+  "reference_limitations": "Expected cases come from handwritten Go mathematical formulas in generate.go. The reference is independent of the body-plan evaluator and Gooo emitter, but it is correlated with the plan designer's intended mathematics; it is not an independent language implementation or a proof of full-domain correctness.",
+  "result_types": {
+    "Bool": 32,
+    "Int": 96
+  },
+  "schema": "gooo/typed-body-plan-cohort-manifest/v1",
+  "superseded_initial_draft": {
+    "cohort_sha256": "650130fbca5b1731370b2b0aeb2d00267e0545db11452a2ae67a4b6e368d1730",
+    "generator_sha256": "618eb76063be986c47c9d766d3c9dc158666c2919807f9c0893fd03f22799847",
+    "manifest_sha256": "c454f96bece12e069fee5df0d749c55949a85492820092bdbb1fefae2e1b7ae1",
+    "reason": "Canonical intent normalization mutated the shared expression slice and erased hole Text/Fallback; the heldout pool was negative-first. Preserved in superseded-initial-cohort/.",
+    "status": "PRE_INFERENCE_DRAFT_NOT_SCORED"
+  },
+  "supported_scope": "Finite one-input int64 expression holes with a closed operation set; this is not arbitrary code generation or full int64-domain proof.",
+  "train_case_count": 3240,
+  "training_and_heldout_policy": "Every row has disjoint inputs. Training includes a fixed signed-boundary core plus scenario critical values and is the only set used for candidate-discrimination checks. Each plan has five negative and five positive heldout inputs. Where an if condition has a solvable affine boundary, the heldout candidate pool includes inputs two and three units around that boundary when disjoint from training; the pool also includes MinInt64+2/+3 and MaxInt64-2/-3 probes. Heldout inputs never participate in candidate selection.",
+  "training_inputs_global": [
+    -9223372036854775808,
+    -9223372036854775807,
+    -1000003,
+    -1024,
+    -257,
+    -17,
+    -7,
+    -5,
+    -3,
+    -2,
+    -1,
+    0,
+    1,
+    2,
+    3,
+    5,
+    7,
+    17,
+    257,
+    1024,
+    1000003,
+    9223372036854775806,
+    9223372036854775807
+  ],
+  "uniqueness_definition": "Canonical intent preserves result type, typed expression graph and operand order, literals, fixed operations, hole locations/options, statement/control-flow topology, and gold operation assignment. It alpha-normalizes local and hole names, removes plan IDs/names, natural-language wording, and fallback choice; renaming, paraphrasing, or fallback changes do not create new intent."
+}

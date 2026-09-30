@@ -1,0 +1,68 @@
+{
+  "cartesian_search_space_sizes": {
+    "18": 4,
+    "27": 4,
+    "3": 50,
+    "6": 20,
+    "81": 4,
+    "9": 46
+  },
+  "cohort_sha256": "650130fbca5b1731370b2b0aeb2d00267e0545db11452a2ae67a4b6e368d1730",
+  "distinct_canonical_intents": 128,
+  "families": {
+    "arithmetic-pipeline": 16,
+    "boolean-composition": 16,
+    "nested-branch": 16,
+    "piecewise-branch": 16,
+    "polynomial-order": 16,
+    "reassignment": 16,
+    "signed-boundary": 16,
+    "threshold-comparison": 16
+  },
+  "generator_sha256": "618eb76063be986c47c9d766d3c9dc158666c2919807f9c0893fd03f22799847",
+  "heldout_case_count": 1280,
+  "maxima": {
+    "expressions": 15,
+    "holes": 4,
+    "statements": 5
+  },
+  "model_input_boundary": "For each hole, inference receives only its natural-language Text and the descriptions of its Allowed operations, within the plan's required type context. Do not provide IDs, family, oracle_operations, fallback, expected values, training cases, heldout cases, or manifest fields to the model. Training cases may be used only by the bounded search arm after the model proposes initial choices.",
+  "plan_count": 128,
+  "plan_schema": "gooo/typed-body-plan/v1",
+  "plans_over_64_candidate_mappings": 4,
+  "reference_limitations": "Expected cases come from handwritten Go mathematical formulas in generate.go. The reference is independent of the body-plan evaluator and Gooo emitter, but it is correlated with the plan designer's intended mathematics; it is not an independent language implementation or a proof of full-domain correctness.",
+  "result_types": {
+    "Bool": 32,
+    "Int": 96
+  },
+  "schema": "gooo/typed-body-plan-cohort-manifest/v1",
+  "supported_scope": "Finite one-input int64 expression holes with a closed operation set; this is not arbitrary code generation or full int64-domain proof.",
+  "train_case_count": 3240,
+  "training_and_heldout_policy": "Every row has disjoint inputs. Training includes a fixed signed-boundary core plus scenario critical values and is the only set used for candidate-discrimination checks. Heldout inputs are selected from a separate fixed pool and never participate in plan construction or candidate selection.",
+  "training_inputs_global": [
+    -9223372036854775808,
+    -9223372036854775807,
+    -1000003,
+    -1024,
+    -257,
+    -17,
+    -7,
+    -5,
+    -3,
+    -2,
+    -1,
+    0,
+    1,
+    2,
+    3,
+    5,
+    7,
+    17,
+    257,
+    1024,
+    1000003,
+    9223372036854775806,
+    9223372036854775807
+  ],
+  "uniqueness_definition": "Canonical intent preserves result type, typed expression graph and operand order, literals, fixed operations, hole locations/options, statement/control-flow topology, and gold operation assignment. It removes IDs/names, natural-language wording, and fallback choice; renaming, paraphrasing, or fallback changes do not create new intent."
+}

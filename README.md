@@ -125,3 +125,14 @@ The original v2 source is separately archived. See
 
 Future controlled studies and the completeness dimensions are in
 [next-experiments.md](docs/next-experiments.md). They are plans, not claimed runs.
+
+## Multi-node body experiment
+
+The [typed body-plan path](docs/multi-node-body-plans.md) now supports authored
+expression arenas, typed operation holes, scoped locals, assignments, nested
+branches and returns. `cmd/gooo-body-compose` fills multiple holes using explicit
+model choices or deterministic fallbacks. A bounded training-only search is
+optional. The [Go study runner](tools/evaluate-bodyplans/README.md) validates
+native Gooo generation and independently compiles/executes emitted Go, with
+explicit planned, observed and unknown counts. This extension is separate from
+the immutable v1 operator-model results and executable release.

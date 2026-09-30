@@ -33,6 +33,11 @@ jobs:
           go run ./cmd/dataset --out-dir "$RUNNER_TEMP/dataset-replay"
           cmp data/synthetic-ops-v1/dataset.jsonl "$RUNNER_TEMP/dataset-replay/dataset.jsonl"
           cmp data/synthetic-ops-v1/manifest.json "$RUNNER_TEMP/dataset-replay/manifest.json"
+      - name: Reproduce frozen multi-node body cohort
+        run: |
+          go run ./studies/body-plan-v1 "$RUNNER_TEMP/body-plan-cohort"
+          cmp studies/body-plan-v1/cohort.jsonl "$RUNNER_TEMP/body-plan-cohort/cohort.jsonl"
+          cmp studies/body-plan-v1/manifest.json "$RUNNER_TEMP/body-plan-cohort/manifest.json"
       - name: Verify public export without credentials or network publication
         run: |
           go run ./tools/assemble-public-export --output "$RUNNER_TEMP/public-model-bundle" --allowlist "$RUNNER_TEMP/public-model-allowlist.json"
@@ -54,4 +59,44 @@ jobs:
             ${{ runner.temp }}/go-audit-ci.json
             ${{ runner.temp }}/export-verification.json
             ${{ runner.temp }}/stream-end-to-end-ci.json
+          if-no-files-found: error
+
+  native-body-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GOTOOLCHAIN: local
+      GOWORK: "off"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.27.0'
+          cache: false
+      - uses: actions/checkout@v7
+        with:
+          repository: kimjooyoon/meta-ontology-go
+          ref: 60cf7f49b0e302a6bebb42bc8da90f3ed19b2b82
+          path: .native-gooo
+          persist-credentials: false
+      - name: Build pinned native compiler and Go evaluation runner
+        run: |
+          (cd .native-gooo && go build -trimpath -o "$RUNNER_TEMP/gooo-native" ./cmd/gooo)
+          go build -trimpath -o "$RUNNER_TEMP/body-plan-evaluate" ./tools/evaluate-bodyplans
+      - name: Execute all model-free and tiny-model body arms
+        run: |
+          task_go_bin=$(command -v go)
+          task_go_sha=$(sha256sum "$task_go_bin" | cut -d ' ' -f 1)
+          task_gooo_sha=$(sha256sum "$RUNNER_TEMP/gooo-native" | cut -d ' ' -f 1)
+          task_cohort_sha=$(sha256sum studies/body-plan-v1/cohort.jsonl | cut -d ' ' -f 1)
+          "$RUNNER_TEMP/body-plan-evaluate" \
+            --source-revision "$GITHUB_SHA" --cohort-sha256 "$task_cohort_sha" \
+            --gooo-bin "$RUNNER_TEMP/gooo-native" --gooo-sha256 "$task_gooo_sha" \
+            --go-bin "$task_go_bin" --go-sha256 "$task_go_sha" \
+            --output-dir "$RUNNER_TEMP/body-plan-native-study"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: native-body-plan-evaluation
+          path: ${{ runner.temp }}/body-plan-native-study
           if-no-files-found: error
