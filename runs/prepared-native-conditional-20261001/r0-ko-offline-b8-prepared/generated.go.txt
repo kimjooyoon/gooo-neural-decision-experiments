@@ -1,0 +1,18 @@
+package pathstudy
+
+//gooo:generated:start id="pathstudy://activity/conditional-assign" kind="activity"
+func ConditionalAssign(input int64) int64 {
+	var left = (input + 5)
+	var right = (input - 10)
+	var guard = (input < 0)
+	var guard_alt = (input <= 5)
+	guard = (guard && guard_alt)
+	if guard {
+		right = (input + 5)
+	} else {
+		left = (input - 10)
+	}
+	return (left + right)
+}
+
+//gooo:generated:end id="pathstudy://activity/conditional-assign" kind="activity"
