@@ -61,6 +61,7 @@ type auditReport struct {
 	Tolerance            float64                   `json:"absolute_tolerance"`
 	DatasetSHA256        string                    `json:"dataset_sha256"`
 	ExpectedDatasetRows  int                       `json:"expected_dataset_rows"`
+	ExpectedTestRows     int                       `json:"expected_test_rows"`
 	ParitySHA256         string                    `json:"parity_sha256"`
 	DecisionBinarySHA256 string                    `json:"decision_binary_sha256,omitempty"`
 	RuntimeSourceSHA256  map[string]string         `json:"runtime_source_sha256"`
@@ -192,6 +193,7 @@ func main() {
 	parityPath := flag.String("parity", "", "saved Python go-parity.json")
 	datasetPath := flag.String("dataset", "", "frozen JSONL dataset")
 	expectedRows := flag.Int("expected-rows", 2048, "explicit frozen row count, 1..8192; v1 default remains 2048")
+	expectedTestRows := flag.Int("expected-test-rows", 256, "explicit frozen test count; v1 default remains 256")
 	outputPath := flag.String("output", "", "audit report JSON output path")
 	decisionBin := flag.String("decision-bin", "", "optional gooo-decision executable for cold CLI runs")
 	coldDir := flag.String("cold-dir", "", "directory for raw cold CLI request/response captures")
@@ -204,7 +206,7 @@ func main() {
 		fmt.Fprintln(os.Stderr, "--decision-bin and --cold-dir must be provided together")
 		os.Exit(2)
 	}
-	if err := runWithRows(*modelsDir, *parityPath, *datasetPath, *outputPath, *decisionBin, *coldDir, *expectedRows); err != nil {
+	if err := runWithCounts(*modelsDir, *parityPath, *datasetPath, *outputPath, *decisionBin, *coldDir, *expectedRows, *expectedTestRows); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
@@ -215,11 +217,18 @@ func run(modelsDir, parityPath, datasetPath, outputPath, decisionBin, coldDir st
 }
 
 func runWithRows(modelsDir, parityPath, datasetPath, outputPath, decisionBin, coldDir string, expectedRows int) error {
+	return runWithCounts(modelsDir, parityPath, datasetPath, outputPath, decisionBin, coldDir, expectedRows, 256)
+}
+
+func runWithCounts(modelsDir, parityPath, datasetPath, outputPath, decisionBin, coldDir string, expectedRows, expectedTestRows int) error {
 	if expectedRows < 1 || expectedRows > 8192 {
 		return errors.New("expected dataset row count must be 1..8192")
 	}
+	if expectedTestRows < 1 || expectedTestRows > expectedRows {
+		return errors.New("expected test row count must be within the dataset row count")
+	}
 	report := auditReport{Schema: auditSchema, Decision: "PASS", Status: "PASS", Tolerance: tolerance,
-		ExpectedDatasetRows: expectedRows, Inputs: make(map[string]string), Parity: make(map[string]paritySummary), TestScores: make(map[string]variantSummary), CLICold: make(map[string]coldCLISummary)}
+		ExpectedDatasetRows: expectedRows, ExpectedTestRows: expectedTestRows, Inputs: make(map[string]string), Parity: make(map[string]paritySummary), TestScores: make(map[string]variantSummary), CLICold: make(map[string]coldCLISummary)}
 	parityRaw, err := os.ReadFile(parityPath)
 	if err != nil {
 		return fmt.Errorf("read parity vectors: %w", err)
@@ -530,8 +539,8 @@ func scoreVariant(variant string, model *decision.Model, rows []datasetRow, repo
 		selective.Accuracy = floatPtr(float64(correctAccepted) / float64(selective.Accepted))
 	}
 	summary.Selective = selective
-	if summary.Overall.Planned != 256 {
-		fail(report, fmt.Sprintf("%s test planned=%d, want 256", variant, summary.Overall.Planned))
+	if summary.Overall.Planned != report.ExpectedTestRows {
+		fail(report, fmt.Sprintf("%s test planned=%d, want %d", variant, summary.Overall.Planned, report.ExpectedTestRows))
 	}
 	if summary.Overall.Observed != summary.Overall.Planned {
 		fail(report, fmt.Sprintf("%s test observed=%d planned=%d", variant, summary.Overall.Observed, summary.Overall.Planned))
