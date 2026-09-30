@@ -7,6 +7,14 @@ classifier with typed output, not a Laya client or a source-code generator.
 The model was independently initialized from synthetic operation examples; it
 is not a Laya fine-tune.
 
+For compiler dependencies, use the smaller independently versioned
+[`gooo-decision-runtime`](https://github.com/kimjooyoon/gooo-decision-runtime)
+module. Its production source is pinned to this repository's `e18908b` revision;
+its module distribution excludes research records and model bundles. The
+[public version consumer receipt](../publication/go-runtime-sdk-v0.1-public-consumer/README.md)
+records a real public `v0.1.0-experimental` import with no local replacement,
+three existing bundles, typed output, and concurrent prediction checks.
+
 ## Load and predict
 
 The model metadata and weights remain separate files. Pass `Load` the path to a

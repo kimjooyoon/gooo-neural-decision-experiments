@@ -70,6 +70,10 @@ and memory accounting.
 
 ## Go inference runtime
 
+The small, separately versioned [Go runtime module](https://github.com/kimjooyoon/gooo-decision-runtime)
+is available as `v0.1.0-experimental` for compiler dependencies; its
+[public import verification](publication/go-runtime-sdk-v0.1-public-consumer/README.md)
+uses the three existing bundles and no local replacement.
 The [public Go library](docs/go-library.md) exposes the same bounded model and
 typed binary IR API for imports from other Go modules. Models remain separate
 files; each concurrent call owns its workspace. This API identifies local tiny

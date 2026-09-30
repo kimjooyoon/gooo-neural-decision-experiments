@@ -1,0 +1,59 @@
+{
+  "schema": "gooo/public-decision-runtime-consumer-check/v1",
+  "module_path": "github.com/kimjooyoon/gooo-decision-runtime",
+  "module_version": "v0.1.0-experimental",
+  "module_h1": "h1:z12hGdFiBTtavnk5Rxt63z8UhLqDVJTRy2pQ20uAGKQ=",
+  "go_version": "go1.27.0",
+  "origin_revision": "e18908b88eecaacbb0b80df4feb8cc7b9b4380bb",
+  "consumer_source_sha256": {
+    "go.mod": "349b72be0c8b96ed3b7dc4f85142d9dafcca4e21be4757be844ff81cb7d69173",
+    "go.sum": "58f8336a27221b75d06c3c621b3c83381b3a6eeb190a3be586c05827464c3978",
+    "main.go": "734164f073f7173d013e0d8f8d3e94909c37f4d42e940d2772524eea8bb02686"
+  },
+  "source_sha256": {
+    "LICENSE": "3ad2cd8fe84a937a0005a2934e377432f2f86fe10ff86c4242cc48f49ebf4947",
+    "bridge.go": "08227b64151ee8296c743e409d5a7dbb61f65d4d841d4dc0e0ab3a6119607236",
+    "ir.go": "14b259d00a581fe8924f973befa0149052f1f8dacb1f2f5fa03eef1eea24312d",
+    "model.go": "5444e9a649a1cd2bd84f6b157b22e7fc912bc912ce046f5bda1f63cb6c6c5a02"
+  },
+  "workspace_bytes": 1248,
+  "prediction_bytes": 80,
+  "models": [
+    {
+      "variant": "fp32",
+      "weights_sha256": "854da0f8fc0dcf5560d1f1b8838ea30081752020dbc2005772207217c5d1d17a",
+      "decision_status": "decision",
+      "best_label": "add",
+      "typed_operation": "add",
+      "typed_result_type": "Int",
+      "go_expression": "left + right",
+      "predict_into_allocs_per_call": 0,
+      "concurrent_predict_calls": 64,
+      "concurrent_workers": 4
+    },
+    {
+      "variant": "ptq_ternary",
+      "weights_sha256": "3c60ab7154f02f04a94b1bc68274e05c4ae86f10185b19dbe7251c26610a5c8b",
+      "decision_status": "decision",
+      "best_label": "add",
+      "typed_operation": "add",
+      "typed_result_type": "Int",
+      "go_expression": "left + right",
+      "predict_into_allocs_per_call": 0,
+      "concurrent_predict_calls": 64,
+      "concurrent_workers": 4
+    },
+    {
+      "variant": "qat_ternary",
+      "weights_sha256": "bd4444d5233f07c18168a4dfa0053afde180ce97e390a993e4e0fbb33fb88337",
+      "decision_status": "decision",
+      "best_label": "add",
+      "typed_operation": "add",
+      "typed_result_type": "Int",
+      "go_expression": "left + right",
+      "predict_into_allocs_per_call": 0,
+      "concurrent_predict_calls": 64,
+      "concurrent_workers": 4
+    }
+  ]
+}
