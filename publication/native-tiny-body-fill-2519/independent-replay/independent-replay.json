@@ -1,0 +1,407 @@
+{
+  "schema": "gooo/native-tiny-go-independent-go-replay/v1",
+  "status": "PASS",
+  "compiler_source_sha256": "2519f27a8d7de834687bc32318c29662e75f5bd9",
+  "cli_binary_sha256": "9cf07b11464080c97fc6a9cc7c52af5fdddbf759ea6e1c563962234a4da62d13",
+  "go_version": "go version go1.27.0 darwin/arm64",
+  "cells_planned": 6,
+  "cells_compiled": 6,
+  "cells_passed": 6,
+  "cases_planned": 36,
+  "cases_observed": 36,
+  "cases_passed": 36,
+  "cases_failed": 0,
+  "cells": [
+    {
+      "cell_id": "arithmetic-fp32",
+      "status": "PASS",
+      "fixture_id": "arithmetic",
+      "model_variant": "fp32",
+      "compiler_source_sha256": "2519f27a8d7de834687bc32318c29662e75f5bd9",
+      "cli_binary_sha256": "9cf07b11464080c97fc6a9cc7c52af5fdddbf759ea6e1c563962234a4da62d13",
+      "capture_receipt_sha256": "265fbe53c704e0d5529cf6a1dba3cac5b14891f03cc89456f4b0f0cc6f434459",
+      "raw_cli_sha256": "8d61776353ace970c7ccdf0893af3e8b92809f5f6667ee6e5236d352748d9955",
+      "plan_file_sha256": "685b22ffb073ad0e8fb597bd008ecbf7dd7696137d3a2e0d9418ab25ee7468e5",
+      "generated_go_source_sha256": "bedff51d4d1a575e51e393af7ff4e77bf7017b989ada4592e36b1d4be58e1a1b",
+      "independent_harness_change": "generated Go source package clause changed from tiny_smoke to main, then an independent finite-case main appended; generated activity function body is byte-preserved",
+      "go_version": "go version go1.27.0 darwin/arm64",
+      "go_build_exit_code": 0,
+      "go_build_wall_ms": 208.086125,
+      "go_build_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "go_build_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "generated_execution_exit_code": 0,
+      "generated_execution_wall_ms": 409.613292,
+      "generated_execution_stdout_sha256": "e223b36f5f422ba431ccdc0aa65a2c510854f65e3fa0ffb68fd73548cb806361",
+      "generated_execution_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "planned_cases": 6,
+      "observed_cases": 6,
+      "passed_cases": 6,
+      "failed_cases": 0,
+      "cases": [
+        {
+          "input": -9223372036854775808,
+          "expected": -9223372036854775804,
+          "actual": -9223372036854775804,
+          "passed": true
+        },
+        {
+          "input": -9,
+          "expected": -5,
+          "actual": -5,
+          "passed": true
+        },
+        {
+          "input": -1,
+          "expected": 3,
+          "actual": 3,
+          "passed": true
+        },
+        {
+          "input": 0,
+          "expected": 2,
+          "actual": 2,
+          "passed": true
+        },
+        {
+          "input": 6,
+          "expected": 8,
+          "actual": 8,
+          "passed": true
+        },
+        {
+          "input": 9223372036854775807,
+          "expected": -9223372036854775807,
+          "actual": -9223372036854775807,
+          "passed": true
+        }
+      ],
+      "errors": null
+    },
+    {
+      "cell_id": "arithmetic-ptq_ternary",
+      "status": "PASS",
+      "fixture_id": "arithmetic",
+      "model_variant": "ptq_ternary",
+      "compiler_source_sha256": "2519f27a8d7de834687bc32318c29662e75f5bd9",
+      "cli_binary_sha256": "9cf07b11464080c97fc6a9cc7c52af5fdddbf759ea6e1c563962234a4da62d13",
+      "capture_receipt_sha256": "90793ce05efecbd81646462bc998aebbd83cdc34d95ddee7fb597a881740d101",
+      "raw_cli_sha256": "66323f63880f7f20804c99bdc96f0399c582f1f4e68c1f4e9a6696aec10142aa",
+      "plan_file_sha256": "685b22ffb073ad0e8fb597bd008ecbf7dd7696137d3a2e0d9418ab25ee7468e5",
+      "generated_go_source_sha256": "bedff51d4d1a575e51e393af7ff4e77bf7017b989ada4592e36b1d4be58e1a1b",
+      "independent_harness_change": "generated Go source package clause changed from tiny_smoke to main, then an independent finite-case main appended; generated activity function body is byte-preserved",
+      "go_version": "go version go1.27.0 darwin/arm64",
+      "go_build_exit_code": 0,
+      "go_build_wall_ms": 150.744541,
+      "go_build_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "go_build_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "generated_execution_exit_code": 0,
+      "generated_execution_wall_ms": 406.110583,
+      "generated_execution_stdout_sha256": "e223b36f5f422ba431ccdc0aa65a2c510854f65e3fa0ffb68fd73548cb806361",
+      "generated_execution_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "planned_cases": 6,
+      "observed_cases": 6,
+      "passed_cases": 6,
+      "failed_cases": 0,
+      "cases": [
+        {
+          "input": -9223372036854775808,
+          "expected": -9223372036854775804,
+          "actual": -9223372036854775804,
+          "passed": true
+        },
+        {
+          "input": -9,
+          "expected": -5,
+          "actual": -5,
+          "passed": true
+        },
+        {
+          "input": -1,
+          "expected": 3,
+          "actual": 3,
+          "passed": true
+        },
+        {
+          "input": 0,
+          "expected": 2,
+          "actual": 2,
+          "passed": true
+        },
+        {
+          "input": 6,
+          "expected": 8,
+          "actual": 8,
+          "passed": true
+        },
+        {
+          "input": 9223372036854775807,
+          "expected": -9223372036854775807,
+          "actual": -9223372036854775807,
+          "passed": true
+        }
+      ],
+      "errors": null
+    },
+    {
+      "cell_id": "arithmetic-qat_ternary",
+      "status": "PASS",
+      "fixture_id": "arithmetic",
+      "model_variant": "qat_ternary",
+      "compiler_source_sha256": "2519f27a8d7de834687bc32318c29662e75f5bd9",
+      "cli_binary_sha256": "9cf07b11464080c97fc6a9cc7c52af5fdddbf759ea6e1c563962234a4da62d13",
+      "capture_receipt_sha256": "7aeb7d1c678924f41352beca09a72f452e7124be19cbff2b44a9dbe932fdddd2",
+      "raw_cli_sha256": "4f5f20f622f02bfac6afeb3bb64bb3b9fd85553417342b1c18e297982b86a78a",
+      "plan_file_sha256": "685b22ffb073ad0e8fb597bd008ecbf7dd7696137d3a2e0d9418ab25ee7468e5",
+      "generated_go_source_sha256": "bedff51d4d1a575e51e393af7ff4e77bf7017b989ada4592e36b1d4be58e1a1b",
+      "independent_harness_change": "generated Go source package clause changed from tiny_smoke to main, then an independent finite-case main appended; generated activity function body is byte-preserved",
+      "go_version": "go version go1.27.0 darwin/arm64",
+      "go_build_exit_code": 0,
+      "go_build_wall_ms": 144.483417,
+      "go_build_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "go_build_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "generated_execution_exit_code": 0,
+      "generated_execution_wall_ms": 409.612958,
+      "generated_execution_stdout_sha256": "e223b36f5f422ba431ccdc0aa65a2c510854f65e3fa0ffb68fd73548cb806361",
+      "generated_execution_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "planned_cases": 6,
+      "observed_cases": 6,
+      "passed_cases": 6,
+      "failed_cases": 0,
+      "cases": [
+        {
+          "input": -9223372036854775808,
+          "expected": -9223372036854775804,
+          "actual": -9223372036854775804,
+          "passed": true
+        },
+        {
+          "input": -9,
+          "expected": -5,
+          "actual": -5,
+          "passed": true
+        },
+        {
+          "input": -1,
+          "expected": 3,
+          "actual": 3,
+          "passed": true
+        },
+        {
+          "input": 0,
+          "expected": 2,
+          "actual": 2,
+          "passed": true
+        },
+        {
+          "input": 6,
+          "expected": 8,
+          "actual": 8,
+          "passed": true
+        },
+        {
+          "input": 9223372036854775807,
+          "expected": -9223372036854775807,
+          "actual": -9223372036854775807,
+          "passed": true
+        }
+      ],
+      "errors": null
+    },
+    {
+      "cell_id": "boolean-fp32",
+      "status": "PASS",
+      "fixture_id": "boolean",
+      "model_variant": "fp32",
+      "compiler_source_sha256": "2519f27a8d7de834687bc32318c29662e75f5bd9",
+      "cli_binary_sha256": "9cf07b11464080c97fc6a9cc7c52af5fdddbf759ea6e1c563962234a4da62d13",
+      "capture_receipt_sha256": "fc80101301b49d084cb52a286a8cabc401c7a9d1541313250071685e58e7ff1b",
+      "raw_cli_sha256": "37785b51d3846cc04bbfbbefe19d182859f1220f59cd0ea2bf0ef4d0b8e6c5be",
+      "plan_file_sha256": "a3f68051f964ee8b2917879e7fcec1d81b0c5bec20a975b2344410b08898e694",
+      "generated_go_source_sha256": "d10295d4d643348152cf2f7656c1558db4feb1b801c615360c273b69b65ceb9f",
+      "independent_harness_change": "generated Go source package clause changed from tiny_smoke to main, then an independent finite-case main appended; generated activity function body is byte-preserved",
+      "go_version": "go version go1.27.0 darwin/arm64",
+      "go_build_exit_code": 0,
+      "go_build_wall_ms": 152.382375,
+      "go_build_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "go_build_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "generated_execution_exit_code": 0,
+      "generated_execution_wall_ms": 410.152792,
+      "generated_execution_stdout_sha256": "24d2e6292fd62193a71fa324e48ab8e746ece2302102ef77b839ba4bf47607e3",
+      "generated_execution_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "planned_cases": 6,
+      "observed_cases": 6,
+      "passed_cases": 6,
+      "failed_cases": 0,
+      "cases": [
+        {
+          "input": -9223372036854775808,
+          "expected": 2,
+          "actual": 2,
+          "passed": true
+        },
+        {
+          "input": -7,
+          "expected": 2,
+          "actual": 2,
+          "passed": true
+        },
+        {
+          "input": -1,
+          "expected": 2,
+          "actual": 2,
+          "passed": true
+        },
+        {
+          "input": 0,
+          "expected": 2,
+          "actual": 2,
+          "passed": true
+        },
+        {
+          "input": 1,
+          "expected": 0,
+          "actual": 0,
+          "passed": true
+        },
+        {
+          "input": 9223372036854775807,
+          "expected": 0,
+          "actual": 0,
+          "passed": true
+        }
+      ],
+      "errors": null
+    },
+    {
+      "cell_id": "boolean-ptq_ternary",
+      "status": "PASS",
+      "fixture_id": "boolean",
+      "model_variant": "ptq_ternary",
+      "compiler_source_sha256": "2519f27a8d7de834687bc32318c29662e75f5bd9",
+      "cli_binary_sha256": "9cf07b11464080c97fc6a9cc7c52af5fdddbf759ea6e1c563962234a4da62d13",
+      "capture_receipt_sha256": "72ff8585ed9f8634e197a481d5b830de2632c5bfce4da9168cbe8297c2e3eafd",
+      "raw_cli_sha256": "122f9784207d0b7f690d6557f0829237c883fa330aaf3789f0795a816302cdb8",
+      "plan_file_sha256": "a3f68051f964ee8b2917879e7fcec1d81b0c5bec20a975b2344410b08898e694",
+      "generated_go_source_sha256": "d10295d4d643348152cf2f7656c1558db4feb1b801c615360c273b69b65ceb9f",
+      "independent_harness_change": "generated Go source package clause changed from tiny_smoke to main, then an independent finite-case main appended; generated activity function body is byte-preserved",
+      "go_version": "go version go1.27.0 darwin/arm64",
+      "go_build_exit_code": 0,
+      "go_build_wall_ms": 153.214417,
+      "go_build_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "go_build_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "generated_execution_exit_code": 0,
+      "generated_execution_wall_ms": 401.756084,
+      "generated_execution_stdout_sha256": "24d2e6292fd62193a71fa324e48ab8e746ece2302102ef77b839ba4bf47607e3",
+      "generated_execution_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "planned_cases": 6,
+      "observed_cases": 6,
+      "passed_cases": 6,
+      "failed_cases": 0,
+      "cases": [
+        {
+          "input": -9223372036854775808,
+          "expected": 2,
+          "actual": 2,
+          "passed": true
+        },
+        {
+          "input": -7,
+          "expected": 2,
+          "actual": 2,
+          "passed": true
+        },
+        {
+          "input": -1,
+          "expected": 2,
+          "actual": 2,
+          "passed": true
+        },
+        {
+          "input": 0,
+          "expected": 2,
+          "actual": 2,
+          "passed": true
+        },
+        {
+          "input": 1,
+          "expected": 0,
+          "actual": 0,
+          "passed": true
+        },
+        {
+          "input": 9223372036854775807,
+          "expected": 0,
+          "actual": 0,
+          "passed": true
+        }
+      ],
+      "errors": null
+    },
+    {
+      "cell_id": "boolean-qat_ternary",
+      "status": "PASS",
+      "fixture_id": "boolean",
+      "model_variant": "qat_ternary",
+      "compiler_source_sha256": "2519f27a8d7de834687bc32318c29662e75f5bd9",
+      "cli_binary_sha256": "9cf07b11464080c97fc6a9cc7c52af5fdddbf759ea6e1c563962234a4da62d13",
+      "capture_receipt_sha256": "1d1ee6a422539e24b9ce0bf0243da45e7265990bd116cc123788032e2b4de940",
+      "raw_cli_sha256": "9003432606955a0604dd8cbbe65d1c19fbb90374861edc0ce48dd58a4c401eef",
+      "plan_file_sha256": "a3f68051f964ee8b2917879e7fcec1d81b0c5bec20a975b2344410b08898e694",
+      "generated_go_source_sha256": "d10295d4d643348152cf2f7656c1558db4feb1b801c615360c273b69b65ceb9f",
+      "independent_harness_change": "generated Go source package clause changed from tiny_smoke to main, then an independent finite-case main appended; generated activity function body is byte-preserved",
+      "go_version": "go version go1.27.0 darwin/arm64",
+      "go_build_exit_code": 0,
+      "go_build_wall_ms": 145.657083,
+      "go_build_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "go_build_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "generated_execution_exit_code": 0,
+      "generated_execution_wall_ms": 408.593291,
+      "generated_execution_stdout_sha256": "24d2e6292fd62193a71fa324e48ab8e746ece2302102ef77b839ba4bf47607e3",
+      "generated_execution_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "planned_cases": 6,
+      "observed_cases": 6,
+      "passed_cases": 6,
+      "failed_cases": 0,
+      "cases": [
+        {
+          "input": -9223372036854775808,
+          "expected": 2,
+          "actual": 2,
+          "passed": true
+        },
+        {
+          "input": -7,
+          "expected": 2,
+          "actual": 2,
+          "passed": true
+        },
+        {
+          "input": -1,
+          "expected": 2,
+          "actual": 2,
+          "passed": true
+        },
+        {
+          "input": 0,
+          "expected": 2,
+          "actual": 2,
+          "passed": true
+        },
+        {
+          "input": 1,
+          "expected": 0,
+          "actual": 0,
+          "passed": true
+        },
+        {
+          "input": 9223372036854775807,
+          "expected": 0,
+          "actual": 0,
+          "passed": true
+        }
+      ],
+      "errors": null
+    }
+  ],
+  "resource_scope": "independent generated-source Go compile/execute only; separate interval from the six native CLI captures; this is the same finite suite, not holdout or full-domain evidence"
+}

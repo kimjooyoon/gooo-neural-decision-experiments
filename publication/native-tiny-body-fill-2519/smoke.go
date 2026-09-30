@@ -1,0 +1,800 @@
+// Standalone, standard-library-only capture wrapper for the native tiny_go
+// body-codegen smoke fixtures. Run one wrapper process per fixture/model cell
+// so RUSAGE_CHILDREN describes exactly one CLI child.
+package main
+
+import (
+	"bytes"
+	"context"
+	"crypto/sha256"
+	"encoding/hex"
+	"encoding/json"
+	"errors"
+	"flag"
+	"fmt"
+	"io"
+	"math"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"runtime"
+	"strings"
+	"syscall"
+	"time"
+)
+
+const schema = "gooo/native-tiny-go-body-smoke/v1"
+
+type testCase struct {
+	Input    int64 `json:"input"`
+	Expected int64 `json:"expected"`
+}
+
+type candidate struct {
+	ID         string `json:"id"`
+	Expression string `json:"expression"`
+}
+
+type plan struct {
+	Schema        string      `json:"schema"`
+	Intent        string      `json:"intent"`
+	HoleID        string      `json:"hole_id"`
+	ProviderModel string      `json:"provider_model,omitempty"`
+	Candidates    []candidate `json:"candidates"`
+	TestCases     []testCase  `json:"test_cases"`
+}
+
+type modelMetadata struct {
+	Schema        string `json:"schema"`
+	Variant       string `json:"variant"`
+	WeightsFile   string `json:"weights_file"`
+	WeightsSHA256 string `json:"weights_sha256"`
+}
+
+type score struct {
+	ID              string  `json:"id"`
+	Expression      string  `json:"expression"`
+	TypecheckPassed bool    `json:"typecheck_passed"`
+	TestCasesPassed int     `json:"test_cases_passed"`
+	TestCasesTotal  int     `json:"test_cases_total"`
+	AccuracyPercent float64 `json:"accuracy_percent"`
+}
+
+type caseResult struct {
+	Input    int64 `json:"input"`
+	Expected int64 `json:"expected"`
+	Actual   int64 `json:"actual"`
+	Passed   bool  `json:"passed"`
+}
+
+type dimension struct {
+	ID          string `json:"id"`
+	Status      string `json:"status"`
+	Numerator   int    `json:"numerator"`
+	Denominator int    `json:"denominator"`
+}
+
+type bodyFillReport struct {
+	ProposedCandidateID string  `json:"proposed_candidate_id"`
+	ProposedAccuracy    float64 `json:"proposed_accuracy_percent"`
+	SelectedCandidateID string  `json:"selected_candidate_id"`
+	BestCandidateID     string  `json:"best_candidate_id"`
+	BestAccuracy        float64 `json:"best_candidate_accuracy_percent"`
+	Regret              float64 `json:"selection_regret_percentage_points"`
+	Adjustment          string  `json:"selection_adjustment"`
+	TestCasesPassed     int     `json:"test_cases_passed"`
+	TestCasesTotal      int     `json:"test_cases_total"`
+	FunctionalAccuracy  float64 `json:"functional_accuracy_percent"`
+	LocalPredictions    int     `json:"local_model_predictions"`
+	ExternalCalls       int     `json:"external_provider_calls"`
+	ExternalCallsKnown  bool    `json:"external_provider_calls_known"`
+	Decision            struct {
+		Provider             string `json:"provider"`
+		Mode                 string `json:"mode"`
+		Selected             string `json:"selected"`
+		FallbackReason       string `json:"fallback_reason"`
+		TinyGoVariant        string `json:"tiny_go_variant"`
+		TinyGoWeightsSHA256  string `json:"tiny_go_weights_sha256"`
+		TinyGoMetadataSHA256 string `json:"tiny_go_metadata_sha256"`
+		RequestSHA256        string `json:"request_sha256"`
+	} `json:"decision"`
+	Timing struct {
+		ModelLoadMS *float64 `json:"tiny_model_load_ms"`
+		DecisionMS  float64  `json:"tiny_decision_ms"`
+		TotalMS     float64  `json:"total_ms"`
+	} `json:"timing"`
+	CandidateScores []score      `json:"candidate_scores"`
+	CaseResults     []caseResult `json:"selected_case_results"`
+}
+
+type cliEnvelope struct {
+	Report struct {
+		Decision          string `json:"decision"`
+		CompilerSourceSHA string `json:"compiler_source_sha"`
+		Completeness      struct {
+			Scope      map[string]any `json:"scope"`
+			Dimensions []dimension    `json:"dimensions"`
+		} `json:"completeness_receipt"`
+		BodyFill bodyFillReport `json:"body_fill"`
+	} `json:"report"`
+	Source string `json:"source"`
+}
+
+type invocationReceipt struct {
+	Schema                   string            `json:"schema"`
+	Status                   string            `json:"status"`
+	FixtureID                string            `json:"fixture_id"`
+	Activity                 string            `json:"activity"`
+	FixtureFile              string            `json:"fixture_file"`
+	FixtureSHA256            string            `json:"fixture_sha256"`
+	PlanFile                 string            `json:"plan_file"`
+	PlanFileSHA256           string            `json:"plan_file_sha256"`
+	PlanSemanticSHA256       string            `json:"plan_semantic_sha256"`
+	CompilerSourceSHA256     string            `json:"compiler_source_sha256_expected"`
+	CompilerSourceObserved   string            `json:"compiler_source_sha256_observed,omitempty"`
+	CLIBinarySHA256Expected  string            `json:"cli_binary_sha256_expected"`
+	CLIBinarySHA256Observed  string            `json:"cli_binary_sha256_observed"`
+	CLIBinarySHA256After     string            `json:"cli_binary_sha256_after"`
+	RunnerSourceSHA256       string            `json:"runner_source_sha256"`
+	RunnerSourceFile         string            `json:"runner_source_file"`
+	RunnerBinarySHA256       string            `json:"runner_binary_sha256"`
+	RunnerSourceBytes        int64             `json:"runner_source_bytes"`
+	ModelVariant             string            `json:"model_variant"`
+	ModelMetadataSHA256      string            `json:"model_metadata_sha256"`
+	ModelMetadataSHA256After string            `json:"model_metadata_sha256_after"`
+	ModelWeightsSHA256       string            `json:"model_weights_sha256"`
+	ModelWeightsSHA256After  string            `json:"model_weights_sha256_after"`
+	ModelWeightsBytes        int64             `json:"model_weights_bytes"`
+	ModelMetadataFile        string            `json:"model_metadata_file"`
+	LayaURLChildEnvironment  string            `json:"laya_url_child_environment"`
+	LayaKeyChildEnvironment  string            `json:"laya_key_child_environment"`
+	ChildCount               int               `json:"child_count"`
+	ChildTimeoutMS           int64             `json:"child_timeout_ms"`
+	Command                  []string          `json:"path_neutral_command"`
+	ExitCode                 int               `json:"exit_code"`
+	ChildRunError            string            `json:"child_run_error,omitempty"`
+	WallMS                   float64           `json:"cli_active_wall_ms"`
+	ChildUserCPUMS           float64           `json:"child_user_cpu_ms"`
+	ChildSystemCPUMS         float64           `json:"child_system_cpu_ms"`
+	ChildMaxRSS              int64             `json:"child_max_rss"`
+	ChildMaxRSSUnit          string            `json:"child_max_rss_unit"`
+	ResourceScope            string            `json:"resource_scope"`
+	ResourceError            string            `json:"resource_error,omitempty"`
+	StdoutBytes              int               `json:"stdout_bytes"`
+	StdoutSHA256             string            `json:"stdout_sha256"`
+	StderrBytes              int               `json:"stderr_bytes"`
+	StderrSHA256             string            `json:"stderr_sha256"`
+	ValidationErrors         []string          `json:"validation_errors"`
+	Decision                 *decisionSummary  `json:"decision,omitempty"`
+	FiniteSuite              *suiteSummary     `json:"finite_suite,omitempty"`
+	Completeness             *completenessView `json:"completeness,omitempty"`
+}
+
+type decisionSummary struct {
+	Provider             string   `json:"provider"`
+	Mode                 string   `json:"mode"`
+	FallbackReason       string   `json:"fallback_reason,omitempty"`
+	ProposedCandidateID  string   `json:"proposed_candidate_id"`
+	ProposedAccuracy     float64  `json:"proposed_accuracy_percent"`
+	SelectedCandidateID  string   `json:"selected_candidate_id"`
+	BestCandidateID      string   `json:"best_candidate_id"`
+	BestAccuracy         float64  `json:"best_candidate_accuracy_percent"`
+	SelectionRegret      float64  `json:"selection_regret_percentage_points"`
+	SelectionAdjustment  string   `json:"selection_adjustment"`
+	TinyGoVariant        string   `json:"tiny_go_variant"`
+	TinyGoWeightsSHA256  string   `json:"tiny_go_weights_sha256"`
+	TinyGoMetadataSHA256 string   `json:"tiny_go_metadata_sha256"`
+	RequestSHA256        string   `json:"request_sha256"`
+	LocalPredictions     int      `json:"local_model_predictions"`
+	ExternalCalls        int      `json:"external_provider_calls"`
+	ExternalCallsKnown   bool     `json:"external_provider_calls_known"`
+	TinyModelLoadMS      *float64 `json:"tiny_model_load_ms,omitempty"`
+	TinyDecisionMS       float64  `json:"tiny_decision_ms"`
+	BodycodegenTotalMS   float64  `json:"bodycodegen_total_ms"`
+}
+
+type suiteSummary struct {
+	Cases                []testCase      `json:"cases"`
+	CandidateScores      []score         `json:"candidate_scores"`
+	ReportedCaseResults  []caseResult    `json:"reported_selected_case_results"`
+	IndependentCandidate []candidateEval `json:"independent_candidate_scores"`
+	IndependentSelected  []caseResult    `json:"independent_selected_case_results"`
+	SelectedPassed       int             `json:"selected_cases_passed"`
+	SelectedTotal        int             `json:"selected_cases_total"`
+	FunctionalAccuracy   float64         `json:"functional_accuracy_percent"`
+}
+
+type candidateEval struct {
+	ID         string `json:"id"`
+	Expression string `json:"expression"`
+	Passed     int    `json:"passed"`
+	Total      int    `json:"total"`
+}
+
+type completenessView struct {
+	DecisionProvider string      `json:"decision_provider"`
+	LayaProvider     string      `json:"laya_provider"`
+	Dimensions       []dimension `json:"dimensions"`
+}
+
+func main() {
+	var (
+		binaryPath   = flag.String("binary", "", "absolute path to the pinned native gooo CLI binary")
+		modelPath    = flag.String("model", "", "absolute path to one trained model.json")
+		modelVariant = flag.String("model-variant", "", "expected fp32, ptq_ternary, or qat_ternary variant")
+		metadataSHA  = flag.String("model-metadata-sha256", "", "expected SHA-256 of model.json bytes")
+		weightsSHA   = flag.String("model-weights-sha256", "", "expected SHA-256 of weights.bin bytes")
+		sourceSHA    = flag.String("compiler-source-sha", "", "expected compiler source commit SHA")
+		binarySHA    = flag.String("binary-sha256", "", "expected native CLI binary SHA-256")
+		runnerSHA    = flag.String("runner-source-sha256", "", "SHA-256 of this exact smoke.go source")
+		runnerPath   = flag.String("runner-source", "", "absolute path to this exact smoke.go source")
+		fixtureID    = flag.String("fixture", "", "frozen fixture ID: arithmetic or boolean")
+		outputDir    = flag.String("output-dir", "", "new per-cell capture directory")
+	)
+	flag.Parse()
+	if err := run(*binaryPath, *modelPath, *modelVariant, *metadataSHA, *weightsSHA, *sourceSHA, *binarySHA, *runnerSHA, *runnerPath, *fixtureID, *outputDir); err != nil {
+		fmt.Fprintln(os.Stderr, "tiny smoke:", err)
+		os.Exit(2)
+	}
+}
+
+func run(binaryPath, modelPath, modelVariant, expectedMetadataSHA, expectedWeightsSHA, expectedSourceSHA, expectedBinarySHA, runnerSourceSHA, runnerSourcePath, fixtureID, outputDir string) error {
+	if fixtureID != "arithmetic" && fixtureID != "boolean" {
+		return errors.New("fixture must be arithmetic or boolean")
+	}
+	for label, value := range map[string]string{
+		"binary": binaryPath, "model": modelPath, "model variant": modelVariant,
+		"metadata SHA-256": expectedMetadataSHA, "weights SHA-256": expectedWeightsSHA,
+		"compiler source SHA": expectedSourceSHA, "binary SHA-256": expectedBinarySHA,
+		"runner source SHA-256": runnerSourceSHA, "runner source": runnerSourcePath, "output directory": outputDir,
+	} {
+		if strings.TrimSpace(value) == "" {
+			return fmt.Errorf("%s is required", label)
+		}
+	}
+	for label, value := range map[string]string{
+		"metadata SHA-256": expectedMetadataSHA, "weights SHA-256": expectedWeightsSHA,
+		"binary SHA-256": expectedBinarySHA, "runner source SHA-256": runnerSourceSHA,
+	} {
+		if !isLowerHexDigest(value, 64) {
+			return fmt.Errorf("%s must be 64 lowercase hexadecimal characters", label)
+		}
+	}
+	if !isLowerHexDigest(expectedSourceSHA, 40) {
+		return errors.New("compiler source SHA must be a 40-character lowercase commit SHA")
+	}
+	if modelVariant != "fp32" && modelVariant != "ptq_ternary" && modelVariant != "qat_ternary" {
+		return errors.New("model variant must be fp32, ptq_ternary, or qat_ternary")
+	}
+	if !filepath.IsAbs(binaryPath) || !filepath.IsAbs(modelPath) || !filepath.IsAbs(runnerSourcePath) {
+		return errors.New("binary, model, and runner source paths must be absolute")
+	}
+	runnerSourceBytes, err := os.ReadFile(runnerSourcePath)
+	if err != nil {
+		return fmt.Errorf("read runner source: %w", err)
+	}
+	if sha256Hex(runnerSourceBytes) != runnerSourceSHA {
+		return errors.New("runner source SHA-256 differs from the supplied exact-source pin")
+	}
+	fixtureRoot, err := filepath.Abs("fixtures")
+	if err != nil {
+		return fmt.Errorf("resolve frozen fixture directory: %w", err)
+	}
+	fixtureName := fixtureID + ".gooo"
+	planName := fixtureID + ".plan.json"
+	fixtureBytes, err := os.ReadFile(filepath.Join(fixtureRoot, fixtureName))
+	if err != nil {
+		return fmt.Errorf("read frozen fixture: %w", err)
+	}
+	planBytes, err := os.ReadFile(filepath.Join(fixtureRoot, planName))
+	if err != nil {
+		return fmt.Errorf("read frozen plan: %w", err)
+	}
+	var planDoc plan
+	if err := decodeStrictOneJSON(planBytes, &planDoc); err != nil {
+		return fmt.Errorf("decode frozen plan: %w", err)
+	}
+	if planDoc.ProviderModel != "" {
+		return errors.New("frozen tiny_go plan must not contain a provider_model selector")
+	}
+	activity := "ArithmeticHole"
+	if fixtureID == "boolean" {
+		activity = "BooleanHole"
+	}
+	if err := validateFrozenFixture(fixtureID, string(fixtureBytes), planDoc); err != nil {
+		return err
+	}
+	metadataBytes, err := os.ReadFile(modelPath)
+	if err != nil {
+		return fmt.Errorf("read model metadata: %w", err)
+	}
+	metadataDigest := sha256Hex(metadataBytes)
+	if metadataDigest != expectedMetadataSHA {
+		return errors.New("model metadata SHA-256 differs from the supplied source-bound pin")
+	}
+	var metadata modelMetadata
+	if err := decodeOneJSON(metadataBytes, &metadata); err != nil {
+		return fmt.Errorf("decode model metadata: %w", err)
+	}
+	if metadata.Schema != "gooo/tiny-ir-decision-model/v1" || metadata.Variant != modelVariant {
+		return errors.New("model schema or variant differs from its source-bound pin")
+	}
+	if metadata.WeightsFile == "" || filepath.IsAbs(metadata.WeightsFile) || filepath.Base(metadata.WeightsFile) != metadata.WeightsFile || strings.ContainsAny(metadata.WeightsFile, `/\\`) || metadata.WeightsFile == "." || metadata.WeightsFile == ".." {
+		return errors.New("model weights_file must be a simple basename")
+	}
+	weightsPath := filepath.Join(filepath.Dir(modelPath), metadata.WeightsFile)
+	weightsBytes, err := os.ReadFile(weightsPath)
+	if err != nil {
+		return fmt.Errorf("read model weights: %w", err)
+	}
+	actualWeightsSHA := sha256Hex(weightsBytes)
+	if actualWeightsSHA != expectedWeightsSHA || actualWeightsSHA != metadata.WeightsSHA256 {
+		return errors.New("model weights SHA-256 does not match metadata and the supplied pin")
+	}
+	cliBytes, err := os.ReadFile(binaryPath)
+	if err != nil {
+		return fmt.Errorf("read CLI binary: %w", err)
+	}
+	actualBinarySHA := sha256Hex(cliBytes)
+	if actualBinarySHA != expectedBinarySHA {
+		return errors.New("CLI binary SHA-256 differs from the supplied clean-build pin")
+	}
+	runnerExecutable, err := os.Executable()
+	if err != nil {
+		return fmt.Errorf("resolve runner executable: %w", err)
+	}
+	runnerBytes, err := os.ReadFile(runnerExecutable)
+	if err != nil {
+		return fmt.Errorf("read runner executable: %w", err)
+	}
+	if err := mkdirFresh(outputDir); err != nil {
+		return err
+	}
+	rootReceipt := invocationReceipt{
+		Schema: schema, Status: "CAPTURING", FixtureID: fixtureID, Activity: activity,
+		FixtureFile: fixtureName, FixtureSHA256: sha256Hex(fixtureBytes), PlanFile: planName,
+		PlanFileSHA256: sha256Hex(planBytes), PlanSemanticSHA256: semanticPlanSHA(planDoc),
+		CompilerSourceSHA256: expectedSourceSHA, CLIBinarySHA256Expected: expectedBinarySHA,
+		CLIBinarySHA256Observed: actualBinarySHA, RunnerSourceSHA256: runnerSourceSHA,
+		RunnerBinarySHA256: sha256Hex(runnerBytes), RunnerSourceFile: filepath.Base(runnerSourcePath),
+		RunnerSourceBytes: int64(len(runnerSourceBytes)), ModelVariant: modelVariant,
+		ModelMetadataSHA256: metadataDigest, ModelWeightsSHA256: actualWeightsSHA,
+		ModelWeightsBytes: int64(len(weightsBytes)), ModelMetadataFile: "model.json",
+		LayaURLChildEnvironment: "unset", LayaKeyChildEnvironment: "unset", ChildCount: 1,
+		Command:  []string{"gooo", "body-codegen", "--json", "--tiny-model", "<pinned-model.json>", "--fill-plan", planName, "--activity", activity, fixtureName},
+		ExitCode: -1, ChildMaxRSSUnit: rssUnit(),
+		ChildTimeoutMS: 30000,
+		ResourceScope:  "one native gooo body-codegen child only; model metadata/weights are hashed before child timing; RUSAGE_CHILDREN CPU is delta around this sole child; max RSS belongs to this sole child",
+	}
+	if err := writeJSON(filepath.Join(outputDir, "prelaunch.json"), rootReceipt); err != nil {
+		return err
+	}
+	childContext, cancelChild := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancelChild()
+	command := exec.CommandContext(childContext, binaryPath, "body-codegen", "--json", "--tiny-model", modelPath,
+		"--fill-plan", planName, "--activity", activity, fixtureName)
+	command.Dir = fixtureRoot
+	command.Env = withoutLayaEnv(os.Environ())
+	var stdout, stderr bytes.Buffer
+	command.Stdout, command.Stderr = &stdout, &stderr
+	var before, after syscall.Rusage
+	if err := syscall.Getrusage(syscall.RUSAGE_CHILDREN, &before); err != nil {
+		return fmt.Errorf("get child usage before invocation: %w", err)
+	}
+	started := time.Now()
+	runErr := command.Run()
+	wallMS := float64(time.Since(started)) / float64(time.Millisecond)
+	if err := writeFile(filepath.Join(outputDir, "raw-cli.json"), stdout.Bytes()); err != nil {
+		return err
+	}
+	if err := writeFile(filepath.Join(outputDir, "raw-stderr.txt"), stderr.Bytes()); err != nil {
+		return err
+	}
+	afterErr := syscall.Getrusage(syscall.RUSAGE_CHILDREN, &after)
+	postCLIBytes, postCLIReadErr := os.ReadFile(binaryPath)
+	postMetadataBytes, postMetadataReadErr := os.ReadFile(modelPath)
+	postWeightsBytes, postWeightsReadErr := os.ReadFile(weightsPath)
+	if postCLIReadErr == nil {
+		rootReceipt.CLIBinarySHA256After = sha256Hex(postCLIBytes)
+	} else {
+		rootReceipt.ValidationErrors = append(rootReceipt.ValidationErrors, "CLI binary could not be rehashed after execution")
+	}
+	if postMetadataReadErr == nil {
+		rootReceipt.ModelMetadataSHA256After = sha256Hex(postMetadataBytes)
+	} else {
+		rootReceipt.ValidationErrors = append(rootReceipt.ValidationErrors, "model metadata could not be rehashed after execution")
+	}
+	if postWeightsReadErr == nil {
+		rootReceipt.ModelWeightsSHA256After = sha256Hex(postWeightsBytes)
+	} else {
+		rootReceipt.ValidationErrors = append(rootReceipt.ValidationErrors, "model weights could not be rehashed after execution")
+	}
+	if rootReceipt.CLIBinarySHA256After != expectedBinarySHA || rootReceipt.ModelMetadataSHA256After != expectedMetadataSHA || rootReceipt.ModelWeightsSHA256After != expectedWeightsSHA {
+		rootReceipt.ValidationErrors = append(rootReceipt.ValidationErrors, "source-bound binary or trained bundle changed during the cell")
+	}
+	rootReceipt.ExitCode = exitCode(runErr)
+	if runErr != nil {
+		rootReceipt.ChildRunError = "child exited unsuccessfully; inspect exit_code and preserved raw output"
+	}
+	rootReceipt.WallMS = wallMS
+	if afterErr != nil {
+		rootReceipt.ResourceError = "post-child RUSAGE_CHILDREN observation failed"
+		rootReceipt.ValidationErrors = append(rootReceipt.ValidationErrors, rootReceipt.ResourceError)
+	} else {
+		rootReceipt.ChildUserCPUMS = timevalMillis(after.Utime) - timevalMillis(before.Utime)
+		rootReceipt.ChildSystemCPUMS = timevalMillis(after.Stime) - timevalMillis(before.Stime)
+	}
+	rootReceipt.ChildMaxRSS = after.Maxrss
+	rootReceipt.StdoutBytes, rootReceipt.StdoutSHA256 = len(stdout.Bytes()), sha256Hex(stdout.Bytes())
+	rootReceipt.StderrBytes, rootReceipt.StderrSHA256 = len(stderr.Bytes()), sha256Hex(stderr.Bytes())
+	if rootReceipt.ChildUserCPUMS < 0 || rootReceipt.ChildSystemCPUMS < 0 {
+		rootReceipt.ValidationErrors = append(rootReceipt.ValidationErrors, "child CPU resource counters decreased")
+	}
+	if strings.Contains(string(stdout.Bytes()), binaryPath) || strings.Contains(string(stdout.Bytes()), modelPath) ||
+		strings.Contains(string(stdout.Bytes()), "/Users/") || strings.Contains(string(stdout.Bytes()), "/tmp/") ||
+		strings.Contains(string(stderr.Bytes()), binaryPath) || strings.Contains(string(stderr.Bytes()), modelPath) ||
+		strings.Contains(string(stderr.Bytes()), "/Users/") || strings.Contains(string(stderr.Bytes()), "/tmp/") {
+		rootReceipt.ValidationErrors = append(rootReceipt.ValidationErrors, "raw CLI stdout/stderr contains a local absolute path")
+	}
+	if rootReceipt.ExitCode != 0 {
+		rootReceipt.ValidationErrors = append(rootReceipt.ValidationErrors, "native CLI did not exit successfully")
+	} else {
+		var payload cliEnvelope
+		if err := decodeOneJSON(stdout.Bytes(), &payload); err != nil {
+			rootReceipt.ValidationErrors = append(rootReceipt.ValidationErrors, "CLI stdout is not exactly one JSON report: "+err.Error())
+		} else {
+			rootReceipt.CompilerSourceObserved = payload.Report.CompilerSourceSHA
+			rootReceipt.Decision = summarizeDecision(payload.Report.BodyFill)
+			rootReceipt.Completeness = summarizeCompleteness(payload.Report.Completeness.Scope, payload.Report.Completeness.Dimensions)
+			rootReceipt.FiniteSuite = verifySuite(fixtureID, planDoc, payload.Report.BodyFill)
+			rootReceipt.ValidationErrors = append(rootReceipt.ValidationErrors,
+				validateEnvelope(payload, rootReceipt, planDoc, modelVariant, actualWeightsSHA, metadataDigest)...)
+		}
+	}
+	if len(rootReceipt.ValidationErrors) == 0 {
+		rootReceipt.Status = "CAPTURED_AND_SOURCE_BOUND"
+	} else {
+		rootReceipt.Status = "CAPTURED_WITH_VALIDATION_ERRORS"
+	}
+	if err := writeJSON(filepath.Join(outputDir, "invocation.json"), rootReceipt); err != nil {
+		return err
+	}
+	if len(rootReceipt.ValidationErrors) != 0 {
+		return fmt.Errorf("cell captured with %d validation error(s); inspect invocation.json", len(rootReceipt.ValidationErrors))
+	}
+	return nil
+}
+
+func validateFrozenFixture(id, source string, p plan) error {
+	if p.Schema != "gooo/body-codegen-ir-fill-plan/v1" || len(p.Candidates) != 3 || len(p.TestCases) != 6 {
+		return errors.New("frozen fixture plan has unexpected schema or dimensions")
+	}
+	if !strings.Contains(source, "__GOOO_BODY_HOLE_"+p.HoleID+"__") {
+		return errors.New("frozen source does not contain the plan's one named body hole")
+	}
+	if !strings.Contains(source, "let result = ") || !strings.Contains(source, " else {") ||
+		!strings.Contains(source, "return result") || strings.Count(source, "result = result ") < 2 {
+		return errors.New("frozen source does not exercise a local assignment, if/else branches, updates, and return")
+	}
+	want := map[string][]candidate{
+		"arithmetic": {{ID: "sum", Expression: "input + 2"}, {ID: "difference", Expression: "input - 2"}, {ID: "product", Expression: "input * 2"}},
+		"boolean":    {{ID: "less_than", Expression: "input < 0"}, {ID: "less_equal", Expression: "input <= 0"}, {ID: "equal", Expression: "input == 0"}},
+	}[id]
+	if len(want) != len(p.Candidates) {
+		return errors.New("frozen candidate count differs from the declared oracle")
+	}
+	for i := range want {
+		if want[i] != p.Candidates[i] {
+			return fmt.Errorf("candidate %d differs from the independent frozen oracle", i)
+		}
+	}
+	inputs := []int64{math.MinInt64, -9, -1, 0, 6, math.MaxInt64}
+	if id == "boolean" {
+		inputs = []int64{math.MinInt64, -7, -1, 0, 1, math.MaxInt64}
+	}
+	if len(inputs) != len(p.TestCases) {
+		return errors.New("frozen finite suite has unexpected count")
+	}
+	for i, input := range inputs {
+		wantExpected := arithmeticExpected(input)
+		if id == "boolean" {
+			wantExpected = booleanExpected(input)
+		}
+		if p.TestCases[i] != (testCase{Input: input, Expected: wantExpected}) {
+			return fmt.Errorf("finite oracle case %d differs from the separately specified input/expected contract", i)
+		}
+	}
+	return nil
+}
+
+func arithmeticExpected(input int64) int64 {
+	base := input + 2
+	if input < 0 {
+		return base + 2
+	}
+	return base
+}
+
+func booleanExpected(input int64) int64 {
+	if input <= 0 {
+		return 2
+	}
+	return 0
+}
+
+func evalCandidate(id, fixture string, input int64) int64 {
+	if fixture == "arithmetic" {
+		base := input
+		switch id {
+		case "sum":
+			base = input + 2
+		case "difference":
+			base = input - 2
+		case "product":
+			base = input * 2
+		}
+		if input < 0 {
+			return base + 2
+		}
+		return base
+	}
+	condition := false
+	switch id {
+	case "less_than":
+		condition = input < 0
+	case "less_equal":
+		condition = input <= 0
+	case "equal":
+		condition = input == 0
+	}
+	if condition {
+		return 2
+	}
+	return 0
+}
+
+func verifySuite(fixture string, p plan, fill bodyFillReport) *suiteSummary {
+	result := &suiteSummary{Cases: append([]testCase(nil), p.TestCases...), CandidateScores: append([]score(nil), fill.CandidateScores...), ReportedCaseResults: append([]caseResult(nil), fill.CaseResults...)}
+	for _, c := range p.Candidates {
+		passed := 0
+		for _, tc := range p.TestCases {
+			if evalCandidate(c.ID, fixture, tc.Input) == tc.Expected {
+				passed++
+			}
+		}
+		result.IndependentCandidate = append(result.IndependentCandidate, candidateEval{ID: c.ID, Expression: c.Expression, Passed: passed, Total: len(p.TestCases)})
+	}
+	for _, tc := range p.TestCases {
+		actual := evalCandidate(fill.SelectedCandidateID, fixture, tc.Input)
+		result.IndependentSelected = append(result.IndependentSelected, caseResult{Input: tc.Input, Expected: tc.Expected, Actual: actual, Passed: actual == tc.Expected})
+		if actual == tc.Expected {
+			result.SelectedPassed++
+		}
+	}
+	result.SelectedTotal = len(p.TestCases)
+	if result.SelectedTotal != 0 {
+		result.FunctionalAccuracy = float64(result.SelectedPassed) * 100 / float64(result.SelectedTotal)
+	}
+	return result
+}
+
+func validateEnvelope(payload cliEnvelope, receipt invocationReceipt, p plan, variant, weightsSHA, metadataSHA string) []string {
+	var problems []string
+	add := func(ok bool, msg string) {
+		if !ok {
+			problems = append(problems, msg)
+		}
+	}
+	r := payload.Report
+	f := r.BodyFill
+	add(r.Decision == "PASS", "CLI report decision is not PASS")
+	add(r.CompilerSourceSHA == receipt.CompilerSourceSHA256, "reported compiler source SHA differs from the expected source pin")
+	add(r.Completeness.Scope["compiler_source_sha"] == receipt.CompilerSourceSHA256, "completeness receipt does not bind the expected compiler source SHA")
+	add(f.Decision.Provider == "tiny_go" && (f.Decision.Mode == "tiny_go" || f.Decision.Mode == "deterministic_fallback"), "decision receipt is not a local tiny_go prediction or its explicit deterministic fallback")
+	add(f.Decision.TinyGoVariant == variant, "decision variant differs from the loaded model variant")
+	add(f.Decision.TinyGoWeightsSHA256 == weightsSHA, "decision receipt weights SHA differs from loaded weights")
+	add(f.Decision.TinyGoMetadataSHA256 == metadataSHA, "decision receipt metadata SHA differs from loaded metadata")
+	add(strings.HasPrefix(f.Decision.RequestSHA256, "sha256:") && isLowerHexDigest(strings.TrimPrefix(f.Decision.RequestSHA256, "sha256:"), 64), "decision receipt lacks a typed request digest")
+	add(f.LocalPredictions == 1 && f.ExternalCalls == 0 && f.ExternalCallsKnown, "provider counts differ from one local prediction and zero external calls")
+	add(f.Timing.ModelLoadMS != nil && *f.Timing.ModelLoadMS >= 0 && f.Timing.DecisionMS >= 0 && f.Timing.TotalMS >= 0,
+		"bodycodegen omitted nonnegative model-load, decision, or total timing")
+	add(r.Completeness.Scope["decision_provider"] == "tiny_go" && r.Completeness.Scope["laya_provider"] == "", "completeness scope conflates tiny_go with Laya")
+	add(f.ProposedCandidateID == f.Decision.Selected, "proposed candidate does not match the raw tiny_go choice")
+	add(payload.Source != "", "CLI report omitted generated Go source")
+	add(f.TestCasesTotal == len(p.TestCases), "selected finite denominator differs from the frozen plan")
+	add(len(f.CandidateScores) == len(p.Candidates), "reported candidate score count differs from the frozen plan")
+	add(len(f.CaseResults) == len(p.TestCases), "reported selected case result count differs from the frozen plan")
+	expectedScores := map[string]candidateEval{}
+	for _, c := range p.Candidates {
+		passed := 0
+		for _, tc := range p.TestCases {
+			if evalCandidate(c.ID, receipt.FixtureID, tc.Input) == tc.Expected {
+				passed++
+			}
+		}
+		expectedScores[c.ID] = candidateEval{ID: c.ID, Expression: c.Expression, Passed: passed, Total: len(p.TestCases)}
+	}
+	for i, observed := range f.CandidateScores {
+		if i >= len(p.Candidates) {
+			break
+		}
+		want := expectedScores[p.Candidates[i].ID]
+		add(observed.ID == want.ID && observed.Expression == want.Expression && observed.TypecheckPassed &&
+			observed.TestCasesPassed == want.Passed && observed.TestCasesTotal == want.Total &&
+			near(observed.AccuracyPercent, percent(want.Passed, want.Total)), "candidate score differs from the independent finite oracle")
+	}
+	selectedExists, bestID, bestPass := false, "", -1
+	for _, c := range p.Candidates {
+		s := expectedScores[c.ID]
+		if s.Passed > bestPass {
+			bestPass, bestID = s.Passed, c.ID
+		}
+		if c.ID == f.SelectedCandidateID {
+			selectedExists = true
+		}
+	}
+	add(selectedExists, "selected candidate is not declared in the frozen plan")
+	selectedPass := -1
+	if s, ok := expectedScores[f.SelectedCandidateID]; ok {
+		selectedPass = s.Passed
+	}
+	add(selectedPass >= 0 && f.TestCasesPassed == selectedPass && near(f.FunctionalAccuracy, percent(selectedPass, len(p.TestCases))), "selected finite score differs from the independent oracle")
+	add(f.BestCandidateID == bestID && near(f.BestAccuracy, percent(bestPass, len(p.TestCases))), "best candidate summary differs from recomputed candidate scores")
+	wantSelected, wantAdjustment := f.ProposedCandidateID, "proposal_retained"
+	if proposed, ok := expectedScores[f.ProposedCandidateID]; ok && proposed.Passed < bestPass {
+		wantSelected, wantAdjustment = bestID, "replaced_with_best_scoring_candidate"
+	}
+	add(f.SelectedCandidateID == wantSelected && f.Adjustment == wantAdjustment, "final selection does not follow finite-score correction policy")
+	if f.Decision.Mode == "deterministic_fallback" {
+		add(f.Decision.FallbackReason != "", "deterministic tiny_go fallback omitted its reason")
+	} else {
+		add(f.Decision.FallbackReason == "", "non-fallback tiny_go decision unexpectedly reports a fallback reason")
+	}
+	if proposed, ok := expectedScores[f.ProposedCandidateID]; ok {
+		add(near(f.ProposedAccuracy, percent(proposed.Passed, len(p.TestCases))), "proposed finite score differs from the independent oracle")
+		add(near(f.Regret, percent(bestPass-proposed.Passed, len(p.TestCases))), "selection regret differs from the independent oracle")
+	} else {
+		problems = append(problems, "raw model proposal is not one of the frozen candidate IDs")
+	}
+	for i, observed := range f.CaseResults {
+		if i >= len(p.TestCases) {
+			break
+		}
+		tc := p.TestCases[i]
+		actual := evalCandidate(f.SelectedCandidateID, receipt.FixtureID, tc.Input)
+		add(observed.Input == tc.Input && observed.Expected == tc.Expected && observed.Actual == actual && observed.Passed == (actual == tc.Expected), "selected case result differs from the independent oracle")
+	}
+	seenExternal, seenLaya := false, false
+	for _, d := range r.Completeness.Dimensions {
+		if d.ID == "external_network_boundary" {
+			seenExternal = d.Status == "PASS" && d.Numerator == 1 && d.Denominator == 1
+		}
+		if d.ID == "laya_decision_observation" {
+			seenLaya = d.Denominator == 0 && d.Numerator == 0
+		}
+	}
+	add(seenExternal, "completeness receipt does not show a passing zero-external-network boundary")
+	add(seenLaya, "completeness receipt counts tiny_go as a Laya decision")
+	return problems
+}
+
+func summarizeDecision(f bodyFillReport) *decisionSummary {
+	return &decisionSummary{
+		Provider: f.Decision.Provider, Mode: f.Decision.Mode, FallbackReason: f.Decision.FallbackReason,
+		ProposedCandidateID: f.ProposedCandidateID, ProposedAccuracy: f.ProposedAccuracy,
+		SelectedCandidateID: f.SelectedCandidateID, BestCandidateID: f.BestCandidateID,
+		BestAccuracy: f.BestAccuracy, SelectionRegret: f.Regret,
+		SelectionAdjustment: f.Adjustment, TinyGoVariant: f.Decision.TinyGoVariant,
+		TinyGoWeightsSHA256:  f.Decision.TinyGoWeightsSHA256,
+		TinyGoMetadataSHA256: f.Decision.TinyGoMetadataSHA256,
+		RequestSHA256:        f.Decision.RequestSHA256,
+		LocalPredictions:     f.LocalPredictions, ExternalCalls: f.ExternalCalls,
+		ExternalCallsKnown: f.ExternalCallsKnown, TinyModelLoadMS: f.Timing.ModelLoadMS,
+		TinyDecisionMS: f.Timing.DecisionMS, BodycodegenTotalMS: f.Timing.TotalMS,
+	}
+}
+
+func summarizeCompleteness(scope map[string]any, dims []dimension) *completenessView {
+	decisionProvider, _ := scope["decision_provider"].(string)
+	layaProvider, _ := scope["laya_provider"].(string)
+	return &completenessView{DecisionProvider: decisionProvider, LayaProvider: layaProvider, Dimensions: append([]dimension(nil), dims...)}
+}
+
+func semanticPlanSHA(p plan) string { data, _ := json.Marshal(p); return sha256Hex(data) }
+func percent(part, total int) float64 {
+	if total == 0 {
+		return 0
+	}
+	return float64(part) * 100 / float64(total)
+}
+func near(a, b float64) bool    { return math.Abs(a-b) < 1e-9 }
+func sha256Hex(b []byte) string { sum := sha256.Sum256(b); return hex.EncodeToString(sum[:]) }
+func isLowerHexDigest(s string, size int) bool {
+	if len(s) != size || strings.ToLower(s) != s {
+		return false
+	}
+	_, err := hex.DecodeString(s)
+	return err == nil
+}
+func decodeOneJSON(data []byte, dst any) error {
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	if err := decoder.Decode(dst); err != nil {
+		return err
+	}
+	var extra any
+	if err := decoder.Decode(&extra); err != io.EOF {
+		if err == nil {
+			return errors.New("multiple JSON values")
+		}
+		return err
+	}
+	return nil
+}
+func decodeStrictOneJSON(data []byte, dst any) error {
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	if err := decoder.Decode(dst); err != nil {
+		return err
+	}
+	var extra any
+	if err := decoder.Decode(&extra); err != io.EOF {
+		if err == nil {
+			return errors.New("multiple JSON values")
+		}
+		return err
+	}
+	return nil
+}
+func withoutLayaEnv(env []string) []string {
+	filtered := make([]string, 0, len(env))
+	for _, item := range env {
+		name, _, ok := strings.Cut(item, "=")
+		if ok && (name == "GOOO_LAYA_URL" || name == "GOOO_LAYA_API_KEY") {
+			continue
+		}
+		filtered = append(filtered, item)
+	}
+	filtered = append(filtered, "GOOO_LAYA_URL=", "GOOO_LAYA_API_KEY=")
+	return filtered
+}
+func mkdirFresh(path string) error {
+	if err := os.Mkdir(path, 0700); err != nil {
+		return fmt.Errorf("output directory must be new and empty: %w", err)
+	}
+	return nil
+}
+func writeFile(path string, data []byte) error {
+	f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0600)
+	if err != nil {
+		return err
+	}
+	if _, err := f.Write(data); err != nil {
+		_ = f.Close()
+		return err
+	}
+	return f.Close()
+}
+func writeJSON(path string, value any) error {
+	data, err := json.MarshalIndent(value, "", "  ")
+	if err != nil {
+		return err
+	}
+	return writeFile(path, append(data, '\n'))
+}
+func exitCode(err error) int {
+	if err == nil {
+		return 0
+	}
+	var exit *exec.ExitError
+	if errors.As(err, &exit) {
+		return exit.ExitCode()
+	}
+	return -1
+}
+func timevalMillis(tv syscall.Timeval) float64 { return float64(tv.Sec)*1000 + float64(tv.Usec)/1000 }
+func rssUnit() string {
+	if runtime.GOOS == "darwin" {
+		return "bytes"
+	}
+	return "kilobytes"
+}

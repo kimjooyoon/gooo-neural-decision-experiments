@@ -70,6 +70,14 @@ and memory accounting.
 
 ## Go inference runtime
 
+The [bounded public SDK kernel measurement](publication/go-runtime-sdk-v0.1-benchmark/README.md)
+records latency, allocations, process CPU, and lifetime peak RSS with explicit
+measurement scopes. The [first native body-fill capture](publication/native-tiny-body-fill-2519/PUBLICATION.md)
+preserves six real trained-model invocations, four deterministic fallbacks, two
+incorrect model-applied proposals, and 36/36 corrected finite generated-Go case
+executions. It also records the revision's module-import CI failure; those
+observations are not rewritten by later adapter fixes.
+
 The small, separately versioned [Go runtime module](https://github.com/kimjooyoon/gooo-decision-runtime)
 is available as `v0.1.0-experimental` for compiler dependencies; its
 [public import verification](publication/go-runtime-sdk-v0.1-public-consumer/README.md)

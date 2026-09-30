@@ -1,0 +1,361 @@
+{
+  "schema": "gooo/native-tiny-go-smoke-summary/v1",
+  "compiler_source_sha256": "2519f27a8d7de834687bc32318c29662e75f5bd9",
+  "cli_binary_sha256": "9cf07b11464080c97fc6a9cc7c52af5fdddbf759ea6e1c563962234a4da62d13",
+  "runner_source_sha256": "999d3d5dc8dcdab63d9777365c31f3e266a933c9bbc6f02c415e3573af3e27f7",
+  "runner_binary_sha256": "514e8dc873cb1cd40b72d9c6c32e06a5e6b3994c903e9cb7248480adf85dc0ab",
+  "fixture_cells_planned": 6,
+  "fixture_cells_captured": 6,
+  "warmups": 0,
+  "retries": 0,
+  "provider_prediction_calls": 6,
+  "external_provider_calls": 0,
+  "model_candidate_choices_recorded": 2,
+  "deterministic_fallbacks": 4,
+  "all_source_bound_and_finite_checks_pass": true,
+  "interpretation": "For deterministic_fallback rows, proposed_candidate_id is the provider receipt fallback candidate, not the model raw 8-class label; the raw label is not exposed by this receipt. Do not attribute that fallback candidate to the model.",
+  "resource_scope": "One sequential native CLI process per cell. CLI active wall includes startup and model load; tiny_model_load_ms, tiny_decision_ms, and bodycodegen_total_ms are compiler report intervals. Child user/system CPU and Darwin RUSAGE_CHILDREN max RSS are one-process observations. No warmups; first cell is retained as measured.",
+  "independent_generated_go_replay": {
+    "status": "PASS",
+    "cells_planned": 6,
+    "cells_compiled": 6,
+    "cells_passed": 6,
+    "cases_planned": 36,
+    "cases_observed": 36,
+    "cases_passed": 36,
+    "cases_failed": 0,
+    "go_version": "go version go1.27.0 darwin/arm64"
+  },
+  "cells": [
+    {
+      "cell_id": "arithmetic-fp32",
+      "fixture_id": "arithmetic",
+      "model_variant": "fp32",
+      "status": "CAPTURED_AND_SOURCE_BOUND",
+      "compiler_source_sha256_observed": "2519f27a8d7de834687bc32318c29662e75f5bd9",
+      "cli_binary_sha256_observed": "9cf07b11464080c97fc6a9cc7c52af5fdddbf759ea6e1c563962234a4da62d13",
+      "model_metadata_sha256": "c5867ee872cbf0fb8227015bd3e94540415786437704ed01b66e6bb0b421c930",
+      "model_weights_sha256": "854da0f8fc0dcf5560d1f1b8838ea30081752020dbc2005772207217c5d1d17a",
+      "raw_cli_sha256": "8d61776353ace970c7ccdf0893af3e8b92809f5f6667ee6e5236d352748d9955",
+      "decision_mode": "deterministic_fallback",
+      "fallback_reason": "TINY_GO_OPERATION_NOT_OFFERED",
+      "model_candidate_choice": null,
+      "fallback_candidate": "sum",
+      "raw_model_operation_label_unavailable": true,
+      "receipt_candidate_accuracy_percent": 100,
+      "model_candidate_accuracy_percent": null,
+      "fallback_candidate_accuracy_percent": 100,
+      "final_candidate_id": "sum",
+      "final_finite_accuracy_percent": 100,
+      "selection_adjustment": "proposal_retained",
+      "candidate_scores": [
+        {
+          "id": "sum",
+          "expression": "input + 2",
+          "passed": 6,
+          "total": 6
+        },
+        {
+          "id": "difference",
+          "expression": "input - 2",
+          "passed": 0,
+          "total": 6
+        },
+        {
+          "id": "product",
+          "expression": "input * 2",
+          "passed": 0,
+          "total": 6
+        }
+      ],
+      "local_model_predictions": 1,
+      "external_provider_calls": 0,
+      "request_sha256": "sha256:b18442b2d9be0b1f50fa02bc485aaab9a1d71b50638c680f81f1448260aafa4d",
+      "timings": {
+        "cli_active_wall_ms": 501.512625,
+        "child_user_cpu_ms": 10.217,
+        "child_system_cpu_ms": 13.225,
+        "child_max_rss": 16564224,
+        "child_max_rss_unit": "bytes",
+        "tiny_model_load_ms": 0.522291,
+        "tiny_decision_ms": 0.080041,
+        "bodycodegen_total_ms": 2.687167
+      }
+    },
+    {
+      "cell_id": "arithmetic-ptq_ternary",
+      "fixture_id": "arithmetic",
+      "model_variant": "ptq_ternary",
+      "status": "CAPTURED_AND_SOURCE_BOUND",
+      "compiler_source_sha256_observed": "2519f27a8d7de834687bc32318c29662e75f5bd9",
+      "cli_binary_sha256_observed": "9cf07b11464080c97fc6a9cc7c52af5fdddbf759ea6e1c563962234a4da62d13",
+      "model_metadata_sha256": "5766a32a9d70ef16c895e7cf8765d7884d59ab6241fcfa225ac2291731a77a4e",
+      "model_weights_sha256": "3c60ab7154f02f04a94b1bc68274e05c4ae86f10185b19dbe7251c26610a5c8b",
+      "raw_cli_sha256": "66323f63880f7f20804c99bdc96f0399c582f1f4e68c1f4e9a6696aec10142aa",
+      "decision_mode": "tiny_go",
+      "fallback_reason": null,
+      "model_candidate_choice": "difference",
+      "fallback_candidate": null,
+      "raw_model_operation_label_unavailable": false,
+      "receipt_candidate_accuracy_percent": 0,
+      "model_candidate_accuracy_percent": 0,
+      "fallback_candidate_accuracy_percent": null,
+      "final_candidate_id": "sum",
+      "final_finite_accuracy_percent": 100,
+      "selection_adjustment": "replaced_with_best_scoring_candidate",
+      "candidate_scores": [
+        {
+          "id": "sum",
+          "expression": "input + 2",
+          "passed": 6,
+          "total": 6
+        },
+        {
+          "id": "difference",
+          "expression": "input - 2",
+          "passed": 0,
+          "total": 6
+        },
+        {
+          "id": "product",
+          "expression": "input * 2",
+          "passed": 0,
+          "total": 6
+        }
+      ],
+      "local_model_predictions": 1,
+      "external_provider_calls": 0,
+      "request_sha256": "sha256:b18442b2d9be0b1f50fa02bc485aaab9a1d71b50638c680f81f1448260aafa4d",
+      "timings": {
+        "cli_active_wall_ms": 10.867875,
+        "child_user_cpu_ms": 5.438,
+        "child_system_cpu_ms": 3.654,
+        "child_max_rss": 16433152,
+        "child_max_rss_unit": "bytes",
+        "tiny_model_load_ms": 0.18075,
+        "tiny_decision_ms": 0.049875,
+        "bodycodegen_total_ms": 0.919541
+      }
+    },
+    {
+      "cell_id": "arithmetic-qat_ternary",
+      "fixture_id": "arithmetic",
+      "model_variant": "qat_ternary",
+      "status": "CAPTURED_AND_SOURCE_BOUND",
+      "compiler_source_sha256_observed": "2519f27a8d7de834687bc32318c29662e75f5bd9",
+      "cli_binary_sha256_observed": "9cf07b11464080c97fc6a9cc7c52af5fdddbf759ea6e1c563962234a4da62d13",
+      "model_metadata_sha256": "4746fc7cbd2864e9536b43d779c7ecc39aa35f8f6f64943c73b951f9e967c8a7",
+      "model_weights_sha256": "bd4444d5233f07c18168a4dfa0053afde180ce97e390a993e4e0fbb33fb88337",
+      "raw_cli_sha256": "4f5f20f622f02bfac6afeb3bb64bb3b9fd85553417342b1c18e297982b86a78a",
+      "decision_mode": "tiny_go",
+      "fallback_reason": null,
+      "model_candidate_choice": "difference",
+      "fallback_candidate": null,
+      "raw_model_operation_label_unavailable": false,
+      "receipt_candidate_accuracy_percent": 0,
+      "model_candidate_accuracy_percent": 0,
+      "fallback_candidate_accuracy_percent": null,
+      "final_candidate_id": "sum",
+      "final_finite_accuracy_percent": 100,
+      "selection_adjustment": "replaced_with_best_scoring_candidate",
+      "candidate_scores": [
+        {
+          "id": "sum",
+          "expression": "input + 2",
+          "passed": 6,
+          "total": 6
+        },
+        {
+          "id": "difference",
+          "expression": "input - 2",
+          "passed": 0,
+          "total": 6
+        },
+        {
+          "id": "product",
+          "expression": "input * 2",
+          "passed": 0,
+          "total": 6
+        }
+      ],
+      "local_model_predictions": 1,
+      "external_provider_calls": 0,
+      "request_sha256": "sha256:b18442b2d9be0b1f50fa02bc485aaab9a1d71b50638c680f81f1448260aafa4d",
+      "timings": {
+        "cli_active_wall_ms": 9.989583,
+        "child_user_cpu_ms": 5.102,
+        "child_system_cpu_ms": 3.283,
+        "child_max_rss": 16728064,
+        "child_max_rss_unit": "bytes",
+        "tiny_model_load_ms": 0.182417,
+        "tiny_decision_ms": 0.044333,
+        "bodycodegen_total_ms": 0.85975
+      }
+    },
+    {
+      "cell_id": "boolean-fp32",
+      "fixture_id": "boolean",
+      "model_variant": "fp32",
+      "status": "CAPTURED_AND_SOURCE_BOUND",
+      "compiler_source_sha256_observed": "2519f27a8d7de834687bc32318c29662e75f5bd9",
+      "cli_binary_sha256_observed": "9cf07b11464080c97fc6a9cc7c52af5fdddbf759ea6e1c563962234a4da62d13",
+      "model_metadata_sha256": "c5867ee872cbf0fb8227015bd3e94540415786437704ed01b66e6bb0b421c930",
+      "model_weights_sha256": "854da0f8fc0dcf5560d1f1b8838ea30081752020dbc2005772207217c5d1d17a",
+      "raw_cli_sha256": "37785b51d3846cc04bbfbbefe19d182859f1220f59cd0ea2bf0ef4d0b8e6c5be",
+      "decision_mode": "deterministic_fallback",
+      "fallback_reason": "TINY_GO_OPERATION_NOT_OFFERED",
+      "model_candidate_choice": null,
+      "fallback_candidate": "less_than",
+      "raw_model_operation_label_unavailable": true,
+      "receipt_candidate_accuracy_percent": 83.33333333333333,
+      "model_candidate_accuracy_percent": null,
+      "fallback_candidate_accuracy_percent": 83.33333333333333,
+      "final_candidate_id": "less_equal",
+      "final_finite_accuracy_percent": 100,
+      "selection_adjustment": "replaced_with_best_scoring_candidate",
+      "candidate_scores": [
+        {
+          "id": "less_than",
+          "expression": "input < 0",
+          "passed": 5,
+          "total": 6
+        },
+        {
+          "id": "less_equal",
+          "expression": "input <= 0",
+          "passed": 6,
+          "total": 6
+        },
+        {
+          "id": "equal",
+          "expression": "input == 0",
+          "passed": 3,
+          "total": 6
+        }
+      ],
+      "local_model_predictions": 1,
+      "external_provider_calls": 0,
+      "request_sha256": "sha256:3faa9aec6971c8ea7554c2b53958bc301917c91481050be61ef2c9f0572ebb29",
+      "timings": {
+        "cli_active_wall_ms": 9.667667,
+        "child_user_cpu_ms": 4.685,
+        "child_system_cpu_ms": 3.293,
+        "child_max_rss": 16842752,
+        "child_max_rss_unit": "bytes",
+        "tiny_model_load_ms": 0.208666,
+        "tiny_decision_ms": 0.038,
+        "bodycodegen_total_ms": 0.791208
+      }
+    },
+    {
+      "cell_id": "boolean-ptq_ternary",
+      "fixture_id": "boolean",
+      "model_variant": "ptq_ternary",
+      "status": "CAPTURED_AND_SOURCE_BOUND",
+      "compiler_source_sha256_observed": "2519f27a8d7de834687bc32318c29662e75f5bd9",
+      "cli_binary_sha256_observed": "9cf07b11464080c97fc6a9cc7c52af5fdddbf759ea6e1c563962234a4da62d13",
+      "model_metadata_sha256": "5766a32a9d70ef16c895e7cf8765d7884d59ab6241fcfa225ac2291731a77a4e",
+      "model_weights_sha256": "3c60ab7154f02f04a94b1bc68274e05c4ae86f10185b19dbe7251c26610a5c8b",
+      "raw_cli_sha256": "122f9784207d0b7f690d6557f0829237c883fa330aaf3789f0795a816302cdb8",
+      "decision_mode": "deterministic_fallback",
+      "fallback_reason": "TINY_GO_LOW_CONFIDENCE",
+      "model_candidate_choice": null,
+      "fallback_candidate": "less_than",
+      "raw_model_operation_label_unavailable": true,
+      "receipt_candidate_accuracy_percent": 83.33333333333333,
+      "model_candidate_accuracy_percent": null,
+      "fallback_candidate_accuracy_percent": 83.33333333333333,
+      "final_candidate_id": "less_equal",
+      "final_finite_accuracy_percent": 100,
+      "selection_adjustment": "replaced_with_best_scoring_candidate",
+      "candidate_scores": [
+        {
+          "id": "less_than",
+          "expression": "input < 0",
+          "passed": 5,
+          "total": 6
+        },
+        {
+          "id": "less_equal",
+          "expression": "input <= 0",
+          "passed": 6,
+          "total": 6
+        },
+        {
+          "id": "equal",
+          "expression": "input == 0",
+          "passed": 3,
+          "total": 6
+        }
+      ],
+      "local_model_predictions": 1,
+      "external_provider_calls": 0,
+      "request_sha256": "sha256:3faa9aec6971c8ea7554c2b53958bc301917c91481050be61ef2c9f0572ebb29",
+      "timings": {
+        "cli_active_wall_ms": 10.860125,
+        "child_user_cpu_ms": 5.518,
+        "child_system_cpu_ms": 3.731,
+        "child_max_rss": 16777216,
+        "child_max_rss_unit": "bytes",
+        "tiny_model_load_ms": 0.197917,
+        "tiny_decision_ms": 0.046625,
+        "bodycodegen_total_ms": 0.948959
+      }
+    },
+    {
+      "cell_id": "boolean-qat_ternary",
+      "fixture_id": "boolean",
+      "model_variant": "qat_ternary",
+      "status": "CAPTURED_AND_SOURCE_BOUND",
+      "compiler_source_sha256_observed": "2519f27a8d7de834687bc32318c29662e75f5bd9",
+      "cli_binary_sha256_observed": "9cf07b11464080c97fc6a9cc7c52af5fdddbf759ea6e1c563962234a4da62d13",
+      "model_metadata_sha256": "4746fc7cbd2864e9536b43d779c7ecc39aa35f8f6f64943c73b951f9e967c8a7",
+      "model_weights_sha256": "bd4444d5233f07c18168a4dfa0053afde180ce97e390a993e4e0fbb33fb88337",
+      "raw_cli_sha256": "9003432606955a0604dd8cbbe65d1c19fbb90374861edc0ce48dd58a4c401eef",
+      "decision_mode": "deterministic_fallback",
+      "fallback_reason": "TINY_GO_OPERATION_NOT_OFFERED",
+      "model_candidate_choice": null,
+      "fallback_candidate": "less_than",
+      "raw_model_operation_label_unavailable": true,
+      "receipt_candidate_accuracy_percent": 83.33333333333333,
+      "model_candidate_accuracy_percent": null,
+      "fallback_candidate_accuracy_percent": 83.33333333333333,
+      "final_candidate_id": "less_equal",
+      "final_finite_accuracy_percent": 100,
+      "selection_adjustment": "replaced_with_best_scoring_candidate",
+      "candidate_scores": [
+        {
+          "id": "less_than",
+          "expression": "input < 0",
+          "passed": 5,
+          "total": 6
+        },
+        {
+          "id": "less_equal",
+          "expression": "input <= 0",
+          "passed": 6,
+          "total": 6
+        },
+        {
+          "id": "equal",
+          "expression": "input == 0",
+          "passed": 3,
+          "total": 6
+        }
+      ],
+      "local_model_predictions": 1,
+      "external_provider_calls": 0,
+      "request_sha256": "sha256:3faa9aec6971c8ea7554c2b53958bc301917c91481050be61ef2c9f0572ebb29",
+      "timings": {
+        "cli_active_wall_ms": 10.581417,
+        "child_user_cpu_ms": 5.444,
+        "child_system_cpu_ms": 3.623,
+        "child_max_rss": 16908288,
+        "child_max_rss_unit": "bytes",
+        "tiny_model_load_ms": 0.165042,
+        "tiny_decision_ms": 0.05025,
+        "bodycodegen_total_ms": 0.899042
+      }
+    }
+  ]
+}

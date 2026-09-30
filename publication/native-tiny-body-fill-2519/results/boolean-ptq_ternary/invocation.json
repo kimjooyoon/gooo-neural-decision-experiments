@@ -1,0 +1,368 @@
+{
+  "schema": "gooo/native-tiny-go-body-smoke/v1",
+  "status": "CAPTURED_AND_SOURCE_BOUND",
+  "fixture_id": "boolean",
+  "activity": "BooleanHole",
+  "fixture_file": "boolean.gooo",
+  "fixture_sha256": "1b2e12bc510ec7215f49e84b23cc00e4da3adadd7244030596671d7cb78af6f1",
+  "plan_file": "boolean.plan.json",
+  "plan_file_sha256": "a3f68051f964ee8b2917879e7fcec1d81b0c5bec20a975b2344410b08898e694",
+  "plan_semantic_sha256": "773eea8ffd8ae1f1ed7e1327edd91f0a6c535a89ea90fd95ee5061a15674a1b6",
+  "compiler_source_sha256_expected": "2519f27a8d7de834687bc32318c29662e75f5bd9",
+  "compiler_source_sha256_observed": "2519f27a8d7de834687bc32318c29662e75f5bd9",
+  "cli_binary_sha256_expected": "9cf07b11464080c97fc6a9cc7c52af5fdddbf759ea6e1c563962234a4da62d13",
+  "cli_binary_sha256_observed": "9cf07b11464080c97fc6a9cc7c52af5fdddbf759ea6e1c563962234a4da62d13",
+  "cli_binary_sha256_after": "9cf07b11464080c97fc6a9cc7c52af5fdddbf759ea6e1c563962234a4da62d13",
+  "runner_source_sha256": "999d3d5dc8dcdab63d9777365c31f3e266a933c9bbc6f02c415e3573af3e27f7",
+  "runner_source_file": "smoke.go",
+  "runner_binary_sha256": "514e8dc873cb1cd40b72d9c6c32e06a5e6b3994c903e9cb7248480adf85dc0ab",
+  "runner_source_bytes": 35706,
+  "model_variant": "ptq_ternary",
+  "model_metadata_sha256": "5766a32a9d70ef16c895e7cf8765d7884d59ab6241fcfa225ac2291731a77a4e",
+  "model_metadata_sha256_after": "5766a32a9d70ef16c895e7cf8765d7884d59ab6241fcfa225ac2291731a77a4e",
+  "model_weights_sha256": "3c60ab7154f02f04a94b1bc68274e05c4ae86f10185b19dbe7251c26610a5c8b",
+  "model_weights_sha256_after": "3c60ab7154f02f04a94b1bc68274e05c4ae86f10185b19dbe7251c26610a5c8b",
+  "model_weights_bytes": 2759,
+  "model_metadata_file": "model.json",
+  "laya_url_child_environment": "unset",
+  "laya_key_child_environment": "unset",
+  "child_count": 1,
+  "child_timeout_ms": 30000,
+  "path_neutral_command": [
+    "gooo",
+    "body-codegen",
+    "--json",
+    "--tiny-model",
+    "\u003cpinned-model.json\u003e",
+    "--fill-plan",
+    "boolean.plan.json",
+    "--activity",
+    "BooleanHole",
+    "boolean.gooo"
+  ],
+  "exit_code": 0,
+  "cli_active_wall_ms": 10.860125,
+  "child_user_cpu_ms": 5.518,
+  "child_system_cpu_ms": 3.731,
+  "child_max_rss": 16777216,
+  "child_max_rss_unit": "bytes",
+  "resource_scope": "one native gooo body-codegen child only; model metadata/weights are hashed before child timing; RUSAGE_CHILDREN CPU is delta around this sole child; max RSS belongs to this sole child",
+  "stdout_bytes": 17845,
+  "stdout_sha256": "122f9784207d0b7f690d6557f0829237c883fa330aaf3789f0795a816302cdb8",
+  "stderr_bytes": 0,
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "validation_errors": null,
+  "decision": {
+    "provider": "tiny_go",
+    "mode": "deterministic_fallback",
+    "fallback_reason": "TINY_GO_LOW_CONFIDENCE",
+    "proposed_candidate_id": "less_than",
+    "proposed_accuracy_percent": 83.33333333333333,
+    "selected_candidate_id": "less_equal",
+    "best_candidate_id": "less_equal",
+    "best_candidate_accuracy_percent": 100,
+    "selection_regret_percentage_points": 16.66666666666667,
+    "selection_adjustment": "replaced_with_best_scoring_candidate",
+    "tiny_go_variant": "ptq_ternary",
+    "tiny_go_weights_sha256": "3c60ab7154f02f04a94b1bc68274e05c4ae86f10185b19dbe7251c26610a5c8b",
+    "tiny_go_metadata_sha256": "5766a32a9d70ef16c895e7cf8765d7884d59ab6241fcfa225ac2291731a77a4e",
+    "request_sha256": "sha256:3faa9aec6971c8ea7554c2b53958bc301917c91481050be61ef2c9f0572ebb29",
+    "local_model_predictions": 1,
+    "external_provider_calls": 0,
+    "external_provider_calls_known": true,
+    "tiny_model_load_ms": 0.197917,
+    "tiny_decision_ms": 0.046625,
+    "bodycodegen_total_ms": 0.948959
+  },
+  "finite_suite": {
+    "cases": [
+      {
+        "input": -9223372036854775808,
+        "expected": 2
+      },
+      {
+        "input": -7,
+        "expected": 2
+      },
+      {
+        "input": -1,
+        "expected": 2
+      },
+      {
+        "input": 0,
+        "expected": 2
+      },
+      {
+        "input": 1,
+        "expected": 0
+      },
+      {
+        "input": 9223372036854775807,
+        "expected": 0
+      }
+    ],
+    "candidate_scores": [
+      {
+        "id": "less_than",
+        "expression": "input \u003c 0",
+        "typecheck_passed": true,
+        "test_cases_passed": 5,
+        "test_cases_total": 6,
+        "accuracy_percent": 83.33333333333333
+      },
+      {
+        "id": "less_equal",
+        "expression": "input \u003c= 0",
+        "typecheck_passed": true,
+        "test_cases_passed": 6,
+        "test_cases_total": 6,
+        "accuracy_percent": 100
+      },
+      {
+        "id": "equal",
+        "expression": "input == 0",
+        "typecheck_passed": true,
+        "test_cases_passed": 3,
+        "test_cases_total": 6,
+        "accuracy_percent": 50
+      }
+    ],
+    "reported_selected_case_results": [
+      {
+        "input": -9223372036854775808,
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      },
+      {
+        "input": -7,
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      },
+      {
+        "input": -1,
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      },
+      {
+        "input": 0,
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      },
+      {
+        "input": 1,
+        "expected": 0,
+        "actual": 0,
+        "passed": true
+      },
+      {
+        "input": 9223372036854775807,
+        "expected": 0,
+        "actual": 0,
+        "passed": true
+      }
+    ],
+    "independent_candidate_scores": [
+      {
+        "id": "less_than",
+        "expression": "input \u003c 0",
+        "passed": 5,
+        "total": 6
+      },
+      {
+        "id": "less_equal",
+        "expression": "input \u003c= 0",
+        "passed": 6,
+        "total": 6
+      },
+      {
+        "id": "equal",
+        "expression": "input == 0",
+        "passed": 3,
+        "total": 6
+      }
+    ],
+    "independent_selected_case_results": [
+      {
+        "input": -9223372036854775808,
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      },
+      {
+        "input": -7,
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      },
+      {
+        "input": -1,
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      },
+      {
+        "input": 0,
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      },
+      {
+        "input": 1,
+        "expected": 0,
+        "actual": 0,
+        "passed": true
+      },
+      {
+        "input": 9223372036854775807,
+        "expected": 0,
+        "actual": 0,
+        "passed": true
+      }
+    ],
+    "selected_cases_passed": 6,
+    "selected_cases_total": 6,
+    "functional_accuracy_percent": 100
+  },
+  "completeness": {
+    "decision_provider": "tiny_go",
+    "laya_provider": "",
+    "dimensions": [
+      {
+        "id": "declaration_coverage",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      },
+      {
+        "id": "generation_coverage",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      },
+      {
+        "id": "source_ast_coverage",
+        "status": "PASS",
+        "numerator": 25,
+        "denominator": 25
+      },
+      {
+        "id": "route_semantic_equivalence",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      },
+      {
+        "id": "typecheck_coverage",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      },
+      {
+        "id": "internal_replay_coverage",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      },
+      {
+        "id": "route_choice_protocol",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      },
+      {
+        "id": "provenance_integrity",
+        "status": "PASS",
+        "numerator": 8,
+        "denominator": 8
+      },
+      {
+        "id": "repository_write_boundary",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      },
+      {
+        "id": "execution_boundary",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      {
+        "id": "permission_boundary",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      {
+        "id": "external_network_boundary",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      },
+      {
+        "id": "laya_decision_observation",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 0
+      },
+      {
+        "id": "use_case_coverage",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      {
+        "id": "reverse_observation_coverage",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      {
+        "id": "full_domain_semantics",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      {
+        "id": "route_quality",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      {
+        "id": "resource_observation",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      {
+        "id": "resource_baseline_comparison",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      {
+        "id": "semantic_profile_delta",
+        "status": "UNKNOWN",
+        "numerator": 0,
+        "denominator": 1
+      },
+      {
+        "id": "declared_suite_functional_accuracy",
+        "status": "PASS",
+        "numerator": 6,
+        "denominator": 6
+      },
+      {
+        "id": "provider_execution_accounting",
+        "status": "PASS",
+        "numerator": 1,
+        "denominator": 1
+      }
+    ]
+  }
+}
