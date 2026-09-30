@@ -35,6 +35,13 @@ See the [model card](docs/hf-compiler-prov-v2-model-card.md),
 [fixed HF bundle](publication/hf-compiler-prov-v2/).
 The previous model/release results below remain frozen historical observations.
 
+The subsequent [128-program body comparison](runs/compiler-prov-v3-bodyplan-20261001/comparison.json)
+finds direct functional case success of 74.22%→84.84% for FP32, 53.05%→49.84%
+for PTQ and 71.56%→60.00% for QAT. **Use FP32 for this measured broader workflow.**
+Training-only TDD search reaches 100% on these finite cases for all variants and
+the deterministic baseline; it does not erase initial-choice regressions.
+See the [reviewed HF card](docs/hf-compiler-prov-v2-reviewed-model-card.md).
+
 Compare float32, post-training ternary quantization and ternary-aware training.
 The ternary alphabet has theoretical log2(3)=1.585 bits; base-3 packing of five
 weights per byte uses 1.6 bits/weight plus scales, biases and metadata. Training

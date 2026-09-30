@@ -1,0 +1,60 @@
+{
+  "arms_per_cohort": 8,
+  "cohort_sha256": "e517b948a8c1d744cf832b5d711918dd2fef0b90cd951126f579ac54ada427a9",
+  "cohorts": [
+    "parent",
+    "improved"
+  ],
+  "compiler_revision": "68361e64def5457f0d0e6de972570a9885cceb96",
+  "compiler_sha256": "3f3e632affb55c35449fcdcd0c69fcd8dcd84ec42dcaa488641eb03dd2f2cb50",
+  "created_at_utc": "2026-09-30T18:38:04.59931Z",
+  "execution": "Two independent bounded runners concurrently; different fresh evidence directories. No agents.",
+  "families": {
+    "arithmetic-pipeline": 16,
+    "boolean-composition": 16,
+    "nested-branch": 16,
+    "piecewise-branch": 16,
+    "polynomial-order": 16,
+    "reassignment": 16,
+    "signed-boundary": 16,
+    "threshold-comparison": 16
+  },
+  "go_version": "go1.27.1",
+  "heldout_cases_per_arm": 1280,
+  "holes_per_variant": 222,
+  "laya_calls": 0,
+  "models": {
+    "improved": {
+      "fp32/model.json": "9f59507ca7fc88d05995202bdac12fecb056a3b07fc75e09c90f54415d50454e",
+      "fp32/weights.bin": "e9beba7f8c6c33931fa89fcc69407bd4f02c5d23d731b2e8a0ebbf03601f59e8",
+      "ptq_ternary/model.json": "41a5168cb3ef0633edc0a9b05a0f6fafcef4324f05eee728db3b4d321c77d381",
+      "ptq_ternary/weights.bin": "005681c525474bb8ec08ffc6e83c43fb27f4c2ed0dd96328b442c2c8caa81fb6",
+      "qat_ternary/model.json": "ad058ac2f42f9e02eb3763b4b027d3f5034aac01fa5577d734ac92468dc2a65f",
+      "qat_ternary/weights.bin": "07813d1eef0651c37115a899c7052dc3bbca5c924dca348ecf4e4b6ca35fcf96"
+    },
+    "parent": {
+      "fp32/model.json": "c5867ee872cbf0fb8227015bd3e94540415786437704ed01b66e6bb0b421c930",
+      "fp32/weights.bin": "854da0f8fc0dcf5560d1f1b8838ea30081752020dbc2005772207217c5d1d17a",
+      "ptq_ternary/model.json": "5766a32a9d70ef16c895e7cf8765d7884d59ab6241fcfa225ac2291731a77a4e",
+      "ptq_ternary/weights.bin": "3c60ab7154f02f04a94b1bc68274e05c4ae86f10185b19dbe7251c26610a5c8b",
+      "qat_ternary/model.json": "4746fc7cbd2864e9536b43d779c7ecc39aa35f8f6f64943c73b951f9e967c8a7",
+      "qat_ternary/weights.bin": "bd4444d5233f07c18168a4dfa0053afde180ce97e390a993e4e0fbb33fb88337"
+    }
+  },
+  "physical_go_sha256": "132b69336a1f809932a8a20b0201dbbb980e86e3a323ae32e893639d83d71598",
+  "planned_case_executions_per_cohort": 36160,
+  "planned_cells_per_cohort": 1024,
+  "planned_go_test_processes_per_cohort": 8,
+  "planned_native_calls_per_cohort": 1024,
+  "planned_tiny_predictions_per_cohort": 666,
+  "resources": "Pipeline wall only; no per-child CPU/RSS or latency-quantile claims",
+  "retries": 0,
+  "runner_binary_sha256": "bb97e9e62b0ec9550aa29773ad93267eaaea56094578070b853c2beb6f2f0972",
+  "runner_source_revision": "67a076284f78bf2ac6b8416500c107f4f284d641",
+  "schema": "gooo/compiler-model-bodyplan-comparison-preexecution/v1",
+  "scope": "Go typed body assembler makes model decisions before native rule-based compiler; native --tiny-model is not invoked here. Native compiler only emits the assembled Gooo. Search uses training cases, with no further model predictions. Held-out refers to disjoint function inputs, not independent natural-language intents.",
+  "search_attempt_limit": 64,
+  "training_cases_per_arm": 3240,
+  "unique_intents": 128,
+  "warmups": 0
+}

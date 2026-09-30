@@ -1,0 +1,56 @@
+{
+  "schema": "gooo/multi-node-body-plan-evaluation/v1",
+  "status": "running",
+  "cohort_sha256": "e517b948a8c1d744cf832b5d711918dd2fef0b90cd951126f579ac54ada427a9",
+  "source_revision": "67a076284f78bf2ac6b8416500c107f4f284d641",
+  "runner_binary_sha256": "bb97e9e62b0ec9550aa29773ad93267eaaea56094578070b853c2beb6f2f0972",
+  "gooo_binary_sha256": "3f3e632affb55c35449fcdcd0c69fcd8dcd84ec42dcaa488641eb03dd2f2cb50",
+  "go_tool_sha256": "132b69336a1f809932a8a20b0201dbbb980e86e3a323ae32e893639d83d71598",
+  "planned_intents": 128,
+  "planned_cells": 1024,
+  "observed_selected_cells": 1024,
+  "training_candidate_attempt_limit": 64,
+  "laya_posts_attempted": 0,
+  "laya_posts_planned": 0,
+  "tiny_predictions_observed": 666,
+  "wall_ms": 0,
+  "cells": null,
+  "limits": [
+    "Synthetic preauthored structural plans; model only fills bounded operation holes.",
+    "Training-only finite enumeration is not a learned feedback policy; heldout is not passed to selection/search.",
+    "Repeated arms share the same intents; case-level success is not whole-domain proof.",
+    "Separate Laya reference service uses its upstream PyTorch runtime; connector, selection, orchestration and verification are Go.",
+    "Process-level CPU/RSS and per-request distribution are unmeasured by this evaluator."
+  ],
+  "family_counts": {
+    "arithmetic-pipeline": 16,
+    "boolean-composition": 16,
+    "nested-branch": 16,
+    "piecewise-branch": 16,
+    "polynomial-order": 16,
+    "reassignment": 16,
+    "signed-boundary": 16,
+    "threshold-comparison": 16
+  },
+  "unobserved_selection_cells": 0,
+  "native_generated_cells": 0,
+  "native_failed_or_unknown_cells": 0,
+  "compiled_go_cases_planned": 36160,
+  "compiled_go_cases_observed": 0,
+  "compiled_go_cases_unknown": 0,
+  "executable_pins_stable_after_execution": false,
+  "model_artifact_sha256": {
+    "fp32": {
+      "model_json": "c5867ee872cbf0fb8227015bd3e94540415786437704ed01b66e6bb0b421c930",
+      "weights_bin": "854da0f8fc0dcf5560d1f1b8838ea30081752020dbc2005772207217c5d1d17a"
+    },
+    "ptq_ternary": {
+      "model_json": "5766a32a9d70ef16c895e7cf8765d7884d59ab6241fcfa225ac2291731a77a4e",
+      "weights_bin": "3c60ab7154f02f04a94b1bc68274e05c4ae86f10185b19dbe7251c26610a5c8b"
+    },
+    "qat_ternary": {
+      "model_json": "4746fc7cbd2864e9536b43d779c7ecc39aa35f8f6f64943c73b951f9e967c8a7",
+      "weights_bin": "bd4444d5233f07c18168a4dfa0053afde180ce97e390a993e4e0fbb33fb88337"
+    }
+  }
+}

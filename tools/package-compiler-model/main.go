@@ -35,6 +35,7 @@ func main() {
 func run() error {
 	runDir := flag.String("run", "runs/compiler-prov-v3-mps-20261001", "validated training and dogfood run")
 	output := flag.String("output", "publication/hf-compiler-prov-v2", "fresh public model folder")
+	bodyReview := flag.Bool("body-review", false, "include the separately captured broader body comparison")
 	flag.Parse()
 	if flag.NArg() != 0 {
 		return errors.New("unexpected arguments")
@@ -75,6 +76,26 @@ func run() error {
 	for _, id := range []string{"arithmetic-fp32", "arithmetic-ptq_ternary", "arithmetic-qat_ternary", "boolean-fp32", "boolean-ptq_ternary", "boolean-qat_ternary"} {
 		files[filepath.Join("provenance", id+".ttl")] = filepath.Join(*runDir, "native-improved", id+".prov.ttl")
 	}
+	manifestSchema := "gooo/public-compiler-model-allowlist/v1"
+	if *bodyReview {
+		comparison := "runs/compiler-prov-v3-bodyplan-20261001/comparison.json"
+		raw, err := os.ReadFile(comparison)
+		if err != nil {
+			return err
+		}
+		var report map[string]any
+		if err := json.Unmarshal(raw, &report); err != nil {
+			return err
+		}
+		if report["status"] != "PASS" {
+			return errors.New("broader comparison is not complete and validated")
+		}
+		files["README.md"] = "docs/hf-compiler-prov-v2-reviewed-model-card.md"
+		files["bodyplan-comparison.json"] = comparison
+		files["bodyplan-preexecution.json"] = "runs/compiler-prov-v3-bodyplan-20261001/preexecution.json"
+		files["bodyplan-evidence-manifest.json"] = "runs/compiler-prov-v3-bodyplan-20261001/artifact-manifest.json"
+		manifestSchema = "gooo/public-compiler-model-allowlist/v2"
+	}
 	var manifest []artifact
 	// Validate every source before creating any public output.
 	contents := make(map[string][]byte, len(files))
@@ -109,7 +130,7 @@ func run() error {
 			return err
 		}
 	}
-	raw, err := json.MarshalIndent(map[string]any{"schema": "gooo/public-compiler-model-allowlist/v1", "files": manifest, "credentials_and_host_paths_scanned": true,
+	raw, err := json.MarshalIndent(map[string]any{"schema": manifestSchema, "files": manifest, "credentials_and_host_paths_scanned": true,
 		"binary_provenance": "Weights trained only on the disclosed public synthetic curriculum; binary files are not text secret-scanned"}, "", "  ")
 	if err != nil {
 		return err

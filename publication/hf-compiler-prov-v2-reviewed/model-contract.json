@@ -1,0 +1,24 @@
+{
+  "schema": "gooo/tiny-ir-decision-model-contract/v1",
+  "feature_dim": 256,
+  "hidden_dim": 48,
+  "label_count": 8,
+  "labels": [
+    "add",
+    "subtract",
+    "multiply",
+    "less_than",
+    "less_equal",
+    "equal",
+    "and",
+    "or"
+  ],
+  "input": "UTF-8 synthetic NL instruction; ASCII letters lowercased; byte bigrams and trigrams hashed with FNV-1a32 modulo256, counts L2-normalized",
+  "max_bytes": 512,
+  "network": "linear256x48+bias48, ReLU, linear48x8+bias8, validation-fitted temperature softmax",
+  "weight_layout": "row-major output-major",
+  "quantization": "ternary matrices absmean scale, straight-through QAT; five trits (-1\u21920,0\u21921,1\u21922) per base3 byte, least-significant trit first",
+  "runtime": "Go only; per-worker reusable fixed arrays; no Python inference dependency",
+  "training": "MPS GPU, bounded pilot budget, source+data hash before invocation",
+  "scope": "Eight supported typed binary IR operations; cannot generate arbitrary Gooo source"
+}

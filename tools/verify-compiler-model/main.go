@@ -66,7 +66,14 @@ func readLocal(root string) ([]artifact, []byte, error) {
 		return nil, nil, err
 	}
 	expected := fixedPaths()
-	if value.Schema != "gooo/public-compiler-model-allowlist/v1" || !value.PrivateTextScanned || value.BinaryProvenance == "" || len(value.Files) != len(expected) {
+	if value.Schema == "gooo/public-compiler-model-allowlist/v2" {
+		for _, name := range []string{"bodyplan-comparison.json", "bodyplan-preexecution.json", "bodyplan-evidence-manifest.json"} {
+			expected[name] = true
+		}
+	} else if value.Schema != "gooo/public-compiler-model-allowlist/v1" {
+		return nil, nil, errors.New("unexpected manifest schema")
+	}
+	if !value.PrivateTextScanned || value.BinaryProvenance == "" || len(value.Files) != len(expected) {
 		return nil, nil, errors.New("invalid fixed publication manifest")
 	}
 	seen := map[string]bool{}
