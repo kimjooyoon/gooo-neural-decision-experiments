@@ -168,7 +168,7 @@ func median(values []float64) float64 {
 	}
 	return (copy[len(copy)/2-1] + copy[len(copy)/2]) / 2
 }
-func run(compiler, goBinary, fixtureRoot, modelRoot, output, revision string) error {
+func run(compiler, goBinary, fixtureRoot, modelRoot, output, revision, compilerPin, goPin string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	head, headErr := exec.CommandContext(ctx, "git", "rev-parse", "HEAD").Output()
 	diffErr := exec.CommandContext(ctx, "git", "diff", "--quiet", "HEAD", "--", "tools/audit-native-paths", "internal/pathplan", "internal/bodyplan", "internal/decision").Run()
@@ -179,7 +179,10 @@ func run(compiler, goBinary, fixtureRoot, modelRoot, output, revision string) er
 	if _, err := os.Stat(output); !os.IsNotExist(err) {
 		return errors.New("fresh output required")
 	}
-	for _, pin := range [][2]string{{compiler, compilerSHA}, {goBinary, goSHA}} {
+	for _, pin := range [][2]string{{compiler, compilerPin}, {goBinary, goPin}} {
+		if !regexp.MustCompile(`^[a-f0-9]{64}$`).MatchString(pin[1]) {
+			return errors.New("explicit binary SHA256 required")
+		}
 		raw, err := read(pin[0], 128<<20)
 		if err != nil || hash(raw) != pin[1] {
 			return errors.New("binary pin mismatch")
@@ -240,7 +243,7 @@ func run(compiler, goBinary, fixtureRoot, modelRoot, output, revision string) er
 	}
 	if err := save(filepath.Join(output, "preexecution.json"), map[string]any{
 		"schema": "gooo/native-typed-path-preexecution/v1", "runner_revision": revision, "runner_binary_sha256": hash(exeRaw),
-		"native_revision": nativeRevision, "native_binary_sha256": compilerSHA, "go_binary_sha256": goSHA,
+		"native_revision": nativeRevision, "native_binary_sha256": compilerPin, "go_binary_sha256": goPin,
 		"hf_model_revision": publicModelRevision, "models": models, "gooo_fixture_sha256": hash(source), "document_fixture_sha256": hash(documentRaw),
 		"planned_native_calls": 32, "planned_local_model_predictions": 72, "planned_external_calls": 0,
 		"design":  "one compound body, 3 interacting choices/8 combinations; two languages x four arms x budgets 4/8 x full/partial contracts; at most two scope-invalid combinations, so budget4 permits a partial emitted candidate; variants and views are not independent ideas",
@@ -488,8 +491,10 @@ func main() {
 	modelRoot := flag.String("models", "runs/typed-path-positioned-random-20261001/models", "frozen model bundles")
 	output := flag.String("output", "", "fresh evidence directory")
 	revision := flag.String("source-revision", "", "actual clean runner HEAD")
+	compilerPin := flag.String("compiler-sha", compilerSHA, "expected platform binary SHA256")
+	goPin := flag.String("go-sha", goSHA, "expected Go binary SHA256")
 	flag.Parse()
-	if err := run(*compiler, *goBinary, *fixtureRoot, *modelRoot, *output, *revision); err != nil {
+	if err := run(*compiler, *goBinary, *fixtureRoot, *modelRoot, *output, *revision, *compilerPin, *goPin); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}

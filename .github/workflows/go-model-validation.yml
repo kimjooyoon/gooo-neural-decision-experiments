@@ -138,6 +138,44 @@ jobs:
             ${{ runner.temp }}/path-native-replay
           if-no-files-found: error
 
+  native-typed-structural-inference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GOTOOLCHAIN: local
+      GOWORK: "off"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.27.1'
+          cache: false
+      - uses: actions/checkout@v7
+        with:
+          repository: kimjooyoon/meta-ontology-go
+          ref: d21ce275ec0832e38ad4962ad03f4546c1b46e9f
+          path: .native-paths
+          persist-credentials: false
+      - name: Build source-bound native compiler and observation runner
+        run: |
+          (cd .native-paths && go build -trimpath -o "$RUNNER_TEMP/gooo-native-paths" ./cmd/gooo)
+          go build -trimpath -o "$RUNNER_TEMP/audit-native-paths" ./tools/audit-native-paths
+      - name: Observe fresh predictions and independently execute exact emitted Go
+        run: |
+          task_go_bin=$(command -v go)
+          task_go_sha=$(sha256sum "$task_go_bin" | cut -d ' ' -f 1)
+          task_native_sha=$(sha256sum "$RUNNER_TEMP/gooo-native-paths" | cut -d ' ' -f 1)
+          "$RUNNER_TEMP/audit-native-paths" --compiler "$RUNNER_TEMP/gooo-native-paths" \
+            --compiler-sha "$task_native_sha" --go "$task_go_bin" --go-sha "$task_go_sha" \
+            --fixtures "$GITHUB_WORKSPACE/.native-paths/examples/body-codegen" \
+            --source-revision "$GITHUB_SHA" --output "$RUNNER_TEMP/native-path-observation"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: native-typed-structural-inference
+          path: ${{ runner.temp }}/native-path-observation
+          if-no-files-found: error
+
   native-body-integration:
     runs-on: ubuntu-latest
     timeout-minutes: 15
