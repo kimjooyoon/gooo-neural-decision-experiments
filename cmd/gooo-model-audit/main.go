@@ -60,6 +60,7 @@ type auditReport struct {
 	Status               string                    `json:"status"`
 	Tolerance            float64                   `json:"absolute_tolerance"`
 	DatasetSHA256        string                    `json:"dataset_sha256"`
+	ExpectedDatasetRows  int                       `json:"expected_dataset_rows"`
 	ParitySHA256         string                    `json:"parity_sha256"`
 	DecisionBinarySHA256 string                    `json:"decision_binary_sha256,omitempty"`
 	RuntimeSourceSHA256  map[string]string         `json:"runtime_source_sha256"`
@@ -190,6 +191,7 @@ func main() {
 	modelsDir := flag.String("models", "", "directory containing one model bundle per variant")
 	parityPath := flag.String("parity", "", "saved Python go-parity.json")
 	datasetPath := flag.String("dataset", "", "frozen JSONL dataset")
+	expectedRows := flag.Int("expected-rows", 2048, "explicit frozen row count, 1..8192; v1 default remains 2048")
 	outputPath := flag.String("output", "", "audit report JSON output path")
 	decisionBin := flag.String("decision-bin", "", "optional gooo-decision executable for cold CLI runs")
 	coldDir := flag.String("cold-dir", "", "directory for raw cold CLI request/response captures")
@@ -202,15 +204,22 @@ func main() {
 		fmt.Fprintln(os.Stderr, "--decision-bin and --cold-dir must be provided together")
 		os.Exit(2)
 	}
-	if err := run(*modelsDir, *parityPath, *datasetPath, *outputPath, *decisionBin, *coldDir); err != nil {
+	if err := runWithRows(*modelsDir, *parityPath, *datasetPath, *outputPath, *decisionBin, *coldDir, *expectedRows); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 }
 
 func run(modelsDir, parityPath, datasetPath, outputPath, decisionBin, coldDir string) error {
+	return runWithRows(modelsDir, parityPath, datasetPath, outputPath, decisionBin, coldDir, 2048)
+}
+
+func runWithRows(modelsDir, parityPath, datasetPath, outputPath, decisionBin, coldDir string, expectedRows int) error {
+	if expectedRows < 1 || expectedRows > 8192 {
+		return errors.New("expected dataset row count must be 1..8192")
+	}
 	report := auditReport{Schema: auditSchema, Decision: "PASS", Status: "PASS", Tolerance: tolerance,
-		Inputs: make(map[string]string), Parity: make(map[string]paritySummary), TestScores: make(map[string]variantSummary), CLICold: make(map[string]coldCLISummary)}
+		ExpectedDatasetRows: expectedRows, Inputs: make(map[string]string), Parity: make(map[string]paritySummary), TestScores: make(map[string]variantSummary), CLICold: make(map[string]coldCLISummary)}
 	parityRaw, err := os.ReadFile(parityPath)
 	if err != nil {
 		return fmt.Errorf("read parity vectors: %w", err)
@@ -223,7 +232,7 @@ func run(modelsDir, parityPath, datasetPath, outputPath, decisionBin, coldDir st
 	if err != nil {
 		return err
 	}
-	dataset, err := decodeDataset(datasetRaw)
+	dataset, err := decodeDatasetWithRows(datasetRaw, expectedRows)
 	if err != nil {
 		return err
 	}
@@ -320,7 +329,15 @@ func decodeParity(raw []byte) (parityFile, error) {
 }
 
 func decodeDataset(raw []byte) ([]datasetRow, error) {
-	rows := make([]datasetRow, 0, 2048)
+	return decodeDatasetWithRows(raw, 2048)
+}
+
+func decodeDatasetWithRows(raw []byte, expectedRows int) ([]datasetRow, error) {
+	if expectedRows < 1 || expectedRows > 8192 {
+		return nil, errors.New("expected dataset row count must be 1..8192")
+	}
+	rows := make([]datasetRow, 0, expectedRows)
+	ids, texts, groups := make(map[string]bool), make(map[string]bool), make(map[string]string)
 	scanner := bufio.NewScanner(bytes.NewReader(raw))
 	scanner.Buffer(make([]byte, 4096), 1<<20)
 	for line := 1; scanner.Scan(); line++ {
@@ -331,13 +348,24 @@ func decodeDataset(raw []byte) ([]datasetRow, error) {
 		if row.ID == "" || row.Text == "" || row.Template == "" || row.Configuration == "" || row.Language == "" || row.Split == "" || labelIndex(row.Label) < 0 {
 			return nil, fmt.Errorf("dataset line %d has missing or unsupported fields", line)
 		}
+		if ids[row.ID] || texts[row.Text] || (row.Split != "train" && row.Split != "calibration" && row.Split != "test") ||
+			(row.Language != "en" && row.Language != "ko") {
+			return nil, fmt.Errorf("dataset line %d has duplicate identity/text or invalid enum", line)
+		}
+		if prior, exists := groups[row.Template]; exists && prior != row.Split {
+			return nil, fmt.Errorf("dataset line %d crosses a template split", line)
+		}
+		ids[row.ID], texts[row.Text], groups[row.Template] = true, true, row.Split
 		rows = append(rows, row)
+		if len(rows) > expectedRows {
+			return nil, fmt.Errorf("dataset exceeds frozen %d rows", expectedRows)
+		}
 	}
 	if err := scanner.Err(); err != nil {
 		return nil, fmt.Errorf("read dataset JSONL: %w", err)
 	}
-	if len(rows) != 2048 {
-		return nil, fmt.Errorf("dataset row count %d; want 2048", len(rows))
+	if len(rows) != expectedRows {
+		return nil, fmt.Errorf("dataset row count %d; want %d", len(rows), expectedRows)
 	}
 	return rows, nil
 }
