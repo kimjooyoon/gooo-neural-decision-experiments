@@ -1,0 +1,179 @@
+{
+  "schema": "gooo/tiny-ir-decision-independent-v1-binding-review/v1",
+  "review_date": "2026-09-30",
+  "review_status": "PASS_FROZEN_INPUT_BINDINGS_AND_FINAL_GO_AUDIT",
+  "scope": "Independent byte, dataset, pre-execution, and saved Go-audit binding review. This is not the full public-bundle verifier result.",
+  "dataset": {
+    "sha256": "af0a637320a8256cd6ebcdb3486a6885f2766441c90f0cb154c11599f3c8ca3d",
+    "manifest_sha256": "90d745c1e2e2db636ddbb53df5ebf4c268916b802468905a21cc2219cd4a2247",
+    "model_contract_sha256": "e1926dc964c6fd0fa671a68861190afe4ec059ec5d4e4e66f877ba119ef8e6e2",
+    "generator_source_sha256": "f9aeaa86cd17b017fbeaaf535913c1a1c442bf0f2a51ef4b1a027a18819689e5",
+    "row_count": 2048,
+    "split_counts": {
+      "calibration": 256,
+      "test": 256,
+      "train": 1536
+    },
+    "label_counts": {
+      "add": 256,
+      "and": 256,
+      "equal": 256,
+      "less_equal": 256,
+      "less_than": 256,
+      "multiply": 256,
+      "or": 256,
+      "subtract": 256
+    },
+    "language_counts": {
+      "en": 1024,
+      "ko": 1024
+    },
+    "unique_ids": 2048,
+    "unique_prompts": 2048,
+    "template_groups_crossing_splits": 0,
+    "maximum_prompt_utf8_bytes": 155,
+    "manifest_matches_dataset_contract_generator_and_split_counts": true
+  },
+  "training": {
+    "source_sha256": "d3725742c6bc1252ed738f769d13602327e7b8edb533e969edcd6b9ebe0ea142",
+    "preexecution_sha256": "2ae73ac67e396c47d931e7c9267933d4d79ea4f179833d06d7485294c1971b9f",
+    "report_sha256": "474e85da30934ccceb5a4bf11741a00e53a2353959e3ea17a52fec1414a03739",
+    "preexecution_dataset_sha256": "af0a637320a8256cd6ebcdb3486a6885f2766441c90f0cb154c11599f3c8ca3d",
+    "preexecution_training_source_sha256": "d3725742c6bc1252ed738f769d13602327e7b8edb533e969edcd6b9ebe0ea142",
+    "test_used_for_training_or_calibration": false,
+    "coarse_hardware": {
+      "chip": "Apple M4",
+      "gpu_cores": 10,
+      "unified_memory_gib": 16
+    },
+    "filtered_test_correct_over_256": {
+      "fp32": {
+        "correct": 256,
+        "planned": 256,
+        "accuracy": 1.0
+      },
+      "ptq_ternary": {
+        "correct": 245,
+        "planned": 256,
+        "accuracy": 0.95703125
+      },
+      "qat_ternary": {
+        "correct": 242,
+        "planned": 256,
+        "accuracy": 0.9453125
+      }
+    },
+    "reported_training_measurements": {
+      "fp32": {
+        "gpu_training_wall_seconds_including_calibration_and_cpu_scoring": 2.618615999817848,
+        "process_peak_rss_bytes_process_lifetime_high_water": 442449920,
+        "mps_allocated_peak_sampled_bytes": 2062592,
+        "mps_driver_peak_sampled_bytes": 53182464
+      },
+      "qat_ternary": {
+        "gpu_training_wall_seconds_including_calibration_and_cpu_scoring": 1.0177141667809337,
+        "process_peak_rss_bytes_process_lifetime_high_water": 445071360,
+        "mps_allocated_peak_sampled_bytes": 2062592,
+        "mps_driver_peak_sampled_bytes": 53182464
+      }
+    },
+    "measurement_limitations": [
+      "Training wall time includes calibration forward passes and CPU NLL scoring; it is not GPU-kernel-only time.",
+      "Process RSS is process-lifetime high-water and is shared across sequential variants.",
+      "MPS memory fields are sampled maxima, not true peaks."
+    ]
+  },
+  "external_go_audit": {
+    "sha256": "f28434deee5356610848c5d5906411abed7d388ee28828c82b39a8bf90dadc9d",
+    "schema": "gooo/tiny-ir-decision-go-audit/v1",
+    "decision": "PASS",
+    "status": "PASS",
+    "dataset_sha256": "af0a637320a8256cd6ebcdb3486a6885f2766441c90f0cb154c11599f3c8ca3d",
+    "parity_sha256": "84119298650830740f4e6d4a3159b1163cef4c24f2e6f49a6dbdbfb3d1e6ebf6",
+    "absolute_tolerance": 0.0001,
+    "python_parity_file_sha256": "84119298650830740f4e6d4a3159b1163cef4c24f2e6f49a6dbdbfb3d1e6ebf6",
+    "parity": {
+      "fp32": {
+        "planned": 32,
+        "observed": 32,
+        "matched": 32,
+        "features_max_abs_error": 0,
+        "logits_max_abs_error": 0,
+        "probabilities_max_abs_error": 3.3236322583007905e-09,
+        "selected_label_matches": 32
+      },
+      "ptq_ternary": {
+        "planned": 32,
+        "observed": 32,
+        "matched": 32,
+        "features_max_abs_error": 0,
+        "logits_max_abs_error": 1.9073486328125e-06,
+        "probabilities_max_abs_error": 8.166554825161931e-07,
+        "selected_label_matches": 32
+      },
+      "qat_ternary": {
+        "planned": 32,
+        "observed": 32,
+        "matched": 32,
+        "features_max_abs_error": 0,
+        "logits_max_abs_error": 3.814697265625e-06,
+        "probabilities_max_abs_error": 2.7027404758683815e-08,
+        "selected_label_matches": 32
+      }
+    },
+    "test_scores": {
+      "fp32": {
+        "planned": 256,
+        "observed": 256,
+        "correct": 256,
+        "accuracy": 1,
+        "model_json_sha256": "c5867ee872cbf0fb8227015bd3e94540415786437704ed01b66e6bb0b421c930",
+        "weights_sha256": "854da0f8fc0dcf5560d1f1b8838ea30081752020dbc2005772207217c5d1d17a"
+      },
+      "ptq_ternary": {
+        "planned": 256,
+        "observed": 256,
+        "correct": 245,
+        "accuracy": 0.95703125,
+        "model_json_sha256": "5766a32a9d70ef16c895e7cf8765d7884d59ab6241fcfa225ac2291731a77a4e",
+        "weights_sha256": "3c60ab7154f02f04a94b1bc68274e05c4ae86f10185b19dbe7251c26610a5c8b"
+      },
+      "qat_ternary": {
+        "planned": 256,
+        "observed": 256,
+        "correct": 242,
+        "accuracy": 0.9453125,
+        "model_json_sha256": "4746fc7cbd2864e9536b43d779c7ecc39aa35f8f6f64943c73b951f9e967c8a7",
+        "weights_sha256": "bd4444d5233f07c18168a4dfa0053afde180ce97e390a993e4e0fbb33fb88337"
+      }
+    },
+    "decision_binary_sha256": "7b843dbb294b1ad63f011eb85891029a728bc9064769590b3fd613bbc9b750b7",
+    "runtime_source_sha256": {
+      "cmd/gooo-decision/main.go": "5f5c00007a99901c39311049a1916db4764dbe2cfb52ed9e7af6f1c5ccf64565",
+      "cmd/gooo-model-audit/main.go": "c8107383b914ae65159b56b271c7de007757323c8e7a1d9ebf133b61650c6b11",
+      "cmd/gooo-model-audit/rss_other.go": "0b52e9e9c26ea14a7d7b0c412561869ab1050d585ef8553b045b1a1e19ee4be6",
+      "cmd/gooo-model-audit/rss_unix.go": "8206430e0f7d0ab0d7969c654bcff615617d6d088b35549d2237ec3378c4b9f8",
+      "go.mod": "4626de282ebb1603d123c02c167ffb2292942341a2a546db42f53ffbe77db690",
+      "internal/decision/bridge.go": "08227b64151ee8296c743e409d5a7dbb61f65d4d841d4dc0e0ab3a6119607236",
+      "internal/decision/ir.go": "ceada8df328b994285c4fc275a442cea8d03fbcbc7fc3d54b1178b2262671829",
+      "internal/decision/model.go": "8b78b501a9fd6e3d06092eebcc10c726826defc7859e6018db00c0a44073ca8f"
+    },
+    "all_nine_cold_cli_runs_observed": true
+  },
+  "public_export_gate": {
+    "status": "NOT_RUN_FULL_BUNDLE_NOT_ASSEMBLED",
+    "external_go_parity_status": "PASS",
+    "required_pending_artifacts": [
+      "filtered public training summary",
+      "model-card.json",
+      "README.md",
+      "reviewer-approved separate 17-file SHA-256 allowlist"
+    ]
+  },
+  "scope_limitations": [
+    "The task covers a closed eight-operation typed binary IR choice problem, not arbitrary source generation.",
+    "The test split has 32 examples per operation, grouped by held-out prompt templates; this is not evidence for unseen operation families.",
+    "Ternary code uses five trits per byte (1.6 physical bits per matrix weight before scales and metadata); 1.585 bits is the theoretical log2(3) value.",
+    "The saved audit is an external Go artifact comparison against Python parity rows and a finite test split; it does not prove behavior outside these inputs."
+  ]
+}

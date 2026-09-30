@@ -1,0 +1,63 @@
+{
+  "schema": "gooo/tiny-ir-decision-response/v1",
+  "status": "decision",
+  "model_variant": "qat_ternary",
+  "weights_sha256": "bd4444d5233f07c18168a4dfa0053afde180ce97e390a993e4e0fbb33fb88337",
+  "probabilities": [
+    {
+      "label": "add",
+      "probability": 9.041631e-8
+    },
+    {
+      "label": "subtract",
+      "probability": 0.0000034471377
+    },
+    {
+      "label": "multiply",
+      "probability": 0.0000546329
+    },
+    {
+      "label": "less_than",
+      "probability": 0.000058524907
+    },
+    {
+      "label": "less_equal",
+      "probability": 0.99974096
+    },
+    {
+      "label": "equal",
+      "probability": 6.007235e-7
+    },
+    {
+      "label": "and",
+      "probability": 4.0810175e-10
+    },
+    {
+      "label": "or",
+      "probability": 0.00014174926
+    }
+  ],
+  "best_label": "less_equal",
+  "confidence": 0.99974096,
+  "confidence_threshold": 0.125,
+  "typed_binary_ir": {
+    "schema": "gooo/typed-binary-ir/v1",
+    "kind": "binary",
+    "operation": "less_equal",
+    "left": {
+      "name": "quantity",
+      "type": "Int"
+    },
+    "right": {
+      "name": "unit_price",
+      "type": "Int"
+    },
+    "result_type": "Bool"
+  },
+  "packed_weights_bytes": 2759,
+  "resident_tensor_bytes": 12896,
+  "matrix_tensor_bytes": 12672,
+  "bias_tensor_bytes": 224,
+  "workspace_scratch_bytes": 1248,
+  "prediction_output_bytes": 64
+}

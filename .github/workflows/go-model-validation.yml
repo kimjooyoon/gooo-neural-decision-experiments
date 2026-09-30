@@ -1,0 +1,51 @@
+name: Go model validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  runtime-and-artifacts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GOTOOLCHAIN: local
+      GOWORK: "off"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.27.0'
+          cache: false
+      - name: Require formatted Go
+        run: test -z "$(gofmt -l cmd internal tools)"
+      - name: Go vet
+        run: go vet ./...
+      - name: Runtime and publication regression tests
+        run: go test -race ./...
+      - name: Reproduce frozen synthetic data
+        run: |
+          go run ./cmd/dataset --out-dir "$RUNNER_TEMP/dataset-replay"
+          cmp data/synthetic-ops-v1/dataset.jsonl "$RUNNER_TEMP/dataset-replay/dataset.jsonl"
+          cmp data/synthetic-ops-v1/manifest.json "$RUNNER_TEMP/dataset-replay/manifest.json"
+      - name: Verify public export without credentials or network publication
+        run: |
+          go run ./tools/assemble-public-export --output "$RUNNER_TEMP/public-model-bundle" --allowlist "$RUNNER_TEMP/public-model-allowlist.json"
+          cmp publication/public-export-allowlist-v1.json "$RUNNER_TEMP/public-model-allowlist.json"
+          go run ./tools/verify-public-export "$RUNNER_TEMP/public-model-bundle" "$RUNNER_TEMP/public-model-allowlist.json" > "$RUNNER_TEMP/export-verification.json"
+          cmp publication/public-export-verification-v1.json "$RUNNER_TEMP/export-verification.json"
+      - name: Independent Go parity and finite held-out evaluation
+        run: |
+          go run ./cmd/gooo-model-audit --models runs/pilot-mps-20260930-v1/models --parity runs/pilot-mps-20260930-v1/go-parity.json --dataset data/synthetic-ops-v1/dataset.jsonl --output "$RUNNER_TEMP/go-audit-ci.json"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: go-model-validation
+          path: |
+            ${{ runner.temp }}/go-audit-ci.json
+            ${{ runner.temp }}/export-verification.json
+          if-no-files-found: error
