@@ -42,10 +42,16 @@ jobs:
       - name: Independent Go parity and finite held-out evaluation
         run: |
           go run ./cmd/gooo-model-audit --models runs/pilot-mps-20260930-v1/models --parity runs/pilot-mps-20260930-v1/go-parity.json --dataset data/synthetic-ops-v1/dataset.jsonl --output "$RUNNER_TEMP/go-audit-ci.json"
+      - name: Exercise bounded Go stream end to end
+        run: |
+          CGO_ENABLED=0 go build -trimpath -buildvcs=false -o "$RUNNER_TEMP/gooo-decision-stream-ci" ./cmd/gooo-decision-stream
+          task_stream_sha=$(sha256sum "$RUNNER_TEMP/gooo-decision-stream-ci" | cut -d ' ' -f 1)
+          go run ./tools/benchmark-stream --stream-bin "$RUNNER_TEMP/gooo-decision-stream-ci" --binary-sha256 "$task_stream_sha" --output "$RUNNER_TEMP/stream-end-to-end-ci.json"
       - uses: actions/upload-artifact@v7
         with:
           name: go-model-validation
           path: |
             ${{ runner.temp }}/go-audit-ci.json
             ${{ runner.temp }}/export-verification.json
+            ${{ runner.temp }}/stream-end-to-end-ci.json
           if-no-files-found: error

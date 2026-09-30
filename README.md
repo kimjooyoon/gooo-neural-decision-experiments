@@ -98,6 +98,13 @@ response construction, encoding and channels allocate separately. A rejected
 record does not prevent later records from completing; a model abstention is
 visible inside the transport result and supplies no IR.
 
+The [six-condition local stream measurement](runs/stream-end-to-end-v2-20260930/README.md)
+completed 24,576 records, repeating 256 frozen test rows. FP32 processed a
+4,096-record batch in 77.7 ms with one worker or 54.2 ms with four. The latter
+used 176.7% average CPU on a one-core basis and 11.6 MiB child peak RSS. This
+measures batch throughput, not individual request latency or host CPU increase.
+CI also exercises the persistent stream without Python, GPU or providers.
+
 ## Runtime hardening after the pilot
 
 The v1 published audit remains unchanged. Follow-up v2/v3 records cover raw

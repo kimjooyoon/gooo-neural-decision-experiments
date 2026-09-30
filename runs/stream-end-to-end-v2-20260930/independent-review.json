@@ -1,0 +1,461 @@
+{
+  "schema": "gooo/stream-end-to-end-independent-review/v1",
+  "decision": "PASS_WITH_LIMITATIONS",
+  "reviewed_utc": "2026-09-30T12:32:14.446832+00:00",
+  "review_scope": "Read-only independent recomputation of source, binary, model, dataset, six condition counts, score repetition, resource formula, and first-attempt provenance. No benchmark execution or model inference was performed for this review.",
+  "primary_report": {
+    "path": "runs/stream-end-to-end-v2-20260930/report.json",
+    "sha256": "331807ef8f44b24b8ee37b0a053e45f7d7659a6d7ce5fb7843cc2c7fe300ddd1"
+  },
+  "reference_go_audit": {
+    "path": "runs/pilot-mps-20260930-v1/go-audit.json",
+    "sha256": "f28434deee5356610848c5d5906411abed7d388ee28828c82b39a8bf90dadc9d",
+    "dataset_sha256": "af0a637320a8256cd6ebcdb3486a6885f2766441c90f0cb154c11599f3c8ca3d",
+    "decision_binary_sha256": "7b843dbb294b1ad63f011eb85891029a728bc9064769590b3fd613bbc9b750b7",
+    "runtime_source_sha256": {
+      "cmd/gooo-decision/main.go": "5f5c00007a99901c39311049a1916db4764dbe2cfb52ed9e7af6f1c5ccf64565",
+      "cmd/gooo-model-audit/main.go": "c8107383b914ae65159b56b271c7de007757323c8e7a1d9ebf133b61650c6b11",
+      "cmd/gooo-model-audit/rss_other.go": "0b52e9e9c26ea14a7d7b0c412561869ab1050d585ef8553b045b1a1e19ee4be6",
+      "cmd/gooo-model-audit/rss_unix.go": "8206430e0f7d0ab0d7969c654bcff615617d6d088b35549d2237ec3378c4b9f8",
+      "go.mod": "4626de282ebb1603d123c02c167ffb2292942341a2a546db42f53ffbe77db690",
+      "internal/decision/bridge.go": "08227b64151ee8296c743e409d5a7dbb61f65d4d841d4dc0e0ab3a6119607236",
+      "internal/decision/ir.go": "ceada8df328b994285c4fc275a442cea8d03fbcbc7fc3d54b1178b2262671829",
+      "internal/decision/model.go": "8b78b501a9fd6e3d06092eebcc10c726826defc7859e6018db00c0a44073ca8f"
+    }
+  },
+  "source": {
+    "closure_paths_in_hash_order": [
+      "go.mod",
+      "cmd/gooo-decision-stream/main.go",
+      "internal/decisionstream/stream.go",
+      "internal/decision/model.go",
+      "internal/decision/bridge.go",
+      "internal/decision/ir.go"
+    ],
+    "closure_sha256_recomputed_current": "c52588e78a992a52715359919afdfd7f823d15903672a3a53132ea5179a75169",
+    "closure_sha256_recomputed_at_commit": "c52588e78a992a52715359919afdfd7f823d15903672a3a53132ea5179a75169",
+    "closure_sha256_reported": "c52588e78a992a52715359919afdfd7f823d15903672a3a53132ea5179a75169",
+    "source_commit_reference_from_preserved_first_attempt": "381c2ad4b3fbc22ba88557177bd7a3fbd6cdab74",
+    "benchmark_driver_sha256_current": "7057cd023da4e06020aeaf58c803e36feb69b145de31c50d1a0f4e8940035325",
+    "benchmark_driver_sha256_at_fix_commit_0dce981": "7057cd023da4e06020aeaf58c803e36feb69b145de31c50d1a0f4e8940035325",
+    "benchmark_driver_sha256_reported": "7057cd023da4e06020aeaf58c803e36feb69b145de31c50d1a0f4e8940035325",
+    "pin_flags": {
+      "checked": true,
+      "matched": true,
+      "source_stable_during_run": true,
+      "driver_stable_during_run": true
+    },
+    "qualification": "The source closure matches the cited source commit and report. The binary is independently SHA-pinned, but its Go build metadata contains no vcs.revision or vcs.modified fields, and this review did not rebuild it; source-to-binary reproducibility is therefore not independently established."
+  },
+  "binary": {
+    "path": "/tmp/gooo-decision-stream-v3-20260930",
+    "sha256_recomputed": "0453957c83f95bd2b24c36a9db1a46e8a83df8bb35ce28d7ec3a451ea957c236",
+    "sha256_reported": "0453957c83f95bd2b24c36a9db1a46e8a83df8bb35ce28d7ec3a451ea957c236",
+    "file_format": "Mach-O 64-bit arm64",
+    "go_build_version": "go1.27.0",
+    "build_target": {
+      "GOOS": "darwin",
+      "GOARCH": "arm64",
+      "CGO_ENABLED": "0",
+      "trimpath": true
+    },
+    "go_build_vcs_revision_present": false
+  },
+  "data": {
+    "manifest_path": "data/synthetic-ops-v1/manifest.json",
+    "manifest_sha256_recomputed": "90d745c1e2e2db636ddbb53df5ebf4c268916b802468905a21cc2219cd4a2247",
+    "dataset_path": "data/synthetic-ops-v1/dataset.jsonl",
+    "dataset_sha256_recomputed": "af0a637320a8256cd6ebcdb3486a6885f2766441c90f0cb154c11599f3c8ca3d",
+    "test_split_sha256_recomputed": "1cf848b0028e11935dbda8429733d53bde43433441fded4b79caa869666e675f",
+    "test_rows": 256,
+    "test_rows_by_label": {
+      "add": 32,
+      "and": 32,
+      "equal": 32,
+      "less_equal": 32,
+      "less_than": 32,
+      "multiply": 32,
+      "or": 32,
+      "subtract": 32
+    },
+    "test_rows_by_language": {
+      "en": 128,
+      "ko": 128
+    },
+    "note": "All 24,576 records are repeated presentations of the same 256 frozen test rows; repetitions are throughput samples, not independent dataset examples."
+  },
+  "models": [
+    {
+      "variant": "fp32",
+      "metadata_sha256": "c5867ee872cbf0fb8227015bd3e94540415786437704ed01b66e6bb0b421c930",
+      "weights_sha256": "854da0f8fc0dcf5560d1f1b8838ea30081752020dbc2005772207217c5d1d17a",
+      "bundle_sha256": "c72130ec96d3ffea454619d96358631f318798e77e61d4d262cdd8ef7ef66291",
+      "file_bytes": 52096,
+      "matches_report": true
+    },
+    {
+      "variant": "ptq_ternary",
+      "metadata_sha256": "5766a32a9d70ef16c895e7cf8765d7884d59ab6241fcfa225ac2291731a77a4e",
+      "weights_sha256": "3c60ab7154f02f04a94b1bc68274e05c4ae86f10185b19dbe7251c26610a5c8b",
+      "bundle_sha256": "42bb2b6c35b69004e98da7c2d7e7db2bbc3172c55ffd8cbb523fa084b1e2761b",
+      "file_bytes": 4011,
+      "matches_report": true
+    },
+    {
+      "variant": "qat_ternary",
+      "metadata_sha256": "4746fc7cbd2864e9536b43d779c7ecc39aa35f8f6f64943c73b951f9e967c8a7",
+      "weights_sha256": "bd4444d5233f07c18168a4dfa0053afde180ce97e390a993e4e0fbb33fb88337",
+      "bundle_sha256": "33a054b212eaa1ae6befd2e20ad3a874efa01167d6e015ebc9fe1454898f59d8",
+      "file_bytes": 3999,
+      "matches_report": true
+    }
+  ],
+  "execution": {
+    "condition_matrix": [
+      {
+        "variant": "fp32",
+        "workers": 1,
+        "runs": 1
+      },
+      {
+        "variant": "fp32",
+        "workers": 4,
+        "runs": 1
+      },
+      {
+        "variant": "ptq_ternary",
+        "workers": 1,
+        "runs": 1
+      },
+      {
+        "variant": "ptq_ternary",
+        "workers": 4,
+        "runs": 1
+      },
+      {
+        "variant": "qat_ternary",
+        "workers": 1,
+        "runs": 1
+      },
+      {
+        "variant": "qat_ternary",
+        "workers": 4,
+        "runs": 1
+      }
+    ],
+    "planned_runs": 6,
+    "completed_runs": 6,
+    "unstarted_runs": 0,
+    "planned_records_total": 24576,
+    "written_records_total": 24576,
+    "observed_output_records_total": 24576,
+    "correlated_records_total": 24576,
+    "unvalidated_records_total": 0,
+    "per_run_checks": [
+      {
+        "variant": "fp32",
+        "workers": 1,
+        "complete": true,
+        "cpu_formula_matches": true,
+        "cpu_percent_recomputed": 98.55319559605286,
+        "peak_rss_bytes": 10813440,
+        "peak_rss_available": true
+      },
+      {
+        "variant": "fp32",
+        "workers": 4,
+        "complete": true,
+        "cpu_formula_matches": true,
+        "cpu_percent_recomputed": 176.66515099899866,
+        "peak_rss_bytes": 12173312,
+        "peak_rss_available": true
+      },
+      {
+        "variant": "ptq_ternary",
+        "workers": 1,
+        "complete": true,
+        "cpu_formula_matches": true,
+        "cpu_percent_recomputed": 98.72674843745398,
+        "peak_rss_bytes": 10534912,
+        "peak_rss_available": true
+      },
+      {
+        "variant": "ptq_ternary",
+        "workers": 4,
+        "complete": true,
+        "cpu_formula_matches": true,
+        "cpu_percent_recomputed": 184.3116361421793,
+        "peak_rss_bytes": 12697600,
+        "peak_rss_available": true
+      },
+      {
+        "variant": "qat_ternary",
+        "workers": 1,
+        "complete": true,
+        "cpu_formula_matches": true,
+        "cpu_percent_recomputed": 98.72113893848268,
+        "peak_rss_bytes": 10780672,
+        "peak_rss_available": true
+      },
+      {
+        "variant": "qat_ternary",
+        "workers": 4,
+        "complete": true,
+        "cpu_formula_matches": true,
+        "cpu_percent_recomputed": 186.55877733499827,
+        "peak_rss_bytes": 12173312,
+        "peak_rss_available": true
+      }
+    ],
+    "all_totals_match": true
+  },
+  "score_comparison": {
+    "baseline_path": "runs/pilot-mps-20260930-v1/go-audit.json",
+    "baseline_sha256": "f28434deee5356610848c5d5906411abed7d388ee28828c82b39a8bf90dadc9d",
+    "repeat_factor": 16,
+    "variants": [
+      {
+        "variant": "fp32",
+        "baseline_rows": 256,
+        "repeat_factor": 16,
+        "conditions": [
+          {
+            "workers": 1,
+            "expected_counts": {
+              "matched_best_label_correct": 4096,
+              "accepted_ir": 4096,
+              "accepted_correct": 4096,
+              "accepted_incorrect": 0,
+              "type_abstentions": 0,
+              "other_abstentions": 0
+            },
+            "observed_counts": {
+              "matched_best_label_correct": 4096,
+              "accepted_ir": 4096,
+              "accepted_correct": 4096,
+              "accepted_incorrect": 0,
+              "type_abstentions": 0,
+              "other_abstentions": 0
+            },
+            "matches": true
+          },
+          {
+            "workers": 4,
+            "expected_counts": {
+              "matched_best_label_correct": 4096,
+              "accepted_ir": 4096,
+              "accepted_correct": 4096,
+              "accepted_incorrect": 0,
+              "type_abstentions": 0,
+              "other_abstentions": 0
+            },
+            "observed_counts": {
+              "matched_best_label_correct": 4096,
+              "accepted_ir": 4096,
+              "accepted_correct": 4096,
+              "accepted_incorrect": 0,
+              "type_abstentions": 0,
+              "other_abstentions": 0
+            },
+            "matches": true
+          }
+        ],
+        "pass": true
+      },
+      {
+        "variant": "ptq_ternary",
+        "baseline_rows": 256,
+        "repeat_factor": 16,
+        "conditions": [
+          {
+            "workers": 1,
+            "expected_counts": {
+              "matched_best_label_correct": 3920,
+              "accepted_ir": 4016,
+              "accepted_correct": 3872,
+              "accepted_incorrect": 144,
+              "type_abstentions": 0,
+              "other_abstentions": 80
+            },
+            "observed_counts": {
+              "matched_best_label_correct": 3920,
+              "accepted_ir": 4016,
+              "accepted_correct": 3872,
+              "accepted_incorrect": 144,
+              "type_abstentions": 0,
+              "other_abstentions": 80
+            },
+            "matches": true
+          },
+          {
+            "workers": 4,
+            "expected_counts": {
+              "matched_best_label_correct": 3920,
+              "accepted_ir": 4016,
+              "accepted_correct": 3872,
+              "accepted_incorrect": 144,
+              "type_abstentions": 0,
+              "other_abstentions": 80
+            },
+            "observed_counts": {
+              "matched_best_label_correct": 3920,
+              "accepted_ir": 4016,
+              "accepted_correct": 3872,
+              "accepted_incorrect": 144,
+              "type_abstentions": 0,
+              "other_abstentions": 80
+            },
+            "matches": true
+          }
+        ],
+        "pass": true
+      },
+      {
+        "variant": "qat_ternary",
+        "baseline_rows": 256,
+        "repeat_factor": 16,
+        "conditions": [
+          {
+            "workers": 1,
+            "expected_counts": {
+              "matched_best_label_correct": 3872,
+              "accepted_ir": 4096,
+              "accepted_correct": 3872,
+              "accepted_incorrect": 224,
+              "type_abstentions": 0,
+              "other_abstentions": 0
+            },
+            "observed_counts": {
+              "matched_best_label_correct": 3872,
+              "accepted_ir": 4096,
+              "accepted_correct": 3872,
+              "accepted_incorrect": 224,
+              "type_abstentions": 0,
+              "other_abstentions": 0
+            },
+            "matches": true
+          },
+          {
+            "workers": 4,
+            "expected_counts": {
+              "matched_best_label_correct": 3872,
+              "accepted_ir": 4096,
+              "accepted_correct": 3872,
+              "accepted_incorrect": 224,
+              "type_abstentions": 0,
+              "other_abstentions": 0
+            },
+            "observed_counts": {
+              "matched_best_label_correct": 3872,
+              "accepted_ir": 4096,
+              "accepted_correct": 3872,
+              "accepted_incorrect": 224,
+              "type_abstentions": 0,
+              "other_abstentions": 0
+            },
+            "matches": true
+          }
+        ],
+        "pass": true
+      }
+    ],
+    "request_construction_check": "makeRequest passes prompt text and parsed operand names/types to the Go stream request. It does not pass the dataset gold label; labels are used by the result parser for scoring."
+  },
+  "resource_interpretation": {
+    "method": "child process getrusage via os.ProcessState.SysUsage",
+    "rss_units": "getrusage ru_maxrss is bytes on Darwin",
+    "cpu_formula": "(child user CPU seconds + child system CPU seconds) / child wall seconds * 100; a core-based process average, not host or machine CPU percent; values above 100 are possible",
+    "per_run": [
+      {
+        "variant": "fp32",
+        "workers": 1,
+        "complete": true,
+        "cpu_formula_matches": true,
+        "cpu_percent_recomputed": 98.55319559605286,
+        "peak_rss_bytes": 10813440,
+        "peak_rss_available": true
+      },
+      {
+        "variant": "fp32",
+        "workers": 4,
+        "complete": true,
+        "cpu_formula_matches": true,
+        "cpu_percent_recomputed": 176.66515099899866,
+        "peak_rss_bytes": 12173312,
+        "peak_rss_available": true
+      },
+      {
+        "variant": "ptq_ternary",
+        "workers": 1,
+        "complete": true,
+        "cpu_formula_matches": true,
+        "cpu_percent_recomputed": 98.72674843745398,
+        "peak_rss_bytes": 10534912,
+        "peak_rss_available": true
+      },
+      {
+        "variant": "ptq_ternary",
+        "workers": 4,
+        "complete": true,
+        "cpu_formula_matches": true,
+        "cpu_percent_recomputed": 184.3116361421793,
+        "peak_rss_bytes": 12697600,
+        "peak_rss_available": true
+      },
+      {
+        "variant": "qat_ternary",
+        "workers": 1,
+        "complete": true,
+        "cpu_formula_matches": true,
+        "cpu_percent_recomputed": 98.72113893848268,
+        "peak_rss_bytes": 10780672,
+        "peak_rss_available": true
+      },
+      {
+        "variant": "qat_ternary",
+        "workers": 4,
+        "complete": true,
+        "cpu_formula_matches": true,
+        "cpu_percent_recomputed": 186.55877733499827,
+        "peak_rss_bytes": 12173312,
+        "peak_rss_available": true
+      }
+    ],
+    "limits": [
+      "Core percentage is a child-process, core-based average and can exceed 100%; it is not host CPU utilization or host CPU increase.",
+      "RSS is the child process peak ru_maxrss converted/reported in bytes on Darwin; it is not whole-machine memory pressure.",
+      "Each model/worker condition is a single 4,096-record batch measurement; there are no repeated condition trials or request-level latency distributions.",
+      "Wall time includes child startup, model loading, JSON parse/encode, queueing, and stream I/O; parent-side feed work affects wall time but is excluded from child process CPU/RSS."
+    ]
+  },
+  "first_attempt": {
+    "path": "runs/stream-end-to-end-v1-20260930/failed-attempt.json",
+    "sha256": "4ba73575942091748a6928da687587c4a9404ad301bf8f88b4693e672fa898b7",
+    "stage": "post-execution report file creation",
+    "known_cause": "The caller supplied a path with an absent parent directory; the driver checked only whether the final file existed before execution.",
+    "observed_process_and_record_counts": null,
+    "assessment": "The failed attempt reached the six-condition execution loop before report creation failed. The retained receipt leaves process/record counts unknown and explicitly does not claim zero work. It is excluded from the successful r2 totals."
+  },
+  "independent_checks": {
+    "report_sha_matches_recorded_bytes": true,
+    "binary_sha_matches_report": true,
+    "binary_format_arm64_macos": true,
+    "source_closure_matches_current_and_report": true,
+    "source_closure_matches_cited_source_commit": true,
+    "benchmark_driver_sha_matches_report_and_fix_commit": true,
+    "source_pin_flags_all_true": true,
+    "manifest_dataset_test_split_sha_match_report": true,
+    "test_distribution_matches_report": true,
+    "all_model_bundle_pins_match_report": true,
+    "all_six_run_denominators_and_zero_errors": true,
+    "all_six_resource_formulas_and_units_valid": true,
+    "scores_equal_go_audit_times_16": true,
+    "request_builder_excludes_gold_label": true,
+    "first_attempt_unknown_work_is_preserved": true
+  },
+  "material_limits": [
+    "No raw per-record stdout/request capture accompanies the aggregate report, so individual output bytes cannot be independently replayed from this artifact; score verification is based on the pinned runner logic plus exact aggregate equality to the separate Go audit repeated 16 times.",
+    "The executable hash and source-closure hash both match their report pins, but source-to-binary reproducible-build proof is absent from this report and the executable metadata does not embed the source revision.",
+    "One measurement per variant/worker pair supports a throughput observation only; it does not establish per-request latency percentiles or robust performance rankings among model variants."
+  ]
+}
