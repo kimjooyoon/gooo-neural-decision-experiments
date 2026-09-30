@@ -524,7 +524,7 @@ func compileArm(cfg config, rows []record, arm string, metadata *report) error {
 		}
 	}
 	tests.WriteString("}\n")
-	if err := os.WriteFile(filepath.Join(dir, "go.mod"), []byte("module frozen.bodyplan.replay\ngo 1.27.0\n"), 0644); err != nil {
+	if err := os.WriteFile(filepath.Join(dir, "go.mod"), []byte("module frozen.bodyplan.replay\ngo 1.27.1\n"), 0644); err != nil {
 		return err
 	}
 	if err := os.WriteFile(filepath.Join(dir, "generated.go"), []byte(code.String()), 0644); err != nil {

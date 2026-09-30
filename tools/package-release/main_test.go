@@ -201,7 +201,7 @@ func TestManifestAndChecksumsBindPayloadAndManifest(t *testing.T) {
 		{path: "README.md", data: []byte("readme"), mode: 0o644},
 		{path: "bin/gooo-decision", data: []byte("binary"), mode: 0o755},
 	}
-	manifest := makeManifest("v0.1.0-experimental", strings.Repeat("a", 40), "go version go1.27.0 darwin/arm64", buildTarget{goos: "darwin", goarch: "arm64"}, files)
+	manifest := makeManifest("v0.1.0-experimental", strings.Repeat("a", 40), "go version go1.27.1 darwin/arm64", buildTarget{goos: "darwin", goarch: "arm64"}, files)
 	manifestBytes, err := json.Marshal(manifest)
 	if err != nil {
 		t.Fatal(err)
@@ -264,7 +264,7 @@ func TestMaterializeGitSnapshotExcludesIgnoredGoFiles(t *testing.T) {
 	gitTestCommand(t, repository, "config", "user.email", "snapshot-test@example.invalid")
 	gitTestCommand(t, repository, "config", "user.name", "Snapshot Test")
 	writeTestFile(t, repository, ".gitignore", "ignored.go\n")
-	writeTestFile(t, repository, "go.mod", "module example.invalid/snapshot\n\ngo 1.27\n")
+	writeTestFile(t, repository, "go.mod", "module example.invalid/snapshot\n\ngo 1.27.1\n")
 	writeTestFile(t, repository, "LICENSE", "test license\n")
 	writeTestFile(t, repository, "model-contract.json", "{}\n")
 	writeTestFile(t, repository, "main.go", "package main\nfunc main() {}\n")
