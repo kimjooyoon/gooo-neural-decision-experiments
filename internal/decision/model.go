@@ -184,6 +184,8 @@ func (m *Model) Variant() string { return m.metadata.Variant }
 
 func (m *Model) ConfidenceThreshold() float32 { return m.threshold }
 
+func (m *Model) Temperature() float32 { return m.temperature }
+
 func (m *Model) ResidentTensorBytes() int {
 	if m == nil {
 		return 0
