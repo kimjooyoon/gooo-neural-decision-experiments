@@ -62,6 +62,15 @@ checked the public repository inventory, and fetched all 23 allowlisted files
 against the local SHA-256 and byte counts. See the
 [anonymous verification receipt](../publication/hf-compiler-prov-v2-public-verification.json).
 
+The later [128-program comparison](compiler-bodyplan-comparison.md) observes a
+broader FP32 improvement and ternary regressions. Its reviewed HF bundle changes
+the documentation/evidence, not weights, at revision
+`c95226b465cb9b559577ab8c72bde1f67372fbec`. All 26 reviewed files were fetched
+anonymously and checked against local bytes in the
+[reviewed public receipt](../publication/hf-compiler-prov-v2-reviewed-public-verification.json).
+The research source `ffa3a2a6ff5d67516ce441eca0a3fe11e7efb3c5` passed all three
+jobs in [CI 36761559625](https://github.com/kimjooyoon/gooo-neural-decision-experiments/actions/runs/36761559625).
+
 ## Measurements
 
 The two 60-epoch MPS optimization loops took 1.824 and 1.323 seconds. End-of-epoch
