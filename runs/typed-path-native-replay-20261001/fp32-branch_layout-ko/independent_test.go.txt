@@ -1,0 +1,16 @@
+package bodyplan
+import "testing"
+func TestIndependentBehavior(t *testing.T){
+if got:=ChoosePath(-9223372036854775808);got!=-9223372036854775769{t.Errorf("input=-9223372036854775808 got=%d",got)}
+if got:=ChoosePath(-123);got!=-84{t.Errorf("input=-123 got=%d",got)}
+if got:=ChoosePath(-7);got!=32{t.Errorf("input=-7 got=%d",got)}
+if got:=ChoosePath(-1);got!=38{t.Errorf("input=-1 got=%d",got)}
+if got:=ChoosePath(0);got!=39{t.Errorf("input=0 got=%d",got)}
+if got:=ChoosePath(1);got!=40{t.Errorf("input=1 got=%d",got)}
+if got:=ChoosePath(5);got!=44{t.Errorf("input=5 got=%d",got)}
+if got:=ChoosePath(99);got!=297{t.Errorf("input=99 got=%d",got)}
+if got:=ChoosePath(9223372036854775807);got!=9223372036854775805{t.Errorf("input=9223372036854775807 got=%d",got)}
+if got:=ChoosePath(31);got!=70{t.Errorf("input=31 got=%d",got)}
+if got:=ChoosePath(32);got!=71{t.Errorf("input=32 got=%d",got)}
+if got:=ChoosePath(33);got!=99{t.Errorf("input=33 got=%d",got)}
+}

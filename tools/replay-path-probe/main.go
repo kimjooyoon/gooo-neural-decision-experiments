@@ -19,6 +19,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"regexp"
+	"strings"
 	"time"
 
 	"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/pathplan"
@@ -129,6 +130,13 @@ func run(compiler, goBinary, compilerSHA, goSHA, probeRoot, output, revision str
 	if !regexp.MustCompile(`^[a-f0-9]{40}$`).MatchString(revision) {
 		return errors.New("source revision required")
 	}
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	head, headErr := exec.CommandContext(ctx, "git", "rev-parse", "HEAD").Output()
+	diffErr := exec.CommandContext(ctx, "git", "diff", "--quiet", "HEAD", "--", "tools/replay-path-probe", "internal/pathplan", "internal/pathstudy", "internal/bodyplan").Run()
+	cancel()
+	if headErr != nil || strings.TrimSpace(string(head)) != revision || diffErr != nil {
+		return errors.New("declared source must match the clean tracked runner checkout before execution")
+	}
 	for _, pin := range []string{compilerSHA, goSHA} {
 		if !regexp.MustCompile(`^[a-f0-9]{64}$`).MatchString(pin) {
 			return errors.New("explicit binary SHA-256 required")
@@ -162,6 +170,17 @@ func run(compiler, goBinary, compilerSHA, goSHA, probeRoot, output, revision str
 		inputBindings[arm] = digest(raw)
 	}
 	if err := os.MkdirAll(output, 0755); err != nil {
+		return err
+	}
+	executable, err := os.Executable()
+	if err != nil {
+		return err
+	}
+	runnerRaw, err := read(executable, 128<<20)
+	if err != nil {
+		return err
+	}
+	if err := save(filepath.Join(output, "runner-binding.json"), map[string]any{"runner_source_revision": revision, "runner_binary_sha256": digest(runnerRaw), "tracked_source_clean": true}); err != nil {
 		return err
 	}
 	if err := save(filepath.Join(output, "preexecution.json"), map[string]any{"schema": "gooo/typed-path-native-replay-preexecution/v1", "runner_source_revision": revision, "native_source_revision": nativeSource, "native_binary_sha256": compilerSHA, "go_binary_sha256": goSHA, "saved_rows_sha256": inputBindings, "planned_native_calls": 20, "planned_local_model_predictions": 0, "planned_external_calls": 0, "scope": "Saved offline/FP32 selections, five families × two languages × two arms; each pair has the same finite-test selected function. This is structural assembly before native codegen, not native model inference."}); err != nil {

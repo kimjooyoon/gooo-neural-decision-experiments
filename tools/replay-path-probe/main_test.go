@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"strings"
 	"testing"
 )
 
@@ -19,5 +20,8 @@ func TestSavedBilingualSampleAccounting(t *testing.T) {
 	}
 	if _, err := samples([]byte("{}\n")); err == nil {
 		t.Fatal("missing samples accepted")
+	}
+	if err := run("", "", nativeBinarySHA, goBinarySHA, "", "", strings.Repeat("0", 40)); err == nil || !strings.Contains(err.Error(), "declared source") {
+		t.Fatal("incorrect declared source reached execution preflight")
 	}
 }
