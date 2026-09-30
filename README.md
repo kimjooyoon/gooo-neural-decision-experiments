@@ -57,6 +57,11 @@ See the [native measurement scopes](docs/hf-typed-path-v1-native-direct.md),
 [actual main smoke and promotion receipt](publication/native-typed-path-main-promotion-20261001.json)
 and [anonymous HF verification](publication/typed-path-native-main-public-verification.json).
 The nine model weight bundles are unchanged in this integration update.
+Actual post-main [CI 36787975612](https://github.com/kimjooyoon/meta-ontology-go/actions/runs/36787975612)
+also passed; its downloaded proof and append-only receipt passed the Go verifier.
+The [post-main evidence receipt](publication/native-typed-path-post-main-ci-20261001.json)
+binds that result and the research repository's four successful jobs to their
+actual source revisions.
 
 On the new synthetic held-out set, FP32 and QAT score 768/768 and PTQ 643/768.
 These are 256 original instructions in three views, not 768 independent tasks.
