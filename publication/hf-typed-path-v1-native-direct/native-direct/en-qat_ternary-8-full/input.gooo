@@ -1,0 +1,5 @@
+package sample
+namespace sample
+entity Integer id "sample://entity/integer"
+activity Combined(Integer) -> Integer computes "let first = (input + 2)\nlet second = (input * 2)\nlet chosen = first\nif (input < 0) {\n\tchosen = (chosen + 3)\n} else {\n\tchosen = (chosen - 3)\n}\nreturn (chosen + (first + second))"
+activity Unrelated(Integer) -> Integer computes "return input"

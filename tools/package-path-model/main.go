@@ -25,6 +25,7 @@ import (
 const repository = "asketeddy/gooo-typed-path-tiny-v1"
 const schema = "gooo/public-typed-path-allowlist/v1"
 const reviewedSchema = "gooo/public-typed-path-allowlist/v2"
+const directSchema = "gooo/public-typed-path-allowlist/v3"
 
 var privateText = regexp.MustCompile(`(?:hf_|ghp_|github_pat_|sk-)[A-Za-z0-9_-]{20,}|/Users/|/private/var/|Bearer\s+[A-Za-z0-9]`)
 
@@ -82,6 +83,26 @@ func reviewedSources() map[string]string {
 	files["native-review/earlier-source-binding-correction.json"] = "runs/typed-path-native-replay-20261001/source-binding-correction.json"
 	return files
 }
+func directSources() map[string]string {
+	files := reviewedSources()
+	root := "runs/native-typed-path-compound-20261001/"
+	for _, name := range []string{"report.json", "preexecution.json", "independent-go-tests.jsonl"} {
+		files["native-direct/"+name] = root + name
+	}
+	for _, language := range []string{"en", "ko"} {
+		for _, arm := range []string{"offline", "fp32", "ptq_ternary", "qat_ternary"} {
+			for _, budget := range []int{4, 8} {
+				for _, contract := range []string{"full", "partial"} {
+					id := fmt.Sprintf("%s-%s-%d-%s", language, arm, budget, contract)
+					for _, name := range []string{"input.gooo", "plan.json", "native-stdout.json", "generated.go.txt", "independent_test.go.txt"} {
+						files["native-direct/"+id+"/"+name] = root + id + "/" + name
+					}
+				}
+			}
+		}
+	}
+	return files
+}
 func read(path string) ([]byte, error) {
 	info, err := os.Lstat(path)
 	if err != nil || !info.Mode().IsRegular() || info.Size() <= 0 || info.Size() > 4<<20 {
@@ -104,6 +125,10 @@ func assemble(output string) error {
 }
 
 func assembleVersion(output string, reviewed bool) error {
+	return assembleVersions(output, reviewed, false)
+}
+func assembleVersions(output string, reviewed, direct bool) error {
+	reviewed = reviewed || direct
 	if _, err := os.Stat(output); !os.IsNotExist(err) {
 		return errors.New("bundle output must be fresh")
 	}
@@ -113,6 +138,9 @@ func assembleVersion(output string, reviewed bool) error {
 	if reviewed {
 		value.Schema = reviewedSchema
 		files = reviewedSources()
+	}
+	if direct {
+		value.Schema, files = directSchema, directSources()
 	}
 	for name, source := range files {
 		raw, err := read(source)
@@ -129,6 +157,13 @@ func assembleVersion(output string, reviewed bool) error {
 			}
 			if privateText.Match(note) {
 				return errors.New("private review text")
+			}
+			raw = append(append(raw, '\n'), note...)
+		}
+		if direct && name == "README.md" {
+			note, err := read("docs/hf-typed-path-v1-native-direct.md")
+			if err != nil || privateText.Match(note) {
+				return errors.New("invalid or private direct-inference text")
 			}
 			raw = append(append(raw, '\n'), note...)
 		}
@@ -156,6 +191,11 @@ func assembleVersion(output string, reviewed bool) error {
 			}
 			if json.Unmarshal(raw, &report) != nil || report.Status != "PASS" || report.Calls != 20 || report.Passed != 240 || report.Total != 240 || report.Predictions != 0 || report.Source != "643ca6ead45cef35d85175864aa3b16556346bca" {
 				return errors.New("required native replay is incomplete or incorrectly bound")
+			}
+		}
+		if name == "native-direct/report.json" {
+			if err := validateDirectEvidence(raw); err != nil {
+				return err
 			}
 		}
 		contents[name] = raw
@@ -186,7 +226,10 @@ func local(root string) ([]artifact, string, error) {
 	if value.Schema == reviewedSchema {
 		expected = reviewedSources()
 	}
-	if value.Schema != schema && value.Schema != reviewedSchema || !value.TextScanned || value.BinaryProvenance == "" || len(value.Files) != len(expected) {
+	if value.Schema == directSchema {
+		expected = directSources()
+	}
+	if value.Schema != schema && value.Schema != reviewedSchema && value.Schema != directSchema || !value.TextScanned || value.BinaryProvenance == "" || len(value.Files) != len(expected) {
 		return nil, "", errors.New("invalid fixed publication manifest")
 	}
 	seen := map[string]bool{}
@@ -268,7 +311,7 @@ func verify(root, revision, output string) error {
 		if !regexp.MustCompile(`^[a-f0-9]{40}$`).MatchString(revision) {
 			return errors.New("immutable revision required")
 		}
-		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 180*time.Second)
 		defer cancel()
 		client := &http.Client{Timeout: 15 * time.Second, CheckRedirect: func(req *http.Request, via []*http.Request) error {
 			if len(via) > 8 || req.URL.Scheme != "https" || req.URL.User != nil {
@@ -305,13 +348,33 @@ func verify(root, revision, output string) error {
 			if !seen[file.Path] {
 				return errors.New("missing public artifact")
 			}
-			raw, err := fetch(ctx, client, "https://huggingface.co/"+repository+"/resolve/"+revision+"/"+file.Path)
-			if err != nil {
-				return err
+		}
+		jobs := make(chan artifact, len(files))
+		results := make(chan error, len(files))
+		for _, file := range files {
+			jobs <- file
+		}
+		close(jobs)
+		for range 4 {
+			go func() {
+				for file := range jobs {
+					raw, err := fetch(ctx, client, "https://huggingface.co/"+repository+"/resolve/"+revision+"/"+file.Path)
+					if err == nil && (len(raw) != file.Bytes || digest(raw) != file.SHA) {
+						err = errors.New("public digest mismatch")
+					}
+					results <- err
+				}
+			}()
+		}
+		var firstError error
+		for range files {
+			if err := <-results; err != nil && firstError == nil {
+				firstError = err
+				cancel()
 			}
-			if len(raw) != file.Bytes || digest(raw) != file.SHA {
-				return errors.New("public digest mismatch")
-			}
+		}
+		if firstError != nil {
+			return firstError
 		}
 		receipt["repository"], receipt["commit_oid"], receipt["public_files_verified"], receipt["network_requests"] = repository, revision, len(files), len(files)+1
 	}
@@ -323,12 +386,13 @@ func main() {
 	output := flag.String("output", "", "fresh bundle or verification output")
 	revision := flag.String("revision", "", "optional immutable public revision")
 	reviewed := flag.Bool("native-review", false, "include separately captured native structural replay")
+	direct := flag.Bool("native-direct", false, "include fresh native structural inference and exact Go observations")
 	flag.Parse()
 	var err error
 	if *output == "" || flag.NArg() != 0 {
 		err = errors.New("fresh output required")
 	} else if *mode == "assemble" {
-		err = assembleVersion(*output, *reviewed)
+		err = assembleVersions(*output, *reviewed, *direct)
 	} else if *mode == "verify" {
 		err = verify(*bundle, *revision, *output)
 	} else {
