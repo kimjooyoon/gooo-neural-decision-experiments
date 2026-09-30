@@ -246,8 +246,12 @@ func run() error {
 				item.UserMS = float64(cmd.ProcessState.UserTime().Nanoseconds()) / 1e6
 				item.SystemMS = float64(cmd.ProcessState.SystemTime().Nanoseconds()) / 1e6
 			}
-			_ = os.WriteFile(filepath.Join(*output, item.ID+".stdout.json"), stdout, 0o644)
-			_ = os.WriteFile(filepath.Join(*output, item.ID+".stderr.txt"), stderr, 0o644)
+			if err := os.WriteFile(filepath.Join(*output, item.ID+".stdout.json"), stdout, 0o644); err != nil {
+				return err
+			}
+			if err := os.WriteFile(filepath.Join(*output, item.ID+".stderr.txt"), stderr, 0o644); err != nil {
+				return err
+			}
 			var decoded payload
 			if runErr != nil || truncated || json.Unmarshal(stdout, &decoded) != nil {
 				item.Error = "native failed, truncated or invalid JSON"
@@ -277,12 +281,16 @@ func run() error {
 				continue
 			}
 			item.GeneratedSHA = hash([]byte(decoded.Source))
-			_ = os.WriteFile(filepath.Join(*output, item.ID+".generated.go"), []byte(decoded.Source), 0o644)
+			if err := os.WriteFile(filepath.Join(*output, item.ID+".generated.go"), []byte(decoded.Source), 0o644); err != nil {
+				return err
+			}
 			ctx, cancel = context.WithTimeout(context.Background(), 30*time.Second)
 			verification, verifyErr := executeGenerated(ctx, decoded.Source, fixture.Activity, expected.Cases)
 			cancel()
 			item.VerificationSHA = hash(verification)
-			_ = os.WriteFile(filepath.Join(*output, item.ID+".verification.txt"), verification, 0o644)
+			if err := os.WriteFile(filepath.Join(*output, item.ID+".verification.txt"), verification, 0o644); err != nil {
+				return err
+			}
 			if verifyErr == nil {
 				item.IndependentPassed = len(expected.Cases)
 			} else {
@@ -291,7 +299,9 @@ func run() error {
 			if verifyErr == nil && item.Passed == item.Total {
 				item.Status = "PASS"
 			}
-			_ = os.WriteFile(filepath.Join(*output, item.ID+".prov.ttl"), trace(item, revision), 0o644)
+			if err := os.WriteFile(filepath.Join(*output, item.ID+".prov.ttl"), trace(item, revision), 0o644); err != nil {
+				return err
+			}
 			cells = append(cells, item)
 		}
 	}
