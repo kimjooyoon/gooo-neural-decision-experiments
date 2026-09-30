@@ -1,0 +1,296 @@
+// package-path-model assembles or verifies one fixed synthetic-only public bundle.
+package main
+
+import (
+	"context"
+	"crypto/sha256"
+	"encoding/hex"
+	"encoding/json"
+	"errors"
+	"flag"
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+	"path/filepath"
+	"regexp"
+	"sort"
+	"strings"
+	"time"
+
+	"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/decision"
+	"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/strictjson"
+)
+
+const repository = "asketeddy/gooo-typed-path-tiny-v1"
+const schema = "gooo/public-typed-path-allowlist/v1"
+
+var privateText = regexp.MustCompile(`(?:hf_|ghp_|github_pat_|sk-)[A-Za-z0-9_-]{20,}|/Users/|/private/var/|Bearer\s+[A-Za-z0-9]`)
+
+type artifact struct {
+	Path  string `json:"path"`
+	SHA   string `json:"sha256"`
+	Bytes int    `json:"bytes"`
+}
+type manifest struct {
+	Schema           string     `json:"schema"`
+	Files            []artifact `json:"files"`
+	TextScanned      bool       `json:"credentials_and_host_paths_scanned"`
+	BinaryProvenance string     `json:"binary_provenance"`
+}
+
+func digest(raw []byte) string { sum := sha256.Sum256(raw); return hex.EncodeToString(sum[:]) }
+func sources() map[string]string {
+	files := map[string]string{
+		"README.md": "docs/hf-typed-path-v1-model-card.md", "LICENSE": "LICENSE",
+		"dataset/dataset.jsonl":            "data/typed-path-v1/dataset.jsonl",
+		"dataset/uniform-manifest.json":    "data/typed-path-v1/manifest.json",
+		"dataset/positioned-manifest.json": "data/typed-path-positioned-v2/manifest.json",
+		"failure-first-training.json":      "runs/typed-path-v1-mps-20261001/failure.json",
+		"probe/report.json":                "runs/typed-path-reserved-probe-tdd-20261001/report.json",
+		"probe/preexecution.json":          "runs/typed-path-reserved-probe-tdd-20261001/preexecution.json",
+		"probe/probe.jsonl":                "runs/typed-path-reserved-probe-tdd-20261001/probe.jsonl",
+		"probe/process-metrics.json":       "runs/typed-path-reserved-probe-tdd-20261001/process-metrics.json",
+	}
+	studies := [][3]string{
+		{"uniform-transfer", "runs/typed-path-v1-mps-20261001-v2", "runs/typed-path-v1-go-audit-20261001-v2"},
+		{"positioned-transfer", "runs/typed-path-positioned-transfer-20261001", "runs/typed-path-positioned-transfer-audit-20261001"},
+		{"positioned-random", "runs/typed-path-positioned-random-20261001", "runs/typed-path-positioned-random-audit-20261001"},
+	}
+	for _, study := range studies {
+		for _, name := range []string{"report.json", "preexecution.json", "go-parity.json"} {
+			files[study[0]+"/"+name] = study[1] + "/" + name
+		}
+		files[study[0]+"/go-audit.json"] = study[2] + "/report.json"
+		files[study[0]+"/parity-audit.json"] = study[2] + "/parity-audit.json"
+		for _, variant := range []string{"fp32", "ptq_ternary", "qat_ternary"} {
+			for _, name := range []string{"model.json", "weights.bin"} {
+				relative := "models/" + variant + "/" + name
+				files[study[0]+"/"+relative] = study[1] + "/" + relative
+			}
+		}
+	}
+	return files
+}
+func read(path string) ([]byte, error) {
+	info, err := os.Lstat(path)
+	if err != nil || !info.Mode().IsRegular() || info.Size() <= 0 || info.Size() > 4<<20 {
+		return nil, errors.New("invalid bounded regular public input")
+	}
+	return os.ReadFile(path)
+}
+func save(path string, value any) error {
+	raw, err := json.MarshalIndent(value, "", "  ")
+	if err != nil {
+		return err
+	}
+	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
+		return err
+	}
+	return os.WriteFile(path, append(raw, '\n'), 0644)
+}
+func assemble(output string) error {
+	if _, err := os.Stat(output); !os.IsNotExist(err) {
+		return errors.New("bundle output must be fresh")
+	}
+	contents := map[string][]byte{}
+	value := manifest{Schema: schema, TextScanned: true, BinaryProvenance: "All nine weight files use the disclosed public synthetic bilingual Gooo/PROV-O curriculum; no private repository text or Laya weights were used. Binary files are validated as model tensors, not scanned as text."}
+	for name, source := range sources() {
+		raw, err := read(source)
+		if err != nil {
+			return fmt.Errorf("%s: %w", name, err)
+		}
+		if !strings.HasSuffix(name, ".bin") && privateText.Match(raw) {
+			return fmt.Errorf("private text in %s", name)
+		}
+		if strings.HasSuffix(name, "/model.json") {
+			if _, err := decision.LoadPath(source); err != nil {
+				return err
+			}
+		}
+		if strings.HasSuffix(name, "/go-audit.json") {
+			var audit struct {
+				Decision string `json:"decision"`
+			}
+			if json.Unmarshal(raw, &audit) != nil || audit.Decision != "PASS" {
+				return errors.New("required numerical audit is incomplete")
+			}
+		}
+		contents[name] = raw
+		value.Files = append(value.Files, artifact{name, digest(raw), len(raw)})
+	}
+	sort.Slice(value.Files, func(i, j int) bool { return value.Files[i].Path < value.Files[j].Path })
+	for name, raw := range contents {
+		path := filepath.Join(output, name)
+		if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
+			return err
+		}
+		if err := os.WriteFile(path, raw, 0644); err != nil {
+			return err
+		}
+	}
+	return save(filepath.Join(output, "publication-manifest.json"), value)
+}
+func local(root string) ([]artifact, string, error) {
+	raw, err := read(filepath.Join(root, "publication-manifest.json"))
+	if err != nil {
+		return nil, "", err
+	}
+	var value manifest
+	if err := strictjson.Decode(raw, &value); err != nil {
+		return nil, "", err
+	}
+	expected := sources()
+	if value.Schema != schema || !value.TextScanned || value.BinaryProvenance == "" || len(value.Files) != len(expected) {
+		return nil, "", errors.New("invalid fixed publication manifest")
+	}
+	seen := map[string]bool{}
+	for _, file := range value.Files {
+		if expected[file.Path] == "" || seen[file.Path] || file.Bytes <= 0 || file.Bytes > 4<<20 || !regexp.MustCompile(`^[a-f0-9]{64}$`).MatchString(file.SHA) {
+			return nil, "", errors.New("unexpected fixed artifact")
+		}
+		seen[file.Path] = true
+		content, err := read(filepath.Join(root, file.Path))
+		if err != nil {
+			return nil, "", err
+		}
+		if len(content) != file.Bytes || digest(content) != file.SHA {
+			return nil, "", errors.New("local artifact digest mismatch")
+		}
+		if !strings.HasSuffix(file.Path, ".bin") && privateText.Match(content) {
+			return nil, "", errors.New("private bundle text")
+		}
+		if strings.HasSuffix(file.Path, "/model.json") {
+			if _, err := decision.LoadPath(filepath.Join(root, file.Path)); err != nil {
+				return nil, "", err
+			}
+		}
+	}
+	seen["publication-manifest.json"] = true
+	err = filepath.WalkDir(root, func(path string, entry os.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if entry.IsDir() {
+			return nil
+		}
+		relative, err := filepath.Rel(root, path)
+		if err != nil {
+			return err
+		}
+		if !seen[filepath.ToSlash(relative)] {
+			return errors.New("extra public artifact")
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, "", err
+	}
+	return append(value.Files, artifact{"publication-manifest.json", digest(raw), len(raw)}), digest(raw), nil
+}
+func fetch(ctx context.Context, client *http.Client, target string) ([]byte, error) {
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, target, nil)
+	if err != nil {
+		return nil, err
+	}
+	response, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer response.Body.Close()
+	if response.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("anonymous GET status %d", response.StatusCode)
+	}
+	raw, err := io.ReadAll(io.LimitReader(response.Body, (4<<20)+1))
+	if err != nil {
+		return nil, err
+	}
+	if len(raw) > 4<<20 {
+		return nil, errors.New("public response too large")
+	}
+	return raw, nil
+}
+func verify(root, revision, output string) error {
+	if _, err := os.Stat(output); !os.IsNotExist(err) {
+		return errors.New("verification output must be fresh")
+	}
+	files, manifestSHA, err := local(root)
+	if err != nil {
+		return err
+	}
+	receipt := map[string]any{"schema": "gooo/typed-path-public-verification/v1", "status": "PASS", "manifest_sha256": manifestSHA, "local_files_verified": len(files), "credentials_sent": false, "local_model_predictions": 0, "network_requests": 0}
+	if revision != "" {
+		if !regexp.MustCompile(`^[a-f0-9]{40}$`).MatchString(revision) {
+			return errors.New("immutable revision required")
+		}
+		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+		defer cancel()
+		client := &http.Client{Timeout: 15 * time.Second, CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			if len(via) > 8 || req.URL.Scheme != "https" || req.URL.User != nil {
+				return errors.New("unsafe redirect")
+			}
+			return nil
+		}}
+		raw, err := fetch(ctx, client, "https://huggingface.co/api/models/"+repository+"/revision/"+revision)
+		if err != nil {
+			return err
+		}
+		var info struct {
+			SHA      string `json:"sha"`
+			Private  bool   `json:"private"`
+			Siblings []struct {
+				Path string `json:"rfilename"`
+			} `json:"siblings"`
+		}
+		if json.Unmarshal(raw, &info) != nil || info.SHA != revision || info.Private {
+			return errors.New("public revision mismatch")
+		}
+		expected := map[string]bool{".gitattributes": true}
+		for _, file := range files {
+			expected[file.Path] = true
+		}
+		seen := map[string]bool{}
+		for _, file := range info.Siblings {
+			if !expected[file.Path] || seen[file.Path] {
+				return errors.New("unexpected public repository artifact")
+			}
+			seen[file.Path] = true
+		}
+		for _, file := range files {
+			if !seen[file.Path] {
+				return errors.New("missing public artifact")
+			}
+			raw, err := fetch(ctx, client, "https://huggingface.co/"+repository+"/resolve/"+revision+"/"+file.Path)
+			if err != nil {
+				return err
+			}
+			if len(raw) != file.Bytes || digest(raw) != file.SHA {
+				return errors.New("public digest mismatch")
+			}
+		}
+		receipt["repository"], receipt["commit_oid"], receipt["public_files_verified"], receipt["network_requests"] = repository, revision, len(files), len(files)+1
+	}
+	return save(output, receipt)
+}
+func main() {
+	mode := flag.String("mode", "assemble", "assemble or verify")
+	bundle := flag.String("bundle", "publication/hf-typed-path-v1", "fixed bundle directory")
+	output := flag.String("output", "", "fresh bundle or verification output")
+	revision := flag.String("revision", "", "optional immutable public revision")
+	flag.Parse()
+	var err error
+	if *output == "" || flag.NArg() != 0 {
+		err = errors.New("fresh output required")
+	} else if *mode == "assemble" {
+		err = assemble(*output)
+	} else if *mode == "verify" {
+		err = verify(*bundle, *revision, *output)
+	} else {
+		err = errors.New("invalid mode")
+	}
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "package-path-model:", err)
+		os.Exit(1)
+	}
+	fmt.Println(`{"status":"PASS","local_model_predictions":0}`)
+}

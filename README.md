@@ -16,9 +16,31 @@ the first tiny model is independently initialized, not copied Laya weights.
 The [compiler/PROV-O model v2](https://huggingface.co/asketeddy/gooo-compiler-prov-tiny-v2)
 fine tunes our own first model using Gooo declaration and PROV-O context views.
 The Go 1.27.1 compiler integration is merged into `meta-ontology-go`'s `dev`
-branch in [PR 1110](https://github.com/kimjooyoon/meta-ontology-go/pull/1110).
+branch in [PR 1110](https://github.com/kimjooyoon/meta-ontology-go/pull/1110) and
+promoted to `main` in [PR 1111](https://github.com/kimjooyoon/meta-ontology-go/pull/1111).
 The model has actually been used in native Gooo body generation, with a separate
-deterministic disconnected baseline. Main deployment is a separate promotion.
+deterministic disconnected baseline. The post-main machine CI proof passed.
+
+## Bilingual structural path model and bounded TDD
+
+The new [typed path model](https://huggingface.co/asketeddy/gooo-typed-path-tiny-v1)
+publishes three training comparisons and nine small model bundles for local
+references, assignment targets, operand order, branch layout and execution order.
+Conservative confidence selection abstains on the recorded development cohort;
+the explicit TDD mode uses model scores to prioritize typed candidates.
+
+On the reserved bilingual probe, FP32 ranking reduces candidate evaluations from
+2,880 to 2,468 (14.31%). All four arms, including deterministic search without a
+model, pass 15,360/15,360 unseen-input cases. Median search is 76.834 µs with FP32
+versus 69.584 µs without a model; candidate savings did not yield a measured
+wall-time speedup. These are five closed two-option families, 640 instructions
+and 1,920 context views, not arbitrary language-to-code tasks.
+
+See [the structural workflow](docs/typed-path-model.md),
+[HF model card](docs/hf-typed-path-v1-model-card.md) and
+[raw bounded TDD evidence](runs/typed-path-reserved-probe-tdd-20261001/).
+This is a Go assembly stage before native Gooo codegen; native in-process
+structural inference is not yet implemented. Root worked directly without subagents.
 
 On the new synthetic held-out set, FP32 and QAT score 768/768 and PTQ 643/768.
 These are 256 original instructions in three views, not 768 independent tasks.

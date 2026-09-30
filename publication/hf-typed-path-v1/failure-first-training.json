@@ -1,0 +1,16 @@
+{
+  "schema": "gooo/typed-path-training-failure/v1",
+  "status": "FAILED_BEFORE_FIRST_OPTIMIZER_STEP",
+  "source_revision": "317d7c57af24ecb509bd88762c6f45eb9329cc6b",
+  "error": "Cannot convert a MPS Tensor to float64 dtype as the MPS framework does not support float64",
+  "cause": "Concatenating integer example indices with an untyped empty repair-index array promoted the complete index array to float64",
+  "optimizer_steps_completed": 0,
+  "completed_epochs": 0,
+  "model_and_training_tensors_allocated_on_mps_before_failure": true,
+  "gpu_peak_memory_measured_for_failed_attempt": false,
+  "native_compiler_invocations": 0,
+  "external_provider_calls": 0,
+  "subsequent_go_audit_attempt": "Rejected missing model metadata before prediction or output-directory creation",
+  "subsequent_go_audit_model_calls": 0,
+  "correction": "Explicit int64 example and repair-index arrays; preserve this directory and use a fresh training output directory"
+}

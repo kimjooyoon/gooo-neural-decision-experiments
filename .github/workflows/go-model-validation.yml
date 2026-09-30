@@ -62,6 +62,19 @@ jobs:
           CGO_ENABLED=0 go build -trimpath -buildvcs=false -o "$RUNNER_TEMP/gooo-decision-stream-ci" ./cmd/gooo-decision-stream
           task_stream_sha=$(sha256sum "$RUNNER_TEMP/gooo-decision-stream-ci" | cut -d ' ' -f 1)
           go run ./tools/benchmark-stream --stream-bin "$RUNNER_TEMP/gooo-decision-stream-ci" --binary-sha256 "$task_stream_sha" --output "$RUNNER_TEMP/stream-end-to-end-ci.json"
+      - name: Replay bilingual structural data, numerical parity and bounded TDD
+        run: |
+          go run ./cmd/path-curriculum --out "$RUNNER_TEMP/path-curriculum"
+          cmp data/typed-path-v1/dataset.jsonl "$RUNNER_TEMP/path-curriculum/dataset.jsonl"
+          go run ./tools/audit-path-model --dataset data/typed-path-v1/dataset.jsonl --models runs/typed-path-v1-mps-20261001-v2/models --parity runs/typed-path-v1-mps-20261001-v2/go-parity.json --output "$RUNNER_TEMP/path-uniform-audit"
+          go run ./tools/audit-path-model --dataset data/typed-path-positioned-v2/dataset.jsonl --models runs/typed-path-positioned-transfer-20261001/models --parity runs/typed-path-positioned-transfer-20261001/go-parity.json --output "$RUNNER_TEMP/path-positioned-transfer-audit"
+          go run ./tools/audit-path-model --dataset data/typed-path-positioned-v2/dataset.jsonl --models runs/typed-path-positioned-random-20261001/models --parity runs/typed-path-positioned-random-20261001/go-parity.json --output "$RUNNER_TEMP/path-positioned-random-audit"
+          go run ./tools/audit-path-search --models runs/typed-path-positioned-random-20261001/models --output "$RUNNER_TEMP/path-reserved-probe-tdd" --source-revision "$GITHUB_SHA"
+      - name: Verify fixed structural HF bundle locally
+        run: |
+          go run ./tools/package-path-model --output "$RUNNER_TEMP/path-model-bundle"
+          cmp publication/hf-typed-path-v1/publication-manifest.json "$RUNNER_TEMP/path-model-bundle/publication-manifest.json"
+          go run ./tools/package-path-model --mode verify --bundle "$RUNNER_TEMP/path-model-bundle" --output "$RUNNER_TEMP/path-model-bundle-verification.json"
       - uses: actions/upload-artifact@v7
         with:
           name: go-model-validation
@@ -71,6 +84,11 @@ jobs:
             ${{ runner.temp }}/stream-end-to-end-ci.json
             ${{ runner.temp }}/compiler-bundle-verification.json
             ${{ runner.temp }}/compiler-go-audit-ci.json
+            ${{ runner.temp }}/path-uniform-audit
+            ${{ runner.temp }}/path-positioned-transfer-audit
+            ${{ runner.temp }}/path-positioned-random-audit
+            ${{ runner.temp }}/path-reserved-probe-tdd
+            ${{ runner.temp }}/path-model-bundle-verification.json
           if-no-files-found: error
 
   compiler-model-dogfood:
