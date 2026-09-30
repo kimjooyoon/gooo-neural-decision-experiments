@@ -1,0 +1,12 @@
+{
+  "schema": "gooo/typed-path-fixture-attempt/v1",
+  "status": "FAILED_BEFORE_MODEL_TRAINING_OR_NATIVE_EXECUTION",
+  "failed_check": "go test ./internal/pathstudy",
+  "error": "fallback path: generated Go source failed type checking: generated.go:5:6: declared and not used: second",
+  "cause": "A local-reference fixture declared both variables but returned only one, violating the existing Go projection's unused-local check",
+  "correction": "Define the intended computation as both-variable total plus one selected reference, and update the independent oracle and instruction templates to match",
+  "existing_typecheck_weakened": false,
+  "new_model_training_loops": 0,
+  "native_compiler_invocations": 0,
+  "external_provider_calls": 0
+}

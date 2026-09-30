@@ -70,6 +70,9 @@ func Validate(plan bodyplan.Plan) (map[string]string, error) {
 // Choose never reads gold labels or test cases. With no model it replays each
 // declared fallback. Sampling is explicit and replayable from its seed/weights.
 func Choose(plan bodyplan.Plan, model *decision.Model, seed string) (Selection, error) {
+	if model != nil && model.Schema() != decision.MetadataSchema {
+		return Selection{}, errors.New("operator holes require the operation model ABI")
+	}
 	choices, err := Validate(plan)
 	if err != nil {
 		return Selection{}, err
