@@ -45,6 +45,9 @@ go build -trimpath -o /tmp/gooo-body-plan-evaluation ./tools/evaluate-bodyplans
 The corpus contains scenario variants across eight declared families. Arm cells
 and repeated cases must not be counted as additional unique experiments or as
 100 distinct metaprogramming techniques. Native Gooo's current pure profile
-has a known integration question for a `let` initialized by a bare integer
-literal: it may infer Go `int` instead of the plan's `int64`. Such a failure must
-be captured and resolved in the compiler, rather than disguised in an oracle.
+had an integration gap in the frozen compiler revision used by this study for
+a `let` initialized by a bare integer literal: it inferred Go `int` instead of
+the plan's `int64`. The [separate native repair record](../../runs/native-integer-local-6a8011bf-20260930/README.md)
+preserves the failing receipt and the source-bound compiler correction. The
+study's old executable remains fixed; no oracle expression was altered to hide
+the gap.

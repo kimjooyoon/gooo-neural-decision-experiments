@@ -34,9 +34,12 @@ Arrays cap expression and statement counts at128 each, holes at16 and combined
 depth at16. Model weights remain shared/read-only; expression IDs avoid a
 heap object per IR edge. Compiled plans own copies of their arrays and choice
 maps so later mutations and concurrent evaluation cannot alter a compiled
-program. Unlike the primitive prediction kernel, full validation, go/types,
-source formatting and interpreter environments allocate. Pipeline throughput
-must be measured separately from the earlier zero-allocation prediction result.
+program. The interpreter now resolves variable names into scoped array slots at
+compile time and uses a private fixed value frame during evaluation. Its
+isolated success-path benchmark uses zero heap allocations; validation,
+go/types, source formatting and protocol handling still allocate. See
+[layout and measured tradeoffs](body-plan-memory-layout.md). Pipeline throughput
+must be measured separately from the primitive prediction or interpreter result.
 
 Completeness remains a vector: declared structural coverage, typed generation,
 first-choice operation agreement, training behavior, heldout behavior, actual

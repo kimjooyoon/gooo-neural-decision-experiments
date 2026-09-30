@@ -1,0 +1,31 @@
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"flag"
+	"fmt"
+	"os"
+	"os/exec"
+	"os/signal"
+	"strconv"
+	"strings"
+	"syscall"
+	"time"
+)
+
+func main(){
+	pid:=flag.Int("pid",0,"owned service PID");output:=flag.String("output","","fresh JSONL capture");flag.Parse()
+	if *pid<1||*output==""{os.Exit(2)}
+	file,err:=os.OpenFile(*output,os.O_CREATE|os.O_EXCL|os.O_WRONLY,0644);if err!=nil{fmt.Fprintln(os.Stderr,err);os.Exit(1)};defer file.Close()
+	ctx,cancel:=signal.NotifyContext(context.Background(),syscall.SIGINT,syscall.SIGTERM);defer cancel()
+	started:=time.Now();ticker:=time.NewTicker(250*time.Millisecond);defer ticker.Stop();encoder:=json.NewEncoder(file)
+	for sequence:=0;sequence<1200;sequence++{
+		child,stop:=context.WithTimeout(ctx,time.Second);raw,err:=exec.CommandContext(child,"/bin/ps","-p",strconv.Itoa(*pid),"-o","rss=","-o","pcpu=","-o","time=").Output();stop()
+		if err!=nil{_ = encoder.Encode(map[string]any{"sequence":sequence,"elapsed_ms":float64(time.Since(started).Nanoseconds())/1e6,"status":"process_observation_ended"});return}
+		fields:=strings.Fields(string(raw));if len(fields)!=3{os.Exit(1)};rss,err:=strconv.ParseInt(fields[0],10,64);if err!=nil{os.Exit(1)};pcpu,err:=strconv.ParseFloat(fields[1],64);if err!=nil{os.Exit(1)}
+		var cpu float64;parts:=strings.Split(fields[2],":");for _,part:=range parts{value,err:=strconv.ParseFloat(part,64);if err!=nil{os.Exit(1)};cpu=cpu*60+value}
+		if err:=encoder.Encode(map[string]any{"sequence":sequence,"elapsed_ms":float64(time.Since(started).Nanoseconds())/1e6,"status":"observed","rss_kib":rss,"rolling_pcpu_one_core_percent":pcpu,"cumulative_cpu_seconds":cpu});err!=nil{os.Exit(1)}
+		select{case<-ctx.Done():return;case<-ticker.C:}
+	}
+}

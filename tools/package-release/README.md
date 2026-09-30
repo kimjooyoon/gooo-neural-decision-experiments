@@ -6,7 +6,8 @@
 - `linux/amd64`
 - `linux/arm64`
 
-Each archive contains the `gooo-decision` and `gooo-decision-stream` binaries,
+Each archive contains `gooo-decision`, `gooo-decision-stream` and
+`gooo-body-compose` binaries,
 the MIT license, a short usage README, `model-contract.json`, and the validated
 `fp32`, `ptq_ternary`, and `qat_ternary` model bundles. It also contains
 `SHA256SUMS` and `SOURCE-MANIFEST.json`. The manifest binds the source commit,
@@ -20,7 +21,7 @@ the repository:
 ```sh
 go run ./tools/package-release \
   --source-sha COMMIT_SHA \
-  --output /tmp/gooo-ir-release-v0.1.0-experimental
+  --output /tmp/gooo-ir-release-v0.2.0-experimental
 ```
 
 The packager requires `--source-sha` to match `HEAD` and rejects staged,
@@ -29,6 +30,15 @@ not to exist, and it never replaces existing files. It uses fixed command,
 documentation, contract, and model paths; it does not accept an arbitrary file
 list. The model bundles are loaded by the repository's strict model validator
 and each metadata file must bind the expected variant and sibling weights.
+
+Before validating models or compiling commands, the packager materializes the
+requested commit into a fresh temporary directory from `git archive`. It
+compares every archived path and blob hash with the commit tree, requires only
+regular files and directories, and enforces entry and byte limits. This makes
+ignored Go files in the checkout ineligible as build inputs. A native model
+validator and all three target command sets are built from that temporary
+source tree. The temporary source and validator directories are removed when
+packaging finishes.
 
 Builds use `CGO_ENABLED=0`, `-trimpath`, and `-buildvcs=false`, with module
 workspace and network module resolution disabled. CPU feature baselines are

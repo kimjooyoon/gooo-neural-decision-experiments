@@ -4,11 +4,14 @@ import (
 	"archive/tar"
 	"bytes"
 	"compress/gzip"
+	"crypto/sha1"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"io"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"reflect"
 	"strings"
@@ -210,7 +213,7 @@ func TestManifestAndChecksumsBindPayloadAndManifest(t *testing.T) {
 	if decoded.SourceRevision != strings.Repeat("a", 40) || decoded.Target != (manifestTarget{GOOS: "darwin", GOARCH: "arm64"}) {
 		t.Fatalf("manifest binding = %+v", decoded)
 	}
-	if !reflect.DeepEqual(decoded.SourcePackages, []string{"cmd/gooo-decision", "cmd/gooo-decision-stream"}) || !reflect.DeepEqual(decoded.BuildEnvironment, targetBuildEnvironment(buildTarget{goos: "darwin", goarch: "arm64"})) {
+	if !reflect.DeepEqual(decoded.SourcePackages, []string{"cmd/gooo-decision", "cmd/gooo-decision-stream", "cmd/gooo-body-compose"}) || !reflect.DeepEqual(decoded.BuildEnvironment, targetBuildEnvironment(buildTarget{goos: "darwin", goarch: "arm64"})) {
 		t.Fatalf("manifest build identity = %+v", decoded)
 	}
 	if len(decoded.Files) != 2 || decoded.Files[0].Path != "README.md" || decoded.Files[1].Path != "bin/gooo-decision" {
@@ -233,6 +236,15 @@ func TestManifestAndChecksumsBindPayloadAndManifest(t *testing.T) {
 	}
 }
 
+func TestReleaseReadmeDescribesBodyCompositionAndOfflineFallback(t *testing.T) {
+	readme := releaseReadme("v0.2.0-experimental", strings.Repeat("a", 40), buildTarget{goos: "darwin", goarch: "arm64"})
+	for _, required := range []string{"bin/gooo-body-compose", "deterministic declared fallbacks", "does not execute", "Laya is not bundled or required"} {
+		if !strings.Contains(readme, required) {
+			t.Errorf("release readme missing %q", required)
+		}
+	}
+}
+
 func TestSafeArchivePathRejectsTraversalAndAmbiguousNames(t *testing.T) {
 	for _, path := range []string{"", "/absolute", "C:/absolute", "../parent", "a/../b", `models\fp32\model.json`, "./relative"} {
 		if safeArchivePath(path) {
@@ -243,5 +255,198 @@ func TestSafeArchivePathRejectsTraversalAndAmbiguousNames(t *testing.T) {
 		if !safeArchivePath(path) {
 			t.Errorf("safeArchivePath(%q) = false", path)
 		}
+	}
+}
+
+func TestMaterializeGitSnapshotExcludesIgnoredGoFiles(t *testing.T) {
+	repository := t.TempDir()
+	gitTestCommand(t, repository, "init", "--quiet")
+	gitTestCommand(t, repository, "config", "user.email", "snapshot-test@example.invalid")
+	gitTestCommand(t, repository, "config", "user.name", "Snapshot Test")
+	writeTestFile(t, repository, ".gitignore", "ignored.go\n")
+	writeTestFile(t, repository, "go.mod", "module example.invalid/snapshot\n\ngo 1.27\n")
+	writeTestFile(t, repository, "LICENSE", "test license\n")
+	writeTestFile(t, repository, "model-contract.json", "{}\n")
+	writeTestFile(t, repository, "main.go", "package main\nfunc main() {}\n")
+	writeTestFile(t, repository, "script.sh", "#!/bin/sh\nexit 0\n")
+	if err := os.Chmod(filepath.Join(repository, "script.sh"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	gitTestCommand(t, repository, "add", ".gitignore", "go.mod", "LICENSE", "model-contract.json", "main.go", "script.sh")
+	gitTestCommand(t, repository, "commit", "--quiet", "-m", "snapshot fixture")
+	commit := strings.TrimSpace(gitTestCommand(t, repository, "rev-parse", "HEAD"))
+	writeTestFile(t, repository, "ignored.go", "package main\nfunc main() {}\n")
+
+	snapshot, cleanup, err := materializeGitSnapshot(repository, commit)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := os.Stat(filepath.Join(snapshot, "ignored.go")); !os.IsNotExist(err) {
+		t.Fatalf("ignored Go file is present in committed snapshot: stat error=%v", err)
+	}
+	if got, err := os.ReadFile(filepath.Join(snapshot, "main.go")); err != nil || string(got) != "package main\nfunc main() {}\n" {
+		t.Fatalf("committed main.go = %q, %v", got, err)
+	}
+	if info, err := os.Stat(filepath.Join(snapshot, "script.sh")); err != nil || info.Mode().Perm() != 0o755 {
+		t.Fatalf("committed executable mode was not preserved: info=%v err=%v", info, err)
+	}
+	contaminated := exec.Command("go", "build", ".")
+	contaminated.Dir = repository
+	if output, err := contaminated.CombinedOutput(); err == nil {
+		t.Fatalf("fixture checkout containing the ignored duplicate main unexpectedly built: %s", output)
+	}
+	binary := filepath.Join(t.TempDir(), "snapshot-app")
+	cleanBuild := exec.Command("go", "build", "-trimpath", "-buildvcs=false", "-o", binary, ".")
+	cleanBuild.Dir = snapshot
+	cleanBuild.Env = append(os.Environ(), "GOWORK=off", "GOPROXY=off", "GOSUMDB=off")
+	if output, err := cleanBuild.CombinedOutput(); err != nil {
+		t.Fatalf("committed snapshot did not build: %v: %s", err, strings.TrimSpace(string(output)))
+	}
+	cleanup()
+	if _, err := os.Stat(snapshot); !os.IsNotExist(err) {
+		t.Fatalf("temporary snapshot was not removed: stat error=%v", err)
+	}
+}
+
+func TestMaterializeGitSnapshotRejectsUnusableCommittedTree(t *testing.T) {
+	repository := t.TempDir()
+	gitTestCommand(t, repository, "init", "--quiet")
+	gitTestCommand(t, repository, "config", "user.email", "snapshot-test@example.invalid")
+	gitTestCommand(t, repository, "config", "user.name", "Snapshot Test")
+	writeTestFile(t, repository, "README.md", "missing required package files\n")
+	gitTestCommand(t, repository, "add", "README.md")
+	gitTestCommand(t, repository, "commit", "--quiet", "-m", "incomplete snapshot")
+	commit := strings.TrimSpace(gitTestCommand(t, repository, "rev-parse", "HEAD"))
+	if _, cleanup, err := materializeGitSnapshot(repository, commit); err == nil {
+		cleanup()
+		t.Fatal("snapshot missing required package inputs was accepted")
+	}
+	if _, _, err := materializeGitSnapshot(repository, strings.Repeat("a", 40)); err == nil {
+		t.Fatal("unresolvable source commit was accepted")
+	}
+}
+
+func TestExtractCommittedArchiveRejectsUnsafeAndUncommittedEntries(t *testing.T) {
+	for _, name := range []string{"../escape", "/absolute", "a/../b", `dir\\file`, "C:/absolute"} {
+		t.Run("unsafe_"+strings.ReplaceAll(name, "/", "_"), func(t *testing.T) {
+			archive := makeTarForTest(t, []tar.Header{{Name: name, Mode: 0o644, Size: 0, Typeflag: tar.TypeReg}}, [][]byte{{}})
+			err := extractCommittedArchive(bytes.NewReader(archive), t.TempDir(), map[string]committedEntry{}, "sha1", "")
+			if err == nil {
+				t.Fatalf("unsafe archive path %q was accepted", name)
+			}
+		})
+	}
+	archive := makeTarForTest(t, []tar.Header{{Name: "extra.go", Mode: 0o644, Size: 0, Typeflag: tar.TypeReg}}, [][]byte{{}})
+	if err := extractCommittedArchive(bytes.NewReader(archive), t.TempDir(), map[string]committedEntry{}, "sha1", ""); err == nil {
+		t.Fatal("archive path absent from committed tree was accepted")
+	}
+}
+
+func TestExtractCommittedArchiveRejectsSymlinkDuplicateOversizeAndOmission(t *testing.T) {
+	t.Run("symlink", func(t *testing.T) {
+		header := tar.Header{Name: "link", Mode: 0o777, Size: 0, Typeflag: tar.TypeSymlink, Linkname: "target"}
+		archive := makeTarForTest(t, []tar.Header{header}, [][]byte{{}})
+		expected := map[string]committedEntry{"link": {mode: "100644", object: gitBlobSHAForTest(nil), size: 0}}
+		if err := extractCommittedArchive(bytes.NewReader(archive), t.TempDir(), expected, "sha1", ""); err == nil {
+			t.Fatal("symbolic link archive entry was accepted")
+		}
+	})
+	t.Run("duplicate", func(t *testing.T) {
+		data := []byte("committed\n")
+		header := tar.Header{Name: "file.go", Mode: 0o644, Size: int64(len(data)), Typeflag: tar.TypeReg}
+		archive := makeTarForTest(t, []tar.Header{header, header}, [][]byte{data, data})
+		expected := map[string]committedEntry{"file.go": {mode: "100644", object: gitBlobSHAForTest(data), size: int64(len(data))}}
+		if err := extractCommittedArchive(bytes.NewReader(archive), t.TempDir(), expected, "sha1", ""); err == nil {
+			t.Fatal("duplicate archive path was accepted")
+		}
+	})
+	t.Run("oversize", func(t *testing.T) {
+		size := int64(maxSnapshotFileBytes + 1)
+		header := tar.Header{Name: "large.bin", Mode: 0o644, Size: size, Typeflag: tar.TypeReg}
+		var buffer bytes.Buffer
+		writer := tar.NewWriter(&buffer)
+		if err := writer.WriteHeader(&header); err != nil {
+			t.Fatal(err)
+		}
+		archive := append([]byte(nil), buffer.Bytes()...)
+		expected := map[string]committedEntry{"large.bin": {mode: "100644", object: strings.Repeat("0", 40), size: size}}
+		if err := extractCommittedArchive(bytes.NewReader(archive), t.TempDir(), expected, "sha1", ""); err == nil {
+			t.Fatal("oversized archive file was accepted")
+		}
+	})
+	t.Run("omitted", func(t *testing.T) {
+		data := []byte("committed\n")
+		expected := map[string]committedEntry{"file.go": {mode: "100644", object: gitBlobSHAForTest(data), size: int64(len(data))}}
+		if err := extractCommittedArchive(bytes.NewReader(nil), t.TempDir(), expected, "sha1", ""); err == nil {
+			t.Fatal("archive omitting a committed path was accepted")
+		}
+	})
+	t.Run("content_mismatch", func(t *testing.T) {
+		committed := []byte("committed\n")
+		archiveData := []byte("badcommit\n")
+		header := tar.Header{Name: "file.go", Mode: 0o644, Size: int64(len(archiveData)), Typeflag: tar.TypeReg}
+		archive := makeTarForTest(t, []tar.Header{header}, [][]byte{archiveData})
+		expected := map[string]committedEntry{"file.go": {mode: "100644", object: gitBlobSHAForTest(committed), size: int64(len(committed))}}
+		if err := extractCommittedArchive(bytes.NewReader(archive), t.TempDir(), expected, "sha1", ""); err == nil {
+			t.Fatal("archive content differing from its committed blob was accepted")
+		}
+	})
+}
+
+func TestSafeSnapshotPath(t *testing.T) {
+	for _, value := range []string{"", ".", "..", "../file", "a/../file", "/absolute", `dir\\file`, "double//slash", "C:/absolute", "line\nbreak"} {
+		if safeSnapshotPath(value) {
+			t.Errorf("safeSnapshotPath(%q) = true", value)
+		}
+	}
+	for _, value := range []string{"go.mod", "cmd/gooo-decision/main.go", ".gitignore"} {
+		if !safeSnapshotPath(value) {
+			t.Errorf("safeSnapshotPath(%q) = false", value)
+		}
+	}
+}
+
+func makeTarForTest(t *testing.T, headers []tar.Header, contents [][]byte) []byte {
+	t.Helper()
+	var archive bytes.Buffer
+	writer := tar.NewWriter(&archive)
+	for index, header := range headers {
+		if err := writer.WriteHeader(&header); err != nil {
+			t.Fatal(err)
+		}
+		if header.Size > 0 && index < len(contents) {
+			if _, err := writer.Write(contents[index]); err != nil {
+				t.Fatal(err)
+			}
+		}
+	}
+	if err := writer.Close(); err != nil {
+		t.Fatal(err)
+	}
+	return archive.Bytes()
+}
+
+func gitBlobSHAForTest(data []byte) string {
+	content := []byte(fmt.Sprintf("blob %d\x00", len(data)))
+	content = append(content, data...)
+	digest := sha1.Sum(content)
+	return hex.EncodeToString(digest[:])
+}
+
+func gitTestCommand(t *testing.T, directory string, args ...string) string {
+	t.Helper()
+	command := exec.Command("git", args...)
+	command.Dir = directory
+	output, err := command.CombinedOutput()
+	if err != nil {
+		t.Fatalf("git %s: %v: %s", strings.Join(args, " "), err, strings.TrimSpace(string(output)))
+	}
+	return string(output)
+}
+
+func writeTestFile(t *testing.T, root, relative, content string) {
+	t.Helper()
+	if err := os.WriteFile(filepath.Join(root, relative), []byte(content), 0o644); err != nil {
+		t.Fatal(err)
 	}
 }

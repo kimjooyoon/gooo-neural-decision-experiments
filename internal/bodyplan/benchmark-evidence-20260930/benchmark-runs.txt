@@ -1,0 +1,30 @@
+Command for both versions:
+go test -run '^$' -bench '^BenchmarkEvaluateArithmeticPlan$' -benchmem -count=5 ./internal/bodyplan
+
+Runtime:
+go version go1.27.0 darwin/arm64
+goos: darwin
+goarch: arm64
+pkg: github.com/kimjooyoon/gooo-neural-decision-experiments/internal/bodyplan
+cpu: Apple M4
+Benchmark harness source: internal/bodyplan/bodyplan_test.go
+Benchmark harness SHA-256 at capture time: cc0798adfc0989e030305c5ba343eb073a78485e5ebe8f79ff00cdb6c75461de
+Both blocks below transcribe the original successful benchmark command outputs; the baseline was not rerun against reconstructed source.
+
+Baseline run output (source commit 7d626b9ab0b503f5c3d571be09524d689271bd48; bodyplan.go SHA-256 286fc65f177bc77a02b54889ef2f4928b60590b802d003b4c1c145a0b02583ae):
+BenchmarkEvaluateArithmeticPlan-10    	 4998609	       256.8 ns/op	     544 B/op	       5 allocs/op
+BenchmarkEvaluateArithmeticPlan-10    	 5234626	       229.5 ns/op	     544 B/op	       5 allocs/op
+BenchmarkEvaluateArithmeticPlan-10    	 5332472	       239.7 ns/op	     544 B/op	       5 allocs/op
+BenchmarkEvaluateArithmeticPlan-10    	 5269123	       286.0 ns/op	     544 B/op	       5 allocs/op
+BenchmarkEvaluateArithmeticPlan-10    	 4824832	       238.2 ns/op	     544 B/op	       5 allocs/op
+PASS
+ok  	github.com/kimjooyoon/gooo-neural-decision-experiments/internal/bodyplan	8.064s
+
+Optimized run output (bodyplan.go SHA-256 2f1a00967786ceea9679ca3a2abf9f1bb8dd4af8c951abc1df1430149b21ea9b; exact source archived as bodyplan_optimized_before_resource_guard.go.txt; current source adds compile-time budget preflight):
+BenchmarkEvaluateArithmeticPlan-10    	 9220015	       113.4 ns/op	       0 B/op	       0 allocs/op
+BenchmarkEvaluateArithmeticPlan-10    	10561059	       113.8 ns/op	       0 B/op	       0 allocs/op
+BenchmarkEvaluateArithmeticPlan-10    	10509379	       113.9 ns/op	       0 B/op	       0 allocs/op
+BenchmarkEvaluateArithmeticPlan-10    	10502052	       113.9 ns/op	       0 B/op	       0 allocs/op
+BenchmarkEvaluateArithmeticPlan-10    	10407511	       115.0 ns/op	       0 B/op	       0 allocs/op
+PASS
+ok  	github.com/kimjooyoon/gooo-neural-decision-experiments/internal/bodyplan	6.655s

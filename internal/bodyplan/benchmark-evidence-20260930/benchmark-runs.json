@@ -1,0 +1,46 @@
+{
+  "schema": "gooo/bodyplan-interpreter-benchmark-evidence/v1",
+  "runtime": {
+    "go_version": "go1.27.0",
+    "goos": "darwin",
+    "goarch": "arm64",
+    "cpu": "Apple M4"
+  },
+  "command": "go test -run '^$' -bench '^BenchmarkEvaluateArithmeticPlan$' -benchmem -count=5 ./internal/bodyplan",
+  "capture_provenance": "Both run arrays and the text transcript preserve the original successful benchmark command outputs. The baseline was not rerun against reconstructed or edited source.",
+  "harness": {
+    "path": "internal/bodyplan/bodyplan_test.go",
+    "sha256_at_benchmark_time": "cc0798adfc0989e030305c5ba343eb073a78485e5ebe8f79ff00cdb6c75461de",
+    "archived_source": "internal/bodyplan/benchmark-evidence-20260930/bodyplan_test_at_capture.go.txt",
+    "archived_source_bytes": 18420,
+    "benchmark": "BenchmarkEvaluateArithmeticPlan",
+    "notes": "Compile happens before the timer; each measured operation calls Evaluate once with a varied input. This digest identifies the complete test source used for both captured runs."
+  },
+  "baseline": {
+    "source_revision": "7d626b9ab0b503f5c3d571be09524d689271bd48",
+    "archived_source": "internal/bodyplan/benchmark-evidence-20260930/bodyplan_baseline_7d626b9.go.txt",
+    "bodyplan_source_sha256": "286fc65f177bc77a02b54889ef2f4928b60590b802d003b4c1c145a0b02583ae",
+    "runs": [
+      {"iterations": 4998609, "ns_per_op": 256.8, "bytes_per_op": 544, "allocs_per_op": 5},
+      {"iterations": 5234626, "ns_per_op": 229.5, "bytes_per_op": 544, "allocs_per_op": 5},
+      {"iterations": 5332472, "ns_per_op": 239.7, "bytes_per_op": 544, "allocs_per_op": 5},
+      {"iterations": 5269123, "ns_per_op": 286.0, "bytes_per_op": 544, "allocs_per_op": 5},
+      {"iterations": 4824832, "ns_per_op": 238.2, "bytes_per_op": 544, "allocs_per_op": 5}
+    ],
+    "median_ns_per_op": 239.7
+  },
+  "optimized": {
+    "bodyplan_source_sha256": "2f1a00967786ceea9679ca3a2abf9f1bb8dd4af8c951abc1df1430149b21ea9b",
+    "archived_source": "internal/bodyplan/benchmark-evidence-20260930/bodyplan_optimized_before_resource_guard.go.txt",
+    "notes": "Exact slot-backed source bytes at benchmark capture, before compile-time shared-DAG budget hardening. Current source adds preflight limits; the captured Evaluate benchmark values remain the raw observed runs below.",
+    "runs": [
+      {"iterations": 9220015, "ns_per_op": 113.4, "bytes_per_op": 0, "allocs_per_op": 0},
+      {"iterations": 10561059, "ns_per_op": 113.8, "bytes_per_op": 0, "allocs_per_op": 0},
+      {"iterations": 10509379, "ns_per_op": 113.9, "bytes_per_op": 0, "allocs_per_op": 0},
+      {"iterations": 10502052, "ns_per_op": 113.9, "bytes_per_op": 0, "allocs_per_op": 0},
+      {"iterations": 10407511, "ns_per_op": 115.0, "bytes_per_op": 0, "allocs_per_op": 0}
+    ],
+    "median_ns_per_op": 113.9
+  },
+  "scope": "Isolated interpreter microbenchmark only; excludes model inference, JSON handling, source rendering, native Gooo compilation, and end-to-end study throughput."
+}

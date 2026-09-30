@@ -1,13 +1,34 @@
 package bodyplan
 
 import (
+	"fmt"
 	"math"
+	"runtime"
 	"strings"
 	"sync"
 	"testing"
 
 	"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/decision"
 )
+
+var evaluateBenchmarkSink Value
+
+func BenchmarkEvaluateArithmeticPlan(b *testing.B) {
+	program, err := Compile(arithmeticPlan(), nil)
+	if err != nil {
+		b.Fatal(err)
+	}
+	b.ReportAllocs()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		value, evalErr := program.Evaluate(int64(i%128 - 64))
+		if evalErr != nil {
+			b.Fatal(evalErr)
+		}
+		evaluateBenchmarkSink = value
+	}
+	runtime.KeepAlive(program)
+}
 
 func TestCompileRendersTypedMultiNodeBodyAndEvaluatesBranches(t *testing.T) {
 	program, err := Compile(arithmeticPlan(), nil)
@@ -142,6 +163,78 @@ func TestCompileAllowsSameNameInSeparateReturningBranchScopes(t *testing.T) {
 		got, evalErr := program.Evaluate(input)
 		if evalErr != nil || got.Type != decision.TypeInt || got.Int != want {
 			t.Errorf("Evaluate(%d) = %+v, %v, want Int(%d)", input, got, evalErr, want)
+		}
+	}
+}
+
+func TestSlotEvaluationResolvesSharedLocalByLexicalScopeAndType(t *testing.T) {
+	plan := Plan{
+		Schema: Schema, ID: "branch-slot-types", Name: "BranchSlotTypes", ResultType: decision.TypeBool,
+		Expressions: []Expr{
+			{Kind: ExprInput, Name: "input"},
+			{Kind: ExprInt, Int: 0},
+			{Kind: ExprBool, Bool: true},
+			{Kind: ExprLocal, Name: "answer"},
+			{Kind: ExprBinary, Operation: "less_than", Left: 3, Right: 1},
+			{Kind: ExprBinary, Operation: "equal", Left: 3, Right: 2},
+			{Kind: ExprBinary, Operation: "less_than", Left: 0, Right: 1},
+		},
+		Statements: []Stmt{
+			{Kind: StmtIf, Expr: 6, Then: []int{1, 2}, Else: []int{3, 4}},
+			{Kind: StmtLet, Name: "answer", Expr: 0},
+			{Kind: StmtReturn, Expr: 4},
+			{Kind: StmtLet, Name: "answer", Expr: 2},
+			{Kind: StmtReturn, Expr: 5},
+		},
+		Root: []int{0},
+	}
+	program, err := Compile(plan, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	thenScope, elseScope := program.branchScopes[0][0], program.branchScopes[0][1]
+	exprCount := len(program.plan.Expressions)
+	thenSlot := program.expressionSlots[int(thenScope)*exprCount+3]
+	elseSlot := program.expressionSlots[int(elseScope)*exprCount+3]
+	if thenSlot == 0 || elseSlot == 0 || thenSlot == elseSlot {
+		t.Fatalf("shared local did not resolve to two distinct branch slots: then=%d else=%d", thenSlot, elseSlot)
+	}
+	for _, input := range []int64{-4, 4} {
+		got, evalErr := program.Evaluate(input)
+		if evalErr != nil || got.Type != decision.TypeBool || !got.Bool {
+			t.Errorf("Evaluate(%d) = %+v, %v; want true Boolean", input, got, evalErr)
+		}
+	}
+}
+
+func TestSlotEvaluationBranchAssignmentsUpdateOuterLocal(t *testing.T) {
+	plan := Plan{
+		Schema: Schema, ID: "branch-assign-outer", Name: "BranchAssignOuter", ResultType: decision.TypeInt,
+		Expressions: []Expr{
+			{Kind: ExprInput, Name: "input"},
+			{Kind: ExprInt, Int: 0},
+			{Kind: ExprBinary, Operation: "less_than", Left: 0, Right: 1},
+			{Kind: ExprLocal, Name: "answer"},
+			{Kind: ExprInt, Int: 10},
+			{Kind: ExprInt, Int: -10},
+		},
+		Statements: []Stmt{
+			{Kind: StmtLet, Name: "answer", Expr: 0},
+			{Kind: StmtIf, Expr: 2, Then: []int{2}, Else: []int{3}},
+			{Kind: StmtAssign, Name: "answer", Expr: 4},
+			{Kind: StmtAssign, Name: "answer", Expr: 5},
+			{Kind: StmtReturn, Expr: 3},
+		},
+		Root: []int{0, 1, 4},
+	}
+	program, err := Compile(plan, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for input, want := range map[int64]int64{-1: 10, 1: -10} {
+		got, evalErr := program.Evaluate(input)
+		if evalErr != nil || got.Type != decision.TypeInt || got.Int != want {
+			t.Errorf("Evaluate(%d) = %+v, %v; want Int(%d)", input, got, evalErr, want)
 		}
 	}
 }
@@ -370,6 +463,66 @@ func TestCompileEnforcesArenaBoundsAndTextSafety(t *testing.T) {
 			t.Fatalf("Compile error = %v, want statement depth rejection", err)
 		}
 	})
+}
+
+func TestCompilePreflightsSharedDAGExpansionBeforeRecursiveWork(t *testing.T) {
+	plan := Plan{
+		Schema: Schema, ID: "shared-dag-expansion", Name: "SharedDAG", ResultType: decision.TypeInt,
+		Expressions: []Expr{{Kind: ExprInput, Name: "input"}},
+	}
+	last := 0
+	for range 16 {
+		plan.Expressions = append(plan.Expressions, Expr{Kind: ExprBinary, Operation: "add", Left: last, Right: last})
+		last = len(plan.Expressions) - 1
+	}
+	for index := range 127 {
+		name := fmt.Sprintf("v%03d", index)
+		plan.Statements = append(plan.Statements, Stmt{Kind: StmtLet, Name: name, Expr: last})
+		plan.Root = append(plan.Root, index)
+	}
+	plan.Expressions = append(plan.Expressions, Expr{Kind: ExprLocal, Name: "v126"})
+	plan.Statements = append(plan.Statements, Stmt{Kind: StmtReturn, Expr: len(plan.Expressions) - 1})
+	plan.Root = append(plan.Root, len(plan.Statements)-1)
+
+	if _, err := Compile(plan, nil); err == nil || !strings.Contains(err.Error(), "expanded Go source exceeds the 128 KiB") {
+		t.Fatalf("Compile error = %v, want the shared-DAG source budget to reject before recursive work", err)
+	}
+}
+
+func TestCompileAcceptsSharedDAGNearSourceBudget(t *testing.T) {
+	plan := Plan{
+		Schema: Schema, ID: "shared-dag-near-budget", Name: "NearBudget", ResultType: decision.TypeInt,
+		Expressions: []Expr{{Kind: ExprInput, Name: "input"}},
+	}
+	last := 0
+	for range 13 {
+		plan.Expressions = append(plan.Expressions, Expr{Kind: ExprBinary, Operation: "add", Left: last, Right: last})
+		last = len(plan.Expressions) - 1
+	}
+	plan.Statements = []Stmt{{Kind: StmtReturn, Expr: last}}
+	plan.Root = []int{0}
+
+	program, err := Compile(plan, nil)
+	if err != nil {
+		t.Fatalf("Compile near-budget shared DAG: %v", err)
+	}
+	if got := len(program.GoSource()); got < 75<<10 || got >= maxGeneratedSourceBytes {
+		t.Fatalf("generated Go source length = %d, want 75 KiB <= length < %d", got, maxGeneratedSourceBytes)
+	}
+	if got := len(program.GoooSource()); got >= maxGeneratedSourceBytes {
+		t.Fatalf("generated Gooo source length = %d, want < %d", got, maxGeneratedSourceBytes)
+	}
+}
+
+func TestCompileBoundsPlanInputBeforeIdentifierValidation(t *testing.T) {
+	plan := Plan{
+		Schema: Schema, ID: "oversized-plan", Name: strings.Repeat("A", 20<<10), ResultType: decision.TypeInt,
+		Expressions: []Expr{{Kind: ExprInput, Name: "input"}},
+		Statements:  []Stmt{{Kind: StmtReturn, Expr: 0}}, Root: []int{0},
+	}
+	if _, err := Compile(plan, nil); err == nil || !strings.Contains(err.Error(), "plan input exceeds the 64 KiB") {
+		t.Fatalf("Compile error = %v, want bounded input rejection before identifier scanning", err)
+	}
 }
 
 func arithmeticPlan() Plan {

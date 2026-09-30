@@ -26,6 +26,9 @@ const (
 	maxHoles    = 16
 	maxDepth    = 16
 	maxHoleText = 512
+
+	maxPlanInputBytes       = 64 << 10
+	maxGeneratedSourceBytes = 128 << 10
 )
 
 const (
@@ -114,10 +117,14 @@ type Value struct {
 // Program is an immutable compiled plan. Its internal slices and maps are
 // private copies, so concurrent Evaluate calls do not share mutable state.
 type Program struct {
-	plan       Plan
-	choices    map[string]string
-	goSource   string
-	goooSource string
+	plan            Plan
+	choices         map[string]string
+	expressionSlots []uint8
+	statementSlots  []uint8
+	branchScopes    [][2]uint16
+	slotCount       int
+	goSource        string
+	goooSource      string
 }
 
 // Holes validates the plan and returns unique typed operator holes in
@@ -168,9 +175,15 @@ func Compile(plan Plan, choices map[string]string) (*Program, error) {
 	if err != nil {
 		return nil, err
 	}
+	if len(goBody) > maxGeneratedSourceBytes {
+		return nil, errors.New("generated Go source exceeds the 128 KiB compilation budget")
+	}
 	goSource, err := format.Source([]byte("package generated\n\nfunc " + ownedPlan.Name + "(input int64) " + goType(ownedPlan.ResultType) + " {\n" + goBody + "}\n"))
 	if err != nil {
 		return nil, fmt.Errorf("generated Go source is invalid: %w", err)
+	}
+	if len(goSource) > maxGeneratedSourceBytes {
+		return nil, errors.New("formatted Go source exceeds the 128 KiB compilation budget")
 	}
 	if err := checkGoSource(goSource); err != nil {
 		return nil, fmt.Errorf("generated Go source failed type checking: %w", err)
@@ -187,7 +200,19 @@ func Compile(plan Plan, choices map[string]string) (*Program, error) {
 		"entity Integer id \"bodyplan://entity/integer\"\n" +
 		"entity Boolean id \"bodyplan://entity/boolean\"\n\n" +
 		"activity " + ownedPlan.Name + "(Integer) -> " + resultEntity + " computes " + strconv.Quote(strings.TrimSuffix(goooBody, "\n")) + "\n"
-	return &Program{plan: ownedPlan, choices: ownedChoices, goSource: string(goSource), goooSource: goooSource}, nil
+	if len(goooSource) > maxGeneratedSourceBytes {
+		return nil, errors.New("generated Gooo source exceeds the 128 KiB compilation budget")
+	}
+	return &Program{
+		plan:            ownedPlan,
+		choices:         ownedChoices,
+		expressionSlots: validated.expressionSlots,
+		statementSlots:  validated.statementSlots,
+		branchScopes:    validated.branchScopes,
+		slotCount:       validated.slotCount,
+		goSource:        string(goSource),
+		goooSource:      goooSource,
+	}, nil
 }
 
 // GoSource returns package generated source for the compiled body.
@@ -202,8 +227,8 @@ func (program Program) Evaluate(input int64) (Value, error) {
 	if program.goSource == "" || program.goooSource == "" {
 		return Value{}, errors.New("program is not compiled")
 	}
-	environment := &runtimeScope{values: map[string]Value{"input": {Type: decision.TypeInt, Int: input}}}
-	value, returned, err := executeSequence(program.plan, program.choices, program.plan.Root, environment)
+	var slots [maxStmts]Value
+	value, returned, err := executeSequence(&program, program.plan.Root, 0, input, &slots)
 	if err != nil {
 		return Value{}, err
 	}
@@ -214,18 +239,33 @@ func (program Program) Evaluate(input int64) (Value, error) {
 }
 
 type validatedPlan struct {
-	holes     map[string]HoleSpec
-	holeOrder []int
-	usedExpr  []bool
-	seenStmt  []bool
+	holes           map[string]HoleSpec
+	holeOrder       []int
+	usedExpr        []bool
+	seenStmt        []bool
+	expressionSlots []uint8
+	statementSlots  []uint8
+	branchScopes    [][2]uint16
+	exprCount       int
+	scopeCount      int
+	slotCount       int
 }
 
 type typeScope struct {
 	parent *typeScope
-	values map[string]decision.ValueType
+	id     int
+	values map[string]localBinding
+}
+
+type localBinding struct {
+	valueType decision.ValueType
+	slot      int
 }
 
 func analyze(plan Plan) (*validatedPlan, error) {
+	if err := preflightPlan(plan); err != nil {
+		return nil, err
+	}
 	if plan.Schema != Schema {
 		return nil, fmt.Errorf("plan schema must be %q", Schema)
 	}
@@ -249,9 +289,14 @@ func analyze(plan Plan) (*validatedPlan, error) {
 	}
 
 	validated := &validatedPlan{
-		holes:    make(map[string]HoleSpec),
-		usedExpr: make([]bool, len(plan.Expressions)),
-		seenStmt: make([]bool, len(plan.Statements)),
+		holes:           make(map[string]HoleSpec),
+		usedExpr:        make([]bool, len(plan.Expressions)),
+		seenStmt:        make([]bool, len(plan.Statements)),
+		expressionSlots: make([]uint8, len(plan.Expressions)),
+		statementSlots:  make([]uint8, len(plan.Statements)),
+		branchScopes:    make([][2]uint16, len(plan.Statements)),
+		exprCount:       len(plan.Expressions),
+		scopeCount:      1,
 	}
 	inputCount := 0
 	seenHoleIDs := make(map[string]bool)
@@ -292,7 +337,7 @@ func analyze(plan Plan) (*validatedPlan, error) {
 			return nil, fmt.Errorf("statement %d is unused or unreachable", index)
 		}
 	}
-	rootScope := &typeScope{values: map[string]decision.ValueType{"input": decision.TypeInt}}
+	rootScope := &typeScope{id: 0, values: map[string]localBinding{"input": {valueType: decision.TypeInt, slot: -1}}}
 	terminates, err := validateSequence(plan, validated, plan.Root, rootScope, 0)
 	if err != nil {
 		return nil, err
@@ -306,6 +351,133 @@ func analyze(plan Plan) (*validatedPlan, error) {
 		}
 	}
 	return validated, nil
+}
+
+// preflightPlan applies shallow input and expanded-source budgets before any
+// recursive scope/type validation or source rendering. Expression costs are
+// memoized by arena index, then charged at each statement use so shared DAG
+// children cannot hide exponential output growth.
+func preflightPlan(plan Plan) error {
+	if len(plan.Expressions) == 0 || len(plan.Expressions) > maxExprs {
+		return fmt.Errorf("expression count must be between 1 and %d", maxExprs)
+	}
+	if len(plan.Statements) == 0 || len(plan.Statements) > maxStmts {
+		return fmt.Errorf("statement count must be between 1 and %d", maxStmts)
+	}
+	if len(plan.Root) == 0 || len(plan.Root) > maxStmts {
+		return errors.New("root must contain at least one statement")
+	}
+
+	inputBytes := uint64(512)
+	addString := func(value string) {
+		// Six bytes per source byte covers JSON control-character escaping,
+		// with two more bytes for the surrounding quotes.
+		inputBytes = cappedAdd(inputBytes, cappedAdd(cappedMultiply(uint64(len(value)), 6, maxPlanInputBytes), 2, maxPlanInputBytes), maxPlanInputBytes)
+	}
+	for _, value := range []string{plan.Schema, plan.ID, plan.Name, string(plan.ResultType)} {
+		addString(value)
+	}
+	for _, expression := range plan.Expressions {
+		inputBytes = cappedAdd(inputBytes, 192, maxPlanInputBytes)
+		for _, value := range []string{expression.Kind, expression.Name, expression.Operation, expression.HoleID, expression.Text, expression.Fallback} {
+			addString(value)
+		}
+		if len(expression.Allowed) > len(operations) {
+			return errors.New("expression candidate list exceeds the supported operation count")
+		}
+		inputBytes = cappedAdd(inputBytes, cappedMultiply(uint64(len(expression.Allowed)), 4, maxPlanInputBytes), maxPlanInputBytes)
+		for _, candidate := range expression.Allowed {
+			addString(candidate)
+		}
+	}
+	statementReferences := uint64(len(plan.Root))
+	for _, statement := range plan.Statements {
+		inputBytes = cappedAdd(inputBytes, 128, maxPlanInputBytes)
+		addString(statement.Kind)
+		addString(statement.Name)
+		thenCount := uint64(len(statement.Then))
+		elseCount := uint64(len(statement.Else))
+		statementReferences = cappedAdd(statementReferences, cappedAdd(thenCount, elseCount, maxStmts), maxStmts)
+		inputBytes = cappedAdd(inputBytes, cappedMultiply(cappedAdd(thenCount, elseCount, maxPlanInputBytes), 24, maxPlanInputBytes), maxPlanInputBytes)
+	}
+	inputBytes = cappedAdd(inputBytes, cappedMultiply(uint64(len(plan.Root)), 24, maxPlanInputBytes), maxPlanInputBytes)
+	if statementReferences > maxStmts {
+		return errors.New("statement references exceed the bounded plan size")
+	}
+	if inputBytes > maxPlanInputBytes {
+		return errors.New("plan input exceeds the 64 KiB bounded-plan budget")
+	}
+
+	goExprBytes := make([]uint64, len(plan.Expressions))
+	goooExprBytes := make([]uint64, len(plan.Expressions))
+	for index, expression := range plan.Expressions {
+		switch expression.Kind {
+		case ExprInput:
+			goExprBytes[index], goooExprBytes[index] = 5, 5
+		case ExprInt:
+			// The longest int64 decimal spelling is 20 bytes.
+			goExprBytes[index], goooExprBytes[index] = 27, 20
+		case ExprBool:
+			goExprBytes[index], goooExprBytes[index] = 5, 5
+		case ExprLocal:
+			goExprBytes[index], goooExprBytes[index] = uint64(len(expression.Name)), uint64(len(expression.Name))
+		case ExprBinary, ExprHole:
+			if expression.Left < 0 || expression.Right < 0 || expression.Left >= index || expression.Right >= index {
+				return fmt.Errorf("expression %d children must refer to earlier arena entries", index)
+			}
+			// Parentheses plus a spaced two-byte operator are the largest
+			// spelling among the supported operations.
+			goExprBytes[index] = cappedAdd(cappedAdd(goExprBytes[expression.Left], goExprBytes[expression.Right], maxGeneratedSourceBytes), 6, maxGeneratedSourceBytes)
+			goooExprBytes[index] = cappedAdd(cappedAdd(goooExprBytes[expression.Left], goooExprBytes[expression.Right], maxGeneratedSourceBytes), 6, maxGeneratedSourceBytes)
+		default:
+			// Shape validation below will provide the specific error. A fixed
+			// charge keeps malformed nodes within the same bounded preflight.
+			goExprBytes[index], goooExprBytes[index] = 64, 64
+		}
+	}
+
+	goBodyBytes := uint64(0)
+	goooBodyBytes := uint64(0)
+	for index, statement := range plan.Statements {
+		if statement.Expr < 0 || statement.Expr >= len(plan.Expressions) {
+			return fmt.Errorf("statement %d expression index %d is out of range", index, statement.Expr)
+		}
+		// This fixed charge covers statement syntax, braces, indentation,
+		// and separators at every allowed nesting depth. Local names are
+		// charged separately.
+		overhead := cappedAdd(256, uint64(len(statement.Name)), maxGeneratedSourceBytes)
+		goBodyBytes = cappedAdd(goBodyBytes, cappedAdd(overhead, goExprBytes[statement.Expr], maxGeneratedSourceBytes), maxGeneratedSourceBytes)
+		goooBodyBytes = cappedAdd(goooBodyBytes, cappedAdd(overhead, goooExprBytes[statement.Expr], maxGeneratedSourceBytes), maxGeneratedSourceBytes)
+	}
+	goSourceBytes := cappedAdd(goBodyBytes, cappedAdd(256, uint64(len(plan.Name)), maxGeneratedSourceBytes), maxGeneratedSourceBytes)
+	if goSourceBytes > maxGeneratedSourceBytes {
+		return errors.New("expanded Go source exceeds the 128 KiB compilation budget")
+	}
+	// Gooo embeds the body as a quoted string. Rendered expression tokens and
+	// identifiers are ASCII without quote or backslash bytes; only renderer
+	// indentation tabs and line breaks need escaping. A statement tree of at
+	// most 128 nodes and depth 16 can emit at most three lines per node.
+	maxQuotedBodyEscapeBytes := uint64(maxStmts * 3 * (maxDepth + 2))
+	quotedBodyBytes := cappedAdd(goooBodyBytes, maxQuotedBodyEscapeBytes, maxGeneratedSourceBytes)
+	goooSourceBytes := cappedAdd(quotedBodyBytes, cappedAdd(256, uint64(len(plan.Name)), maxGeneratedSourceBytes), maxGeneratedSourceBytes)
+	if goooSourceBytes > maxGeneratedSourceBytes {
+		return errors.New("expanded Gooo source exceeds the 128 KiB compilation budget")
+	}
+	return nil
+}
+
+func cappedAdd(left, right, limit uint64) uint64 {
+	if left > limit || right > limit || right > limit-left {
+		return limit + 1
+	}
+	return left + right
+}
+
+func cappedMultiply(value, multiplier, limit uint64) uint64 {
+	if value > limit || multiplier > limit || value != 0 && multiplier > limit/value {
+		return limit + 1
+	}
+	return value * multiplier
 }
 
 func validateStatementTree(plan Plan, validated *validatedPlan, sequence []int, depth int) error {
@@ -352,22 +524,32 @@ func validateSequence(plan Plan, validated *validatedPlan, sequence []int, scope
 			if err != nil {
 				return false, fmt.Errorf("statement %d: %w", index, err)
 			}
-			scope.values[statement.Name] = expressionType
+			if validated.slotCount >= maxStmts || validated.slotCount >= 254 {
+				return false, errors.New("local slot count exceeds fixed runtime frame")
+			}
+			slot := validated.slotCount
+			validated.slotCount++
+			validated.statementSlots[index] = uint8(slot + 1)
+			scope.values[statement.Name] = localBinding{valueType: expressionType, slot: slot}
 		case StmtAssign:
 			if !validLocalName(statement.Name) || statement.Name == "input" {
 				return false, fmt.Errorf("statement %d has invalid assignment target", index)
 			}
-			currentType, found := scope.lookup(statement.Name)
+			current, found := scope.lookup(statement.Name)
 			if !found {
 				return false, fmt.Errorf("assignment target %q is not in scope", statement.Name)
+			}
+			if current.slot < 0 || current.slot >= maxStmts || current.slot >= 254 {
+				return false, fmt.Errorf("assignment target %q has invalid runtime slot", statement.Name)
 			}
 			expressionType, err := typeExpression(plan, validated, statement.Expr, scope, depth)
 			if err != nil {
 				return false, fmt.Errorf("statement %d: %w", index, err)
 			}
-			if currentType != expressionType {
+			if current.valueType != expressionType {
 				return false, fmt.Errorf("assignment to %q changes its type", statement.Name)
 			}
+			validated.statementSlots[index] = uint8(current.slot + 1)
 		case StmtIf:
 			conditionType, err := typeExpression(plan, validated, statement.Expr, scope, depth)
 			if err != nil {
@@ -376,8 +558,9 @@ func validateSequence(plan Plan, validated *validatedPlan, sequence []int, scope
 			if conditionType != decision.TypeBool {
 				return false, fmt.Errorf("if condition %d must have type Bool", index)
 			}
-			thenScope := &typeScope{parent: scope, values: make(map[string]decision.ValueType)}
-			elseScope := &typeScope{parent: scope, values: make(map[string]decision.ValueType)}
+			thenScope := newTypeScope(validated, scope)
+			elseScope := newTypeScope(validated, scope)
+			validated.branchScopes[index] = [2]uint16{uint16(thenScope.id), uint16(elseScope.id)}
 			thenTerminates, err := validateSequence(plan, validated, statement.Then, thenScope, depth+1)
 			if err != nil {
 				return false, err
@@ -426,11 +609,17 @@ func typeExpression(plan Plan, validated *validatedPlan, index int, scope *typeS
 	case ExprBool:
 		return decision.TypeBool, nil
 	case ExprLocal:
-		valueType, found := scope.lookup(expression.Name)
+		binding, found := scope.lookup(expression.Name)
 		if !found {
 			return "", fmt.Errorf("local %q is not in scope", expression.Name)
 		}
-		return valueType, nil
+		if binding.slot < 0 || binding.slot >= maxStmts || binding.slot >= 254 {
+			return "", fmt.Errorf("local %q has invalid runtime slot", expression.Name)
+		}
+		if err := validated.recordExpressionSlot(scope.id, index, binding.slot); err != nil {
+			return "", err
+		}
+		return binding.valueType, nil
 	case ExprBinary, ExprHole:
 		if expression.Left >= index || expression.Right >= index || expression.Left < 0 || expression.Right < 0 {
 			return "", errors.New("expression children must refer to earlier arena entries")
@@ -557,13 +746,37 @@ func sameHole(left, right HoleSpec) bool {
 	return true
 }
 
-func (scope *typeScope) lookup(name string) (decision.ValueType, bool) {
+func newTypeScope(validated *validatedPlan, parent *typeScope) *typeScope {
+	scope := &typeScope{
+		parent: parent,
+		id:     validated.scopeCount,
+		values: make(map[string]localBinding),
+	}
+	validated.scopeCount++
+	validated.expressionSlots = append(validated.expressionSlots, make([]uint8, validated.exprCount)...)
+	return scope
+}
+
+func (validated *validatedPlan) recordExpressionSlot(scopeID, expressionIndex, slot int) error {
+	if scopeID < 0 || scopeID >= validated.scopeCount || expressionIndex < 0 || expressionIndex >= validated.exprCount || slot < 0 || slot >= 254 {
+		return errors.New("local expression slot is out of range")
+	}
+	index := scopeID*validated.exprCount + expressionIndex
+	encoded := uint8(slot + 1)
+	if current := validated.expressionSlots[index]; current != 0 && current != encoded {
+		return errors.New("expression resolves to different slots in one lexical scope")
+	}
+	validated.expressionSlots[index] = encoded
+	return nil
+}
+
+func (scope *typeScope) lookup(name string) (localBinding, bool) {
 	for current := scope; current != nil; current = current.parent {
-		if valueType, ok := current.values[name]; ok {
-			return valueType, true
+		if binding, ok := current.values[name]; ok {
+			return binding, true
 		}
 	}
-	return "", false
+	return localBinding{}, false
 }
 
 func validLocalName(name string) bool {
@@ -755,41 +968,36 @@ func goType(valueType decision.ValueType) string {
 	return "int64"
 }
 
-type runtimeScope struct {
-	parent *runtimeScope
-	values map[string]Value
-}
-
-func (scope *runtimeScope) lookup(name string) (Value, *runtimeScope, bool) {
-	for current := scope; current != nil; current = current.parent {
-		if value, ok := current.values[name]; ok {
-			return value, current, true
-		}
-	}
-	return Value{}, nil, false
-}
-
-func evalExpression(plan Plan, choices map[string]string, index int, scope *runtimeScope) (Value, error) {
-	expression := plan.Expressions[index]
+func evalExpression(program *Program, scopeID, index int, input int64, slots *[maxStmts]Value) (Value, error) {
+	expression := program.plan.Expressions[index]
 	switch expression.Kind {
-	case ExprInput, ExprLocal:
-		value, _, ok := scope.lookup(expression.Name)
-		if !ok {
-			return Value{}, fmt.Errorf("runtime name %q is not initialized", expression.Name)
+	case ExprInput:
+		return Value{Type: decision.TypeInt, Int: input}, nil
+	case ExprLocal:
+		if scopeID < 0 || index < 0 || index >= len(program.plan.Expressions) {
+			return Value{}, errors.New("local expression context is out of range")
 		}
-		return value, nil
+		tableIndex := scopeID*len(program.plan.Expressions) + index
+		if tableIndex < 0 || tableIndex >= len(program.expressionSlots) || program.expressionSlots[tableIndex] == 0 {
+			return Value{}, fmt.Errorf("runtime local %q has no compiled slot", expression.Name)
+		}
+		slot := int(program.expressionSlots[tableIndex] - 1)
+		if slot >= program.slotCount || slot >= len(slots) {
+			return Value{}, fmt.Errorf("runtime local %q has invalid slot", expression.Name)
+		}
+		return slots[slot], nil
 	case ExprInt:
 		return Value{Type: decision.TypeInt, Int: expression.Int}, nil
 	case ExprBool:
 		return Value{Type: decision.TypeBool, Bool: expression.Bool}, nil
 	case ExprBinary, ExprHole:
-		left, err := evalExpression(plan, choices, expression.Left, scope)
+		left, err := evalExpression(program, scopeID, expression.Left, input, slots)
 		if err != nil {
 			return Value{}, err
 		}
 		operation := expression.Operation
 		if expression.Kind == ExprHole {
-			operation = choices[expression.HoleID]
+			operation = program.choices[expression.HoleID]
 		}
 		if operation == "and" && !left.Bool {
 			return Value{Type: decision.TypeBool, Bool: false}, nil
@@ -797,7 +1005,7 @@ func evalExpression(plan Plan, choices map[string]string, index int, scope *runt
 		if operation == "or" && left.Bool {
 			return Value{Type: decision.TypeBool, Bool: true}, nil
 		}
-		right, err := evalExpression(plan, choices, expression.Right, scope)
+		right, err := evalExpression(program, scopeID, expression.Right, input, slots)
 		if err != nil {
 			return Value{}, err
 		}
@@ -829,42 +1037,57 @@ func evalExpression(plan Plan, choices map[string]string, index int, scope *runt
 	}
 }
 
-func executeSequence(plan Plan, choices map[string]string, indices []int, scope *runtimeScope) (Value, bool, error) {
+func executeSequence(program *Program, indices []int, scopeID int, input int64, slots *[maxStmts]Value) (Value, bool, error) {
 	for _, index := range indices {
-		statement := plan.Statements[index]
+		statement := program.plan.Statements[index]
 		switch statement.Kind {
 		case StmtLet:
-			value, err := evalExpression(plan, choices, statement.Expr, scope)
+			value, err := evalExpression(program, scopeID, statement.Expr, input, slots)
 			if err != nil {
 				return Value{}, false, err
 			}
-			scope.values[statement.Name] = value
+			if index >= len(program.statementSlots) || program.statementSlots[index] == 0 {
+				return Value{}, false, fmt.Errorf("runtime let %q has no compiled slot", statement.Name)
+			}
+			slot := int(program.statementSlots[index] - 1)
+			if slot >= program.slotCount || slot >= len(slots) {
+				return Value{}, false, fmt.Errorf("runtime let %q has invalid slot", statement.Name)
+			}
+			slots[slot] = value
 		case StmtAssign:
-			value, err := evalExpression(plan, choices, statement.Expr, scope)
+			value, err := evalExpression(program, scopeID, statement.Expr, input, slots)
 			if err != nil {
 				return Value{}, false, err
 			}
-			_, owner, ok := scope.lookup(statement.Name)
-			if !ok || owner == nil {
-				return Value{}, false, fmt.Errorf("runtime assignment target %q is not initialized", statement.Name)
+			if index >= len(program.statementSlots) || program.statementSlots[index] == 0 {
+				return Value{}, false, fmt.Errorf("runtime assignment target %q has no compiled slot", statement.Name)
 			}
-			owner.values[statement.Name] = value
+			slot := int(program.statementSlots[index] - 1)
+			if slot >= program.slotCount || slot >= len(slots) {
+				return Value{}, false, fmt.Errorf("runtime assignment target %q has invalid slot", statement.Name)
+			}
+			slots[slot] = value
 		case StmtIf:
-			condition, err := evalExpression(plan, choices, statement.Expr, scope)
+			condition, err := evalExpression(program, scopeID, statement.Expr, input, slots)
 			if err != nil {
 				return Value{}, false, err
 			}
+			if index >= len(program.branchScopes) {
+				return Value{}, false, errors.New("runtime if has no compiled branch scopes")
+			}
+			branchIndex := 1
 			branch := statement.Else
 			if condition.Bool {
+				branchIndex = 0
 				branch = statement.Then
 			}
-			branchScope := &runtimeScope{parent: scope, values: make(map[string]Value)}
-			value, returned, err := executeSequence(plan, choices, branch, branchScope)
+			branchScopeID := int(program.branchScopes[index][branchIndex])
+			value, returned, err := executeSequence(program, branch, branchScopeID, input, slots)
 			if err != nil || returned {
 				return value, returned, err
 			}
 		case StmtReturn:
-			value, err := evalExpression(plan, choices, statement.Expr, scope)
+			value, err := evalExpression(program, scopeID, statement.Expr, input, slots)
 			return value, true, err
 		default:
 			return Value{}, false, fmt.Errorf("unsupported statement kind %q", statement.Kind)

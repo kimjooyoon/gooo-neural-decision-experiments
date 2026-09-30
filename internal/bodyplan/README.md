@@ -24,6 +24,12 @@ declared result type. The arenas are limited to 128 expressions, 128
 statements, 16 holes, and combined expression/control-flow nesting depth 16;
 hole text is nonempty valid UTF-8 up to 512 bytes.
 
+Compilation first estimates the plan's encoded input size with a 64 KiB budget,
+then memoizes shared expression-node costs and charges them at every statement
+use. Generated Go and Gooo source are each capped at 128 KiB before recursive
+type validation and rendering. The estimate is conservative and may reject a
+plan whose final source would fit.
+
 `GoSource()` returns a formatted `package generated` function with an `int64`
 input and an `int64` or `bool` result. `GoooSource()` returns `package
 bodyplan`, the `bodyplan` namespace, Integer and Boolean entity declarations,

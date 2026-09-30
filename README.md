@@ -2,7 +2,9 @@
 
 Public experimental Gooo-specific natural-language to typed IR decisions.
 Runtime, orchestration, data generation and compiler bridges are written in Go.
-Python is used only for offline PyTorch/MPS training and checkpoint export.
+Python is used for offline PyTorch/MPS training and checkpoint export. The
+optional Laya comparison connects from Go to its existing upstream PyTorch
+service; the tiny-model runtime has no Python dependency.
 
 First pilot: eight bounded binary-operation decisions, English/Korean synthetic
 instructions, template-grouped train/calibration/test splits. This is a small
@@ -123,8 +125,8 @@ values and atomic output on failed inference. The v3 audit again matched all
 The original v2 source is separately archived. See
 [hardening evidence](runs/runtime-hardening-v3-20260930/report.md).
 
-Future controlled studies and the completeness dimensions are in
-[next-experiments.md](docs/next-experiments.md). They are plans, not claimed runs.
+Controlled study status and the completeness dimensions are in
+[next-experiments.md](docs/next-experiments.md).
 
 ## Multi-node body experiment
 
@@ -136,3 +138,18 @@ optional. The [Go study runner](tools/evaluate-bodyplans/README.md) validates
 native Gooo generation and independently compiles/executes emitted Go, with
 explicit planned, observed and unknown counts. This extension is separate from
 the immutable v1 operator-model results and executable release.
+
+The [frozen 128-scenario study](runs/body-plan-v1-laya-7d626b9-20260930/README.md)
+completed 1,280 native Gooo generation cells and 45,200 independent Go case
+executions, with zero unknowns. It made 222 actual Laya calls and 666 tiny-model
+predictions. Initial heldout behavior was 74.2% for FP32 and 73.8% for Laya;
+training-only finite search reached 100% for every arm, including model-free
+search. Model proposals reduced observed search work; final correctness is not
+exclusive model contribution. Laya HTTP median/p95 was 40.9/46.8 ms on CPU.
+See the raw run and independent audits for the comparison and resource limits.
+
+The [slot-backed interpreter](docs/body-plan-memory-layout.md) resolves names
+once into scoped array indices. One-plan M4 measurements improved the median
+evaluation time from 239.7 to 113.9 ns, with 544 B/5 heap allocations per call
+reduced to zero. Compilation still allocates and stores bounded slot tables;
+the benchmark does not measure full code generation or inference.

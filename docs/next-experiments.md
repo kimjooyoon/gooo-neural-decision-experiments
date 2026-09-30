@@ -31,10 +31,20 @@ for context-heavy operation choices; the v1 weights have no Laya lineage.
 | CI context | Pin exact source/run and pass compact machine failure facts | Match zero/stale/current-context arms; measure added value independently of extra attempts |
 | Load/backpressure | 1/2/4/8 workers and bounded queue capacities | Throughput, p50/p95 latency, RSS, CPU-seconds, no stalled completion or unbounded goroutines |
 
-No new study above is claimed as executed. GPU work should begin with one small
-head/model arm at a time so shared 16 GiB memory is not multiplied across worker
-processes. Parallel Go compilation/audit work can proceed while that bounded
-GPU job runs. Runtime workers share one read-only model and own their workspace.
+The multi-node IR study has now executed 128 frozen scenarios with the three
+existing tiny models and actual Laya, with native Gooo and independent Go
+execution. Its search sees training cases only and makes no feedback model
+calls; feedback-aware TDD and CI context are still separate studies. See the
+[body capture](../runs/body-plan-v1-laya-7d626b9-20260930/README.md) for scores and
+complete planned/observed denominators. The earlier persistent primitive stream
+also has measured 1/2/4-worker batch evidence; multi-body incremental scheduling
+and individual pipeline latency remain unmeasured.
+
+The other proposed changes have not been trained or executed in this repo.
+GPU work should begin with one small head/model arm at a time so shared 16 GiB
+memory is not multiplied across worker processes. Parallel Go compilation/audit
+work can proceed while that bounded GPU job runs. Runtime workers share one
+read-only model and own their workspace.
 
 ## Completeness is a vector
 
