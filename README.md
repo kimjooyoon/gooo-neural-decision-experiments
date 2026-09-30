@@ -11,6 +11,30 @@ instructions, template-grouped train/calibration/test splits. This is a small
 classifier, not a full natural-language compiler. Laya is the research baseline;
 the first tiny model is independently initialized, not copied Laya weights.
 
+## Current compiler dogfood model
+
+The [compiler/PROV-O model v2](https://huggingface.co/asketeddy/gooo-compiler-prov-tiny-v2)
+fine tunes our own first model using Gooo declaration and PROV-O context views.
+The Go 1.27.1 compiler integration is merged into `meta-ontology-go`'s `dev`
+branch in [PR 1110](https://github.com/kimjooyoon/meta-ontology-go/pull/1110).
+The model has actually been used in native Gooo body generation, with a separate
+deterministic disconnected baseline. Main deployment is a separate promotion.
+
+On the new synthetic held-out set, FP32 and QAT score 768/768 and PTQ 643/768.
+These are 256 original instructions in three views, not 768 independent tasks.
+Two observed compiler intents were added to training; their native raw-operation
+repair score improves from 0/6 to 6/6 across three variants. Final generated code
+passes 36/36 finite cases both before and after training because local TDD already
+repairs candidate selection. The disconnected baseline passes 12/12 with no
+model calls. This demonstrates repair and integration, not new unseen-task
+codegen accuracy or reduced candidate-evaluation work.
+
+See the [model card](docs/hf-compiler-prov-v2-model-card.md),
+[training and raw execution evidence](runs/compiler-prov-v3-mps-20261001/),
+[development feedback design](docs/compiler-model-dogfood.md) and
+[fixed HF bundle](publication/hf-compiler-prov-v2/).
+The previous model/release results below remain frozen historical observations.
+
 Compare float32, post-training ternary quantization and ternary-aware training.
 The ternary alphabet has theoretical log2(3)=1.585 bits; base-3 packing of five
 weights per byte uses 1.6 bits/weight plus scales, biases and metadata. Training

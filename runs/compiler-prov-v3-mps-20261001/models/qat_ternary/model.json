@@ -1,0 +1,63 @@
+{
+  "confidence_threshold": 0.125,
+  "feature_dim": 256,
+  "hidden_dim": 48,
+  "labels": [
+    "add",
+    "subtract",
+    "multiply",
+    "less_than",
+    "less_equal",
+    "equal",
+    "and",
+    "or"
+  ],
+  "max_bytes": 512,
+  "schema": "gooo/tiny-ir-decision-model/v1",
+  "temperature": 0.15,
+  "tensors": [
+    {
+      "bytes": 2458,
+      "cols": 256,
+      "count": 12288,
+      "encoding": "ternary_base3_5",
+      "name": "w1",
+      "offset": 0,
+      "rows": 48,
+      "scale": 0.4867602586746216
+    },
+    {
+      "bytes": 192,
+      "cols": 48,
+      "count": 48,
+      "encoding": "float32_le",
+      "name": "b1",
+      "offset": 2458,
+      "rows": 1,
+      "scale": 1.0
+    },
+    {
+      "bytes": 77,
+      "cols": 48,
+      "count": 384,
+      "encoding": "ternary_base3_5",
+      "name": "w2",
+      "offset": 2650,
+      "rows": 8,
+      "scale": 0.8735342025756836
+    },
+    {
+      "bytes": 32,
+      "cols": 8,
+      "count": 8,
+      "encoding": "float32_le",
+      "name": "b2",
+      "offset": 2727,
+      "rows": 1,
+      "scale": 1.0
+    }
+  ],
+  "variant": "qat_ternary",
+  "weights_file": "weights.bin",
+  "weights_sha256": "07813d1eef0651c37115a899c7052dc3bbca5c924dca348ecf4e4b6ca35fcf96"
+}
