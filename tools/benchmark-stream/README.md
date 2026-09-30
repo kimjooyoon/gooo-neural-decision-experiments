@@ -9,12 +9,16 @@ creation, so an existing report is never overwritten.
 Run from the repository root:
 
 ```sh
+mkdir -p audit
 go run ./tools/benchmark-stream \
   --stream-bin ./bin/gooo-decision-stream \
   --binary-sha256 <64-character-binary-sha256> \
   --source-sha256 <64-character-stream-source-closure-sha256> \
   --output audit/new-stream-benchmark.json
 ```
+
+The output parent directory must already exist and must not itself be a
+symlink. The tool checks this before starting any benchmark process.
 
 The optional source pin is checked against a deterministic hash of the fixed
 runtime source closure: `go.mod`, the stream command, stream implementation,

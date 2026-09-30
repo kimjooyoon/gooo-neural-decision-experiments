@@ -233,11 +233,8 @@ func run(args []string, diagnostics io.Writer) int {
 			return 2
 		}
 	}
-	if _, err := os.Lstat(*outputPath); err == nil {
-		fmt.Fprintln(diagnostics, "output already exists; choose a new report path")
-		return 2
-	} else if !errors.Is(err, os.ErrNotExist) {
-		fmt.Fprintln(diagnostics, "output path cannot be checked")
+	if err := validateNewOutputPath(*outputPath); err != nil {
+		fmt.Fprintln(diagnostics, "output must be new and its parent must be an existing non-symlink directory")
 		return 2
 	}
 
@@ -1016,4 +1013,24 @@ func writeNewReport(path string, report benchmarkReport) error {
 		return err
 	}
 	return file.Sync()
+}
+
+func validateNewOutputPath(path string) error {
+	absolutePath, err := filepath.Abs(path)
+	if err != nil {
+		return err
+	}
+	parentInfo, err := os.Lstat(filepath.Dir(absolutePath))
+	if err != nil {
+		return err
+	}
+	if !parentInfo.IsDir() || parentInfo.Mode()&os.ModeSymlink != 0 {
+		return errors.New("output parent is not a real directory")
+	}
+	if _, err := os.Lstat(absolutePath); err == nil {
+		return errors.New("output already exists")
+	} else if !errors.Is(err, os.ErrNotExist) {
+		return err
+	}
+	return nil
 }

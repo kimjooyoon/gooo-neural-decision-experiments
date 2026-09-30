@@ -1,0 +1,17 @@
+{
+  "schema": "gooo/stream-benchmark-failed-attempt/v1",
+  "source_commit": "381c2ad4b3fbc22ba88557177bd7a3fbd6cdab74",
+  "stream_binary_sha256": "0453957c83f95bd2b24c36a9db1a46e8a83df8bb35ce28d7ec3a451ea957c236",
+  "stream_source_closure_sha256": "c52588e78a992a52715359919afdfd7f823d15903672a3a53132ea5179a75169",
+  "planned_conditions": 6,
+  "planned_records_per_condition": 4096,
+  "requested_output": "runs/stream-end-to-end-v1-20260930/report.json",
+  "exit_code": 1,
+  "stderr": "benchmark report could not be created without overwriting an existing file",
+  "failure_stage": "post-execution report file creation",
+  "cause": "The caller supplied a path with an absent parent directory; the driver checked only whether the final file existed before execution.",
+  "successful_report_preserved": false,
+  "observed_process_and_record_counts": null,
+  "model_or_dataset_bytes_changed": false,
+  "notes": "The six-condition execution loop was reached before the write error. Exact completed processes, timing and record counts cannot be reconstructed from the absent report. This attempt is not counted as a successful benchmark and is not claimed to have executed zero work."
+}

@@ -140,6 +140,53 @@ func TestWriteReportRefusesOverwrite(t *testing.T) {
 	}
 }
 
+func TestRunRejectsMissingOutputParentBeforeStartingChild(t *testing.T) {
+	root := findRepoRoot(t)
+	temporary := t.TempDir()
+	streamPath := filepath.Join(temporary, "fake-stream")
+	markerPath := filepath.Join(temporary, "child-started")
+	if err := os.WriteFile(streamPath, []byte("#!/bin/sh\n/usr/bin/touch \"$BENCHMARK_STREAM_TEST_MARKER\"\nexit 0\n"), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Chmod(streamPath, 0o700); err != nil {
+		t.Fatal(err)
+	}
+	streamSHA, err := hashRegularFile(streamPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Setenv("BENCHMARK_STREAM_TEST_MARKER", markerPath)
+	outputPath := filepath.Join(temporary, "missing-parent", "report.json")
+	var diagnostics bytes.Buffer
+	code := run([]string{
+		"--stream-bin", streamPath,
+		"--binary-sha256", streamSHA,
+		"--output", outputPath,
+		"--repo-root", root,
+	}, &diagnostics)
+	if code != 2 || !strings.Contains(diagnostics.String(), "existing non-symlink directory") {
+		t.Fatalf("run() = %d, diagnostics=%q", code, diagnostics.String())
+	}
+	if _, err := os.Stat(markerPath); !os.IsNotExist(err) {
+		t.Fatalf("child process ran before rejecting output parent: stat err=%v", err)
+	}
+}
+
+func TestValidateNewOutputPathRejectsSymlinkParent(t *testing.T) {
+	temporary := t.TempDir()
+	realDirectory := filepath.Join(temporary, "real")
+	if err := os.Mkdir(realDirectory, 0o700); err != nil {
+		t.Fatal(err)
+	}
+	symlinkDirectory := filepath.Join(temporary, "linked")
+	if err := os.Symlink(realDirectory, symlinkDirectory); err != nil {
+		t.Skipf("symlinks unavailable: %v", err)
+	}
+	if err := validateNewOutputPath(filepath.Join(symlinkDirectory, "report.json")); err == nil {
+		t.Fatal("symlink output parent was accepted")
+	}
+}
+
 func TestDecodeSHA256RequiresLowercaseFullDigest(t *testing.T) {
 	if _, err := decodeSHA256(strings.Repeat("a", 64)); err != nil {
 		t.Fatal(err)
