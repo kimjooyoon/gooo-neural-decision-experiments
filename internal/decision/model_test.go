@@ -59,6 +59,37 @@ func TestLoadVariantsAndPredictIntoDoesNotAllocate(t *testing.T) {
 	}
 }
 
+func TestLoadCapturesSHA256OfExactMetadataSnapshot(t *testing.T) {
+	metadataPath, _ := writeFixtureModel(t, "fp32", 0.5)
+	raw, err := os.ReadFile(metadataPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	raw = append(raw, '\n', ' ', '\n')
+	if err := os.WriteFile(metadataPath, raw, 0o600); err != nil {
+		t.Fatal(err)
+	}
+
+	model, err := Load(metadataPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := shaHex(raw)
+	if got := model.MetadataSHA256(); got != want {
+		t.Fatalf("MetadataSHA256() = %q, want exact loaded-byte digest %q", got, want)
+	}
+	if got := (*Model)(nil).MetadataSHA256(); got != "" {
+		t.Fatalf("nil MetadataSHA256() = %q, want empty string", got)
+	}
+
+	if err := os.WriteFile(metadataPath, append(raw, ' '), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if got := model.MetadataSHA256(); got != want {
+		t.Fatalf("loaded snapshot digest changed after file rewrite: got %q, want %q", got, want)
+	}
+}
+
 func TestFeatureHashingLowercasesASCIIAndNormalizes(t *testing.T) {
 	var upper, lower [FeatureDim]float32
 	buildFeatures("Add Two", &upper)

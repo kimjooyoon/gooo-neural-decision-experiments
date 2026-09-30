@@ -20,6 +20,10 @@ three existing bundles, typed output, and concurrent prediction checks.
 The model metadata and weights remain separate files. Pass `Load` the path to a
 variant's `model.json`; it reads the adjacent weights file, checks metadata,
 file sizes and the declared SHA-256, and then decodes the model once.
+`MetadataSHA256` identifies the exact metadata bytes decoded at load time;
+`WeightsSHA256` identifies the packed tensor file. Both are needed to identify
+inference configuration because thresholds, temperature, and scales live in
+metadata. The loaded metadata digest remains stable after a file changes.
 
 ```go
 package main
