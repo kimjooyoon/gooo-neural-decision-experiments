@@ -42,5 +42,8 @@ machine checks and type/scope correctness still supply execution constraints.
 Typed-pair training is a possible later comparison, not part of this publication.
 Current exported models still train the eight-label global objective. The TDD
 runtime conditions ranking on the compiler-known pair and retains global
-confidence observations. Neither production online learning nor native in-process
-structural inference has been implemented by this study.
+confidence observations. Native in-process structural inference is now available
+on compiler `main` through `--path-plan [--path-model]`; see the
+[actual main promotion and smoke](../publication/native-typed-path-main-promotion-20261001.json).
+The current compound probe preserves short-budget failures, partial finite
+contracts and resource costs. Production online learning remains future work.

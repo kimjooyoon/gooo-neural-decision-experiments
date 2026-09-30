@@ -39,8 +39,24 @@ and 1,920 context views, not arbitrary language-to-code tasks.
 See [the structural workflow](docs/typed-path-model.md),
 [HF model card](docs/hf-typed-path-v1-model-card.md) and
 [raw bounded TDD evidence](runs/typed-path-reserved-probe-tdd-20261001/).
-This is a Go assembly stage before native Gooo codegen; native in-process
-structural inference is not yet implemented. Root worked directly without subagents.
+Native in-process structural inference is now merged to compiler `main` in
+[PR 1113](https://github.com/kimjooyoon/meta-ontology-go/pull/1113), using the public
+[Go SDK v0.2.0-experimental](https://github.com/kimjooyoon/gooo-decision-runtime/tree/v0.2.0-experimental).
+`body-codegen --path-plan [--path-model]` binds the fallback to the actual source,
+ranks each decision once, checks finite candidates and emits the selected body.
+Omitting the model retains deterministic finite search. Development is direct,
+without subagents.
+
+The [fresh native compound probe](runs/native-typed-path-compound-20261001/)
+records 32 native calls, 72 in-process predictions and zero external calls over
+one compound intent. Eight-attempt arms pass all 160 independent arithmetic
+observations; four-attempt arms retain failures, including the Korean model
+arms' 6/60 success. These are budget/language/model views, not 32 distinct ideas.
+Deliberately inconsistent finite cases retain 66.67% functional completeness.
+See the [native measurement scopes](docs/hf-typed-path-v1-native-direct.md),
+[actual main smoke and promotion receipt](publication/native-typed-path-main-promotion-20261001.json)
+and [anonymous HF verification](publication/typed-path-native-main-public-verification.json).
+The nine model weight bundles are unchanged in this integration update.
 
 On the new synthetic held-out set, FP32 and QAT score 768/768 and PTQ 643/768.
 These are 256 original instructions in three views, not 768 independent tasks.

@@ -30,7 +30,7 @@ coarse word order; its global classification performance regressed. Both the
 collision diagnosis and measured regressions are preserved.
 
 The Go curriculum contains 6,240 views: 4,800 training, 480 calibration and 960
-test. The test views represent 320 original English/Korean instructions and 160
+development evaluation. These reused evaluation views represent 320 original English/Korean instructions and 160
 structural program configurations. Numeric configurations and instruction
 templates are disjoint across splits. Plain, actual fallback Gooo activity, and
 PROV-O vocabulary views of one instruction always share a split. The Gooo view
@@ -74,11 +74,12 @@ unseen-input cases are 15,360/15,360 in each arm. Search median grows from
 training attempt, conservative zero-acceptance result and reused development
 evaluation disclosure. No arbitrary-body or general intent completion is inferred.
 
-This Go assembler emits Gooo for the native compiler. It is an experimental
-structural stage before native codegen; the native `--tiny-model` flag still
-uses the operation ABI. Native in-process structural-provider integration,
-training from arbitrary PROV-O feedback traces and production online learning
-are not implemented by this stage.
+The standalone Go assembler emits Gooo for the native compiler. The subsequent
+native integration is now on compiler `main` in
+[PR 1113](https://github.com/kimjooyoon/meta-ontology-go/pull/1113). Native
+`--path-plan [--path-model]` uses structural inference inside the compiler;
+`--tiny-model` retains its separate operation ABI. Training from arbitrary
+PROV-O feedback traces and production online learning remain future work.
 
 The subsequent source-bound native replay is recorded in
 `runs/typed-path-native-replay-bound-20261001`: 20 generations through the actual
@@ -86,6 +87,36 @@ compiler and 240/240 independently executed emitted-Go cases, repeating five
 unique functions across languages/arms. Native replay uses saved selections and
 makes zero additional predictions. The earlier runner revision typo and all
 captures are retained in the neighboring run with an explicit exclusion/correction.
+
+## Native in-process use
+
+Run from the native compiler repository with a downloaded structural model:
+
+```text
+go run ./cmd/gooo body-codegen --json --path-plan examples/body-codegen/typed-path-compound-plan.json --path-model /path/to/positioned-random/models/fp32/model.json --activity Combined examples/body-codegen/typed-path-compound.gooo.fixture
+```
+
+Omit `--path-model` for deterministic finite search. Source/fallback equivalence
+is checked before loading the model. Each declared decision makes one local
+prediction before candidate tests and final emission. No external model call or
+background codegen wait is created by this path. The compiler keeps declaration
+identity and changes only the in-memory activity body. Explicit cases and the
+attempt budget bind the finite completeness result; a lowering `PASS` does not
+turn a partial functional result into 100% intent completion.
+
+The new compound observation uses three interacting decisions, two languages,
+four arms, two budgets and full/partial finite contracts. Its 32 generations
+make 72 fresh native predictions and produce three unique Go sources from one
+compound intent. Independent arithmetic observations pass 226/320 overall and
+160/160 at budget eight. The finite contract with an intentionally inconsistent
+case remains 2/3 complete. The model's initial global abstentions, type-rejected
+combinations and unattempted paths remain in the raw receipts.
+
+See [raw native observations](../runs/native-typed-path-compound-20261001/),
+[main source smoke](../publication/native-typed-path-main-promotion-20261001.json)
+and [resource definitions](hf-typed-path-v1-native-direct.md). These are new
+native calls, distinct from the earlier saved-selection replay above. No weights
+were retrained or selected using this compound probe.
 
 ## Evidence handling
 
