@@ -1,0 +1,13 @@
+{
+  "schema": "gooo/source-binding-correction/v1",
+  "status": "EXCLUDED_FROM_PRIMARY_SOURCE_BOUND_EVIDENCE",
+  "original_declared_revision": "3e39307c942aab2e02428cb43b30eae886cfd06f",
+  "actual_checkout_revision": "3e393075849e1195611774b2b5846da8d39c7cc5",
+  "actual_runner_binary_sha256": "a06147fc41f413046db56c8415fd79fefde2738f8d087902d3babf464aa533f5",
+  "diagnosis": "The invocation expanded a short commit ID incorrectly. Its declared full revision did not equal the actual checked-out runner source. Original metadata and raw captures are retained without rewriting.",
+  "observed_native_calls": 20,
+  "observed_independent_cases_passed": 240,
+  "additional_model_predictions": 0,
+  "external_provider_calls": 0,
+  "remedy": "Require declared revision to match the clean tracked Git checkout before execution and capture the running executable SHA-256. Repeat into a fresh directory after committing the guard."
+}

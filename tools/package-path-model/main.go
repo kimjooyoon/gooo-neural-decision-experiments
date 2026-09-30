@@ -128,6 +128,10 @@ func assembleVersion(output string, reviewed bool) error {
 	return assembleVersions(output, reviewed, false)
 }
 func assembleVersions(output string, reviewed, direct bool) error {
+	return assemblePublication(output, reviewed, direct, false)
+}
+func assemblePublication(output string, reviewed, direct, mainPromotion bool) error {
+	direct = direct || mainPromotion
 	reviewed = reviewed || direct
 	if _, err := os.Stat(output); !os.IsNotExist(err) {
 		return errors.New("bundle output must be fresh")
@@ -164,6 +168,13 @@ func assembleVersions(output string, reviewed, direct bool) error {
 			note, err := read("docs/hf-typed-path-v1-native-direct.md")
 			if err != nil || privateText.Match(note) {
 				return errors.New("invalid or private direct-inference text")
+			}
+			raw = append(append(raw, '\n'), note...)
+		}
+		if mainPromotion && name == "README.md" {
+			note, err := read("docs/hf-typed-path-v1-main-promotion.md")
+			if err != nil || privateText.Match(note) {
+				return errors.New("invalid or private main-promotion text")
 			}
 			raw = append(append(raw, '\n'), note...)
 		}
@@ -387,12 +398,13 @@ func main() {
 	revision := flag.String("revision", "", "optional immutable public revision")
 	reviewed := flag.Bool("native-review", false, "include separately captured native structural replay")
 	direct := flag.Bool("native-direct", false, "include fresh native structural inference and exact Go observations")
+	mainPromotion := flag.Bool("main-promotion", false, "append verified native source main availability")
 	flag.Parse()
 	var err error
 	if *output == "" || flag.NArg() != 0 {
 		err = errors.New("fresh output required")
 	} else if *mode == "assemble" {
-		err = assembleVersions(*output, *reviewed, *direct)
+		err = assemblePublication(*output, *reviewed, *direct, *mainPromotion)
 	} else if *mode == "verify" {
 		err = verify(*bundle, *revision, *output)
 	} else {

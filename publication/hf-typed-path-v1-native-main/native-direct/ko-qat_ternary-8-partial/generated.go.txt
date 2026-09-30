@@ -1,0 +1,16 @@
+package sample
+
+//gooo:generated:start id="sample://activity/combined" kind="activity"
+func Combined(input int64) int64 {
+	var first = (input + 2)
+	var second = (input * 2)
+	var chosen = second
+	if input < 0 {
+		chosen = (chosen - 3)
+	} else {
+		chosen = (chosen + 3)
+	}
+	return (chosen + (first + second))
+}
+
+//gooo:generated:end id="sample://activity/combined" kind="activity"

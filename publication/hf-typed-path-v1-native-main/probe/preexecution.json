@@ -1,0 +1,46 @@
+{
+  "candidate_budget": 2,
+  "checkpoint_updates": 0,
+  "deadline_per_view_ms": 2000,
+  "holdout_inputs": "fixed boundary inputs excluding all training inputs",
+  "model_bindings": {
+    "fp32": {
+      "matrix_scale_bytes": 0,
+      "metadata_sha256": "1ea3bada068f2487418f17270db4ba6785a98c3ad60e0ad7eb92359400a01bb5",
+      "resident_tensor_bytes": 50912,
+      "weights_sha256": "3732a103720fdb0da0ea611471ecde7472e0b9166322394ba9352ffb855b9354"
+    },
+    "ptq_ternary": {
+      "matrix_scale_bytes": 8,
+      "metadata_sha256": "7c4eb4068d76e83620a9b8e7ce7f8d948b5e2436d44c7b79cf241da609dab894",
+      "resident_tensor_bytes": 12896,
+      "weights_sha256": "01a6574dedba327361cd3e4fda00a4d4dea34e162aab09885174bcd41ed4da47"
+    },
+    "qat_ternary": {
+      "matrix_scale_bytes": 8,
+      "metadata_sha256": "368e37e7899cecba03874b69e933525a2f8c90ecc53d787d8e698de6aa21c087",
+      "resident_tensor_bytes": 12896,
+      "weights_sha256": "456c686911b95bb933a7dd9275d2611974482ecf353831ab17b593c6bd3d86de"
+    }
+  },
+  "model_choice": "Positioned random initialization is one fixed comparison arm; this probe cannot select a checkpoint or establish model superiority.",
+  "original_instructions": 640,
+  "planned_external_calls": 0,
+  "planned_local_model_predictions": 5760,
+  "planned_native_calls": 0,
+  "planned_views_per_arm": 1920,
+  "probe_sha256": "720aa86e7b82dd6da74e4ab0d18ed85fe4ec24d5e95937caef966b123340fd77",
+  "program_configurations": 320,
+  "retries": 0,
+  "schema": "gooo/typed-path-probe-preexecution/v1",
+  "seeds": [],
+  "source_files_sha256": {
+    "internal/decision/model.go": "6f5379065cda5722a538167f31219be617cb872eaac1c700580d39b14c7f992a",
+    "internal/pathplan/search.go": "24d06ebcfdbdba1b05ed8f95f79c5e1f41c3f1958b0be746e51e180d0f3dc673",
+    "internal/pathstudy/study.go": "5708818e0ee2d093fcd755573fc3c9a66eac276feccbaeff3441cdbd0aebade6",
+    "tools/audit-path-search/main.go": "e956904049ede63b89af852b5e728926c03737964e1bf240a6554c2baca1bbc0"
+  },
+  "source_revision": "0719bf12466b1515a7ed89642e6bdc7895d7ccae",
+  "training_inputs": "deduplicated {0,1,offset,offset+1}",
+  "warmups": 0
+}
