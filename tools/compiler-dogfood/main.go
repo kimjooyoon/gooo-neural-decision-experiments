@@ -12,6 +12,8 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"go/parser"
+	"go/token"
 	"io"
 	"os"
 	"os/exec"
@@ -114,13 +116,17 @@ func child(ctx context.Context, directory, program string, args ...string) (*exe
 }
 
 func executeGenerated(ctx context.Context, goBinary, source, activity string, cases []testCase) ([]byte, error) {
+	parsed, err := parser.ParseFile(token.NewFileSet(), "generated.go", source, parser.PackageClauseOnly)
+	if err != nil {
+		return nil, err
+	}
 	directory, err := os.MkdirTemp("", "gooo-dogfood-replay-")
 	if err != nil {
 		return nil, err
 	}
 	defer os.RemoveAll(directory)
 	var probe strings.Builder
-	fmt.Fprintf(&probe, "package bodycodegen\nimport \"testing\"\nfunc TestBehavior(t *testing.T) {\n")
+	fmt.Fprintf(&probe, "package %s\nimport \"testing\"\nfunc TestBehavior(t *testing.T) {\n", parsed.Name.Name)
 	for _, item := range cases {
 		fmt.Fprintf(&probe, "if got := %s(%d); got != %d { t.Errorf(\"input=%d got=%%d\", got) }\n", activity, item.Input, item.Expected, item.Input)
 	}
