@@ -112,5 +112,5 @@ func main() {
 		fmt.Fprintln(os.Stderr, "extract-typed-sdk:", err)
 		os.Exit(1)
 	}
-	fmt.Println(`{"status":"EXTRACTED","source_and_test_files":16,"model_predictions":0}`)
+	fmt.Printf("{\"status\":\"EXTRACTED\",\"source_and_test_files\":%d,\"model_predictions\":0}\n", len(inventory()))
 }
