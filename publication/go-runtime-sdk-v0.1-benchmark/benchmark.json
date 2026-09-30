@@ -1,0 +1,89 @@
+{
+  "schema": "gooo/public-sdk-predictinto-benchmark/v1",
+  "module_path": "github.com/kimjooyoon/gooo-decision-runtime",
+  "module_version": "v0.1.0-experimental",
+  "module_h1": "h1:z12hGdFiBTtavnk5Rxt63z8UhLqDVJTRy2pQ20uAGKQ=",
+  "origin_revision": "e18908b88eecaacbb0b80df4feb8cc7b9b4380bb",
+  "go_version": "go1.27.0",
+  "goos": "darwin",
+  "goarch": "arm64",
+  "source_sha256": {
+    "bridge.go": "08227b64151ee8296c743e409d5a7dbb61f65d4d841d4dc0e0ab3a6119607236",
+    "ir.go": "14b259d00a581fe8924f973befa0149052f1f8dacb1f2f5fa03eef1eea24312d",
+    "model.go": "5444e9a649a1cd2bd84f6b157b22e7fc912bc912ce046f5bda1f63cb6c6c5a02"
+  },
+  "benchmark_source_sha256": {
+    "go.mod": "2035fab6fe1fe287e7e9d57d0ec26a1fe65502e9b033f4f4eddf42e2f0a0d81c",
+    "go.sum": "58f8336a27221b75d06c3c621b3c83381b3a6eeb190a3be586c05827464c3978",
+    "main.go": "09df04d07f04cd6c8bbaddf9509f166a069db1d779682d5f767449366d0366dc"
+  },
+  "fixed_input_sha256": "69c85f06571229624d91b8dc6769eec3b0ad3911500ac862ee1ca8d5ee8c6348",
+  "explicit_warmup_calls_per_model": 128,
+  "measured_calls_per_model": 50000,
+  "alloc_diagnostic_calls_per_model": 100,
+  "training_runs": 0,
+  "laya_calls": 0,
+  "models": [
+    {
+      "variant": "fp32",
+      "weights_sha256": "854da0f8fc0dcf5560d1f1b8838ea30081752020dbc2005772207217c5d1d17a",
+      "measured_calls": 50000,
+      "explicit_warmup_calls": 128,
+      "median_latency_ns": 7750,
+      "p95_latency_ns": 10917,
+      "mean_latency_ns": 8191.82304,
+      "measured_loop_wall_ns": 411036833,
+      "process_user_cpu_ns": 410300000,
+      "process_system_cpu_ns": 831000,
+      "process_total_cpu_ns": 411131000,
+      "process_cpu_percent_of_one_core": 100.02290962571716,
+      "alloc_diagnostic_calls": 100,
+      "allocs_per_diagnostic_call": 0
+    },
+    {
+      "variant": "ptq_ternary",
+      "weights_sha256": "3c60ab7154f02f04a94b1bc68274e05c4ae86f10185b19dbe7251c26610a5c8b",
+      "measured_calls": 50000,
+      "explicit_warmup_calls": 128,
+      "median_latency_ns": 9250,
+      "p95_latency_ns": 9334,
+      "mean_latency_ns": 9317.08068,
+      "measured_loop_wall_ns": 467265958,
+      "process_user_cpu_ns": 466039000,
+      "process_system_cpu_ns": 1358000,
+      "process_total_cpu_ns": 467397000,
+      "process_cpu_percent_of_one_core": 100.02804441405509,
+      "alloc_diagnostic_calls": 100,
+      "allocs_per_diagnostic_call": 0
+    },
+    {
+      "variant": "qat_ternary",
+      "weights_sha256": "bd4444d5233f07c18168a4dfa0053afde180ce97e390a993e4e0fbb33fb88337",
+      "measured_calls": 50000,
+      "explicit_warmup_calls": 128,
+      "median_latency_ns": 9208,
+      "p95_latency_ns": 9292,
+      "mean_latency_ns": 9256.50218,
+      "measured_loop_wall_ns": 464205750,
+      "process_user_cpu_ns": 463427000,
+      "process_system_cpu_ns": 891000,
+      "process_total_cpu_ns": 464318000,
+      "process_cpu_percent_of_one_core": 100.0241810878043,
+      "alloc_diagnostic_calls": 100,
+      "allocs_per_diagnostic_call": 0
+    }
+  ],
+  "process_peak_rss": {
+    "value_bytes": 7569408,
+    "scope": "This process lifetime high-water mark sampled after all three variants, warmups, measured loops, and allocation diagnostics; not current RSS, not a per-model value, and not a delta.",
+    "unit_source": "Darwin GETRUSAGE(2): RUSAGE_SELF describes the current process; ru_maxrss is maximum resident set size in bytes."
+  },
+  "measurement_notes": [
+    "PredictInto hot-loop latency uses one fixed input and one reused Workspace and Prediction per variant; it makes no correctness or accuracy claim.",
+    "The 128 explicit warmup calls occur before each measured loop. AllocsPerRun is a separate diagnostic of 100 counted repetitions and performs its own uncounted warmup.",
+    "Measured wall and process CPU intervals cover the 50,000-call loop, including per-call timer reads and latency-sample appends; CPU percent is process CPU divided by wall time as a one-core ratio, not host utilization.",
+    "Per-call timing and Go scheduler/OS activity add measurement overhead and run-to-run noise; results are observations from one bounded run.",
+    "Ternary storage variants describe their bundle encoding; this benchmark makes no claim that the prediction kernel executes with 1.58-bit arithmetic.",
+    "No training or Laya/provider calls were made."
+  ]
+}
