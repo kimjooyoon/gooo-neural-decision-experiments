@@ -1,0 +1,77 @@
+{
+  "change": "PredictInto now computes into a local Prediction and copies to the caller output only after all inference checks succeed; the caller output is cleared at entry and remains zero on any error.",
+  "frozen_inputs_unchanged": {
+    "dataset_sha256": "af0a637320a8256cd6ebcdb3486a6885f2766441c90f0cb154c11599f3c8ca3d",
+    "models": {
+      "fp32": {
+        "model_json_sha256": "c5867ee872cbf0fb8227015bd3e94540415786437704ed01b66e6bb0b421c930",
+        "weights_sha256": "854da0f8fc0dcf5560d1f1b8838ea30081752020dbc2005772207217c5d1d17a"
+      },
+      "ptq_ternary": {
+        "model_json_sha256": "5766a32a9d70ef16c895e7cf8765d7884d59ab6241fcfa225ac2291731a77a4e",
+        "weights_sha256": "3c60ab7154f02f04a94b1bc68274e05c4ae86f10185b19dbe7251c26610a5c8b"
+      },
+      "qat_ternary": {
+        "model_json_sha256": "4746fc7cbd2864e9536b43d779c7ecc39aa35f8f6f64943c73b951f9e967c8a7",
+        "weights_sha256": "bd4444d5233f07c18168a4dfa0053afde180ce97e390a993e4e0fbb33fb88337"
+      }
+    },
+    "parity_sha256": "84119298650830740f4e6d4a3159b1163cef4c24f2e6f49a6dbdbfb3d1e6ebf6",
+    "v1_audit_sha256": "f28434deee5356610848c5d5906411abed7d388ee28828c82b39a8bf90dadc9d",
+    "v1_commit": "8a21ddef9918b033631b02a4abd088e657a2c9e6"
+  },
+  "go_audit": {
+    "path": "runs/runtime-hardening-v3-20260930/go-audit.json",
+    "sha256": "b8aae68eba6b431035dd1c01eee3140b9b018d44497c57cf1e8eb51e8267b0e4"
+  },
+  "late_failure_regression": {
+    "expected": "error and all-zero caller Prediction",
+    "setup": "b2[0]=1, b2[7]=1e20, temperature=1e-30; early logits/calibrated values are finite and nonzero, the final calibrated logit overflows",
+    "test": "TestPredictFailsClosedOnFiniteWeightOverflow/late_calibrated_logit_overflow_is_atomic"
+  },
+  "schema": "gooo/runtime-hardening-v3-report/v1",
+  "scope": "No v1 or v2 source, report, weights, dataset or parity bytes were overwritten.",
+  "source_sha256": {
+    "internal/decision/model.go": "9ce02c43e2bb75d5a5cb1b77a0b9b721dc5b2f7b00fa50b840d3b5f29eb42a3f",
+    "internal/decision/model_test.go": "06481841bd42a61d83c4419b03ba2d5c54b5260a6236cac66694ca07b4b8769e"
+  },
+  "status": "PASS",
+  "v2_preservation": {
+    "archive_manifest_sha256": "96e77b2c2d26fe50d6e5102c10dc102d02d27e5105188766c91576d5ac600779",
+    "archived_sources": 11,
+    "go_audit_sha256": "ea89c8b65203f51525c6597555459e6aef32ca0db84f6252ec767a0bc84001d4",
+    "initial_source_archive": "runs/runtime-hardening-v2-initial-20260930",
+    "receipt_sha256": "8b4f60f8f564a9505ff9b396ed984a2091935902cb28dd743c648fbc937120ae",
+    "report_sha256": "05528544738b579655202823d676c71da15cdc4c801793066aba978e5078ab33"
+  },
+  "validation": {
+    "benchmark": "PASS: FP32 and QAT ternary each report 0 B/op and 0 allocs/op",
+    "benchmark_log": "runs/runtime-hardening-v3-20260930/benchmark.log",
+    "go_version": "go1.27.0 darwin/arm64",
+    "heldout": {
+      "fp32": {
+        "correct": 256,
+        "observed": 256,
+        "planned": 256
+      },
+      "ptq_ternary": {
+        "correct": 245,
+        "observed": 256,
+        "planned": 256
+      },
+      "qat_ternary": {
+        "correct": 242,
+        "observed": 256,
+        "planned": 256
+      }
+    },
+    "parity": {
+      "absolute_tolerance": 0.0001,
+      "matched": 96,
+      "observed": 96,
+      "planned": 96
+    },
+    "tests": "PASS: go test ./internal/decision ./cmd/gooo-decision",
+    "vet": "PASS: go vet ./internal/decision ./cmd/gooo-decision"
+  }
+}

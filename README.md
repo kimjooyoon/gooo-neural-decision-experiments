@@ -83,3 +83,29 @@ planned and observed counts, label/language/template breakdowns, calibration,
 typed-IR/source-expression checks, model/input hashes, and per-worker memory.
 Adding `--decision-bin PATH --cold-dir DIR` also captures three raw cold CLI
 runs per model variant with process wall time and peak RSS.
+
+## Persistent bounded execution
+
+`cmd/gooo-decision-stream` loads one model and accepts NDJSON requests. One to
+eight workers share the read-only weights; each worker reuses its own fixed
+workspace. Job and result channels are bounded by worker count. Results are
+emitted as they finish, identified by correlation ID and input sequence. The
+runner closes cancellable input/output to interrupt blocked I/O and joins its
+watcher on normal completion. See [stream protocol and resource boundaries](docs/streaming-inference.md).
+
+The zero-allocation benchmark covers `PredictInto` only. JSON parsing, typed
+response construction, encoding and channels allocate separately. A rejected
+record does not prevent later records from completing; a model abstention is
+visible inside the transport result and supplies no IR.
+
+## Runtime hardening after the pilot
+
+The v1 published audit remains unchanged. Follow-up v2/v3 records cover raw
+invalid UTF-8 rejection, Go keywords/blank identifiers, nonfinite intermediate
+values and atomic output on failed inference. The v3 audit again matched all
+96 parity rows and observed all 256 test rows per model with unchanged scores.
+The original v2 source is separately archived. See
+[hardening evidence](runs/runtime-hardening-v3-20260930/report.md).
+
+Future controlled studies and the completeness dimensions are in
+[next-experiments.md](docs/next-experiments.md). They are plans, not claimed runs.

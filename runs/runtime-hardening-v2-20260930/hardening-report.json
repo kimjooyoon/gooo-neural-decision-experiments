@@ -1,0 +1,361 @@
+{
+  "baseline": {
+    "commit": "8a21ddef9918b033631b02a4abd088e657a2c9e6",
+    "frozen_v1_audit_sha256": "f28434deee5356610848c5d5906411abed7d388ee28828c82b39a8bf90dadc9d",
+    "v1_audit_modified": false,
+    "v1_models_data_parity_modified": false
+  },
+  "changes": [
+    {
+      "coverage": [
+        "central JSON scanner test",
+        "model Load metadata test",
+        "CLI execute handler test",
+        "compiled CLI process reproduction"
+      ],
+      "finding": "raw invalid UTF-8 was silently normalized by encoding/json before the feature extractor could reject it",
+      "fix": "RejectDuplicateJSONKeys now validates raw bytes with utf8.Valid before JSON tokenization"
+    },
+    {
+      "coverage": [
+        "BuildTypedBinary",
+        "AssembleGoExpression",
+        "ordinary ASCII names including _private"
+      ],
+      "finding": "ASCII identifier check accepted Go keywords and the blank identifier",
+      "fix": "identifier validation rejects token.IsKeyword names and the exact name _ while retaining the existing ASCII-only policy"
+    },
+    {
+      "coverage": [
+        "positive and negative finite-weight hidden overflow",
+        "finite-weight output-logit overflow",
+        "finite-temperature calibration overflow"
+      ],
+      "finding": "finite float32 weights or a finite small temperature can overflow intermediate inference values",
+      "fix": "PredictInto checks hidden activations before ReLU, output logits, calibrated logits and probabilities for nonfinite values; failed predictions leave zero output"
+    }
+  ],
+  "modified_paths": [
+    "internal/decision/model.go",
+    "internal/decision/ir.go",
+    "internal/decision/model_test.go",
+    "internal/decision/ir_test.go",
+    "cmd/gooo-decision/main_test.go",
+    "runs/runtime-hardening-v2-20260930/go-audit.json",
+    "runs/runtime-hardening-v2-20260930/go-test.log",
+    "runs/runtime-hardening-v2-20260930/go-vet.log",
+    "runs/runtime-hardening-v2-20260930/invalid-utf8-cli-request.bin",
+    "runs/runtime-hardening-v2-20260930/invalid-utf8-cli-stdout.json",
+    "runs/runtime-hardening-v2-20260930/invalid-utf8-cli-stderr.txt",
+    "runs/runtime-hardening-v2-20260930/invalid-utf8-cli-receipt.json",
+    "runs/runtime-hardening-v2-20260930/hardening-report.json",
+    "runs/runtime-hardening-v2-20260930/report.md",
+    "runs/runtime-hardening-v2-20260930/receipt.json"
+  ],
+  "modified_source_sha256": {
+    "cmd/gooo-decision/main_test.go": "6764f4d1d15089763dbb0809c7ba359e8d3b8ee39a05a23f529f96f382ac3a1a",
+    "internal/decision/ir.go": "14b259d00a581fe8924f973befa0149052f1f8dacb1f2f5fa03eef1eea24312d",
+    "internal/decision/ir_test.go": "48dd6b13ecd431602adb0f5e10c65ab686dca03a6ca32726c2e5289712af2b48",
+    "internal/decision/model.go": "12327203e9f2bff42ff3212b246a7d8dd03f86c4c30a79ebbb6db7b8bd0bb0a3",
+    "internal/decision/model_test.go": "ee7754dc8386973aad8e457203bb809e6f9013139bec35b48c2c197b82a2a2e2"
+  },
+  "schema": "gooo/runtime-hardening-v2-report/v1",
+  "status": "PASS",
+  "unchanged_inputs": {
+    "dataset_sha256": "af0a637320a8256cd6ebcdb3486a6885f2766441c90f0cb154c11599f3c8ca3d",
+    "models": {
+      "fp32": {
+        "model_json_sha256": "c5867ee872cbf0fb8227015bd3e94540415786437704ed01b66e6bb0b421c930",
+        "weights_sha256": "854da0f8fc0dcf5560d1f1b8838ea30081752020dbc2005772207217c5d1d17a"
+      },
+      "ptq_ternary": {
+        "model_json_sha256": "5766a32a9d70ef16c895e7cf8765d7884d59ab6241fcfa225ac2291731a77a4e",
+        "weights_sha256": "3c60ab7154f02f04a94b1bc68274e05c4ae86f10185b19dbe7251c26610a5c8b"
+      },
+      "qat_ternary": {
+        "model_json_sha256": "4746fc7cbd2864e9536b43d779c7ecc39aa35f8f6f64943c73b951f9e967c8a7",
+        "weights_sha256": "bd4444d5233f07c18168a4dfa0053afde180ce97e390a993e4e0fbb33fb88337"
+      }
+    },
+    "parity_sha256": "84119298650830740f4e6d4a3159b1163cef4c24f2e6f49a6dbdbfb3d1e6ebf6"
+  },
+  "validation": {
+    "cli_invalid_utf8": {
+      "binary_sha256": "6ecde90225024216dafa6b79263e68f0b6994f59db494321d2acbd960bb807e2",
+      "error": "validate request JSON: JSON input is not valid UTF-8",
+      "exit_code": 2,
+      "request_sha256": "e658192801a04f4ba974e2e67f7fbe616bbfe1836c40dcea33599f5863df16eb",
+      "status": "rejected"
+    },
+    "focused_tests": "PASS: go test ./internal/decision ./cmd/gooo-decision",
+    "focused_vet": "PASS: go vet ./internal/decision ./cmd/gooo-decision",
+    "go_audit": {
+      "cold_cli_runs": "not run",
+      "decision": "PASS",
+      "heldout": {
+        "fp32": {
+          "heldout": {
+            "accuracy": 1,
+            "brier_multiclass_sum": 5.117643467548851e-06,
+            "calibration_bins": [
+              {
+                "accuracy": null,
+                "count": 0,
+                "lower": 0,
+                "mean_confidence": null,
+                "upper": 0.1
+              },
+              {
+                "accuracy": null,
+                "count": 0,
+                "lower": 0.1,
+                "mean_confidence": null,
+                "upper": 0.2
+              },
+              {
+                "accuracy": null,
+                "count": 0,
+                "lower": 0.2,
+                "mean_confidence": null,
+                "upper": 0.3
+              },
+              {
+                "accuracy": null,
+                "count": 0,
+                "lower": 0.3,
+                "mean_confidence": null,
+                "upper": 0.4
+              },
+              {
+                "accuracy": null,
+                "count": 0,
+                "lower": 0.4,
+                "mean_confidence": null,
+                "upper": 0.5
+              },
+              {
+                "accuracy": null,
+                "count": 0,
+                "lower": 0.5,
+                "mean_confidence": null,
+                "upper": 0.6
+              },
+              {
+                "accuracy": null,
+                "count": 0,
+                "lower": 0.6,
+                "mean_confidence": null,
+                "upper": 0.7
+              },
+              {
+                "accuracy": null,
+                "count": 0,
+                "lower": 0.7,
+                "mean_confidence": null,
+                "upper": 0.8
+              },
+              {
+                "accuracy": null,
+                "count": 0,
+                "lower": 0.8,
+                "mean_confidence": null,
+                "upper": 0.9
+              },
+              {
+                "accuracy": 1,
+                "count": 256,
+                "lower": 0.9,
+                "mean_confidence": 0.9998669892083853,
+                "upper": 1
+              }
+            ],
+            "correct": 256,
+            "ece_equal_width_10": 0.00013301079161465168,
+            "nll": 0.00013431100375497728,
+            "observed": 256,
+            "planned": 256
+          },
+          "model_json_sha256": "c5867ee872cbf0fb8227015bd3e94540415786437704ed01b66e6bb0b421c930",
+          "weights_sha256": "854da0f8fc0dcf5560d1f1b8838ea30081752020dbc2005772207217c5d1d17a"
+        },
+        "ptq_ternary": {
+          "heldout": {
+            "accuracy": 0.95703125,
+            "brier_multiclass_sum": 0.06918786305542103,
+            "calibration_bins": [
+              {
+                "accuracy": null,
+                "count": 0,
+                "lower": 0,
+                "mean_confidence": null,
+                "upper": 0.1
+              },
+              {
+                "accuracy": null,
+                "count": 0,
+                "lower": 0.1,
+                "mean_confidence": null,
+                "upper": 0.2
+              },
+              {
+                "accuracy": null,
+                "count": 0,
+                "lower": 0.2,
+                "mean_confidence": null,
+                "upper": 0.3
+              },
+              {
+                "accuracy": null,
+                "count": 0,
+                "lower": 0.3,
+                "mean_confidence": null,
+                "upper": 0.4
+              },
+              {
+                "accuracy": null,
+                "count": 0,
+                "lower": 0.4,
+                "mean_confidence": null,
+                "upper": 0.5
+              },
+              {
+                "accuracy": 0.7272727272727273,
+                "count": 11,
+                "lower": 0.5,
+                "mean_confidence": 0.5454625487327576,
+                "upper": 0.6
+              },
+              {
+                "accuracy": 0.6666666666666666,
+                "count": 6,
+                "lower": 0.6,
+                "mean_confidence": 0.6349231600761414,
+                "upper": 0.7
+              },
+              {
+                "accuracy": 0.8,
+                "count": 10,
+                "lower": 0.7,
+                "mean_confidence": 0.7522046625614166,
+                "upper": 0.8
+              },
+              {
+                "accuracy": 0.8571428571428571,
+                "count": 14,
+                "lower": 0.8,
+                "mean_confidence": 0.8514240256377629,
+                "upper": 0.9
+              },
+              {
+                "accuracy": 0.9906976744186047,
+                "count": 215,
+                "lower": 0.9,
+                "mean_confidence": 0.9904292450394742,
+                "upper": 1
+              }
+            ],
+            "correct": 245,
+            "ece_equal_width_10": 0.010961337247863414,
+            "nll": 0.11344166154189145,
+            "observed": 256,
+            "planned": 256
+          },
+          "model_json_sha256": "5766a32a9d70ef16c895e7cf8765d7884d59ab6241fcfa225ac2291731a77a4e",
+          "weights_sha256": "3c60ab7154f02f04a94b1bc68274e05c4ae86f10185b19dbe7251c26610a5c8b"
+        },
+        "qat_ternary": {
+          "heldout": {
+            "accuracy": 0.9453125,
+            "brier_multiclass_sum": 0.07455887813831863,
+            "calibration_bins": [
+              {
+                "accuracy": null,
+                "count": 0,
+                "lower": 0,
+                "mean_confidence": null,
+                "upper": 0.1
+              },
+              {
+                "accuracy": null,
+                "count": 0,
+                "lower": 0.1,
+                "mean_confidence": null,
+                "upper": 0.2
+              },
+              {
+                "accuracy": null,
+                "count": 0,
+                "lower": 0.2,
+                "mean_confidence": null,
+                "upper": 0.3
+              },
+              {
+                "accuracy": null,
+                "count": 0,
+                "lower": 0.3,
+                "mean_confidence": null,
+                "upper": 0.4
+              },
+              {
+                "accuracy": null,
+                "count": 0,
+                "lower": 0.4,
+                "mean_confidence": null,
+                "upper": 0.5
+              },
+              {
+                "accuracy": 0.8,
+                "count": 5,
+                "lower": 0.5,
+                "mean_confidence": 0.5545180320739747,
+                "upper": 0.6
+              },
+              {
+                "accuracy": 0.2,
+                "count": 5,
+                "lower": 0.6,
+                "mean_confidence": 0.6518546938896179,
+                "upper": 0.7
+              },
+              {
+                "accuracy": 0.5,
+                "count": 8,
+                "lower": 0.7,
+                "mean_confidence": 0.7488418370485306,
+                "upper": 0.8
+              },
+              {
+                "accuracy": 0.6666666666666666,
+                "count": 6,
+                "lower": 0.8,
+                "mean_confidence": 0.859977662563324,
+                "upper": 0.9
+              },
+              {
+                "accuracy": 0.9870689655172413,
+                "count": 232,
+                "lower": 0.9,
+                "mean_confidence": 0.9960677248650583,
+                "upper": 1
+              }
+            ],
+            "correct": 242,
+            "ece_equal_width_10": 0.03408201620914045,
+            "nll": 0.1074393187777322,
+            "observed": 256,
+            "planned": 256
+          },
+          "model_json_sha256": "4746fc7cbd2864e9536b43d779c7ecc39aa35f8f6f64943c73b951f9e967c8a7",
+          "weights_sha256": "bd4444d5233f07c18168a4dfa0053afde180ce97e390a993e4e0fbb33fb88337"
+        }
+      },
+      "parity_matched": 96,
+      "parity_observed": 96,
+      "parity_planned": 96,
+      "path": "runs/runtime-hardening-v2-20260930/go-audit.json",
+      "sha256": "ea89c8b65203f51525c6597555459e6aef32ca0db84f6252ec767a0bc84001d4",
+      "tolerance": 0.0001
+    },
+    "go_version": "go1.27.0 darwin/arm64"
+  }
+}

@@ -1,0 +1,8 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/kimjooyoon/gooo-neural-decision-experiments/internal/decision
+cpu: Apple M4
+BenchmarkPredictInto/fp32-10         	  169893	      6921 ns/op	       224.0 bias-B	     50688 matrix-B	     50912 packed-B	        80.00 prediction-B	        64.00 prediction-arrays-B	         0 scale-B	     50912 tensor-B	      1248 workspace-B	       0 B/op	       0 allocs/op
+BenchmarkPredictInto/qat_ternary-10  	  136250	      8801 ns/op	       224.0 bias-B	     12672 matrix-B	      2759 packed-B	        80.00 prediction-B	        64.00 prediction-arrays-B	         8.000 scale-B	     12896 tensor-B	      1248 workspace-B	       0 B/op	       0 allocs/op
+PASS
+ok  	github.com/kimjooyoon/gooo-neural-decision-experiments/internal/decision	3.720s

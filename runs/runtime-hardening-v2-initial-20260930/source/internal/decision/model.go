@@ -525,10 +525,7 @@ func (m *Model) PredictInto(text string, workspace *Workspace, output *Predictio
 	if workspace == nil || output == nil {
 		return errors.New("workspace and prediction output are required")
 	}
-	destination := output
-	*destination = Prediction{}
-	var candidate Prediction
-	output = &candidate
+	*output = Prediction{}
 	if err := FeaturesInto(text, &workspace.features); err != nil {
 		return err
 	}
@@ -616,7 +613,6 @@ func (m *Model) PredictInto(text string, workspace *Workspace, output *Predictio
 	}
 	output.Confidence = output.Probabilities[output.TopIndex]
 	output.Abstained = output.Confidence < m.threshold
-	*destination = *output
 	return nil
 }
 

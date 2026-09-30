@@ -292,14 +292,6 @@ func TestPredictFailsClosedOnFiniteWeightOverflow(t *testing.T) {
 			temperature: &tinyTemperature,
 			wantError:   "calibrated logit is not finite",
 		},
-		{
-			name: "late calibrated logit overflow is atomic",
-			values: map[string]map[int]float32{
-				"b2": {0: 1, LabelCount - 1: large},
-			},
-			temperature: &tinyTemperature,
-			wantError:   "calibrated logit is not finite",
-		},
 	}
 	for _, test := range cases {
 		t.Run(test.name, func(t *testing.T) {
