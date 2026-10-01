@@ -160,6 +160,9 @@ jobs:
           go run ./tools/native-feedback-study --mode family-audit --out runs/feedback-family-matrix-20261001 \
             --audit-output "$RUNNER_TEMP/family-matrix-audit.json"
           cmp runs/feedback-family-matrix-20261001/audit.json "$RUNNER_TEMP/family-matrix-audit.json"
+          go run ./tools/native-feedback-study --mode family-audit --out runs/feedback-family-optimized-feature-20261001 \
+            --audit-output "$RUNNER_TEMP/family-optimized-feature-audit.json"
+          cmp runs/feedback-family-optimized-feature-20261001/audit.json "$RUNNER_TEMP/family-optimized-feature-audit.json"
       - name: Reproduce compressed native-family publication without credentials
         run: |
           go run ./tools/package-family-evidence --pack --bundle "$RUNNER_TEMP/native-family-bundle"
@@ -196,6 +199,7 @@ jobs:
             ${{ runner.temp }}/feedback-continuation-curves.json
             ${{ runner.temp }}/family-pilot-audit.json
             ${{ runner.temp }}/family-matrix-audit.json
+            ${{ runner.temp }}/family-optimized-feature-audit.json
           if-no-files-found: error
 
   compiler-model-dogfood:

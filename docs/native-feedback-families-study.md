@@ -91,3 +91,31 @@ focused native test edit had a missing loop brace; compilation failed before
 native execution, the brace was repaired, and bilingual focused race/vet passed.
 The first publication tool build had an unused import; no publication occurred
 until the corrected tool verified the frozen allowlist and archive.
+
+## Actual optimized feature comparison
+
+Runner `1727f64e5636ae1fec985aaa1fa1a2da27035a57` executed the same 1,080 views
+using clean feature binary `bf19d5b84fe27c15f3571a6ec14e6f95fed565c5` and SDK
+`v0.2.5-experimental`. It made 960 initialization predictions, **zero feedback
+predictions**, and retained 244 hashed `ranking_unnecessary` receipts. All 1,080
+paired observations preserve the selected label, generated Go, finite passes,
+separate-input passes, intention agreement and candidate count. There are still
+1,638 attempted candidates, 5,400/5,760 repeated finite passes and 8,982/9,720
+repeated separate-input passes. Twenty actual Go processes perform 440 actual
+function evaluations. No fresh training or upstream Laya call occurred.
+
+The removed 244 predictions are 20.27% of the baseline's 1,204 total predictions.
+This is an exact invocation-count reduction, not a demonstrated wall speedup or
+host utilization decrease. It preserves partial construction and failure lineage
+instead of treating another model judgment as a requirement for progress.
+
+The feature run's predeclared caller CI hint was `PASS`; it is an unauthenticated
+context input, not a check result. Actual CI 36815255280 later failed its module
+fixed-point step because two obsolete v0.2.4 checksum lines remained. Updating
+the branch canceled that old run; the failure and feature captures are retained.
+`go mod tidy` removed only those unused lines, yielding source
+`6636f13953ad0652d3a46d578d0299a6bad9a77d`. Promotion requires fresh exact-head
+CI and proof. These feature results do not establish main deployment.
+
+[Optimized feature matrix](../runs/feedback-family-optimized-feature-20261001/report.json)
+and [zero-inference paired audit](../runs/feedback-family-optimized-feature-20261001/audit.json).

@@ -16,12 +16,31 @@ var familyReports = map[string]bool{
 	"9c00cf48dae46bdc793b39c5ae94f15c825194d33eabe2bcf3002161aba87c2d": false,
 }
 
+type frozenFamily struct {
+	Pilot          bool
+	Runner, Binary string
+	Spec           familySpec
+}
+
+var optimizedFamilies = map[string]frozenFamily{
+	"0346231d22f540a844fc9296b408a64c59bb33d538223603c10f65a281c63d62": {
+		Runner: "1727f64e5636ae1fec985aaa1fa1a2da27035a57", Binary: "dfaa23b207bead2762cb94b2fb056a77121bfb4331ceb2f550c528af11b3892d",
+		Spec: familySpec{Revision: "bf19d5b84fe27c15f3571a6ec14e6f95fed565c5", SDK: "v0.2.5-experimental", NoChoice: true},
+	},
+}
+
 func auditFamily(dir string) (map[string]any, error) {
 	raw, err := read(filepath.Join(dir, "report.json"))
 	if err != nil {
 		return nil, err
 	}
 	pilot, ok := familyReports[hash(raw)]
+	frozen := frozenFamily{Pilot: pilot, Runner: "30fbf81b951e12d504aca19d06e8d1a8dc08a865", Binary: "d6c5c191b334ec9736f13fa34674f6c4785479dcb686d95a0ab98772fb03d26d", Spec: legacyFamily}
+	if optimized, exists := optimizedFamilies[hash(raw)]; exists {
+		frozen = optimized
+		pilot = frozen.Pilot
+		ok = true
+	}
 	if !ok {
 		return nil, errors.New("frozen family report required")
 	}
@@ -42,7 +61,7 @@ func auditFamily(dir string) (map[string]any, error) {
 		GoProcesses    int                 `json:"actual_generated_go_processes"`
 		GoEvaluations  int                 `json:"actual_generated_function_evaluations"`
 	}
-	if err = json.Unmarshal(raw, &report); err != nil || report.Pilot != pilot || report.Runner != "30fbf81b951e12d504aca19d06e8d1a8dc08a865" || report.Native != familyNativeSHA || len(report.Observations) != report.Calls {
+	if err = json.Unmarshal(raw, &report); err != nil || report.Pilot != pilot || report.Runner != frozen.Runner || report.Native != frozen.Spec.Revision || len(report.Observations) != report.Calls {
 		return nil, errors.New("family report tuple differs")
 	}
 	preRaw, err := read(filepath.Join(dir, "preexecution.json"))
@@ -56,8 +75,9 @@ func auditFamily(dir string) (map[string]any, error) {
 		Binary  string `json:"binary_sha256"`
 		Go      string `json:"go_binary_sha256"`
 		Planned int    `json:"planned_native_calls"`
+		SDK     string `json:"sdk"`
 	}
-	if err = json.Unmarshal(preRaw, &pre); err != nil || pre.Runner != report.Runner || pre.Native != familyNativeSHA || pre.Cohort != familyCohortSHA || pre.Binary != "d6c5c191b334ec9736f13fa34674f6c4785479dcb686d95a0ab98772fb03d26d" || pre.Go != "132b69336a1f809932a8a20b0201dbbb980e86e3a323ae32e893639d83d71598" || pre.Planned != report.Calls {
+	if err = json.Unmarshal(preRaw, &pre); err != nil || pre.Runner != report.Runner || pre.Native != frozen.Spec.Revision || pre.Cohort != familyCohortSHA || pre.Binary != frozen.Binary || pre.SDK != frozen.Spec.SDK || pre.Go != "132b69336a1f809932a8a20b0201dbbb980e86e3a323ae32e893639d83d71598" || pre.Planned != report.Calls {
 		return nil, errors.New("family preexecution identities differ")
 	}
 	rows, err := familyRows()
@@ -87,6 +107,7 @@ func auditFamily(dir string) (map[string]any, error) {
 	calls, feedback, attempts, passed, cases, separatePassed, separateCases := 0, 0, 0, 0, 0, 0, 0
 	pairs := map[string]familyObservation{}
 	samePairs := 0
+	noChoice := 0
 	for _, o := range report.Observations {
 		r, ok := byID[o.CaseID]
 		if !ok || seen[o.ID] {
@@ -106,7 +127,7 @@ func auditFamily(dir string) (map[string]any, error) {
 		if err = json.Unmarshal(data, &v); err != nil {
 			return nil, err
 		}
-		fresh, err := inspectFamily(v, r, a)
+		fresh, err := inspectFamilyFor(v, r, a, frozen.Spec)
 		if err != nil {
 			return nil, err
 		}
@@ -137,6 +158,7 @@ func auditFamily(dir string) (map[string]any, error) {
 			}
 		}
 		calls += o.Predictions
+		noChoice += o.NoChoice
 		feedback += o.FeedbackPredictions
 		attempts += o.Attempts
 		passed += o.Passed
@@ -157,6 +179,55 @@ func auditFamily(dir string) (map[string]any, error) {
 	if calls != report.Predictions || feedback != report.Feedback || attempts != report.Attempts || passed != report.Passed || cases != report.Cases || separatePassed != report.SeparatePassed || separateCases != report.SeparateCases || len(executions) != report.GoProcesses || len(executions)*len(report.Inputs) != report.GoEvaluations || !pilot && (report.Calls != 1080 || samePairs != 480) || pilot && report.Calls != 10 {
 		return nil, errors.New("family aggregate or pair count differs")
 	}
-	return map[string]any{"schema": "gooo/native-feedback-family-audit/v1", "decision": "PASS", "report_sha256": hash(raw), "preexecution_sha256": hash(preRaw), "recorded_native_calls": report.Calls, "recorded_model_predictions": calls, "recorded_feedback_predictions": feedback, "reinterpreted_candidates": attempts, "same_feedback_pairs": samePairs, "recorded_go_processes": report.GoProcesses, "recorded_go_function_evaluations": report.GoEvaluations, "execution_sha256": executionHashes, "new_model_predictions": 0, "new_native_calls": 0, "new_go_processes": 0,
-		"scope": "Reconcile frozen source/cohort/model/progress and counterexample bindings; reinterpret candidates and independently check captured actual-Go values. Recorded process/resource observations are not new executions. All two-option feedback pairs retain identical outcomes; a sole remaining option offers no ranking freedom."}, nil
+	value := map[string]any{"schema": "gooo/native-feedback-family-audit/v1", "decision": "PASS", "report_sha256": hash(raw), "preexecution_sha256": hash(preRaw), "recorded_native_calls": report.Calls, "recorded_model_predictions": calls, "recorded_feedback_predictions": feedback, "reinterpreted_candidates": attempts, "same_feedback_pairs": samePairs, "recorded_go_processes": report.GoProcesses, "recorded_go_function_evaluations": report.GoEvaluations, "execution_sha256": executionHashes, "new_model_predictions": 0, "new_native_calls": 0, "new_go_processes": 0,
+		"scope": "Reconcile frozen source/cohort/model/progress and counterexample bindings; reinterpret candidates and independently check captured actual-Go values. Recorded process/resource observations are not new executions. All two-option feedback pairs retain identical outcomes; a sole remaining option offers no ranking freedom."}
+	if frozen.Spec.NoChoice {
+		if calls != 960 || feedback != 0 || noChoice != 244 {
+			return nil, errors.New("optimized family actual-call totals differ")
+		}
+		comparison, err := compareFamilyBaseline(report.Observations)
+		if err != nil {
+			return nil, err
+		}
+		value["baseline_comparison"] = comparison
+		value["zero_call_ranking_unnecessary_receipts"] = noChoice
+		value["scope"] = "Reconcile source/cohort/model/progress/counterexample, zero-call receipts and captured actual-Go values. Compare all 1080 frozen v0.2.4 paired observations; retain identical selected labels, Go, finite/separate outcomes and candidate counts. Whole-process resources are descriptive fixed-order observations, not causal performance gains. Caller CI hints are not authenticated CI or source authority. This audit makes zero new model/native/Go calls."
+	}
+	return value, nil
+}
+
+func compareFamilyBaseline(observations []familyObservation) (map[string]any, error) {
+	raw, err := read("runs/feedback-family-matrix-20261001/report.json")
+	if err != nil || hash(raw) != "9c00cf48dae46bdc793b39c5ae94f15c825194d33eabe2bcf3002161aba87c2d" {
+		return nil, errors.New("fixed family baseline required")
+	}
+	var baseline struct {
+		Observations []familyObservation `json:"observations"`
+	}
+	if err = json.Unmarshal(raw, &baseline); err != nil {
+		return nil, err
+	}
+	byID := map[string]familyObservation{}
+	for _, o := range baseline.Observations {
+		byID[o.ID] = o
+	}
+	if len(observations) != 1080 || len(byID) != 1080 {
+		return nil, errors.New("paired cohort count differs")
+	}
+	delta := 0
+	for _, o := range observations {
+		b, ok := byID[o.ID]
+		if !ok || o.CaseID != b.CaseID || o.Arm != b.Arm || o.Feedback != b.Feedback || o.GoSHA != b.GoSHA || o.Selected != b.Selected || o.IntentionAgreement != b.IntentionAgreement || o.FiniteBest != b.FiniteBest || o.Passed != b.Passed || o.Cases != b.Cases || o.SeparatePassed != b.SeparatePassed || o.SeparateCases != b.SeparateCases || o.Attempts != b.Attempts {
+			return nil, errors.New("paired baseline source or semantic outcome changed")
+		}
+		if b.Predictions-o.Predictions != o.NoChoice || b.FeedbackPredictions-o.FeedbackPredictions != o.NoChoice {
+			return nil, errors.New("paired prediction savings differ")
+		}
+		delta += b.Predictions - o.Predictions
+		delete(byID, o.ID)
+	}
+	if len(byID) != 0 || delta != 244 {
+		return nil, errors.New("paired baseline coverage or delta differs")
+	}
+	return map[string]any{"baseline_report_sha256": hash(raw), "paired_observations": 1080, "same_selected_labels_go_finite_separate_and_attempts": 1080, "model_predictions_removed": delta, "baseline_model_predictions": 1204, "optimized_model_predictions": 960, "causal_wall_speedup_measured": false}, nil
 }
