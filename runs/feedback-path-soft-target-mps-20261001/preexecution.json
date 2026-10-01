@@ -1,0 +1,29 @@
+{
+  "dataset_sha256": "570d1d73bfea32662b869e5cfbf77e6d04df838b703191b076be58c1d2180dbf",
+  "device": "mps",
+  "epochs_per_trainable_variant": 20,
+  "feature_version": "positioned_intent_ngrams_v1",
+  "manifest_sha256": "6d9b7e842b023b31cef8fb15ae3b8d3bb0f9f8e9beb49889250d4d2a98017ba8",
+  "numpy": "2.4.6",
+  "objective": "typed eligible-pair soft targets; tied best finite paths have equal target mass",
+  "parent": {
+    "metadata_sha256": "1ea3bada068f2487418f17270db4ba6785a98c3ad60e0ad7eb92359400a01bb5",
+    "weights_sha256": "3732a103720fdb0da0ea611471ecde7472e0b9166322394ba9352ffb855b9354"
+  },
+  "schema": "gooo/feedback-path-training-preexecution/v1",
+  "scope": "Fine tune the existing small structural model on finite-feedback contexts. Source/test groups reuse the development curriculum; no untouched holdout, arbitrary-language compiler or online optimizer claim.",
+  "seed": 20261004,
+  "source_revision": "439da7bce8e801da94720696fbf16165a3bd099e",
+  "split_eligible_views": {
+    "calibration": 480,
+    "test": 960,
+    "train": 4800
+  },
+  "test_used_for_checkpoint_or_temperature_selection": false,
+  "torch": "2.14.0",
+  "training_sources_sha256": {
+    "training/train_feedback_path_v1.py": "3c5bb7a83be4098d91023ff85bbad0ce7251fcc4a929e7ab1bda6437fe2f007a",
+    "training/train_pilot_v2.py": "4ddfe02e007cb6eb84fa696c5f965eaebbfebc681b2a723f2895e1f402fd72d4",
+    "training/train_typed_path_v1.py": "8858b61bdb135e5b871238f5451adacd2a9670d1c6087673e9ec5772eb00f8ef"
+  }
+}

@@ -1,0 +1,351 @@
+{
+  "limitations": [
+    "Finite acceptable sets do not prove every natural-language intention",
+    "6240 views reuse 2080 existing instruction groups",
+    "Calibration/test templates and configurations are disjoint from training; reused test evaluation is development data",
+    "Global confidence threshold stays 1.0; this model is experimental for compiler-owned pair ranking and bounded TDD",
+    "Packed ternary storage decodes to int8; no packed arithmetic speedup or production online learning claim"
+  ],
+  "preexecution_sha256": "2797aba75ad09e193fce09e90b540ea5dbd7d3412f79db326c287a50bacc6fb0",
+  "schema": "gooo/feedback-path-training-report/v1",
+  "status": "TRAINED_AND_EXPORTED",
+  "training": {
+    "fp32": {
+      "epochs": 20,
+      "history": [
+        {
+          "calibration_paired_nll": 0.6145082116127014,
+          "epoch": 1,
+          "training_paired_nll": 0.2360930732990566
+        },
+        {
+          "calibration_paired_nll": 0.575088620185852,
+          "epoch": 2,
+          "training_paired_nll": 0.2183328278754887
+        },
+        {
+          "calibration_paired_nll": 0.5403394103050232,
+          "epoch": 3,
+          "training_paired_nll": 0.20337571909553126
+        },
+        {
+          "calibration_paired_nll": 0.5141446590423584,
+          "epoch": 4,
+          "training_paired_nll": 0.1889362672441884
+        },
+        {
+          "calibration_paired_nll": 0.4831339418888092,
+          "epoch": 5,
+          "training_paired_nll": 0.17845495986311058
+        },
+        {
+          "calibration_paired_nll": 0.4774484932422638,
+          "epoch": 6,
+          "training_paired_nll": 0.1700703517386788
+        },
+        {
+          "calibration_paired_nll": 0.45215022563934326,
+          "epoch": 7,
+          "training_paired_nll": 0.16373152168173538
+        },
+        {
+          "calibration_paired_nll": 0.4493137001991272,
+          "epoch": 8,
+          "training_paired_nll": 0.15850670361205152
+        },
+        {
+          "calibration_paired_nll": 0.43877461552619934,
+          "epoch": 9,
+          "training_paired_nll": 0.15518199260297574
+        },
+        {
+          "calibration_paired_nll": 0.4525713622570038,
+          "epoch": 10,
+          "training_paired_nll": 0.1514012448881802
+        },
+        {
+          "calibration_paired_nll": 0.4396785795688629,
+          "epoch": 11,
+          "training_paired_nll": 0.15034338126057073
+        },
+        {
+          "calibration_paired_nll": 0.42873141169548035,
+          "epoch": 12,
+          "training_paired_nll": 0.14767971281942568
+        },
+        {
+          "calibration_paired_nll": 0.44299301505088806,
+          "epoch": 13,
+          "training_paired_nll": 0.14666501079735003
+        },
+        {
+          "calibration_paired_nll": 0.4259212613105774,
+          "epoch": 14,
+          "training_paired_nll": 0.1458535088520301
+        },
+        {
+          "calibration_paired_nll": 0.4265390634536743,
+          "epoch": 15,
+          "training_paired_nll": 0.1431786237578643
+        },
+        {
+          "calibration_paired_nll": 0.4230223000049591,
+          "epoch": 16,
+          "training_paired_nll": 0.14126550170936084
+        },
+        {
+          "calibration_paired_nll": 0.42746925354003906,
+          "epoch": 17,
+          "training_paired_nll": 0.14117129264693512
+        },
+        {
+          "calibration_paired_nll": 0.4142646789550781,
+          "epoch": 18,
+          "training_paired_nll": 0.1399457897794874
+        },
+        {
+          "calibration_paired_nll": 0.42969951033592224,
+          "epoch": 19,
+          "training_paired_nll": 0.13874540281923195
+        },
+        {
+          "calibration_paired_nll": 0.4161734879016876,
+          "epoch": 20,
+          "training_paired_nll": 0.1374838462001399
+        }
+      ],
+      "loop_wall_seconds": 0.9701329169329256,
+      "mps_allocated_peak_sampled_bytes": 5810944,
+      "mps_driver_peak_sampled_bytes": 53166080,
+      "optimizer_steps": 380,
+      "process_lifetime_peak_rss_bytes": 521584640,
+      "selection": "minimum calibration paired soft-target NLL; test excluded",
+      "unique_training_views": 4800
+    },
+    "qat_ternary": {
+      "epochs": 20,
+      "history": [
+        {
+          "calibration_paired_nll": 0.5571056604385376,
+          "epoch": 1,
+          "training_paired_nll": 0.36173127199474137
+        },
+        {
+          "calibration_paired_nll": 0.5547568202018738,
+          "epoch": 2,
+          "training_paired_nll": 0.35011379028621475
+        },
+        {
+          "calibration_paired_nll": 0.5517131090164185,
+          "epoch": 3,
+          "training_paired_nll": 0.3414640316837712
+        },
+        {
+          "calibration_paired_nll": 0.5542039275169373,
+          "epoch": 4,
+          "training_paired_nll": 0.3338145315647125
+        },
+        {
+          "calibration_paired_nll": 0.546148419380188,
+          "epoch": 5,
+          "training_paired_nll": 0.32690160054909556
+        },
+        {
+          "calibration_paired_nll": 0.5525849461555481,
+          "epoch": 6,
+          "training_paired_nll": 0.32117801747824015
+        },
+        {
+          "calibration_paired_nll": 0.5453699827194214,
+          "epoch": 7,
+          "training_paired_nll": 0.31597069846956355
+        },
+        {
+          "calibration_paired_nll": 0.5404197573661804,
+          "epoch": 8,
+          "training_paired_nll": 0.3103918715527183
+        },
+        {
+          "calibration_paired_nll": 0.5325737595558167,
+          "epoch": 9,
+          "training_paired_nll": 0.30389678478240967
+        },
+        {
+          "calibration_paired_nll": 0.5294463634490967,
+          "epoch": 10,
+          "training_paired_nll": 0.2965653334793292
+        },
+        {
+          "calibration_paired_nll": 0.5232259035110474,
+          "epoch": 11,
+          "training_paired_nll": 0.28819066599795695
+        },
+        {
+          "calibration_paired_nll": 0.528762698173523,
+          "epoch": 12,
+          "training_paired_nll": 0.2854110284855491
+        },
+        {
+          "calibration_paired_nll": 0.514519453048706,
+          "epoch": 13,
+          "training_paired_nll": 0.27912492579535436
+        },
+        {
+          "calibration_paired_nll": 0.5081232786178589,
+          "epoch": 14,
+          "training_paired_nll": 0.27556234362878296
+        },
+        {
+          "calibration_paired_nll": 0.5078380703926086,
+          "epoch": 15,
+          "training_paired_nll": 0.2667803050656068
+        },
+        {
+          "calibration_paired_nll": 0.4935617446899414,
+          "epoch": 16,
+          "training_paired_nll": 0.2616630024031589
+        },
+        {
+          "calibration_paired_nll": 0.49169063568115234,
+          "epoch": 17,
+          "training_paired_nll": 0.25439188119612244
+        },
+        {
+          "calibration_paired_nll": 0.48210352659225464,
+          "epoch": 18,
+          "training_paired_nll": 0.2517996406868884
+        },
+        {
+          "calibration_paired_nll": 0.4937037527561188,
+          "epoch": 19,
+          "training_paired_nll": 0.24765271732681676
+        },
+        {
+          "calibration_paired_nll": 0.49180641770362854,
+          "epoch": 20,
+          "training_paired_nll": 0.24157032841130308
+        }
+      ],
+      "loop_wall_seconds": 0.4060941250063479,
+      "mps_allocated_peak_sampled_bytes": 5810944,
+      "mps_driver_peak_sampled_bytes": 53166080,
+      "optimizer_steps": 380,
+      "process_lifetime_peak_rss_bytes": 523583488,
+      "selection": "minimum calibration paired soft-target NLL; test excluded",
+      "unique_training_views": 4800
+    }
+  },
+  "variants": {
+    "fp32": {
+      "confidence_threshold": 1.0,
+      "scores": {
+        "calibration": {
+          "finite_best_set_selected": 383,
+          "finite_cases_passed": 1882,
+          "finite_cases_total": 2560,
+          "mean_probability_on_best_set": 0.7679728338846413,
+          "multiple_best_finite_labels": 36,
+          "observed_views": 480,
+          "original_intention_label_agreement": 365,
+          "paired_soft_target_nll": 0.41426469452576975
+        },
+        "test": {
+          "finite_best_set_selected": 754,
+          "finite_cases_passed": 3748,
+          "finite_cases_total": 5120,
+          "mean_probability_on_best_set": 0.7654323288620627,
+          "multiple_best_finite_labels": 76,
+          "observed_views": 960,
+          "original_intention_label_agreement": 736,
+          "paired_soft_target_nll": 0.43629657546673767
+        },
+        "train": {
+          "finite_best_set_selected": 4800,
+          "finite_cases_passed": 23040,
+          "finite_cases_total": 24640,
+          "mean_probability_on_best_set": 0.9589450758597282,
+          "multiple_best_finite_labels": 384,
+          "observed_views": 4800,
+          "original_intention_label_agreement": 4800,
+          "paired_soft_target_nll": 0.13901554831659843
+        }
+      },
+      "temperature": 1.0,
+      "weights_bytes": 50912
+    },
+    "ptq_ternary": {
+      "confidence_threshold": 1.0,
+      "scores": {
+        "calibration": {
+          "finite_best_set_selected": 341,
+          "finite_cases_passed": 1670,
+          "finite_cases_total": 2560,
+          "mean_probability_on_best_set": 0.6224078653698693,
+          "multiple_best_finite_labels": 36,
+          "observed_views": 480,
+          "original_intention_label_agreement": 325,
+          "paired_soft_target_nll": 0.5968685065786675
+        },
+        "test": {
+          "finite_best_set_selected": 786,
+          "finite_cases_passed": 3895,
+          "finite_cases_total": 5120,
+          "mean_probability_on_best_set": 0.6501657403198808,
+          "multiple_best_finite_labels": 76,
+          "observed_views": 960,
+          "original_intention_label_agreement": 770,
+          "paired_soft_target_nll": 0.5424948201801337
+        },
+        "train": {
+          "finite_best_set_selected": 4481,
+          "finite_cases_passed": 21462,
+          "finite_cases_total": 24640,
+          "mean_probability_on_best_set": 0.7478670112045853,
+          "multiple_best_finite_labels": 384,
+          "observed_views": 4800,
+          "original_intention_label_agreement": 4479,
+          "paired_soft_target_nll": 0.385852847137074
+        }
+      },
+      "temperature": 1.0,
+      "weights_bytes": 2759
+    },
+    "qat_ternary": {
+      "confidence_threshold": 1.0,
+      "scores": {
+        "calibration": {
+          "finite_best_set_selected": 388,
+          "finite_cases_passed": 1899,
+          "finite_cases_total": 2560,
+          "mean_probability_on_best_set": 0.7594571776584618,
+          "multiple_best_finite_labels": 36,
+          "observed_views": 480,
+          "original_intention_label_agreement": 371,
+          "paired_soft_target_nll": 0.47498548183197
+        },
+        "test": {
+          "finite_best_set_selected": 756,
+          "finite_cases_passed": 3742,
+          "finite_cases_total": 5120,
+          "mean_probability_on_best_set": 0.7600324745405622,
+          "multiple_best_finite_labels": 76,
+          "observed_views": 960,
+          "original_intention_label_agreement": 737,
+          "paired_soft_target_nll": 0.47134705649161174
+        },
+        "train": {
+          "finite_best_set_selected": 4796,
+          "finite_cases_passed": 23018,
+          "finite_cases_total": 24640,
+          "mean_probability_on_best_set": 0.9492055155372321,
+          "multiple_best_finite_labels": 384,
+          "observed_views": 4800,
+          "original_intention_label_agreement": 4796,
+          "paired_soft_target_nll": 0.19212756273047948
+        }
+      },
+      "temperature": 0.5,
+      "weights_bytes": 2759
+    }
+  }
+}
