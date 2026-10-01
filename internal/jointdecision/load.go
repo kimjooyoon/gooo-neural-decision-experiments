@@ -7,6 +7,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"io"
 	"math"
 	"os"
 	"path/filepath"
@@ -34,7 +35,23 @@ func boundedFile(name string, max int64) ([]byte, error) {
 	if err != nil || !info.Mode().IsRegular() || info.Size() <= 0 || info.Size() > max {
 		return nil, errors.New("bounded regular joint model file required")
 	}
-	return os.ReadFile(name)
+	f, err := os.Open(name)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	opened, err := f.Stat()
+	if err != nil || !opened.Mode().IsRegular() || !os.SameFile(info, opened) {
+		return nil, errors.New("joint model file changed during bounded open")
+	}
+	raw, err := io.ReadAll(io.LimitReader(f, max+1))
+	if err != nil {
+		return nil, err
+	}
+	if int64(len(raw)) != info.Size() || int64(len(raw)) > max {
+		return nil, errors.New("joint model file extent changed")
+	}
+	return raw, nil
 }
 func validate(meta Metadata) error {
 	if meta.Schema != Schema || meta.Feature != FeatureVersion || meta.FeatureDim != FeatureDim || meta.HiddenDim != HiddenDim || meta.MaxBytes != InputMaxBytes ||
