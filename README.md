@@ -29,6 +29,9 @@ with [verified six-check evidence](publication/context-decline-dev-20261001.json
 is merged at `4dced73b26dde567cb7129f3e4ba5733850196d0`. The clean main
 compiler separately preserves long-context partial construction and disconnected
 deterministic replay; feature measurements remain separate from main observations.
+The [main deployment receipt](publication/context-decline-main-20261001.json) and
+[verified main-push six-check proof](publication/context-decline-main-push-20261001.json)
+record the protected merge, exact source and actual main smokes.
 
 The [first finite-feedback GPU tuning](docs/feedback-path-training-results.md)
 completed 760 optimizer steps on our own 12,728-parameter model. It preserves
