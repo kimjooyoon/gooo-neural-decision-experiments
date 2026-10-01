@@ -80,3 +80,28 @@ func TestRetainedAuditRejectsAbsentSourcePins(t *testing.T) {
 		t.Fatal("absent measurements accepted")
 	}
 }
+
+func TestRetainedCompletenessDistinguishesDeclaredAndAttainableScores(t *testing.T) {
+	t.Chdir("../..")
+	root := "runs/retained-native-feature-pilot-20261001"
+	value, err := retainedCompleteness(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	raw, err := json.MarshalIndent(value, "", "  ")
+	if err != nil {
+		t.Fatal(err)
+	}
+	expected, err := read(filepath.Join(root, "completeness-summary.json"))
+	if err != nil || hash(expected) != "8befd5ef343abd3d1194e39f960a9242e4d78ef701a89a3b60170c63886f2ea0" || !bytes.Equal(append(raw, '\n'), expected) {
+		t.Fatal("completeness derivation differs")
+	}
+	for _, curve := range value["observations"].([]completionCurve) {
+		if curve.DeclaredCases != 8 || curve.MaximumPassed != 7 || curve.AttainablePercent != 100 || curve.GapPercent != 12.5 || len(curve.Curve) != 4 {
+			t.Fatal("completeness denominators collapsed")
+		}
+	}
+	if err := saveRetainedCompleteness(root, filepath.Join(root, "report.json")); err == nil {
+		t.Fatal("original report overwrite allowed")
+	}
+}

@@ -214,6 +214,16 @@ jobs:
             --out runs/retained-native-feature-pilot-20261001 \
             --audit-output "$RUNNER_TEMP/retained-native-metrics.json"
           cmp runs/retained-native-feature-pilot-20261001/metrics-summary.json "$RUNNER_TEMP/retained-native-metrics.json"
+          go run ./tools/native-feedback-study --mode retained-completeness \
+            --out runs/retained-native-feature-pilot-20261001 \
+            --audit-output "$RUNNER_TEMP/retained-completeness.json"
+          cmp runs/retained-native-feature-pilot-20261001/completeness-summary.json "$RUNNER_TEMP/retained-completeness.json"
+          go run ./tools/package-family-evidence --kind retained-completeness --pack \
+            --bundle "$RUNNER_TEMP/retained-completeness-bundle"
+          cmp publication/hf-retained-native-completeness-20261001/publication-manifest.json "$RUNNER_TEMP/retained-completeness-bundle/publication-manifest.json"
+          go run ./tools/package-family-evidence --kind retained-completeness \
+            --bundle "$RUNNER_TEMP/retained-completeness-bundle" \
+            --output "$RUNNER_TEMP/retained-completeness-verification.json"
           go run ./tools/package-family-evidence --kind retained-native-feature --pack \
             --bundle "$RUNNER_TEMP/retained-native-bundle"
           cmp publication/hf-retained-native-feature-pilot-20261001/publication-manifest.json "$RUNNER_TEMP/retained-native-bundle/publication-manifest.json"
@@ -267,6 +277,8 @@ jobs:
           name: go-model-validation
           path: |
             ${{ runner.temp }}/retained-native-audit.json
+            ${{ runner.temp }}/retained-completeness.json
+            ${{ runner.temp }}/retained-completeness-verification.json
             ${{ runner.temp }}/retained-native-metrics.json
             ${{ runner.temp }}/retained-native-verification.json
             ${{ runner.temp }}/unfixed-native-feature-audit.json

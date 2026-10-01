@@ -429,6 +429,13 @@ func main() {
 	worker := flag.String("worker", "", "optional retained native body worker executable")
 	familyCIStatus := flag.String("family-ci-status", "PASS", "caller family-study CI context: PASS, FAIL or UNKNOWN")
 	flag.Parse()
+	if *mode == "retained-completeness" {
+		if err := saveRetainedCompleteness(*output, *auditOutput); err != nil {
+			fmt.Fprintln(os.Stderr, "retained-completeness:", err)
+			os.Exit(1)
+		}
+		return
+	}
 	if *mode == "retained-metrics" {
 		value, err := retainedMetrics(*output)
 		if err == nil {

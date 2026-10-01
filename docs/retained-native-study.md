@@ -44,6 +44,13 @@ Original CI context is **UNKNOWN**, bound to the measured compiler revision and
 unauthenticated. Subsequent CI status is recorded separately and never replaces it.
 Raw JSON/NDJSON and timing/resource sidecars were saved before inspection.
 
+All five arms, including the disconnected control, reached the same 87.5% finite
+completeness. This pilot shows no functional gain from the model: the full four-path
+budget already finds the finite best body, and one case is deliberately contradictory.
+Model value under a smaller construction budget, unfamiliar expressions or more
+interacting coordinates requires a separate experiment. The observed worker cost
+changes should not be presented as improved language judgment.
+
 ## Observed costs
 
 Each cell uses the same fixed 12 valid requests per model/mode.
@@ -81,6 +88,8 @@ separate from compiler/transport/process memory. Ternary storage is 1.6 bits per
 weight (1.58 theoretical); compute uses decoded int8 arrays. No new training,
 optimizer steps, GPU work or upstream Laya HTTP calls occurred. Controller CPU,
 memory and serialization costs are outside the child resource measurements.
+The recorded worker peak covers only 13 requests in this small workload. It is
+not an upper bound for maximal source/plan/case receipts or a long running stream.
 
 ## Next bounded use
 
