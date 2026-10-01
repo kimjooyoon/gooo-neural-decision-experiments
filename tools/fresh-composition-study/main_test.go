@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -59,6 +60,9 @@ func TestAllNativeSubsetViewsCompleteWithoutModel(t *testing.T) {
 				if err != nil || o.Search.Selection.ModelCalls != 0 || o.Search.SelectedTrainingPassed != 16 {
 					t.Fatal(v.ID, err)
 				}
+				if err = receiptLinks(o); err != nil {
+					t.Fatal("actual progress hash chain", err)
+				}
 				if err = validateObservation(v, o, true); err == nil {
 					t.Fatal("missing initial model calls accepted")
 				}
@@ -67,6 +71,34 @@ func TestAllNativeSubsetViewsCompleteWithoutModel(t *testing.T) {
 					t.Fatal("independent actual mismatch accepted")
 				}
 			}
+		}
+	}
+}
+
+func TestPublishedOwnModelsNumericalParity(t *testing.T) {
+	root := filepath.Join("..", "..", "models", "fresh-composition-v1")
+	loaded, _, err := loadModels(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, arm := range arms {
+		var rows struct {
+			Rows []struct {
+				ID   string `json:"row_id"`
+				Text string `json:"text"`
+			} `json:"rows"`
+		}
+		if err = decodeFile(filepath.Join(root, arm, "go-parity.json"), &rows); err != nil {
+			t.Fatal(err)
+		}
+		var views []view
+		for _, r := range rows.Rows {
+			v := view{}
+			v.Rows[0].ID, v.Rows[0].Split, v.Rows[0].Input.Text = r.ID, "development", r.Text
+			views = append(views, v)
+		}
+		if _, err = parity(root, arm, loaded, views); err != nil {
+			t.Fatal(arm, err)
 		}
 	}
 }

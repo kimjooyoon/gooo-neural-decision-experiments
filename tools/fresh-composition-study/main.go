@@ -230,6 +230,7 @@ func main() {
 	binary := flag.String("binary", "", "clean released Gooo main binary")
 	goBinary := flag.String("go-binary", "", "Go 1.27.1 execution compiler")
 	study := flag.String("study", "", "frozen calibration selection and SDK observations")
+	native := flag.String("native", "", "frozen native capture directory for audit")
 	flag.Parse()
 	if flag.NArg() != 0 || *curriculum == "" || *models == "" || *output == "" || *revision == "" {
 		fmt.Fprintln(os.Stderr, "complete bounded study arguments required")
@@ -244,6 +245,12 @@ func main() {
 			err = errors.New("native binaries and prior frozen study required")
 		} else {
 			err = runNative(*curriculum, *models, *study, *output, *revision, *binary, *goBinary)
+		}
+	case "audit":
+		if *study == "" || *native == "" {
+			err = errors.New("SDK and native captures required")
+		} else {
+			err = audit(*curriculum, *models, *study, *native, *output)
 		}
 	default:
 		err = errors.New("unknown study mode")

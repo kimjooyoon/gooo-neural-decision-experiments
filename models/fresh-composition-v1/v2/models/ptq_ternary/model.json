@@ -1,0 +1,64 @@
+{
+  "confidence_threshold": 1.0,
+  "feature_dim": 256,
+  "feature_version": "split_context_intent_ngrams_v2",
+  "hidden_dim": 48,
+  "labels": [
+    "reference_first",
+    "reference_second",
+    "assign_first",
+    "assign_second",
+    "layout_forward",
+    "layout_reverse",
+    "schedule_forward",
+    "schedule_reverse"
+  ],
+  "max_bytes": 512,
+  "schema": "gooo/tiny-path-decision-model/v1",
+  "temperature": 0.5,
+  "tensors": [
+    {
+      "bytes": 2458,
+      "cols": 256,
+      "count": 12288,
+      "encoding": "ternary_base3_5",
+      "name": "w1",
+      "offset": 0,
+      "rows": 48,
+      "scale": 0.05606132745742798
+    },
+    {
+      "bytes": 192,
+      "cols": 48,
+      "count": 48,
+      "encoding": "float32_le",
+      "name": "b1",
+      "offset": 2458,
+      "rows": 1,
+      "scale": 1.0
+    },
+    {
+      "bytes": 77,
+      "cols": 48,
+      "count": 384,
+      "encoding": "ternary_base3_5",
+      "name": "w2",
+      "offset": 2650,
+      "rows": 8,
+      "scale": 0.13633902370929718
+    },
+    {
+      "bytes": 32,
+      "cols": 8,
+      "count": 8,
+      "encoding": "float32_le",
+      "name": "b2",
+      "offset": 2727,
+      "rows": 1,
+      "scale": 1.0
+    }
+  ],
+  "variant": "ptq_ternary",
+  "weights_file": "weights.bin",
+  "weights_sha256": "cfa759bdaad028c10c3f96a1b56ee16c8b21962438a77aeb4ccd52a9ceefa427"
+}

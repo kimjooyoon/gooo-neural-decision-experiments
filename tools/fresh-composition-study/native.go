@@ -326,6 +326,7 @@ func runNative(curriculum, models, study, output, revision, binary, goBinary str
 	}
 	totals := map[string]counts{}
 	measurements := map[string][]metrics{}
+	initialPairs := map[string]map[string]map[string]uint16{}
 	calls, predictions, executions := 0, 0, 0
 	for _, family := range compositionstudy.Families {
 		for goal := 0; goal < 4; goal++ {
@@ -392,12 +393,33 @@ func runNative(curriculum, models, study, output, revision, binary, goBinary str
 					add(&count, o)
 					totals[policies[i]] = count
 					measurements[policies[i]] = append(measurements[policies[i]], m)
+					if initialPairs[policies[i]] == nil {
+						initialPairs[policies[i]] = map[string]map[string]uint16{}
+					}
+					pairKey := fmt.Sprintf("%s/%d", family, goal)
+					if initialPairs[policies[i]][pairKey] == nil {
+						initialPairs[policies[i]][pairKey] = map[string]uint16{}
+					}
+					initialPairs[policies[i]][pairKey][language] = o.Search.Attempts[0].Mask
 				}
 			}
 		}
 	}
 	if calls != 144 || executions != 144 {
 		return errors.New("fixed native execution count differs")
+	}
+	for policy, pairs := range initialPairs {
+		c := totals[policy]
+		for _, languages := range pairs {
+			if len(languages) != 2 {
+				return errors.New("native bilingual pair missing")
+			}
+			c.Pairs++
+			if languages["en"] != languages["ko"] {
+				c.Different++
+			}
+		}
+		totals[policy] = c
 	}
 	return save(filepath.Join(output, "report.json"), map[string]any{"schema": "gooo/fresh-composition-native/v1", "status": "PASS", "source_revision": revision,
 		"native_revision": nativeMain, "selected_candidate": chosen, "actual_native_calls": calls, "actual_model_predictions": predictions,
