@@ -1,0 +1,31 @@
+{
+  "schema": "gooo/incremental-native-prediction-latency/v1",
+  "summaries": [
+    {
+      "arm": "fp32",
+      "actual_initial_predictions": 48,
+      "min_ns": 7917,
+      "median_ns": 8229.5,
+      "p95_ns": 9625,
+      "max_ns": 9750
+    },
+    {
+      "arm": "ptq_ternary",
+      "actual_initial_predictions": 48,
+      "min_ns": 9458,
+      "median_ns": 9729.5,
+      "p95_ns": 10959,
+      "max_ns": 11084
+    },
+    {
+      "arm": "qat_ternary",
+      "actual_initial_predictions": 48,
+      "min_ns": 9541,
+      "median_ns": 10625.5,
+      "p95_ns": 13333,
+      "max_ns": 13500
+    }
+  ],
+  "additional_local_model_predictions": 0,
+  "scope": "Observed timings from the 144 existing initial ranking predictions only; batch receipts repeat them and are not counted again. PredictInto latency excludes model load, source binding, eligible-probability normalization, tests, final Go emission and process startup. Repeated views of one compound intention; not general language accuracy or service throughput."
+}
