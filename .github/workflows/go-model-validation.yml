@@ -173,6 +173,12 @@ jobs:
           go run ./tools/native-feedback-study --mode family-audit --out runs/feedback-family-optimized-main-20261001 \
             --audit-output "$RUNNER_TEMP/family-optimized-main-audit.json"
           cmp runs/feedback-family-optimized-main-20261001/audit.json "$RUNNER_TEMP/family-optimized-main-audit.json"
+          go run ./tools/native-feedback-study --mode compound-audit --out runs/compound-path-pilot-20261001 \
+            --audit-output "$RUNNER_TEMP/compound-pilot-audit.json"
+          cmp runs/compound-path-pilot-20261001/audit.json "$RUNNER_TEMP/compound-pilot-audit.json"
+          go run ./tools/native-feedback-study --mode compound-audit --out runs/compound-path-main-20261001 \
+            --audit-output "$RUNNER_TEMP/compound-main-audit.json"
+          cmp runs/compound-path-main-20261001/audit.json "$RUNNER_TEMP/compound-main-audit.json"
       - name: Reproduce compressed native-family publication without credentials
         run: |
           go run ./tools/package-family-evidence --pack --bundle "$RUNNER_TEMP/native-family-bundle"
@@ -191,6 +197,12 @@ jobs:
           go run ./tools/package-family-evidence --kind optimized-main \
             --bundle "$RUNNER_TEMP/native-family-optimized-main-bundle" \
             --output "$RUNNER_TEMP/native-family-optimized-main-verification.json"
+          go run ./tools/package-family-evidence --kind compound-main --pack \
+            --bundle "$RUNNER_TEMP/compound-main-bundle"
+          cmp publication/hf-compound-path-main-20261001/publication-manifest.json "$RUNNER_TEMP/compound-main-bundle/publication-manifest.json"
+          go run ./tools/package-family-evidence --kind compound-main \
+            --bundle "$RUNNER_TEMP/compound-main-bundle" \
+            --output "$RUNNER_TEMP/compound-main-verification.json"
       - uses: actions/upload-artifact@v7
         with:
           name: go-model-validation
@@ -224,6 +236,9 @@ jobs:
             ${{ runner.temp }}/family-optimized-feature-audit.json
             ${{ runner.temp }}/family-optimized-main-audit.json
             ${{ runner.temp }}/native-family-optimized-main-verification.json
+            ${{ runner.temp }}/compound-pilot-audit.json
+            ${{ runner.temp }}/compound-main-audit.json
+            ${{ runner.temp }}/compound-main-verification.json
           if-no-files-found: error
 
   compiler-model-dogfood:

@@ -7,11 +7,16 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"go/ast"
+	"go/format"
+	"go/parser"
+	"go/token"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"reflect"
 	"sort"
+	"strconv"
 	"time"
 
 	"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/compoundstudy"
@@ -117,7 +122,7 @@ func compoundRows() ([]compoundstudy.Case, error) {
 func inspectCompound(v nativeResult, r compoundstudy.Case, a familyArm) (compoundObservation, error) {
 	var result compoundObservation
 	p := v.Report.Paths
-	if v.Report.Decision != "PASS" || !v.Report.Types || !v.Report.Replay || v.Report.Writes != 0 || v.Report.Compiler != compoundNative || !p.Bound || v.Report.ActivityID == "" || v.Source == "" || len(p.Cases) != len(r.Document.Cases) || p.Search.TrainingTotal != len(r.Document.Cases) || p.Search.DeclaredCombinations != 4 || len(p.Search.Attempts) < 1 || len(p.Search.Attempts) > 4 || p.Search.TypeRejected != 0 || p.Search.Selection.ExternalCalls != 0 || !p.Search.Selection.ExternalCallsKnown {
+	if v.Report.Decision != "PASS" || !v.Report.Types || !v.Report.Replay || v.Report.Writes != 0 || v.Report.Compiler != compoundNative || !p.Bound || v.Report.ActivityID != "compound-study://activity/compose-paths" || v.Source == "" || len(p.Cases) != len(r.Document.Cases) || p.Search.TrainingTotal != len(r.Document.Cases) || p.Search.DeclaredCombinations != 4 || len(p.Search.Attempts) < 1 || len(p.Search.Attempts) > 4 || p.Search.TypeRejected != 0 || p.Search.Selection.ExternalCalls != 0 || !p.Search.Selection.ExternalCallsKnown {
 		return result, errors.New("compound native verification differs")
 	}
 	prepared, err := pathplan.Prepare(r.Document.Plan)
@@ -238,6 +243,18 @@ func inspectCompound(v nativeResult, r compoundstudy.Case, a familyArm) (compoun
 	if err != nil {
 		return result, err
 	}
+	compiled, err := prepared.Compile(p.Search.Selection.Choices)
+	if err != nil {
+		return result, err
+	}
+	actualFunction, err := compoundFunction(v.Source)
+	if err != nil {
+		return result, err
+	}
+	expectedFunction, err := compoundFunction(compiled.GoSource())
+	if err != nil || actualFunction != expectedFunction {
+		return result, errors.New("emitted function differs from selected typed body")
+	}
 	passed, separate := 0, 0
 	for i, c := range r.Document.Cases {
 		expected, _ := compoundstudy.Oracle(r.Template, mask, c.Input)
@@ -263,6 +280,84 @@ func inspectCompound(v nativeResult, r compoundstudy.Case, a familyArm) (compoun
 		return result, errors.New("finite construction did not reach declared best completion")
 	}
 	return compoundObservation{CaseID: r.ID, Template: r.Template, Arm: a.Name, Feedback: a.Feedback, GoSHA: hash([]byte(v.Source)), Selected: mask, IntentAgreement: mask == r.IntendedMask, FiniteBest: best, Passed: passed, Cases: len(r.Document.Cases), SeparatePassed: separate, SeparateCases: len(r.Separate), Attempts: len(recorded), Predictions: initial + feedbackCalls, FeedbackPredictions: feedbackCalls, NoChoice: noChoice, ChangedJudgments: changed}, nil
+}
+
+// Bind signature and statements modulo in-range int64 literal wrappers. The SDK
+// emits int64(4), while the native compiler emits 4 in an int64 expression.
+func compoundFunction(source string) (string, error) {
+	fset := token.NewFileSet()
+	file, err := parser.ParseFile(fset, "projection.go", source, parser.SkipObjectResolution)
+	if err != nil || len(file.Decls) != 1 {
+		return "", errors.New("one declared compound function required")
+	}
+	function, ok := file.Decls[0].(*ast.FuncDecl)
+	if !ok || function.Name.Name != "ComposePaths" || function.Recv != nil || function.Body == nil {
+		return "", errors.New("declared compound function signature required")
+	}
+	normalizeCompoundBlock(function.Body)
+	var signature, body bytes.Buffer
+	if err = format.Node(&signature, fset, function.Type); err != nil {
+		return "", err
+	}
+	if err = format.Node(&body, fset, function.Body); err != nil {
+		return "", err
+	}
+	return signature.String() + body.String(), nil
+}
+
+func normalizeCompoundExpression(expression ast.Expr) ast.Expr {
+	switch value := expression.(type) {
+	case *ast.CallExpr:
+		name, ok := value.Fun.(*ast.Ident)
+		if ok && name.Name == "int64" && len(value.Args) == 1 && value.Ellipsis == token.NoPos {
+			literal, ok := value.Args[0].(*ast.BasicLit)
+			if ok && literal.Kind == token.INT {
+				if _, err := strconv.ParseInt(literal.Value, 0, 64); err == nil {
+					return literal
+				}
+			}
+		}
+	case *ast.BinaryExpr:
+		value.X, value.Y = normalizeCompoundExpression(value.X), normalizeCompoundExpression(value.Y)
+	case *ast.ParenExpr:
+		value.X = normalizeCompoundExpression(value.X)
+	case *ast.UnaryExpr:
+		value.X = normalizeCompoundExpression(value.X)
+	}
+	return expression
+}
+
+func normalizeCompoundBlock(block *ast.BlockStmt) {
+	for _, statement := range block.List {
+		switch value := statement.(type) {
+		case *ast.DeclStmt:
+			declaration, ok := value.Decl.(*ast.GenDecl)
+			if !ok {
+				continue
+			}
+			for _, spec := range declaration.Specs {
+				if binding, ok := spec.(*ast.ValueSpec); ok {
+					for i, expression := range binding.Values {
+						binding.Values[i] = normalizeCompoundExpression(expression)
+					}
+				}
+			}
+		case *ast.AssignStmt:
+			for i, expression := range value.Rhs {
+				value.Rhs[i] = normalizeCompoundExpression(expression)
+			}
+		case *ast.ReturnStmt:
+			for i, expression := range value.Results {
+				value.Results[i] = normalizeCompoundExpression(expression)
+			}
+		case *ast.IfStmt:
+			value.Cond = normalizeCompoundExpression(value.Cond)
+			normalizeCompoundBlock(value.Body)
+			if alternative, ok := value.Else.(*ast.BlockStmt); ok {
+				normalizeCompoundBlock(alternative)
+			}
+		}
+	}
 }
 
 func runCompound(binary, goBinary, output, revision string, pilot bool) error {

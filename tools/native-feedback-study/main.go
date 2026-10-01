@@ -424,6 +424,21 @@ func main() {
 	nativeRevision := flag.String("native-revision", "", "clean binary source SHA")
 	familyCIStatus := flag.String("family-ci-status", "PASS", "caller family-study CI context: PASS, FAIL or UNKNOWN")
 	flag.Parse()
+	if *mode == "compound-audit" {
+		value, err := auditCompound(*output)
+		if err == nil {
+			path := *auditOutput
+			if path == "" {
+				path = filepath.Join(*output, "audit.json")
+			}
+			err = save(path, value)
+		}
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+		return
+	}
 	if *mode == "compound-cohort" {
 		if err := writeCompoundCohort(*output); err != nil {
 			fmt.Fprintln(os.Stderr, err)

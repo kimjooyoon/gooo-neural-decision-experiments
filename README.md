@@ -2,6 +2,16 @@
 
 ## Continued partial construction
 
+The [interacting four-path study](docs/compound-path-study.md) adds three new
+body compositions involving local references, assignment, subtraction, if
+branches and execution order. Actual main codegen ran 648 times and generated
+twelve distinct executed Go programs. Observed failure context changed sixteen
+candidate sequences among 288 pairs; final code and finite/separate outcomes
+match. QAT saved two candidate attempts but used 112 extra predictions, while
+the parent spent one extra attempt. The audit records 97 predictions for already
+fixed coordinates as an unimplemented cost opportunity. Sparse ambiguity and
+commuting updates retain distinct functional and structural denominators.
+
 Korean/English Gooo intentions can now rank bounded structural paths once and
 continue finite construction in batches. First-shot accuracy is not the goal:
 partial results, failed cases, type rejections, unattempted paths and cost remain

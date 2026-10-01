@@ -38,6 +38,11 @@ var fixed = map[string]string{
 	"runs/feedback-family-optimized-feature-20261001/audit.json":  "8fcbc56ad12c812755d6925082a72baeab739c0e006d12fdfb27a56ac86adc47",
 	"runs/feedback-family-optimized-main-20261001/report.json":    "4537080ed58d19f6744e6d615c5c6eb63632c9494d96637282c4f36a2990b083",
 	"runs/feedback-family-optimized-main-20261001/audit.json":     "770b268ac84ab0fadb4a489b193f2008e3ec95fa027921b41da77742dd761be4",
+	"studies/compound-path-v1/cohort.jsonl":                       "aefd16b22076c05b113e29df3e7788b06e60e0c5c14e45cc75547bd1e582a15a",
+	"runs/compound-path-pilot-20261001/report.json":               "11fa52d7fbc6c1bbd04eeacffd7ea82db440fd552ca03d0836de9b03cab44525",
+	"runs/compound-path-pilot-20261001/audit.json":                "20335902beda6880732df639a038d684a7b841b8f35e286a240d1e2d8acd24dc",
+	"runs/compound-path-main-20261001/report.json":                "dec30461109eafcea587e7d78a533087df21879fb23bb7edc68c5645aefca66e",
+	"runs/compound-path-main-20261001/audit.json":                 "74d5ed1e3f36da15ad14c599a56c909d06a75b0411bdf795ad0fdfb44fb5d7c1",
 }
 
 type entry struct {
@@ -84,6 +89,10 @@ func namesKind(kind string) ([]string, error) {
 	} else if kind == "optimized-main" {
 		roots = []string{"runs/feedback-family-optimized-main-20261001"}
 		expected = 1105
+	} else if kind == "compound-main" {
+		names = []string{"studies/compound-path-v1/cohort.jsonl", "studies/compound-path-v1/manifest.json"}
+		roots = []string{"runs/compound-path-pilot-20261001", "runs/compound-path-main-20261001"}
+		expected = 674
 	} else if kind != "" {
 		return nil, errors.New("unknown frozen evidence kind")
 	}
@@ -160,6 +169,10 @@ func buildKind(kind string) (manifest, map[string][]byte, error) {
 	} else if kind == "optimized-main" {
 		m.Prefix = "research/native-family-optimized-main-20261001/"
 		m.Scope = "Frozen SDK v0.2.5 main ef63060ed1aebd9d92a2fe4cf24ce9c5929b8726 evidence. 1080 native calls, 960 initial predictions, zero feedback predictions, 244 zero-call ranking_unnecessary receipts, 1638 candidates, 20 actual Go processes and 440 function evaluations. All 1080 baseline pairs preserve selected label/Go/finite/separate outcomes and attempts. Captured caller CI status is UNKNOWN because post-push CI was pending at execution; this unauthenticated hint is retained unchanged. Existing core weights and card remain unchanged. No new training/model/native/Go calls during packaging. Repeated contract/language/arm views are not independent experiments. No host utilization or causal wall-speedup claim."
+	} else if kind == "compound-main" {
+		m.Schema = "gooo/compound-path-publication/v1"
+		m.Prefix = "research/compound-path-main-20261001/"
+		m.Scope = "Three interacting body templates, twelve structural intention groups, two decisions and four whole-body paths. Main matrix: 648 native calls, 1590 predictions including 438 feedback predictions, 1405 candidates, 12 actual Go processes and 192 actual function evaluations. Pilot: three disconnected native calls, three Go processes and 42 evaluations. All 288 ranking/feedback pairs retain emitted Go and finite/separate outcomes; 16 candidate sequences differ. QAT uses two fewer candidate attempts while the parent uses one more. 97 feedback predictions concern coordinates constant among remaining paths; skipping them has not been implemented or measured. Exact typed function AST is reconciled modulo in-range int64 literal wrappers. One synthetic configuration; repeated policy views are not independent experiments or untouched language accuracy. Core weights/card and earlier appendices are unchanged. No training, model/native/Go calls during packaging; no upstream Laya call, host utilization or causal timing claim."
 	}
 	n, err := namesKind(kind)
 	if err != nil {
@@ -205,6 +218,8 @@ func buildKind(kind string) (manifest, map[string][]byte, error) {
 		files["README.md"] = []byte("# Gooo sole-remaining-path feature evidence\n\n" + m.Scope + "\n\nThe deterministic archive contains 1,105 allowlisted files. See per-entry hashes and sizes in publication-manifest.json and methods/failure limitations at https://github.com/kimjooyoon/gooo-neural-decision-experiments/blob/main/docs/native-feedback-families-study.md .\n")
 	} else if kind == "optimized-main" {
 		files["README.md"] = []byte("# Gooo sole-remaining-path main evidence\n\n" + m.Scope + "\n\nThe deterministic archive contains 1,105 allowlisted files. See per-entry hashes and sizes in publication-manifest.json and methods/failure limitations at https://github.com/kimjooyoon/gooo-neural-decision-experiments/blob/main/docs/native-feedback-families-study.md .\n\nVerified main promotion: https://github.com/kimjooyoon/meta-ontology-go/pull/1123 . Subsequent CI evidence is recorded separately without rewriting the original UNKNOWN hints.\n")
+	} else if kind == "compound-main" {
+		files["README.md"] = []byte("# Interacting Gooo four-path main evidence\n\n" + m.Scope + "\n\nThe deterministic archive contains 674 allowlisted files. Per-entry hashes and sizes are in publication-manifest.json. Methods, distinct structural and functional denominators, finite ambiguity, resource observations and negative results are described at https://github.com/kimjooyoon/gooo-neural-decision-experiments/blob/main/docs/compound-path-study.md .\n")
 	}
 	for name := range files {
 		payload = append(payload, name)
@@ -325,6 +340,9 @@ func executeKind(bundle, revision, output string, pack bool, kind string) error 
 		}
 	}
 	value := map[string]any{"schema": "gooo/native-family-publication-verification/v1", "decision": "PASS", "repository": repository, "revision": revision, "prefix": m.Prefix, "files_verified": count, "archive_entries_verified": len(m.Raw), "archive_bytes": len(files["evidence.tar.gz"]), "manifest_sha256": hash(files["publication-manifest.json"]), "anonymous_http_gets": gets, "credentials_sent": false, "new_model_predictions": 0, "new_native_calls": 0, "new_go_processes": 0}
+	if kind == "compound-main" {
+		value["schema"] = "gooo/compound-path-publication-verification/v1"
+	}
 	if output == "" {
 		return errors.New("verification output required")
 	}
@@ -339,7 +357,7 @@ func main() {
 	revision := flag.String("revision", "", "immutable public revision")
 	output := flag.String("output", "", "verification record")
 	pack := flag.Bool("pack", false, "build deterministic archive")
-	kind := flag.String("kind", "", "frozen evidence kind: empty, optimized-feature or optimized-main")
+	kind := flag.String("kind", "", "frozen evidence kind: empty, optimized-feature, optimized-main or compound-main")
 	flag.Parse()
 	if flag.NArg() != 0 || *bundle == "" {
 		fmt.Fprintln(os.Stderr, "package-family-evidence: bundle required")

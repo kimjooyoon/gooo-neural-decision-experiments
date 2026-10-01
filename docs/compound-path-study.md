@@ -63,3 +63,66 @@ part of this study.
 The authored cohort and independent typed/oracle regressions are available in
 [compound-path-v1](../studies/compound-path-v1/) and
 [compoundstudy](../internal/compoundstudy/).
+
+## Observed main results
+
+Committed runner `0127ed66e5fae44d134e07593bec683246285979` used clean native
+main `ef63060ed1aebd9d92a2fe4cf24ce9c5929b8726` / SDK v0.2.5. The pilot performed
+three disconnected native calls and three actual Go processes with 42 function
+evaluations. The full matrix performed **648 native calls, 1,590 local model
+predictions (438 after failures), 1,405 candidate attempts, twelve actual Go
+processes and 192 actual function evaluations**. Repeated finite and separate
+observations are 3,240/3,456 and 4,810/4,932 respectively; they reuse those Go
+executions. All children completed within the declared timeout.
+
+The [matrix](../runs/compound-path-main-20261001/report.json) and
+[zero-inference audit](../runs/compound-path-main-20261001/audit.json) preserve
+every raw capture, progress link and failed case. Across all 288 paired
+ranking/feedback views, final Go, finite pass count and separate-input pass
+count match. **Sixteen candidate sequences differ**. Twenty-nine individual
+feedback judgments differ from their initial proposals. These two counts
+describe different observations.
+
+| Model | Candidate attempts, initial → feedback | Model predictions, initial → feedback | Final structural intention matches / 72 | Separate pass observations / 548 |
+|---|---:|---:|---:|---:|
+| Disconnected | 198 | 0 | 60 | 498 |
+| Parent FP32 | 146 → 147 | 144 → 246 | 70 | 530 |
+| New FP32 | 152 → 152 | 144 → 256 | 72 | 548 |
+| New PTQ | 152 → 152 | 144 → 256 | 67 | 530 |
+| New QAT | 154 → 152 | 144 → 256 | 72 | 548 |
+
+Each arm reaches the declared finite best: 360/384, or 93.75% overall. Complete
+and sparse contracts reach 100%; contradictory contracts reach their 7/8
+ceiling. Structural matches are **after finite TDD**, not first-choice model
+accuracy. The QAT feedback arm saves two attempts while making 112 extra
+predictions. The parent feedback arm makes one extra attempt and 102 extra
+predictions. Those costs remain visible alongside the favorable separate-input
+results of new FP32/QAT on this small configuration. Earlier regressions on
+[other development views](feedback-path-training-results.md) remain relevant;
+this result does not justify a general checkpoint promotion.
+
+### A measured remaining ranking cost
+
+SDK v0.2.5 records 96 zero-prediction receipts when one complete path remains. The audit
+also identifies **97 of 438 actual feedback predictions** for decision
+coordinates that have the same value in every unattempted whole-body path.
+Such probabilities cannot distinguish those remaining candidates by that
+coordinate. This is a cost opportunity for a later active-coordinate ranking
+experiment. The current study has not skipped those predictions or measured
+the resulting behavior; proposal scheduling and numerical ties must be checked.
+
+### Projection and resource scope
+
+The initial AST audit rejected the SDK's `int64(4)` against the native
+compiler's `4`. The repaired audit normalizes only in-range integer literal
+wrappers, then compares the function signature and body. It does not erase
+variable conversions, arbitrary calls, changed constants or extra declarations.
+The repair made no new native/model/Go calls. All 648 selected native functions
+now reconcile with the selected typed bodies, and every policy observation is
+checked against reused actual-Go values and independent arithmetic transitions.
+
+Across nine arms, whole compiler process wall medians are 5.592–5.789 ms,
+CPU-time medians 4.839–5.054 ms, median peak RSS 17,211,392–17,514,496 bytes and
+median CPU/wall ratios 86.66–87.37% of one core. The full records retain outliers.
+This fixed-order local measurement does not show a causal wall-speedup or host
+CPU utilization increase. No GPU training or upstream Laya call occurred.

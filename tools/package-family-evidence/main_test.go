@@ -47,6 +47,9 @@ func TestOptimizedInventoryIsBounded(t *testing.T) {
 			t.Fatal("optimized frozen inventory differs", kind, err)
 		}
 	}
+	if names, err := namesKind("compound-main"); err != nil || len(names) != 674 {
+		t.Fatal("compound frozen inventory differs", err)
+	}
 	if _, err := namesKind("untrusted"); err == nil {
 		t.Fatal("unknown evidence inventory accepted")
 	}
