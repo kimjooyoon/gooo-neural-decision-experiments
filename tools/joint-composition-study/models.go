@@ -23,6 +23,25 @@ type loadedModel struct {
 	joint       *jointdecision.Model
 }
 
+func (m *loadedModel) MetadataSHA256() string {
+	if m.joint != nil {
+		return m.joint.MetadataSHA256()
+	}
+	return m.independent.MetadataSHA256()
+}
+func (m *loadedModel) WeightsSHA256() string {
+	if m.joint != nil {
+		return m.joint.WeightsSHA256()
+	}
+	return m.independent.WeightsSHA256()
+}
+func (m *loadedModel) RuntimeFeatureVersion() string {
+	if m.joint != nil {
+		return m.joint.FeatureVersion()
+	}
+	return m.independent.FeatureVersion()
+}
+
 func (m *loadedModel) FeatureVersion() string { return decision.SemanticContextIntentFeatureVersion }
 func loadModels(root string) (map[string]*loadedModel, map[string]modelPin, error) {
 	var report struct {

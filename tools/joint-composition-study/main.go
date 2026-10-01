@@ -233,21 +233,32 @@ func preflight(output, revision string) error {
 }
 
 func main() {
+	mode := flag.String("mode", "study", "study, native, or native-audit")
 	curriculum := flag.String("curriculum", "", "frozen joint source-bound curriculum")
 	models := flag.String("models", "", "six own model exports")
 	output := flag.String("output", "", "fresh study output")
 	revision := flag.String("source-revision", "", "exact clean runner source")
 	study := flag.String("audit-study", "", "existing frozen SDK captures; zero new model calls")
+	frozen := flag.String("study", "", "frozen SDK captures for native execution or audit")
+	native := flag.String("native", "", "captured native evidence for audit")
+	binary := flag.String("binary", "", "clean adopted Gooo main executable")
+	goBinary := flag.String("go-binary", "", "exact Go 1.27.1 execution compiler")
 	flag.Parse()
-	if flag.NArg() != 0 || *curriculum == "" || *models == "" || *output == "" || (*revision == "" && *study == "") {
+	if flag.NArg() != 0 || *curriculum == "" || *models == "" || *output == "" {
 		fmt.Fprintln(os.Stderr, "complete study arguments required")
 		os.Exit(2)
 	}
 	var err error
-	if *study != "" {
+	if *study != "" && *mode == "study" {
 		err = auditSDK(*curriculum, *models, *study, *output)
-	} else {
+	} else if *mode == "study" && *revision != "" {
 		err = run(*curriculum, *models, *output, *revision)
+	} else if *mode == "native" && *revision != "" && *frozen != "" && *binary != "" && *goBinary != "" {
+		err = runNative(*curriculum, *models, *frozen, *output, *revision, *binary, *goBinary)
+	} else if *mode == "native-audit" && *frozen != "" && *native != "" {
+		err = auditNative(*curriculum, *models, *frozen, *native, *output)
+	} else {
+		err = errors.New("complete mode-specific study arguments required")
 	}
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
