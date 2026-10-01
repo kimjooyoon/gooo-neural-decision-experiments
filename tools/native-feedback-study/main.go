@@ -439,6 +439,17 @@ func main() {
 	worker := flag.String("worker", "", "optional retained native body worker executable")
 	familyCIStatus := flag.String("family-ci-status", "PASS", "caller family-study CI context: PASS, FAIL or UNKNOWN")
 	flag.Parse()
+	if *mode == "own-native-context-compare" {
+		value, err := compareOwnNativeContext(*root, *output)
+		if err == nil {
+			err = save(*auditOutput, value)
+		}
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "own-native-context-compare:", err)
+			os.Exit(1)
+		}
+		return
+	}
 	if *mode == "own-native-context" || *mode == "own-native-context-audit" {
 		var err error
 		if *mode == "own-native-context" {
