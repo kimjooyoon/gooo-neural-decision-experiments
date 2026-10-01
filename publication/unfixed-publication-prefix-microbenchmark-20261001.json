@@ -1,0 +1,21 @@
+{
+  "schema": "gooo/publication-privacy-prefix-cost/v1",
+  "go": "1.27.1",
+  "os": "darwin",
+  "architecture": "arm64",
+  "cpu": "Apple M4",
+  "command": "go test ./tools/package-family-evidence -run '^TestPrivacyNecessaryPrefixEquivalence$' -bench BenchmarkPrivacySafeEvidence -benchtime=300ms -count=3 -benchmem",
+  "synthetic_safe_input_bytes": 1160000,
+  "regular_expression_ns_per_operation": [37743854, 37084630, 36612389],
+  "necessary_prefix_ns_per_operation": [1001545, 1001488, 1003043],
+  "necessary_prefix_bytes_per_operation": [0, 0, 0],
+  "necessary_prefix_allocations_per_operation": [0, 0, 0],
+  "fixed_equivalence_cases": 2752,
+  "whole_publication_race_package_seconds_before": 84.051,
+  "whole_publication_race_package_seconds_after": 2.007,
+  "frozen_feature_manifest_sha256": "cf67a855a22ce2ef37b6236a0200b322c6f5a7a050f18bcbbac756ca93c8901a",
+  "repacked_manifest_bytes_unchanged": true,
+  "repacked_all_archive_entries_verified": 104,
+  "original_privacy_rejection_expression_unchanged": true,
+  "scope": "Local synthetic safe-text microbenchmark, three fixed-order repetitions. Every regex match requires one of seven literal prefixes; directory alternatives reject directly and suspected token text still uses the original regex over the entire input. Input with a suspicious prefix is not claimed faster. Whole-package before/after duration includes different cache/run conditions and is descriptive, not a causal CI speedup. This changes publication scanning only: no model weights, inference kernel, language accuracy, codegen throughput, GPU or host CPU claim. No new model/native/Go generated-program executions or training steps."
+}

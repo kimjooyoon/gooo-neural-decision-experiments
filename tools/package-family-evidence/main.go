@@ -28,6 +28,22 @@ const maxFile = 4 << 20
 const maxTotal = 40 << 20
 
 var privacy = regexp.MustCompile(`(?:hf_|ghp_|github_pat_|sk-)[A-Za-z0-9_-]{20,}|/Users/|/private/var/|Bearer\s+[A-Za-z0-9]`)
+
+// Every regex alternative requires one of these exact byte substrings. This
+// necessary-prefix check avoids regex work on large ordinary evidence strings;
+// suspected text still uses the original expression and rejection semantics.
+func privateText(raw []byte) bool {
+	if bytes.Contains(raw, []byte("/Users/")) || bytes.Contains(raw, []byte("/private/var/")) {
+		return true
+	}
+	for _, prefix := range [5]string{"hf_", "ghp_", "github_pat_", "sk-", "Bearer"} {
+		if bytes.Contains(raw, []byte(prefix)) {
+			return privacy.Match(raw)
+		}
+	}
+	return false
+}
+
 var fixed = map[string]string{
 	"runs/unfixed-native-feature-pilot-20261001/preexecution.json": "b7fd3eedddabac4e37864b05a77d6f65e08dd60b1f626bb83134ab1126e8bdd0",
 	"runs/unfixed-native-feature-pilot-20261001/report.json":       "4dba2dab42c17af2c069a442b18053fc804bc50a32f5b4276799ddf3f96d3962",
@@ -71,7 +87,7 @@ func read(path string) ([]byte, error) {
 		return nil, errors.New("bounded regular source required")
 	}
 	raw, err := os.ReadFile(path)
-	if err != nil || privacy.Match(raw) {
+	if err != nil || privateText(raw) {
 		return nil, errors.New("private or unreadable publication text rejected")
 	}
 	if pin := fixed[path]; pin != "" && hash(raw) != pin {
@@ -346,7 +362,7 @@ func checkArchive(raw []byte, entries []entry) error {
 			return errors.New("archive entry differs")
 		}
 		data, err := io.ReadAll(io.LimitReader(t, int64(e.Bytes)+1))
-		if err != nil || len(data) != e.Bytes || hash(data) != e.SHA || privacy.Match(data) {
+		if err != nil || len(data) != e.Bytes || hash(data) != e.SHA || privateText(data) {
 			return errors.New("archive bytes differ")
 		}
 	}
