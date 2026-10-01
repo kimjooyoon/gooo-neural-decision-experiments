@@ -8,6 +8,7 @@ partial results, failed cases, type rejections, unattempted paths and cost remai
 inspectable. Models are optional; the disconnected order is deterministic.
 
 [Session API and limits](docs/incremental-typed-paths.md),
+[Korean judgment and partial-construction policy](docs/judgment-and-partial-construction.md),
 [actual 288-call native study](runs/incremental-native-20261001/), and
 [cost summary](runs/incremental-native-20261001/summary.json) show 32 same-result
 pairs, 1,152→144 model judgments, and 6,340→1,268 candidate attempts. Sixteen
