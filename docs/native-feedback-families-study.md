@@ -143,6 +143,15 @@ append-only receipt verification. Main's tree exactly matches the merged dev
 tree `263c0bc24923dd44125532d06734d12dab4e2b5b`. Required reviews remain zero;
 Guardian is absent from the required checks.
 
+[The main integration receipt](../publication/sole-path-native-main-integration-20261001.json)
+also records successful post-push CI `36818323280`, its downloaded Go proof and
+append-only receipt verification, plus the four successful research source CI
+jobs at `2593d34c9455bcc51e7db7f73f57ae944f2a4ef0` / `36818990937`.
+The auxiliary implementation-only predecessor certificate still reports
+`AXIS_MISMATCH`; the accumulated compiler changes exceed that certificate's
+scope. Its failure remains visible and does not establish whole-input
+compatibility with that predecessor.
+
 Runner `e8bdb7447ddadc21971e6be8f72d6ff74f90b250` then executed the same 1,080
 views using the clean main binary. The captured caller CI hint is `UNKNOWN`
 because main's post-push CI was pending at execution. Subsequent CI results
@@ -163,6 +172,13 @@ wall time is 5.288–5.494 ms, median CPU time 4.577–4.762 ms, median peak RSS
 16,891,904–17,235,968 bytes, and median process CPU/wall ratio 86.17–86.66%
 of one core. This measures the compiler subprocess, not host utilization.
 The fixed measurement order does not establish causal wall-speedup.
+
+The [immutable main appendix on Hugging Face](https://huggingface.co/asketeddy/gooo-feedback-path-tiny-v1/tree/e720276887cca90817d174494e1d6238551da0b9/research/native-family-optimized-main-20261001)
+contains 1,105 allowlisted raw records in 878,049 compressed bytes. The seven
+payload files passed eight anonymous requests. At the same revision the frozen
+25-file core, nine-file baseline appendix and seven-file feature appendix also
+passed anonymous byte verification. This publication performed no new inference,
+native generation, Go execution or optimizer step.
 
 ## 개발에 사용하는 방식
 

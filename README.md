@@ -10,7 +10,7 @@ inspectable. Models are optional; the disconnected order is deterministic.
 The optional [observed feedback judgment](docs/feedback-path-judgment.md)
 can now ask the same frozen model again after a partial batch. It supplies a
 bounded failure summary and optional caller CI hint, and changes only remaining
-path priority. Go SDK `v0.2.4-experimental` exports this bounded API;
+path priority. Go SDK `v0.2.5-experimental` exports this bounded API;
 default sessions still rank once. The native feedback feature was deployed to
 main in [compiler PR 1119](https://github.com/kimjooyoon/meta-ontology-go/pull/1119),
 with [source-bound post-main CI](publication/native-feedback-main-push-20261001.json).
@@ -49,9 +49,22 @@ track completeness at candidate batch boundaries rather than only the final outc
 The [five-family native study](docs/native-feedback-families-study.md) now adds
 1,080 actual native calls and twenty actual generated Go programs. Sparse tests
 expose remaining behavior even when every selected finite case passes. All 480
-two-option feedback pairs preserve outcomes while spending 244 extra predictions;
-research now records a zero-call skip for a sole remaining declared path. SDK and
-native deployment of this optimization are separate from the frozen measurements.
+two-option feedback pairs preserve outcomes while spending 244 extra predictions.
+SDK v0.2.5 now skips another ranking call when one declared path remains;
+[compiler PR 1123](https://github.com/kimjooyoon/meta-ontology-go/pull/1123) merged
+this continuation into main. A separate 1,080-call main matrix preserves all
+paired code, finite/separate-input outcomes and candidate counts while reducing
+actual predictions from 1,204 to 960. Its original caller CI hints remain
+`UNKNOWN`; actual source checks are recorded separately.
+[Main evidence on Hugging Face](https://huggingface.co/asketeddy/gooo-feedback-path-tiny-v1/tree/e720276887cca90817d174494e1d6238551da0b9/research/native-family-optimized-main-20261001)
+contains 1,105 raw records in an 878,049-byte archive. The seven-file appendix,
+25-file core and both earlier appendices were anonymously verified at that
+immutable revision. Model weights remain unchanged; the new checkpoints'
+regressions against the parent remain visible.
+The [main integration receipt](publication/sole-path-native-main-integration-20261001.json)
+binds the protected merge, successful post-push six-check Go proof, main captures,
+successful research source CI and anonymous HF verification. The auxiliary
+predecessor certificate mismatch remains recorded.
 
 The [actual native integration study](docs/native-feedback-results.md) measured
 28 native generations and 246 local predictions with three existing models.
