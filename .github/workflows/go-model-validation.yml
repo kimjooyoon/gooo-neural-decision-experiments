@@ -202,6 +202,24 @@ jobs:
           go run ./tools/native-unfixed-metrics --root runs/unfixed-native-main-pilot-20261001 \
             --output "$RUNNER_TEMP/unfixed-native-main-metrics.json"
           cmp publication/unfixed-native-main-descriptive-metrics-20261001.json "$RUNNER_TEMP/unfixed-native-main-metrics.json"
+      - name: Replay retained native construction and costs without inference
+        run: |
+          go run ./tools/native-feedback-study --mode retained-audit \
+            --out runs/retained-native-feature-pilot-20261001 \
+            --source-revision be3ccb633446ef4379af964007f8d25766d6726b \
+            --native-revision faf932f85c6acc293ce3839a563665661cb53665 \
+            --audit-output "$RUNNER_TEMP/retained-native-audit.json"
+          cmp runs/retained-native-feature-pilot-20261001/report.json "$RUNNER_TEMP/retained-native-audit.json"
+          go run ./tools/native-feedback-study --mode retained-metrics \
+            --out runs/retained-native-feature-pilot-20261001 \
+            --audit-output "$RUNNER_TEMP/retained-native-metrics.json"
+          cmp runs/retained-native-feature-pilot-20261001/metrics-summary.json "$RUNNER_TEMP/retained-native-metrics.json"
+          go run ./tools/package-family-evidence --kind retained-native-feature --pack \
+            --bundle "$RUNNER_TEMP/retained-native-bundle"
+          cmp publication/hf-retained-native-feature-pilot-20261001/publication-manifest.json "$RUNNER_TEMP/retained-native-bundle/publication-manifest.json"
+          go run ./tools/package-family-evidence --kind retained-native-feature \
+            --bundle "$RUNNER_TEMP/retained-native-bundle" \
+            --output "$RUNNER_TEMP/retained-native-verification.json"
       - name: Reproduce compressed native-family publication without credentials
         run: |
           go run ./tools/package-family-evidence --pack --bundle "$RUNNER_TEMP/native-family-bundle"
@@ -248,6 +266,9 @@ jobs:
         with:
           name: go-model-validation
           path: |
+            ${{ runner.temp }}/retained-native-audit.json
+            ${{ runner.temp }}/retained-native-metrics.json
+            ${{ runner.temp }}/retained-native-verification.json
             ${{ runner.temp }}/unfixed-native-feature-audit.json
             ${{ runner.temp }}/unfixed-native-main-audit.json
             ${{ runner.temp }}/unfixed-native-main-metrics.json

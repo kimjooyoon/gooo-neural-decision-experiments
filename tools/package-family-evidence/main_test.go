@@ -59,6 +59,9 @@ func TestOptimizedInventoryIsBounded(t *testing.T) {
 	if names, err := namesKind("unfixed-native-main"); err != nil || len(names) != 104 {
 		t.Fatal("native main unfixed pilot allowlist differs", err)
 	}
+	if names, err := namesKind("retained-native-feature"); err != nil || len(names) != 146 {
+		t.Fatal("retained native allowlist differs", err)
+	}
 	if _, err := namesKind("untrusted"); err == nil {
 		t.Fatal("unknown evidence inventory accepted")
 	}

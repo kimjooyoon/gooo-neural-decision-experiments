@@ -1,9 +1,43 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
+	"path/filepath"
 	"testing"
 )
+
+func TestRetainedFrozenNativeReplaysWithoutProcessesOrPredictions(t *testing.T) {
+	t.Chdir("../..")
+	root := "runs/retained-native-feature-pilot-20261001"
+	value, err := auditRetained(root, retainedFeatureRunner, retainedFeatureNative)
+	if err != nil {
+		t.Fatal(err)
+	}
+	raw, err := json.MarshalIndent(value, "", "  ")
+	if err != nil {
+		t.Fatal(err)
+	}
+	expected, err := read(filepath.Join(root, "report.json"))
+	if err != nil || hash(expected) != retainedFeatureReport || !bytes.Equal(append(raw, '\n'), expected) {
+		t.Fatal("frozen audit differs")
+	}
+	summary, err := retainedMetrics(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	raw, err = json.MarshalIndent(summary, "", "  ")
+	if err != nil {
+		t.Fatal(err)
+	}
+	expected, err = read(filepath.Join(root, "metrics-summary.json"))
+	if err != nil || !bytes.Equal(append(raw, '\n'), expected) {
+		t.Fatal("cost arithmetic differs")
+	}
+	if _, err := collectRetained(root, retainedFeatureRunner, compoundNative); err == nil {
+		t.Fatal("other compiler accepted")
+	}
+}
 
 func TestRetainedPlanReusesViewsWithReverseSecondPass(t *testing.T) {
 	t.Chdir("../..")

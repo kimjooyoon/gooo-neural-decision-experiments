@@ -429,6 +429,17 @@ func main() {
 	worker := flag.String("worker", "", "optional retained native body worker executable")
 	familyCIStatus := flag.String("family-ci-status", "PASS", "caller family-study CI context: PASS, FAIL or UNKNOWN")
 	flag.Parse()
+	if *mode == "retained-metrics" {
+		value, err := retainedMetrics(*output)
+		if err == nil {
+			err = save(*auditOutput, value)
+		}
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "retained-metrics:", err)
+			os.Exit(1)
+		}
+		return
+	}
 	if *mode == "retained-pilot" || *mode == "retained-audit" {
 		var err error
 		if *mode == "retained-pilot" {

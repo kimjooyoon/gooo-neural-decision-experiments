@@ -45,28 +45,33 @@ func privateText(raw []byte) bool {
 }
 
 var fixed = map[string]string{
-	"runs/unfixed-native-main-pilot-20261001/preexecution.json":    "333f5b1cf65a9c45f1c10ee01ce7a53e3dd989f915eec764cc2a7e30a5c09c39",
-	"runs/unfixed-native-main-pilot-20261001/report.json":          "6bf4030ee7fe769fd3befe8b5bee66bb6fe00fe272037153f4197d59cc6818f6",
-	"runs/unfixed-native-main-pilot-20261001/audit.json":           "6bf4030ee7fe769fd3befe8b5bee66bb6fe00fe272037153f4197d59cc6818f6",
-	"runs/unfixed-native-feature-pilot-20261001/preexecution.json": "b7fd3eedddabac4e37864b05a77d6f65e08dd60b1f626bb83134ab1126e8bdd0",
-	"runs/unfixed-native-feature-pilot-20261001/report.json":       "4dba2dab42c17af2c069a442b18053fc804bc50a32f5b4276799ddf3f96d3962",
-	"runs/unfixed-native-feature-pilot-20261001/audit.json":        "4dba2dab42c17af2c069a442b18053fc804bc50a32f5b4276799ddf3f96d3962",
-	"studies/feedback-family-v1/cohort.jsonl":                      "0e9d5c2cb9a816ca4d05c2e6e2d94ceccb9a0d02912edd4cc1063c0adb648a70",
-	"runs/feedback-family-pilot-20261001/report.json":              "58090950d759d47d7c0c42ca9e6edd1929c50864cceb5a4b9f37fbc33c00da00",
-	"runs/feedback-family-pilot-20261001/audit.json":               "92884e427b9499b643f7a588e8eb39a7425f6d2d079edfbe3691fdf45e2103a8",
-	"runs/feedback-family-matrix-20261001/report.json":             "9c00cf48dae46bdc793b39c5ae94f15c825194d33eabe2bcf3002161aba87c2d",
-	"runs/feedback-family-matrix-20261001/audit.json":              "c732643f2312543a3bc669f878bef0d63ed8c9d671d6225db20d4b073512d0b2",
-	"runs/feedback-family-optimized-feature-20261001/report.json":  "0346231d22f540a844fc9296b408a64c59bb33d538223603c10f65a281c63d62",
-	"runs/feedback-family-optimized-feature-20261001/audit.json":   "8fcbc56ad12c812755d6925082a72baeab739c0e006d12fdfb27a56ac86adc47",
-	"runs/feedback-family-optimized-main-20261001/report.json":     "4537080ed58d19f6744e6d615c5c6eb63632c9494d96637282c4f36a2990b083",
-	"runs/feedback-family-optimized-main-20261001/audit.json":      "770b268ac84ab0fadb4a489b193f2008e3ec95fa027921b41da77742dd761be4",
-	"studies/compound-path-v1/cohort.jsonl":                        "aefd16b22076c05b113e29df3e7788b06e60e0c5c14e45cc75547bd1e582a15a",
-	"runs/compound-path-pilot-20261001/report.json":                "11fa52d7fbc6c1bbd04eeacffd7ea82db440fd552ca03d0836de9b03cab44525",
-	"runs/compound-path-pilot-20261001/audit.json":                 "20335902beda6880732df639a038d684a7b841b8f35e286a240d1e2d8acd24dc",
-	"runs/compound-path-main-20261001/report.json":                 "dec30461109eafcea587e7d78a533087df21879fb23bb7edc68c5645aefca66e",
-	"runs/compound-path-main-20261001/audit.json":                  "74d5ed1e3f36da15ad14c599a56c909d06a75b0411bdf795ad0fdfb44fb5d7c1",
-	"runs/unfixed-feedback-sdk-20261001/report.json":               "41b0e37c2ba99fa44d2173a25e4c2d7174e21115b9dff0a29d3c512664bf839e",
-	"runs/unfixed-feedback-sdk-20261001/audit.json":                "41b0e37c2ba99fa44d2173a25e4c2d7174e21115b9dff0a29d3c512664bf839e",
+	"docs/retained-native-preregistration.md":                          "25b759ed3c054bdefad6a3263a36e02d07965aed0ac362b78ab3f6e0a373f959",
+	"runs/retained-native-feature-pilot-20261001/metrics-summary.json": "2f27f9c6f27d350f4693ae541a3124db099d1e9dc207c082dada124be51bf452",
+	"runs/retained-native-feature-pilot-20261001/report.json":          "581c09ebb1746505a636a44d8eb34cdeef333fd3204e6ad9120775ba1c5c7e9b",
+	"runs/retained-native-feature-pilot-20261001/audit.json":           "581c09ebb1746505a636a44d8eb34cdeef333fd3204e6ad9120775ba1c5c7e9b",
+	"runs/retained-native-feature-pilot-20261001/preexecution.json":    "d6afa79e902576da1ccf176b89395b842d5d0d793c248d2580ea561b9af2c734",
+	"runs/unfixed-native-main-pilot-20261001/preexecution.json":        "333f5b1cf65a9c45f1c10ee01ce7a53e3dd989f915eec764cc2a7e30a5c09c39",
+	"runs/unfixed-native-main-pilot-20261001/report.json":              "6bf4030ee7fe769fd3befe8b5bee66bb6fe00fe272037153f4197d59cc6818f6",
+	"runs/unfixed-native-main-pilot-20261001/audit.json":               "6bf4030ee7fe769fd3befe8b5bee66bb6fe00fe272037153f4197d59cc6818f6",
+	"runs/unfixed-native-feature-pilot-20261001/preexecution.json":     "b7fd3eedddabac4e37864b05a77d6f65e08dd60b1f626bb83134ab1126e8bdd0",
+	"runs/unfixed-native-feature-pilot-20261001/report.json":           "4dba2dab42c17af2c069a442b18053fc804bc50a32f5b4276799ddf3f96d3962",
+	"runs/unfixed-native-feature-pilot-20261001/audit.json":            "4dba2dab42c17af2c069a442b18053fc804bc50a32f5b4276799ddf3f96d3962",
+	"studies/feedback-family-v1/cohort.jsonl":                          "0e9d5c2cb9a816ca4d05c2e6e2d94ceccb9a0d02912edd4cc1063c0adb648a70",
+	"runs/feedback-family-pilot-20261001/report.json":                  "58090950d759d47d7c0c42ca9e6edd1929c50864cceb5a4b9f37fbc33c00da00",
+	"runs/feedback-family-pilot-20261001/audit.json":                   "92884e427b9499b643f7a588e8eb39a7425f6d2d079edfbe3691fdf45e2103a8",
+	"runs/feedback-family-matrix-20261001/report.json":                 "9c00cf48dae46bdc793b39c5ae94f15c825194d33eabe2bcf3002161aba87c2d",
+	"runs/feedback-family-matrix-20261001/audit.json":                  "c732643f2312543a3bc669f878bef0d63ed8c9d671d6225db20d4b073512d0b2",
+	"runs/feedback-family-optimized-feature-20261001/report.json":      "0346231d22f540a844fc9296b408a64c59bb33d538223603c10f65a281c63d62",
+	"runs/feedback-family-optimized-feature-20261001/audit.json":       "8fcbc56ad12c812755d6925082a72baeab739c0e006d12fdfb27a56ac86adc47",
+	"runs/feedback-family-optimized-main-20261001/report.json":         "4537080ed58d19f6744e6d615c5c6eb63632c9494d96637282c4f36a2990b083",
+	"runs/feedback-family-optimized-main-20261001/audit.json":          "770b268ac84ab0fadb4a489b193f2008e3ec95fa027921b41da77742dd761be4",
+	"studies/compound-path-v1/cohort.jsonl":                            "aefd16b22076c05b113e29df3e7788b06e60e0c5c14e45cc75547bd1e582a15a",
+	"runs/compound-path-pilot-20261001/report.json":                    "11fa52d7fbc6c1bbd04eeacffd7ea82db440fd552ca03d0836de9b03cab44525",
+	"runs/compound-path-pilot-20261001/audit.json":                     "20335902beda6880732df639a038d684a7b841b8f35e286a240d1e2d8acd24dc",
+	"runs/compound-path-main-20261001/report.json":                     "dec30461109eafcea587e7d78a533087df21879fb23bb7edc68c5645aefca66e",
+	"runs/compound-path-main-20261001/audit.json":                      "74d5ed1e3f36da15ad14c599a56c909d06a75b0411bdf795ad0fdfb44fb5d7c1",
+	"runs/unfixed-feedback-sdk-20261001/report.json":                   "41b0e37c2ba99fa44d2173a25e4c2d7174e21115b9dff0a29d3c512664bf839e",
+	"runs/unfixed-feedback-sdk-20261001/audit.json":                    "41b0e37c2ba99fa44d2173a25e4c2d7174e21115b9dff0a29d3c512664bf839e",
 }
 
 type entry struct {
@@ -102,6 +107,9 @@ func names() ([]string, error) {
 	return namesKind("")
 }
 func namesKind(kind string) ([]string, error) {
+	if kind == "retained-native-feature" {
+		return retainedNativeNames()
+	}
 	if kind == "unfixed-native-feature" || kind == "unfixed-native-main" {
 		return nativeUnfixedNames(kind)
 	}
@@ -213,6 +221,11 @@ func buildKind(kind string) (manifest, map[string][]byte, error) {
 		m.Prefix = "research/" + nativeUnfixedRoot(kind)[len("runs/"):] + "/"
 		m.Scope = "Actual native SDK 0.2.7 pilot using own frozen models, six reused bilingual contradictory views and 24 legacy-first pairs. The explicit --path-feedback-unfixed option ranks varying typed coordinates. Raw native bodies, resource sidecars, derived skip receipts, partial finite outcomes and actual emitted-Go values are retained. Caller PASS is unauthenticated context; source CI/GoProof is separate. Feature/main edition is explicit in the prefix and captured compiler SHA. This does not establish arbitrary natural-language accuracy, causal wall speedup, host CPU growth or all-input ordering equivalence. Core weights/card and prior appendices are preserved. No training, GPU work, upstream Laya calls or model/native/Go calls during packaging or offline verification."
 	}
+	if kind == "retained-native-feature" {
+		m.Schema = "gooo/retained-native-publication/v1"
+		m.Prefix = "research/retained-native-feature-pilot-20261001/"
+		m.Scope = "Actual native compiler/retained Go worker with identical clean feature source, five frozen own-model/disconnected arms, six reused bilingual contradictory views repeated forward/reverse. 180 valid constructions, 10 source rejections with zero predictions, 70 native processes, 720 predictions, 120 pairs with equal candidate sequences/bodies/actuals, 87.5% finite completeness, three actual Go executions and 42 function values against an independent state oracle. Default one worker; four-worker throughput costs more per-request CPU and resident process memory than sequential retained mode. Fresh response includes startup/load; sequential retained response excludes one startup/setup; parallel latency includes queueing. First disconnected binary invocations have large startup/wall outliers and are preserved. Original UNKNOWN CI hint is not authority. Feature evidence is distinct from main deployment. Core weights/card and earlier appendices unchanged; no training/GPU/upstream Laya or model/native/Go calls during packaging/audit. No causal speedup, host CPU, arbitrary text-generation or all-input correctness claim."
+	}
 	n, err := namesKind(kind)
 	if err != nil {
 		return m, nil, err
@@ -264,6 +277,16 @@ func buildKind(kind string) (manifest, map[string][]byte, error) {
 	}
 	if kind == "unfixed-native-feature" || kind == "unfixed-native-main" {
 		files["README.md"] = []byte("# Native Gooo varying-coordinate feedback pilot\n\n" + m.Scope + "\n\nSee report.json for actual measured counts. The deterministic archive preserves raw captures, resource sidecars and actual Go execution values; per-entry hashes and byte sizes are in publication-manifest.json. Methods and limitations: https://github.com/kimjooyoon/gooo-neural-decision-experiments/blob/main/docs/native-unfixed-pilot.md .\n")
+	}
+	if kind == "retained-native-feature" {
+		files["README.md"] = []byte("# Retained native Gooo construction evidence\n\n" + m.Scope + "\n\nThe deterministic archive preserves original JSON/NDJSON, setup/latency/CPU/RSS sidecars and actual generated-Go execution values. Per-entry digests and byte sizes are in publication-manifest.json. Methods, measurement boundaries and increased costs: https://github.com/kimjooyoon/gooo-neural-decision-experiments/blob/main/docs/retained-native-study.md .\n")
+		for _, path := range []string{"docs/retained-native-preregistration.md", "runs/retained-native-feature-pilot-20261001/metrics-summary.json"} {
+			raw, err := read(path)
+			if err != nil {
+				return m, nil, err
+			}
+			files[path] = raw
+		}
 	}
 	for name := range files {
 		payload = append(payload, name)
@@ -468,6 +491,9 @@ func executeKind(bundle, revision, output string, pack bool, kind string) error 
 	}
 	if kind == "unfixed-native-feature" || kind == "unfixed-native-main" {
 		value["schema"] = "gooo/native-unfixed-publication-verification/v1"
+	}
+	if kind == "retained-native-feature" {
+		value["schema"] = "gooo/retained-native-publication-verification/v1"
 	}
 	if output == "" {
 		return errors.New("verification output required")
