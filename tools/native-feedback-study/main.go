@@ -429,6 +429,23 @@ func main() {
 	worker := flag.String("worker", "", "optional retained native body worker executable")
 	familyCIStatus := flag.String("family-ci-status", "PASS", "caller family-study CI context: PASS, FAIL or UNKNOWN")
 	flag.Parse()
+	if *mode == "diagnosis-study" || *mode == "diagnosis-audit" {
+		var err error
+		if *mode == "diagnosis-study" {
+			err = runDiagnosisStudy(*goBinary, *output, *revision)
+		} else {
+			var value map[string]any
+			value, err = auditDiagnosisStudy(*output, *revision)
+			if err == nil {
+				err = save(*auditOutput, value)
+			}
+		}
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "diagnosis:", err)
+			os.Exit(1)
+		}
+		return
+	}
 	if *mode == "budget-study" || *mode == "budget-audit" {
 		var err error
 		if *mode == "budget-study" {
