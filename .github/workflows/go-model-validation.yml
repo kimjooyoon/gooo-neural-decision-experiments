@@ -680,3 +680,51 @@ jobs:
           path: |
             runs/compiler-context-model-ci
             runs/compiler-context-native-ci
+
+  paired-compiler-own-model:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GOTOOLCHAIN: local
+      GOWORK: "off"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.27.1'
+          cache: false
+      - name: Select on calibration and measure all nine own models
+        run: |
+          go run ./tools/native-feedback-study --mode paired-compiler-study \
+            --curriculum runs/compiler-context-curriculum-validated-20261001 \
+            --model-root runs/paired-compiler-context-mps-20261002 \
+            --out runs/paired-compiler-go-ci --source-revision "$GITHUB_SHA"
+          go run ./tools/native-feedback-study --mode paired-compiler-audit \
+            --curriculum runs/compiler-context-curriculum-validated-20261001 \
+            --model-root runs/paired-compiler-context-mps-20261002 --out runs/paired-compiler-go-ci
+      - name: Retrieve pinned deployed Gooo compiler
+        run: |
+          git clone --no-checkout https://github.com/kimjooyoon/meta-ontology-go.git .paired-compiler-native
+          git -C .paired-compiler-native checkout --detach b431ef7547a968e2532fa2dcf0891ee44ec2ee86
+          cd .paired-compiler-native
+          go build -trimpath -o "$RUNNER_TEMP/gooo-paired" ./cmd/gooo
+      - name: Execute selected model, reference and disconnected assembly
+        run: |
+          go run ./tools/native-feedback-study --mode paired-compiler-native \
+            --curriculum runs/compiler-context-curriculum-validated-20261001 \
+            --model-root runs/paired-compiler-context-mps-20261002 \
+            --selection runs/paired-compiler-go-ci/selection.json \
+            --native "$RUNNER_TEMP/gooo-paired" --native-revision b431ef7547a968e2532fa2dcf0891ee44ec2ee86 \
+            --go-bin "$(command -v go)" --out runs/paired-compiler-native-ci --source-revision "$GITHUB_SHA"
+          go run ./tools/native-feedback-study --mode paired-compiler-native-audit \
+            --curriculum runs/compiler-context-curriculum-validated-20261001 \
+            --model-root runs/paired-compiler-context-mps-20261002 \
+            --selection runs/paired-compiler-go-ci/selection.json \
+            --out runs/paired-compiler-native-ci --native-revision b431ef7547a968e2532fa2dcf0891ee44ec2ee86
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: paired-compiler-own-model
+          path: |
+            runs/paired-compiler-go-ci
+            runs/paired-compiler-native-ci

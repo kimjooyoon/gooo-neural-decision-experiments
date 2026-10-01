@@ -440,7 +440,28 @@ func main() {
 	familyCIStatus := flag.String("family-ci-status", "PASS", "caller family-study CI context: PASS, FAIL or UNKNOWN")
 	curriculum := flag.String("curriculum", "", "canonical compiler curriculum directory")
 	modelRoot := flag.String("model-root", "", "own-model training directory")
+	selection := flag.String("selection", "", "paired-study calibration selection receipt")
 	flag.Parse()
+	if strings.HasPrefix(*mode, "paired-compiler-") {
+		var err error
+		switch *mode {
+		case "paired-compiler-study":
+			err = runPairedCompilerAudit(*curriculum, *modelRoot, *output, *revision)
+		case "paired-compiler-audit":
+			err = auditPairedCompiler(*curriculum, *modelRoot, *output)
+		case "paired-compiler-native":
+			err = runPairedNative(*binary, *goBinary, *curriculum, *modelRoot, *selection, *output, *revision, *nativeRevision)
+		case "paired-compiler-native-audit":
+			err = auditPairedNative(*curriculum, *modelRoot, *selection, *output, *nativeRevision)
+		default:
+			err = errors.New("unknown paired study mode")
+		}
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "paired-compiler:", err)
+			os.Exit(1)
+		}
+		return
+	}
 	if *mode == "compiler-native-dogfood-compare" {
 		value, err := compareCompilerNativeDogfood(*root, *output)
 		if err == nil {
