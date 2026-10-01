@@ -35,6 +35,11 @@ jobs:
           go run ./tools/joint-composition-curriculum \
             --audit "$RUNNER_TEMP/joint-frozen-evidence/curriculum" \
             --audit-report "$RUNNER_TEMP/joint-curriculum-audit.json"
+          go run ./tools/audit-joint-representation \
+            --dataset "$RUNNER_TEMP/joint-frozen-evidence/curriculum/dataset.jsonl" \
+            --output "$RUNNER_TEMP/joint-representation-diagnostic.json"
+          cmp publication/joint-composition-representation-diagnostic-20261002.json \
+            "$RUNNER_TEMP/joint-representation-diagnostic.json"
           go run ./tools/joint-composition-study \
             --curriculum "$RUNNER_TEMP/joint-frozen-evidence/curriculum" \
             --models models/joint-composition-v1 \

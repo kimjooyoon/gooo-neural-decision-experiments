@@ -59,6 +59,14 @@ a property of the oracle target, not evidence that the learned joint model
 has solved that correlation. Single inputs also contain conflicting targets;
 eight of 576 distinct joint inputs have conflicting full targets.
 
+A subsequent [Go representation diagnostic](../publication/joint-composition-representation-diagnostic-20261002.json)
+separates unequal soft target distributions from incompatible executable
+choices. All eight joint groups retain a common passing mask, and development
+has no unequal joint distributions. The actual feature vectors add no further
+collisions in this cohort. There is no demonstrated unavoidable full-function
+failure from the joint representation here. Independent coordinate support
+alone does not prove that independently selected choices compose successfully.
+
 Source collection made 2,304 real calls to clean compiler main
 `f4813dc6251037767c8cff7295ccfdab2b044ff2`, with SDK v0.2.11. It exported 4,608
 decision rows, made zero predictions and performed no candidate tests. Median
@@ -224,9 +232,11 @@ weights and the calibration-only selection were not rewritten.
 
 ## Next own-model direction
 
-1. Expand intent facts to distinguish the eight conflicting joint targets,
-   preserving original source and complete intent. Measure representation loss
-   separately from prediction mistakes.
+1. Compare uniform-target training with passing-set likelihood and observed
+   failure continuation under the [frozen v2 protocol](own-joint-completeness-feedback-preregistration-20261002.md).
+   The eight unequal joint distributions retain common passing support; adding
+   source fields solely to distinguish equivalent-target probabilities is not
+   an established remedy. Measure actual incompatibility separately.
 2. Preregister variable-arity heads or pairwise factors for 3+ choices. Record
    total inference calls, candidate tests and search exhaustion; a four-way head
    cannot represent arbitrary decision counts.
