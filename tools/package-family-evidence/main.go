@@ -114,6 +114,9 @@ func names() ([]string, error) {
 	return namesKind("")
 }
 func namesKind(kind string) ([]string, error) {
+	if kind == "native-path-diagnosis-feature" {
+		return nativePathDiagnosisNames()
+	}
 	if kind == "path-diagnosis-sdk" {
 		return pathDiagnosisNames()
 	}
@@ -254,6 +257,11 @@ func buildKind(kind string) (manifest, map[string][]byte, error) {
 		m.Prefix = "research/path-diagnosis-sdk-20261001/"
 		m.Scope = "144 two-candidate SDK searches followed by 144 deterministic four-candidate diagnoses, 576 observed typed candidates, 144 actual own-FP32 initial predictions and zero diagnostic predictions. Twelve distinct emitted Go programs execute 31 generic probes each, yielding 372 actual function invocations. Independent integer-state oracle verifies all vectors and 46 candidate-pair distinguishing witnesses. All 24 sparse FP32 views pass declared cases but remain case-ambiguous; twenty admit a distinguishing probe and four retain unresolved probe agreement. Existing 72 bilingual/contract views over twelve intention groups are reused development evidence. Witness outputs are candidate observations, never authoritative expected answers or permission to modify source. Probe agreement is not all-input equivalence. Median SDK diagnosis timing excludes model loading/preparation; extra candidate checks are not a causal speedup or native latency measurement. Core models and card remain unchanged. No new training/GPU/Laya/native integration or model/native/generated-Go calls during packaging or offline audit."
 	}
+	if kind == "native-path-diagnosis-feature" {
+		m.Schema = "gooo/native-path-diagnosis-publication/v1"
+		m.Prefix = "research/native-path-diagnosis-feature-20261001/"
+		m.Scope = "Preregistered native feature SDK 0.2.8 smoke: eight actual compiler invocations, four own-FP32 initial predictions, four deterministic diagnoses with eight typed candidate observations and zero diagnostic predictions. Four off/on pairs retain selected choices and emitted Go. Two distinct selected Go programs run two inputs each, yielding four actual function evaluations. One synthetic bilingual intention; English model selection disagrees with its instruction despite passing the single sparse test. All diagnostic pairs expose input-three ambiguity. Witnesses are observations without expected-answer authority; alternatives are not native-executed. Small whole-child resource observations preserve the first startup outlier and do not estimate host utilization or causal speedup. Feature evidence is separate from main adoption. Core weights/card and previous appendices are unchanged. No training/GPU/upstream Laya/model promotion or new inference/processes during packaging/audit."
+	}
 	n, err := namesKind(kind)
 	if err != nil {
 		return m, nil, err
@@ -339,6 +347,16 @@ func buildKind(kind string) (manifest, map[string][]byte, error) {
 	if kind == "path-diagnosis-sdk" {
 		files["README.md"] = []byte("# Gooo finite path ambiguity diagnosis\n\n" + m.Scope + "\n\nThe deterministic archive contains 19 allowlisted evidence/source files, including unchanged preregistration and actual emitted-Go values. Methods and limitations are in docs/path-diagnosis.md. All per-entry hashes and sizes are in publication-manifest.json. This is SDK evidence; deployed native compiler integration is a separate future action.\n")
 		for _, path := range []string{"docs/path-diagnosis-preregistration.md", "docs/path-diagnosis.md"} {
+			raw, err := read(path)
+			if err != nil {
+				return m, nil, err
+			}
+			files[path] = raw
+		}
+	}
+	if kind == "native-path-diagnosis-feature" {
+		files["README.md"] = []byte("# Native Gooo bilingual path diagnosis dogfood\n\n" + m.Scope + "\n\nThe deterministic archive preserves thirty allowlisted inputs, raw native receipts, whole-child resource sidecars and actual selected emitted-Go output captures. See publication-manifest.json for all hashes and sizes. Methods and negative English selection are in docs/native-path-diagnosis-smoke.md; the preregistration is unchanged.\n")
+		for _, path := range []string{"docs/native-path-diagnosis-preregistration.md", "docs/native-path-diagnosis-smoke.md"} {
 			raw, err := read(path)
 			if err != nil {
 				return m, nil, err
@@ -572,6 +590,9 @@ func executeKind(bundle, revision, output string, pack bool, kind string) error 
 	}
 	if kind == "path-diagnosis-sdk" {
 		value["schema"] = "gooo/path-diagnosis-publication-verification/v1"
+	}
+	if kind == "native-path-diagnosis-feature" {
+		value["schema"] = "gooo/native-path-diagnosis-publication-verification/v1"
 	}
 	if output == "" {
 		return errors.New("verification output required")

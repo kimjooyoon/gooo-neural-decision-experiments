@@ -59,3 +59,20 @@ func TestNativeDiagnosisInspectionRejectsFalseWitnessAndPrediction(t *testing.T)
 		}
 	}
 }
+
+func TestNativeDiagnosisFrozenSmokeReplaysWithoutProcesses(t *testing.T) {
+	t.Chdir("../..")
+	root := "runs/native-path-diagnosis-feature-20261001"
+	value, err := auditNativeDiagnosisSmoke(root, "18ae830c18b47b377ae8fa97dcc39df75f6b593b", "5ae486d05b3521ecc48b18bfa28d45cdd9041203")
+	if err != nil {
+		t.Fatal(err)
+	}
+	raw, err := read(root + "/report.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	got, _ := json.MarshalIndent(value, "", "  ")
+	if string(append(got, '\n')) != string(raw) {
+		t.Fatal("native smoke audit drifted")
+	}
+}

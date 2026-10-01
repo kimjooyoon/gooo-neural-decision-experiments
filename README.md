@@ -509,3 +509,22 @@ exposes bounded, cancellable `PreparedPlan.Diagnose`; native main adoption is a
 separate next step. [HF raw evidence](https://huggingface.co/asketeddy/gooo-feedback-path-tiny-v1/tree/f41547f98ffc76d015bc027826afa21d619b1904/research/path-diagnosis-sdk-20261001)
 includes all captures, preregistration and actual Go values. Earlier model weights,
 card and regression evidence remain available.
+
+## Native compiler diagnostic connection
+
+The [native integration smoke](docs/native-path-diagnosis-smoke.md) uses the
+published own FP32 model directly in the Gooo compiler: eight invocations,
+four initial predictions, four deterministic diagnoses and zero extra diagnostic
+predictions. All four diagnosis-off/on pairs retain the selected body. Two
+actually emitted Go programs were compiled/run for four function evaluations.
+This reuses one synthetic intention; the English view selects the opposite
+subtraction order while passing its sparse test. The negative result and
+input-three witnesses are preserved.
+
+Diagnostic stage observations range from 0.034 to 0.053 ms. Whole-child wall
+observations include the retained first disconnected startup outlier of 465 ms;
+these eight calls do not establish a stable speedup or host CPU utilization.
+[The public HF appendix](https://huggingface.co/asketeddy/gooo-feedback-path-tiny-v1/tree/7397092ea711e5b3f8a4ddba7f304a33647d2bdb/research/native-path-diagnosis-feature-20261001)
+contains raw receipts, resource sidecars, selected emitted-Go values and the
+unchanged preregistration. This captures clean feature source; main adoption
+and canonical CI proof are recorded separately.
