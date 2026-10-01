@@ -133,3 +133,34 @@ wall medians are 5.280–5.485 ms, CPU-time medians 4.562–4.760 ms, and median
 RSS 16,891,904–17,203,200 bytes. Median process CPU/wall ratios are 86.12–86.99%
 of one core. These figures are whole compiler subprocess measurements, not
 host CPU utilization or its increase, and do not establish a wall-speedup claim.
+
+## 개발에 사용하는 방식
+
+자체 Gooo 판단 모델은 한글·영어 의도를 선언된 경로 후보와 연결합니다.
+현재 모델은 지역 변수 참조, 변수 할당 대상, 피연산자 순서, if 분기의 배치,
+문장 실행 순서를 판단합니다. 컴파일러는 선택된 경로로 실제 본문을 구성하고,
+타입·범위·원본 소스 연결을 검사한 뒤 Go 코드를 생성합니다. 개발에서는
+모델의 첫 응답과 별개로 관찰한 실패를 기록하면서 다음 후보를 구성합니다.
+
+이번 실행에서 사용한 명령 구조는 다음과 같습니다. `plan.json`에는 Gooo
+원본에 연결된 본문, 허용된 대안, 테스트 입력·기대값, 최대 시도 수가 들어갑니다.
+
+```sh
+gooo body-codegen --json --path-plan plan.json \
+  --path-model model-bundle/models/qat_ternary/model.json \
+  --path-step-attempts 1 --path-feedback-rounds 1 \
+  --path-feedback-ci ci.json --activity ChoosePath source.gooo
+```
+
+개발 순서는 의도와 타입이 있는 Gooo 본문을 선언하고, 모델이 후보 순서를
+힌트로 주고, 테스트가 관찰한 결과를 다음 단계에 연결하는 흐름입니다.
+테스트가 부족하면 별도 입력 통과율과 의도 경로 일치율도 함께 기록합니다.
+표현이 모델의 입력 크기를 넘으면 그 상태를 기록하고 기존 후보 구성을
+이어갑니다. 후보가 하나 남으면 모델을 추가 호출하지 않고 그 후보를 검사합니다.
+
+모델을 연결하지 않을 때는 모델·피드백 옵션을 생략합니다. 같은 원본·계획·테스트·
+예산에서 선언된 순서로 후보를 평가하므로 최종 코드와 선택 경로를 재현할 수
+있습니다. 실행시간 측정은 별도로 기록합니다. 새 모델은 실험 체크포인트로
+보존하며, 이전 모델과의 회귀 결과도 공개합니다. SDK v0.2.5 연결은 개발
+브랜치에 병합됐고 [main 승격 PR 1123](https://github.com/kimjooyoon/meta-ontology-go/pull/1123)은
+별도의 필수 CI와 소스 연결 증거를 검사합니다.
