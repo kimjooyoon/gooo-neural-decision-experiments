@@ -540,7 +540,10 @@ intention groups. Main diagnostic stages range from about 0.035 to 0.075 ms.
 
 The [HF main adoption appendix](https://huggingface.co/asketeddy/gooo-feedback-path-tiny-v1/tree/07f3e8bc8359a88f3e89d92ee38b96b346d1ab32/research/native-path-diagnosis-main-adoption-20261001)
 contains metadata and summary; full raw main captures stay on GitHub. Main push
-CI is a separate pending observation in the frozen adoption receipt. The scoped
+CI was a separate pending observation in the frozen adoption receipt.
+The [later terminal main-push receipt](publication/native-path-diagnosis-main-push-finalization-20261001.json)
+records all six canonical checks and the independently verified proof as PASS.
+The scoped
 automatic promotion App remains unconfigured; ordinary authenticated CLI
 promotion completed without overrides or human approval requests. Existing
 weights remain unchanged. The [next experiment plan](docs/path-diagnosis-followup-plan.md)
