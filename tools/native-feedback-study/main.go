@@ -423,6 +423,13 @@ func main() {
 	revision := flag.String("source-revision", "", "committed runner SHA")
 	nativeRevision := flag.String("native-revision", "", "clean binary source SHA")
 	flag.Parse()
+	if *mode == "input-bound" {
+		if err := probeInputBound(*binary, *root, *output, *revision, *nativeRevision); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+		return
+	}
 	if *mode == "audit" || *mode == "execute" {
 		value, err := audit(*output, *root, *goBinary, *mode == "execute")
 		if err == nil {
