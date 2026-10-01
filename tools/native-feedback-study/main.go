@@ -423,6 +423,13 @@ func main() {
 	revision := flag.String("source-revision", "", "committed runner SHA")
 	nativeRevision := flag.String("native-revision", "", "clean binary source SHA")
 	flag.Parse()
+	if *mode == "family-optimized" {
+		if err := runFamilyFor(*binary, *goBinary, *output, *revision, false, familySpec{Revision: *nativeRevision, SDK: "v0.2.5-experimental", NoChoice: true}); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+		return
+	}
 	if *mode == "family-pilot" || *mode == "family-study" {
 		if err := runFamily(*binary, *goBinary, *output, *revision, *mode == "family-pilot"); err != nil {
 			fmt.Fprintln(os.Stderr, err)

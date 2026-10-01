@@ -15,6 +15,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"reflect"
+	"regexp"
 	"strings"
 	"time"
 
@@ -26,6 +27,13 @@ import (
 
 const familyCohortSHA = "0e9d5c2cb9a816ca4d05c2e6e2d94ceccb9a0d02912edd4cc1063c0adb648a70"
 const familyNativeSHA = "4dced73b26dde567cb7129f3e4ba5733850196d0"
+
+type familySpec struct {
+	Revision, SDK string
+	NoChoice      bool
+}
+
+var legacyFamily = familySpec{Revision: familyNativeSHA, SDK: "v0.2.4-experimental"}
 
 type familyArm struct {
 	Name, Variant, Path, Metadata, Weights string
@@ -48,6 +56,7 @@ type familyObservation struct {
 	Attempts            int     `json:"candidate_attempts"`
 	Predictions         int     `json:"actual_model_predictions"`
 	FeedbackPredictions int     `json:"feedback_predictions"`
+	NoChoice            int     `json:"zero_call_ranking_unnecessary_receipts,omitempty"`
 	Metrics             metrics `json:"process_metrics"`
 }
 
@@ -92,6 +101,12 @@ func executableHash(path string) (string, error) {
 	return hex.EncodeToString(h.Sum(nil)), nil
 }
 func familyPreflight(binary, goBinary, output, revision string) ([]familystudy.Case, []familyArm, error) {
+	return familyPreflightFor(binary, goBinary, output, revision, legacyFamily)
+}
+func familyPreflightFor(binary, goBinary, output, revision string, spec familySpec) ([]familystudy.Case, []familyArm, error) {
+	if !regexp.MustCompile(`^[a-f0-9]{40}$`).MatchString(spec.Revision) || spec.NoChoice && spec.SDK != "v0.2.5-experimental" {
+		return nil, nil, errors.New("explicit source-pinned family SDK contract required")
+	}
 	head, err := exec.Command("git", "rev-parse", "HEAD").Output()
 	if err != nil || strings.TrimSpace(string(head)) != revision {
 		return nil, nil, errors.New("family runner source differs")
@@ -117,7 +132,7 @@ func familyPreflight(binary, goBinary, output, revision string) ([]familystudy.C
 			sdk = d.Version
 		}
 	}
-	if settings["vcs.revision"] != familyNativeSHA || settings["vcs.modified"] != "false" || sdk != "v0.2.4-experimental" {
+	if settings["vcs.revision"] != spec.Revision || settings["vcs.modified"] != "false" || sdk != spec.SDK {
 		return nil, nil, errors.New("clean main native source and SDK required")
 	}
 	g, err := buildinfo.ReadFile(goBinary)
@@ -156,8 +171,11 @@ func familyPreflight(binary, goBinary, output, revision string) ([]familystudy.C
 	return rows, arms, nil
 }
 func inspectFamily(v nativeResult, r familystudy.Case, a familyArm) (familyObservation, error) {
+	return inspectFamilyFor(v, r, a, legacyFamily)
+}
+func inspectFamilyFor(v nativeResult, r familystudy.Case, a familyArm, spec familySpec) (familyObservation, error) {
 	p := v.Report.Paths
-	if v.Report.Decision != "PASS" || !v.Report.Types || !v.Report.Replay || v.Report.Writes != 0 || v.Report.Compiler != familyNativeSHA || !p.Bound || v.Source == "" || len(p.Cases) != len(r.Document.Cases) || p.Search.DeclaredCombinations != 2 || len(p.Search.Attempts) < 1 || len(p.Search.Attempts) > 2 || p.Search.Selection.ExternalCalls != 0 {
+	if v.Report.Decision != "PASS" || !v.Report.Types || !v.Report.Replay || v.Report.Writes != 0 || v.Report.Compiler != spec.Revision || !p.Bound || v.Source == "" || len(p.Cases) != len(r.Document.Cases) || p.Search.DeclaredCombinations != 2 || len(p.Search.Attempts) < 1 || len(p.Search.Attempts) > 2 || p.Search.Selection.ExternalCalls != 0 {
 		return familyObservation{}, errors.New("family native verification differs")
 	}
 	prepared, err := pathplan.Prepare(r.Document.Plan)
@@ -216,14 +234,37 @@ func inspectFamily(v nativeResult, r familystudy.Case, a familyArm) (familyObser
 		initial = 1
 	}
 	feedbackCalls := 0
+	noChoice := 0
 	prior = ""
 	for i, f := range p.Feedback {
 		sha := f.SHA
 		f.SHA = ""
 		encoded, err := json.Marshal(f)
 		from, ok := progressBySHA[f.FromProgressSHA]
-		if err != nil || hash(encoded) != sha || !ok || f.PreviousSHA != prior || f.Round != i+1 || !a.Feedback || f.CIIsAuthority || f.CI == nil || f.CI.SourceSHA != familyNativeSHA || f.CI.Status != "PASS" || f.MetadataSHA != a.Metadata || f.WeightsSHA != a.Weights || f.ModelCalls != 1 || f.CumulativeCalls != initial+feedbackCalls+1 || !f.Applied || f.ContextDeclined || len(f.Judgments) != 1 || from.Attempted != f.Attempted {
+		if err != nil || hash(encoded) != sha || !ok || f.PreviousSHA != prior || f.Round != i+1 || !a.Feedback || f.CIIsAuthority || f.CI == nil || f.CI.SourceSHA != spec.Revision || f.CI.Status != "PASS" || f.MetadataSHA != a.Metadata || f.WeightsSHA != a.Weights || from.Attempted != f.Attempted || f.PlanSHA != prepared.PlanSHA256() || f.CaseSHA != from.CaseSHA || f.Passed != from.SelectedPassed || f.Cases != from.Cases || f.TypeRejected != from.TypeRejected {
 			return familyObservation{}, errors.New("family feedback binding differs")
+		}
+		var first *pathplan.TestResult
+		for _, result := range from.BestCases {
+			if !result.Passed {
+				copy := result
+				first = &copy
+				break
+			}
+		}
+		if !reflect.DeepEqual(first, f.FirstFailure) {
+			return familyObservation{}, errors.New("family failure binding differs")
+		}
+		if spec.NoChoice {
+			if !f.RankingUnnecessary || f.ModelCalls != 0 || f.CumulativeCalls != initial+feedbackCalls || f.Applied || f.AddedMask || f.ContextDeclined || len(f.Judgments) != 0 || f.Error != "" || from.Declared-from.Attempted != 1 {
+				return familyObservation{}, errors.New("sole remaining path performed a ranking or lost its zero-call receipt")
+			}
+			noChoice++
+			prior = sha
+			continue
+		}
+		if f.RankingUnnecessary || f.ModelCalls != 1 || f.CumulativeCalls != initial+feedbackCalls+1 || !f.Applied || f.ContextDeclined || len(f.Judgments) != 1 {
+			return familyObservation{}, errors.New("legacy family ranking differs")
 		}
 		j := f.Judgments[0]
 		intent := r.Document.Plan.Decisions[0].Intent
@@ -235,6 +276,13 @@ func inspectFamily(v nativeResult, r familystudy.Case, a familyArm) (familyObser
 	}
 	if p.Search.Selection.ModelCalls != initial+feedbackCalls || len(p.Feedback) > 1 || evaluated != p.Search.Evaluated || p.Search.TypeRejected != 0 {
 		return familyObservation{}, errors.New("family prediction accounting differs")
+	}
+	if a.Feedback && evaluated == 2 && len(p.Feedback) != 1 || !a.Feedback && len(p.Feedback) != 0 || len(p.Progress) == 0 {
+		return familyObservation{}, errors.New("family feedback observation missing or unexpected")
+	}
+	last := p.Progress[len(p.Progress)-1]
+	if last.FeedbackRounds != len(p.Feedback) || last.FeedbackPredictions != feedbackCalls || last.LatestFeedbackSHA != prior || last.Selection.ModelCalls != initial+feedbackCalls {
+		return familyObservation{}, errors.New("family final feedback accounting differs")
 	}
 	selected := p.Search.Selection.Choices["structure"]
 	compiled, err := prepared.Compile(p.Search.Selection.Choices)
@@ -268,10 +316,13 @@ func inspectFamily(v nativeResult, r familystudy.Case, a familyArm) (familyObser
 	if passed != p.Search.SelectedTrainingPassed || p.Completeness != 100*float64(passed)/float64(len(r.Document.Cases)) {
 		return familyObservation{}, errors.New("family native completeness differs")
 	}
-	return familyObservation{CaseID: r.ID, Arm: a.Name, Feedback: a.Feedback, GoSHA: hash([]byte(v.Source)), Selected: selected, IntentionAgreement: selected == r.IntentionLabel, FiniteBest: best, Passed: passed, Cases: len(r.Document.Cases), SeparatePassed: separate, SeparateCases: len(r.Separate), Attempts: evaluated, Predictions: initial + feedbackCalls, FeedbackPredictions: feedbackCalls}, nil
+	return familyObservation{CaseID: r.ID, Arm: a.Name, Feedback: a.Feedback, GoSHA: hash([]byte(v.Source)), Selected: selected, IntentionAgreement: selected == r.IntentionLabel, FiniteBest: best, Passed: passed, Cases: len(r.Document.Cases), SeparatePassed: separate, SeparateCases: len(r.Separate), Attempts: evaluated, Predictions: initial + feedbackCalls, FeedbackPredictions: feedbackCalls, NoChoice: noChoice}, nil
 }
 func runFamily(binary, goBinary, output, revision string, pilot bool) error {
-	rows, arms, err := familyPreflight(binary, goBinary, output, revision)
+	return runFamilyFor(binary, goBinary, output, revision, pilot, legacyFamily)
+}
+func runFamilyFor(binary, goBinary, output, revision string, pilot bool, spec familySpec) error {
+	rows, arms, err := familyPreflightFor(binary, goBinary, output, revision, spec)
 	if err != nil {
 		return err
 	}
@@ -300,7 +351,7 @@ func runFamily(binary, goBinary, output, revision string, pilot bool) error {
 	for _, a := range arms {
 		pins[a.Name] = map[string]string{"metadata": a.Metadata, "weights": a.Weights}
 	}
-	if err = save(filepath.Join(output, "preexecution.json"), map[string]any{"schema": "gooo/native-feedback-family-preexecution/v1", "runner_revision": revision, "native_revision": familyNativeSHA, "binary_sha256": binSHA, "go_binary_sha256": goSHA, "go": "1.27.1", "sdk": "v0.2.4-experimental", "cohort_sha256": familyCohortSHA, "planned_native_calls": len(rows) * len(arms), "models": pins, "caller_ci_hint": pathplan.CIHint{SourceSHA: familyNativeSHA, Status: "PASS"}, "caller_ci_hint_is_authority": false, "pilot": pilot}); err != nil {
+	if err = save(filepath.Join(output, "preexecution.json"), map[string]any{"schema": "gooo/native-feedback-family-preexecution/v1", "runner_revision": revision, "native_revision": spec.Revision, "binary_sha256": binSHA, "go_binary_sha256": goSHA, "go": "1.27.1", "sdk": spec.SDK, "cohort_sha256": familyCohortSHA, "planned_native_calls": len(rows) * len(arms), "models": pins, "caller_ci_hint": pathplan.CIHint{SourceSHA: spec.Revision, Status: "PASS"}, "caller_ci_hint_is_authority": false, "pilot": pilot}); err != nil {
 		return err
 	}
 	dir, err := os.MkdirTemp("", "gooo-family-study-")
@@ -308,7 +359,7 @@ func runFamily(binary, goBinary, output, revision string, pilot bool) error {
 		return err
 	}
 	defer os.RemoveAll(dir)
-	if err = save(filepath.Join(dir, "ci.json"), pathplan.CIHint{SourceSHA: familyNativeSHA, Status: "PASS"}); err != nil {
+	if err = save(filepath.Join(dir, "ci.json"), pathplan.CIHint{SourceSHA: spec.Revision, Status: "PASS"}); err != nil {
 		return err
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
@@ -353,7 +404,7 @@ func runFamily(binary, goBinary, output, revision string, pilot bool) error {
 			if err = json.Unmarshal(raw, &v); err != nil {
 				return err
 			}
-			o, err := inspectFamily(v, r, a)
+			o, err := inspectFamilyFor(v, r, a, spec)
 			if err != nil {
 				return fmt.Errorf("%s: %w", id, err)
 			}
@@ -402,6 +453,9 @@ func runFamily(binary, goBinary, output, revision string, pilot bool) error {
 		separatePassed += o.SeparatePassed
 		separateTotal += o.SeparateCases
 	}
-	return save(filepath.Join(output, "report.json"), map[string]any{"schema": "gooo/native-feedback-family-study/v1", "decision": "PASS", "runner_revision": revision, "native_revision": familyNativeSHA, "pilot": pilot, "observations": observations, "native_calls": len(observations), "actual_model_predictions": predictions, "feedback_predictions": feedbackPredictions, "candidate_attempts": attempts, "repeated_finite_passes": passed, "repeated_finite_cases": total, "repeated_separate_input_passes": separatePassed, "repeated_separate_input_cases": separateTotal, "actual_generated_go_processes": len(executions), "actual_generated_function_evaluations": len(executions) * len(inputs), "execution_inputs": inputs,
-		"scope": "Fixed baseline-first development matrix across five existing families and ten source bodies. Repeated contracts/languages/arms are not independent tasks. Actual Go is deduplicated per emitted source and checked against an independent arithmetic oracle; reuse is counted separately. No host utilization or causal performance improvement is inferred. SDK v0.2.4 raw receipt wording describes a non-feedback-trained model even for the newly tuned models; that description is a known metadata-scope defect, not an actual training fact."})
+	scope := "Fixed baseline-first development matrix across five existing families and ten source bodies. Repeated contracts/languages/arms are not independent tasks. Actual Go is deduplicated per emitted source and checked against an independent arithmetic oracle; reuse is counted separately. No host utilization or causal performance improvement is inferred. SDK v0.2.4 raw receipt wording describes a non-feedback-trained model even for the newly tuned models; that description is a known metadata-scope defect, not an actual training fact."
+	if spec.NoChoice {
+		scope = "SDK v0.2.5 sole-remaining-path continuation; same frozen development cohort and models. Zero-call receipts retain failures and lineage. Compare source, selected labels, finite/separate outcomes and attempts to the frozen v0.2.4 matrix. Repeated policy observations are not independent tasks or new Go executions. One fixed ordering does not establish a causal wall-time or host-utilization improvement."
+	}
+	return save(filepath.Join(output, "report.json"), map[string]any{"schema": "gooo/native-feedback-family-study/v1", "decision": "PASS", "runner_revision": revision, "native_revision": spec.Revision, "pilot": pilot, "observations": observations, "native_calls": len(observations), "actual_model_predictions": predictions, "feedback_predictions": feedbackPredictions, "candidate_attempts": attempts, "repeated_finite_passes": passed, "repeated_finite_cases": total, "repeated_separate_input_passes": separatePassed, "repeated_separate_input_cases": separateTotal, "actual_generated_go_processes": len(executions), "actual_generated_function_evaluations": len(executions) * len(inputs), "execution_inputs": inputs, "scope": scope})
 }
