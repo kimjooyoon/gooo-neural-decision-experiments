@@ -90,6 +90,13 @@ jobs:
           go run ./tools/package-path-model --incremental-native --output "$RUNNER_TEMP/path-model-incremental-bundle"
           cmp publication/hf-typed-path-v1-incremental-native/publication-manifest.json "$RUNNER_TEMP/path-model-incremental-bundle/publication-manifest.json"
           go run ./tools/package-path-model --mode verify --bundle "$RUNNER_TEMP/path-model-incremental-bundle" --output "$RUNNER_TEMP/path-model-incremental-verification.json"
+      - name: Audit captured feedback and reproduce its synthetic appendix
+        run: |
+          go run ./tools/audit-feedback-pilot --output "$RUNNER_TEMP/feedback-pilot-audit.json"
+          cmp runs/feedback-path-pilot-fixed-20261001/audit.json "$RUNNER_TEMP/feedback-pilot-audit.json"
+          go run ./tools/package-feedback-pilot --bundle "$RUNNER_TEMP/feedback-pilot-bundle"
+          cmp publication/hf-feedback-path-pilot-20261001/publication-manifest.json "$RUNNER_TEMP/feedback-pilot-bundle/publication-manifest.json"
+          go run ./tools/package-feedback-pilot --mode verify --bundle "$RUNNER_TEMP/feedback-pilot-bundle" --output "$RUNNER_TEMP/feedback-pilot-verification.json"
       - uses: actions/upload-artifact@v7
         with:
           name: go-model-validation
@@ -108,6 +115,8 @@ jobs:
             ${{ runner.temp }}/path-model-direct-verification.json
             ${{ runner.temp }}/path-model-main-verification.json
             ${{ runner.temp }}/path-model-prepared-verification.json
+            ${{ runner.temp }}/feedback-pilot-audit.json
+            ${{ runner.temp }}/feedback-pilot-verification.json
           if-no-files-found: error
 
   compiler-model-dogfood:

@@ -13,6 +13,13 @@ bounded failure summary and optional caller CI hint, and changes only remaining
 path priority. Default sessions and released native SDK still rank once.
 This is an experiment with an existing model, not feedback training.
 
+The [actual feedback pilot](docs/feedback-path-pilot-results.md) made 246 small-model
+predictions, including 102 reconsideration predictions, and 32 native generations.
+All 16 pairs emitted the same Go and final case scores. One pair needed fewer
+candidates, two needed more, and there was no aggregate functional gain. Raw
+[captures and independent audit](runs/feedback-path-pilot-fixed-20261001/) retain
+those observations; existing weights remain unchanged.
+
 [Session API and limits](docs/incremental-typed-paths.md),
 [Korean judgment and partial-construction policy](docs/judgment-and-partial-construction.md),
 [actual 288-call native study](runs/incremental-native-20261001/), and

@@ -1,0 +1,7 @@
+package bodyplan
+namespace bodyplan
+
+entity Integer id "bodyplan://entity/integer"
+entity Boolean id "bodyplan://entity/boolean"
+
+activity ConditionalAssign(Integer) -> Integer computes "let left = (input + 5)\nlet right = (input - 10)\nlet guard = (0 < input)\nlet guard_alt = (input <= 5)\nguard = (guard && guard_alt)\nif guard {\n\tleft = (input - 10)\n} else {\n\tright = (input + 5)\n}\nreturn (left + right)"
