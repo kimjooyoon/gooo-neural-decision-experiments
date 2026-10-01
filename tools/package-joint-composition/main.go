@@ -311,7 +311,7 @@ func packageBundle(models, study, native, output, revision string) error {
 		"scope": "Six own random-init bounded structural models, all variants and negative comparisons; fixed allowlist contains public synthetic source/targets/captures only. Offline Python optimizer, Go runtime/oracle/orchestration/audit/publication."})
 }
 func main() {
-	mode := flag.String("mode", "package", "package, verify or fetch")
+	mode := flag.String("mode", "package", "stage, package, verify or fetch")
 	bundle := flag.String("bundle", "", "local frozen public bundle for verification")
 	publicRevision := flag.String("verify-revision", "", "immutable public Hugging Face revision")
 	manifestSHA := flag.String("manifest-sha256", "", "immutable public manifest digest for fetch")
@@ -328,6 +328,12 @@ func main() {
 	}
 	var err error
 	switch *mode {
+	case "stage":
+		if *study == "" || *revision == "" || *native != "" {
+			err = errors.New("complete SDK stage arguments required")
+		} else {
+			err = stageSDK(*models, *study, *output, *revision)
+		}
 	case "package":
 		if *study == "" || *native == "" || *revision == "" {
 			err = errors.New("complete fixed source/evidence paths required")
