@@ -580,3 +580,9 @@ is rejected by the current SDK before inference; this is compatibility evidence,
 not successful native adoption. The [next controlled studies](docs/split-context-followup-plan.md)
 prioritize bounded judgment, typed source context and measurable continuation
 cost. Runtime and publication are in Go; training/export are offline.
+The [immutable HF split-context appendix](https://huggingface.co/asketeddy/gooo-feedback-path-tiny-v1/tree/ad979c4db936cebaeb996acdd9f48b9b4ff135e3/research/split-context-gooo-judgment-20261001)
+contains all six exports and selected evidence. Anonymous byte verification
+passes for 30 appendix files and 25 selected core files. The
+[finite completeness and attempt metrics](publication/split-context-descriptive-metrics-20261001.json)
+retain their explicit case/view denominators. CI preserves its own fresh parity,
+judgment and packaging reports as downloadable artifacts.

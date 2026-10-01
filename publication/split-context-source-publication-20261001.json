@@ -1,0 +1,83 @@
+{
+  "schema": "gooo/split-context-source-publication/v1",
+  "decision": "PASS",
+  "training_source": "93e3c7f2c394bceecd34db9c428044461fb59c9a",
+  "training_source_ci": {
+    "ci_run": 36855853978,
+    "conclusion": "success",
+    "headSha": "93e3c7f2c394bceecd34db9c428044461fb59c9a",
+    "jobs": [
+      {
+        "conclusion": "success",
+        "name": "native-body-integration",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "runtime-and-artifacts",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "compiler-model-dogfood",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "native-typed-structural-inference",
+        "status": "completed"
+      }
+    ],
+    "schema": "gooo/split-context-training-source-ci/v1",
+    "scope": "Terminal source CI observation before new weights/captures are published; verifies source runtime, old native dogfood and existing evidence. New split weights are not part of this source revision.",
+    "status": "completed",
+    "updatedAt": "2026-10-01T11:38:48Z"
+  },
+  "weights_and_captures_source": "49c9013279ad7419ca031fbba92a06cfc0c18030",
+  "weights_and_captures_ci_run": 36857880012,
+  "weights_and_captures_ci_observed_status": "in_progress",
+  "hf_appendix": {
+    "credentials_sent": false,
+    "decision": "PASS",
+    "explicit_anonymous_requests": 31,
+    "manifest_sha256": "ef6143537db833c117a2c975bc43974fe4fe64d4b37bc8ea51b7fabd83618493",
+    "new_model_predictions": 0,
+    "new_native_calls": 0,
+    "new_optimizer_steps": 0,
+    "prefix": "research/split-context-gooo-judgment-20261001/",
+    "publication_files": 30,
+    "repository": "asketeddy/gooo-feedback-path-tiny-v1",
+    "request_scope": "One public identity API and one explicit file request per selected file; automatic redirects and prior publications excluded.",
+    "revision": "ad979c4db936cebaeb996acdd9f48b9b4ff135e3",
+    "schema": "gooo/split-context-verification/v1"
+  },
+  "core_retention": {
+    "anonymous_requests": 26,
+    "credentials_sent": false,
+    "decision": "PASS",
+    "manifest_sha256": "3689f09e1013733a1c0bbb827de1acd371a8b2b18d6cec8e3b5bf26b29dca55d",
+    "new_model_predictions": 0,
+    "new_native_calls": 0,
+    "new_optimizer_steps": 0,
+    "publication_files": 25,
+    "repository": "asketeddy/gooo-feedback-path-tiny-v1",
+    "revision": "ad979c4db936cebaeb996acdd9f48b9b4ff135e3",
+    "schema": "gooo/feedback-path-model-verification/v1"
+  },
+  "native_contract_probe": {
+    "schema": "gooo/split-context-native-contract-outcome/v1",
+    "actual_native_calls": 1,
+    "exit_code": 1,
+    "new_model_predictions_observed": 0,
+    "native_adopted": false,
+    "scope": "Feature version rejected before inference by the pinned SDK 0.2.8 reader. Original error and exit are retained. This is expected incompatibility evidence, not a successful model/native integration or universal fallback claim."
+  },
+  "new_optimizer_steps": 560,
+  "new_independent_intentions": 0,
+  "controlled_model_predictions_excluding_unit_and_ci": 14592,
+  "new_upstream_laya_calls": 0,
+  "new_default_checkpoint_promoted": false,
+  "subagents_used": 0,
+  "new_worktrees": 0,
+  "scope": "Matched v1/v2 feature experiment published with increased continuation attempts. Source training CI passes four jobs. Packaging/capture source CI is pending at this observation and gets a later terminal finalization. Anonymous immutable verification checks 55 selected files through 57 explicit requests, excluding redirects/discovery. Native v2 is rejected before inference; no successful native v2 use, untouched benchmark or host utilization claim."
+}

@@ -347,6 +347,10 @@ jobs:
         with:
           name: go-model-validation
           path: |
+            ${{ runner.temp }}/split-v1-parity.json
+            ${{ runner.temp }}/split-v2-parity.json
+            ${{ runner.temp }}/split-context-judgment
+            ${{ runner.temp }}/split-context-publication-verification.json
             ${{ runner.temp }}/retained-native-audit.json
             ${{ runner.temp }}/native-budget-audit.json
             ${{ runner.temp }}/path-diagnosis-audit.json
