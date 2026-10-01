@@ -44,23 +44,27 @@ type nativeResult struct {
 		Replay     bool   `json:"deterministic_replay"`
 		Writes     int    `json:"repository_writes"`
 		Paths      struct {
-			Unfixed     bool                       `json:"feedback_unfixed,omitempty"`
-			OriginalSHA string                     `json:"original_source_sha256"`
-			DocumentSHA string                     `json:"document_sha256"`
-			SuiteSHA    string                     `json:"test_suite_sha256"`
-			Bound       bool                       `json:"source_base_matched"`
-			Search      pathplan.SearchResult      `json:"search"`
-			Progress    []pathplan.SessionProgress `json:"session_progress"`
-			Feedback    []pathplan.FeedbackReceipt `json:"feedback_judgments"`
-			Cases       []struct {
+			Diagnosis       *pathplan.Diagnosis        `json:"diagnosis,omitempty"`
+			DiagnosisBudget int                        `json:"diagnosis_budget,omitempty"`
+			DiagnosisSHA    string                     `json:"diagnosis_options_sha256,omitempty"`
+			Unfixed         bool                       `json:"feedback_unfixed,omitempty"`
+			OriginalSHA     string                     `json:"original_source_sha256"`
+			DocumentSHA     string                     `json:"document_sha256"`
+			SuiteSHA        string                     `json:"test_suite_sha256"`
+			Bound           bool                       `json:"source_base_matched"`
+			Search          pathplan.SearchResult      `json:"search"`
+			Progress        []pathplan.SessionProgress `json:"session_progress"`
+			Feedback        []pathplan.FeedbackReceipt `json:"feedback_judgments"`
+			Cases           []struct {
 				Input, Expected, Actual int64
 				Passed                  bool
 			} `json:"native_case_results"`
 			Completeness float64 `json:"finite_functional_completeness_percent"`
 			Timing       struct {
-				Total  float64 `json:"total_ms"`
-				Search float64 `json:"bounded_search_ms"`
-				Load   float64 `json:"model_load_ms"`
+				Diagnosis float64 `json:"diagnosis_ms"`
+				Total     float64 `json:"total_ms"`
+				Search    float64 `json:"bounded_search_ms"`
+				Load      float64 `json:"model_load_ms"`
 			} `json:"timing"`
 		} `json:"body_paths"`
 	} `json:"report"`
@@ -429,6 +433,23 @@ func main() {
 	worker := flag.String("worker", "", "optional retained native body worker executable")
 	familyCIStatus := flag.String("family-ci-status", "PASS", "caller family-study CI context: PASS, FAIL or UNKNOWN")
 	flag.Parse()
+	if *mode == "native-diagnosis-smoke" || *mode == "native-diagnosis-audit" {
+		var err error
+		if *mode == "native-diagnosis-smoke" {
+			err = runNativeDiagnosisSmoke(*binary, *root, *goBinary, *output, *revision, *nativeRevision)
+		} else {
+			var value map[string]any
+			value, err = auditNativeDiagnosisSmoke(*output, *revision, *nativeRevision)
+			if err == nil {
+				err = save(*auditOutput, value)
+			}
+		}
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "native-diagnosis:", err)
+			os.Exit(1)
+		}
+		return
+	}
 	if *mode == "diagnosis-study" || *mode == "diagnosis-audit" {
 		var err error
 		if *mode == "diagnosis-study" {

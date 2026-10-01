@@ -32,7 +32,7 @@ func executeGenerated(ctx context.Context, goBinary, source string, inputs []int
 }
 
 func executeFunction(ctx context.Context, goBinary, source, function string, inputs []int64) ([]byte, error) {
-	if function != "ConditionalAssign" && function != "ChoosePath" && function != "ComposePaths" {
+	if function != "ConditionalAssign" && function != "ChoosePath" && function != "ComposePaths" && function != "Probe" {
 		return nil, errors.New("compiler-owned execution function required")
 	}
 	info, err := buildinfo.ReadFile(goBinary)
