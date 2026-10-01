@@ -2,6 +2,14 @@
 
 ## Own source-aware small model
 
+The [actual fresh-model training and native dogfood](docs/fresh-composition-model-results-20261002.md)
+now adds 960 MPS optimizer updates, six own random-init exports and 144 native
+compiler calls with 2,304 independently executed generated-Go invocations.
+Source v3 FP32 reduces development continuation attempts 524→397; the frozen
+calibration-selected v3 QAT needs 470. All negative comparisons remain recorded.
+Warm selected inference is about 9.7 microseconds, with zero per-call heap
+allocation. Published ternary disk packing decodes to int8 runtime matrices.
+
 The [source ABI and fresh curriculum preparation](docs/semantic-source-v3-preparation-results-20261002.md)
 connects our optional small model directly to typed Gooo source in protected
 native main. Six fresh two-choice compositions provide 9,216 audited decision
