@@ -423,6 +423,21 @@ func main() {
 	revision := flag.String("source-revision", "", "committed runner SHA")
 	nativeRevision := flag.String("native-revision", "", "clean binary source SHA")
 	flag.Parse()
+	if *mode == "continued-audit" {
+		value, err := auditContinuedBound(*output)
+		if err == nil {
+			path := *auditOutput
+			if path == "" {
+				path = filepath.Join(*output, "audit.json")
+			}
+			err = save(path, value)
+		}
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+		return
+	}
 	if *mode == "continued-bound" {
 		if err := probeContinuedBound(*binary, *goBinary, *output, *revision, *nativeRevision); err != nil {
 			fmt.Fprintln(os.Stderr, err)

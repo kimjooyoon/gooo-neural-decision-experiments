@@ -107,6 +107,16 @@ jobs:
           cmp publication/hf-native-feedback-20261001/publication-manifest.json "$RUNNER_TEMP/native-feedback-bundle/publication-manifest.json"
           go run ./tools/package-native-feedback --mode verify --bundle "$RUNNER_TEMP/native-feedback-bundle" \
             --output "$RUNNER_TEMP/native-feedback-verification.json"
+      - name: Audit continued construction after a zero-call context decline
+        run: |
+          go run ./tools/native-feedback-study --mode continued-audit \
+            --out runs/feedback-context-decline-20261001 \
+            --audit-output "$RUNNER_TEMP/continued-judgment-audit.json"
+          cmp runs/feedback-context-decline-20261001/audit.json "$RUNNER_TEMP/continued-judgment-audit.json"
+          go run ./tools/package-continued-judgment --bundle "$RUNNER_TEMP/continued-judgment-bundle"
+          cmp publication/hf-continued-judgment-20261001/publication-manifest.json "$RUNNER_TEMP/continued-judgment-bundle/publication-manifest.json"
+          go run ./tools/package-continued-judgment --mode verify --bundle "$RUNNER_TEMP/continued-judgment-bundle" \
+            --output "$RUNNER_TEMP/continued-judgment-verification.json"
       - uses: actions/upload-artifact@v7
         with:
           name: go-model-validation
@@ -127,6 +137,8 @@ jobs:
             ${{ runner.temp }}/path-model-prepared-verification.json
             ${{ runner.temp }}/feedback-pilot-audit.json
             ${{ runner.temp }}/feedback-pilot-verification.json
+            ${{ runner.temp }}/continued-judgment-audit.json
+            ${{ runner.temp }}/continued-judgment-verification.json
           if-no-files-found: error
 
   compiler-model-dogfood:

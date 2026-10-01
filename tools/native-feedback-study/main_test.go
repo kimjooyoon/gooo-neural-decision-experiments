@@ -147,3 +147,39 @@ func TestBoundedOutputAndProcessCancellation(t *testing.T) {
 		t.Fatal("canceled child retained a live process group or output wait")
 	}
 }
+
+func TestContinuedConstructionAuditRejectsChangedCaptures(t *testing.T) {
+	t.Chdir("../..")
+	const original = "runs/feedback-context-decline-20261001"
+	if _, err := auditContinuedBound(original); err != nil {
+		t.Fatal(err)
+	}
+	dir := t.TempDir()
+	entries, err := os.ReadDir(original)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, entry := range entries {
+		raw, err := read(filepath.Join(original, entry.Name()))
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(filepath.Join(dir, entry.Name()), raw, 0600); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if _, err := auditContinuedBound(dir); err != nil {
+		t.Fatal(err)
+	}
+	path := filepath.Join(dir, "en-feedback.json")
+	raw, err := read(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(path, append(raw, ' '), 0600); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := auditContinuedBound(dir); err == nil {
+		t.Fatal("changed continued-construction capture accepted")
+	}
+}
