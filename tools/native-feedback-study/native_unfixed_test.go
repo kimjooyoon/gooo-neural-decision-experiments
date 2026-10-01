@@ -12,21 +12,25 @@ import (
 
 func TestNativeUnfixedFrozenPilotReproducesWithoutInference(t *testing.T) {
 	t.Chdir("../..")
-	root := "runs/unfixed-native-feature-pilot-20261001"
-	v, err := auditNativeUnfixed(root, "3749fdc6c1f218c36d944a7899bb1125061c6906", "d869be3219a7798b6cc3b13c31efa8a6d899ae22")
-	if err != nil {
-		t.Fatal(err)
-	}
-	raw, err := json.MarshalIndent(v, "", "  ")
-	if err != nil {
-		t.Fatal(err)
-	}
-	expected, err := read(filepath.Join(root, "report.json"))
-	if err != nil || hash(expected) != "4dba2dab42c17af2c069a442b18053fc804bc50a32f5b4276799ddf3f96d3962" || !bytes.Equal(append(raw, '\n'), expected) {
-		t.Fatal("frozen native pilot audit differs")
-	}
-	if _, err := auditNativeUnfixed(root, "3749fdc6c1f218c36d944a7899bb1125061c6906", compoundNative); err == nil {
-		t.Fatal("other native source accepted")
+	for _, pin := range []struct{ root, runner, native, report string }{
+		{"runs/unfixed-native-feature-pilot-20261001", "3749fdc6c1f218c36d944a7899bb1125061c6906", "d869be3219a7798b6cc3b13c31efa8a6d899ae22", "4dba2dab42c17af2c069a442b18053fc804bc50a32f5b4276799ddf3f96d3962"},
+		{"runs/unfixed-native-main-pilot-20261001", "b093d1b7a855dba34051b0b4ff959ba8be45fdf0", "6f69eb116336b4728db6f94a992130ea56003a48", "6bf4030ee7fe769fd3befe8b5bee66bb6fe00fe272037153f4197d59cc6818f6"},
+	} {
+		v, err := auditNativeUnfixed(pin.root, pin.runner, pin.native)
+		if err != nil {
+			t.Fatal(err)
+		}
+		raw, err := json.MarshalIndent(v, "", "  ")
+		if err != nil {
+			t.Fatal(err)
+		}
+		expected, err := read(filepath.Join(pin.root, "report.json"))
+		if err != nil || hash(expected) != pin.report || !bytes.Equal(append(raw, '\n'), expected) {
+			t.Fatal("frozen native pilot audit differs")
+		}
+		if _, err := auditNativeUnfixed(pin.root, pin.runner, compoundNative); err == nil {
+			t.Fatal("other native source accepted")
+		}
 	}
 }
 

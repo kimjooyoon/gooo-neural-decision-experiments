@@ -443,3 +443,12 @@ all median RSS values rise slightly despite fewer predictions. Exact CI/proof,
 source-bound raw captures, resource sidecars and compressed public HF evidence
 are available; main promotion is separate. Reused views do not establish arbitrary
 natural-language accuracy or causal speedup. First-shot correctness is not acceptance.
+
+This option is now merged into native main through
+[PR 1125](https://github.com/kimjooyoon/meta-ontology-go/pull/1125). A fresh
+48-call main pilot preserves the same bounded partial outcomes and call reduction,
+with original UNKNOWN post-push CI context retained. Its
+[public HF appendix](https://huggingface.co/asketeddy/gooo-feedback-path-tiny-v1/tree/5e5718256beb43667483154cc0e4464981a66fb4/research/unfixed-native-main-pilot-20261001)
+includes all raw observations and actual emitted-Go values. FP32/PTQ main medians
+increase slightly despite fewer calls; all median RSS values rise. Main push and
+full evidence-source CI verification remain separate records.

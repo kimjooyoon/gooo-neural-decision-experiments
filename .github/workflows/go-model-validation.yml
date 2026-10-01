@@ -193,6 +193,15 @@ jobs:
           cmp runs/unfixed-native-feature-pilot-20261001/report.json "$RUNNER_TEMP/unfixed-native-feature-audit.json"
           go run ./tools/native-unfixed-metrics --output "$RUNNER_TEMP/unfixed-native-feature-metrics.json"
           cmp publication/unfixed-native-feature-descriptive-metrics-20261001.json "$RUNNER_TEMP/unfixed-native-feature-metrics.json"
+          go run ./tools/native-feedback-study --mode native-unfixed-audit \
+            --out runs/unfixed-native-main-pilot-20261001 \
+            --source-revision b093d1b7a855dba34051b0b4ff959ba8be45fdf0 \
+            --native-revision 6f69eb116336b4728db6f94a992130ea56003a48 \
+            --audit-output "$RUNNER_TEMP/unfixed-native-main-audit.json"
+          cmp runs/unfixed-native-main-pilot-20261001/report.json "$RUNNER_TEMP/unfixed-native-main-audit.json"
+          go run ./tools/native-unfixed-metrics --root runs/unfixed-native-main-pilot-20261001 \
+            --output "$RUNNER_TEMP/unfixed-native-main-metrics.json"
+          cmp publication/unfixed-native-main-descriptive-metrics-20261001.json "$RUNNER_TEMP/unfixed-native-main-metrics.json"
       - name: Reproduce compressed native-family publication without credentials
         run: |
           go run ./tools/package-family-evidence --pack --bundle "$RUNNER_TEMP/native-family-bundle"
@@ -229,11 +238,20 @@ jobs:
           go run ./tools/package-family-evidence --kind unfixed-native-feature \
             --bundle "$RUNNER_TEMP/unfixed-native-feature-bundle" \
             --output "$RUNNER_TEMP/unfixed-native-feature-verification.json"
+          go run ./tools/package-family-evidence --kind unfixed-native-main --pack \
+            --bundle "$RUNNER_TEMP/unfixed-native-main-bundle"
+          cmp publication/hf-unfixed-native-main-pilot-20261001/publication-manifest.json "$RUNNER_TEMP/unfixed-native-main-bundle/publication-manifest.json"
+          go run ./tools/package-family-evidence --kind unfixed-native-main \
+            --bundle "$RUNNER_TEMP/unfixed-native-main-bundle" \
+            --output "$RUNNER_TEMP/unfixed-native-main-verification.json"
       - uses: actions/upload-artifact@v7
         with:
           name: go-model-validation
           path: |
             ${{ runner.temp }}/unfixed-native-feature-audit.json
+            ${{ runner.temp }}/unfixed-native-main-audit.json
+            ${{ runner.temp }}/unfixed-native-main-metrics.json
+            ${{ runner.temp }}/unfixed-native-main-verification.json
             ${{ runner.temp }}/unfixed-native-feature-metrics.json
             ${{ runner.temp }}/unfixed-native-feature-verification.json
             ${{ runner.temp }}/unfixed-feedback-sdk-audit.json

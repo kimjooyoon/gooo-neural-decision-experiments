@@ -45,6 +45,9 @@ func privateText(raw []byte) bool {
 }
 
 var fixed = map[string]string{
+	"runs/unfixed-native-main-pilot-20261001/preexecution.json":    "333f5b1cf65a9c45f1c10ee01ce7a53e3dd989f915eec764cc2a7e30a5c09c39",
+	"runs/unfixed-native-main-pilot-20261001/report.json":          "6bf4030ee7fe769fd3befe8b5bee66bb6fe00fe272037153f4197d59cc6818f6",
+	"runs/unfixed-native-main-pilot-20261001/audit.json":           "6bf4030ee7fe769fd3befe8b5bee66bb6fe00fe272037153f4197d59cc6818f6",
 	"runs/unfixed-native-feature-pilot-20261001/preexecution.json": "b7fd3eedddabac4e37864b05a77d6f65e08dd60b1f626bb83134ab1126e8bdd0",
 	"runs/unfixed-native-feature-pilot-20261001/report.json":       "4dba2dab42c17af2c069a442b18053fc804bc50a32f5b4276799ddf3f96d3962",
 	"runs/unfixed-native-feature-pilot-20261001/audit.json":        "4dba2dab42c17af2c069a442b18053fc804bc50a32f5b4276799ddf3f96d3962",

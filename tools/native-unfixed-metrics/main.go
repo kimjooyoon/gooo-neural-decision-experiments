@@ -14,6 +14,7 @@ import (
 )
 
 var reportPins = map[string]string{
+	"runs/unfixed-native-main-pilot-20261001":    "6bf4030ee7fe769fd3befe8b5bee66bb6fe00fe272037153f4197d59cc6818f6",
 	"runs/unfixed-native-feature-pilot-20261001": "4dba2dab42c17af2c069a442b18053fc804bc50a32f5b4276799ddf3f96d3962",
 }
 

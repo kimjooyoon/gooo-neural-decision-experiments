@@ -124,3 +124,52 @@ that sum is not workflow elapsed time or measured CPU/billing. Runner-source CI
 spanned 292 seconds. These full-repository checks have a different workload from
 local candidate construction. Local finite feedback therefore stays in the
 bounded codegen loop, with source CI evidence used as additional context.
+
+## Actual main deployment and repeated pilot
+
+After all six canonical checks and exact promotion GoProof passed,
+[PR 1125](https://github.com/kimjooyoon/meta-ontology-go/pull/1125) was normally
+protected-merged at 07:04:03 UTC. Actual main is
+`6f69eb116336b4728db6f94a992130ea56003a48`, tree
+`51c2eccb0b65bd08e46b1b1f47fecdc6d1c3997b`, exactly the live dev tree. Main
+requires exactly six statuses, strict checks/admin enforcement and zero reviews;
+no Guardian or override was used. A clean Go 1.27.1/SDK 0.2.7 binary was rebuilt,
+SHA256 `77e330a2a865dc80c061928863f3fe82c5649e2db6981782338c3d0bebf8b858`.
+
+Runner `b093d1b7a855dba34051b0b4ff959ba8be45fdf0` passed all four jobs in
+[source CI 36828009562](https://github.com/kimjooyoon/gooo-neural-decision-experiments/actions/runs/36828009562).
+The repeated main pilot actually made 48 compiler calls and 264 predictions,
+144 legacy versus 120 opt-in, again skipping 24. All 24 pairs preserve candidate
+sequence, body and 87.5% contradictory-case completeness. Three actual emitted
+Go programs were executed on 14 inputs, 42 function invocations, and matched
+the independent integer-state oracle. Combined feature/main execution counts
+are 96 native calls, 528 predictions, six Go processes and 84 function invocations;
+they reuse the same views rather than forming independent new experiments.
+
+The main raw hint remains UNKNOWN because its post-push CI was pending when
+executed. That status is part of the exact feedback prefix and is not relabeled
+after subsequent CI. Report/audit SHA256 is
+`6bf4030ee7fe769fd3befe8b5bee66bb6fe00fe272037153f4197d59cc6818f6`.
+
+| Model | Whole-child wall p50 ms, legacy → opt-in | CPU time p50 ms, legacy → opt-in | RSS p50 MiB, legacy → opt-in |
+|---|---:|---:|---:|
+| Parent FP32 | 6.0803 → 6.0545 | 5.3285 → 5.2700 | 17.2188 → 17.2656 |
+| Feedback FP32 | 6.0513 → 6.1033 | 5.2720 → 5.3300 | 17.2656 → 17.3203 |
+| Feedback PTQ | 5.8852 → 5.9094 | 5.1845 → 5.2345 | 17.0938 → 17.1406 |
+| Feedback QAT | 5.9920 → 5.9190 | 5.2545 → 5.1940 | 17.1016 → 17.1797 |
+
+Each row has six observations per mode. FP32/PTQ median wall and CPU time rise;
+every median RSS rises. Main one-core child CPU medians span 87.44–88.67%, and
+bounded-search medians span 0.330–0.352 ms, including a slightly higher parent
+opt-in search median. None is host CPU growth or a causal speedup conclusion.
+[Full metrics and outliers](../publication/unfixed-native-main-descriptive-metrics-20261001.json)
+preserve the exact scope and calculation rules.
+
+The [immutable main HF appendix](https://huggingface.co/asketeddy/gooo-feedback-path-tiny-v1/tree/5e5718256beb43667483154cc0e4464981a66fb4/research/unfixed-native-main-pilot-20261001)
+contains 104 raw entries compressed to 369,676 bytes. All seven files/entries
+passed anonymous byte verification. Original core (25 files), compound (nine),
+SDK (seven) and feature (seven) appendices were reverified at the same revision:
+55 files and 60 HTTP GETs, zero credentials or inference/subprocess calls.
+The [main source/publication receipt](../publication/unfixed-native-main-source-publication-20261001.json)
+binds exact promotion proof and immutable bytes. Subsequent main push CI and
+evidence-source CI are recorded separately without changing the raw hint/captures.
