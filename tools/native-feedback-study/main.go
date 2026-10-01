@@ -423,6 +423,20 @@ func main() {
 	revision := flag.String("source-revision", "", "committed runner SHA")
 	nativeRevision := flag.String("native-revision", "", "clean binary source SHA")
 	flag.Parse()
+	if *mode == "family-pilot" || *mode == "family-study" {
+		if err := runFamily(*binary, *goBinary, *output, *revision, *mode == "family-pilot"); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+		return
+	}
+	if *mode == "family-cohort" {
+		if err := writeFamilyCohort(*output); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+		return
+	}
 	if *mode == "trained-dogfood" {
 		if err := trainedDogfood(*binary, *goBinary, *output, *revision, *nativeRevision); err != nil {
 			fmt.Fprintln(os.Stderr, err)

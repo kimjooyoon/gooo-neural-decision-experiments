@@ -28,6 +28,13 @@ func median(values []float64) float64 {
 	return (values[n/2-1] + values[n/2]) / 2
 }
 func executeGenerated(ctx context.Context, goBinary, source string, inputs []int64) ([]byte, error) {
+	return executeFunction(ctx, goBinary, source, "ConditionalAssign", inputs)
+}
+
+func executeFunction(ctx context.Context, goBinary, source, function string, inputs []int64) ([]byte, error) {
+	if function != "ConditionalAssign" && function != "ChoosePath" {
+		return nil, errors.New("compiler-owned execution function required")
+	}
 	info, err := buildinfo.ReadFile(goBinary)
 	if err != nil || info.GoVersion != "go1.27.1" {
 		return nil, errors.New("exact Go 1.27.1 execution toolchain required")
@@ -43,7 +50,7 @@ func executeGenerated(ctx context.Context, goBinary, source string, inputs []int
 	var main strings.Builder
 	main.WriteString("package main\nimport (\"encoding/json\";\"os\";p \"gooo.native.feedback/projection\")\nfunc main(){json.NewEncoder(os.Stdout).Encode([]int64{")
 	for _, input := range inputs {
-		fmt.Fprintf(&main, "p.ConditionalAssign(%d),", input)
+		fmt.Fprintf(&main, "p.%s(%d),", function, input)
 	}
 	main.WriteString("})}\n")
 	for name, content := range map[string]string{"go.mod": "module gooo.native.feedback\n\ngo 1.27.1\n", "projection/generated.go": source, "main.go": main.String()} {
