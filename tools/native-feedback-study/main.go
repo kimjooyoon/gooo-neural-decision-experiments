@@ -426,8 +426,26 @@ func main() {
 	output := flag.String("out", "", "fresh relative runs directory")
 	revision := flag.String("source-revision", "", "committed runner SHA")
 	nativeRevision := flag.String("native-revision", "", "clean binary source SHA")
+	worker := flag.String("worker", "", "optional retained native body worker executable")
 	familyCIStatus := flag.String("family-ci-status", "PASS", "caller family-study CI context: PASS, FAIL or UNKNOWN")
 	flag.Parse()
+	if *mode == "retained-pilot" || *mode == "retained-audit" {
+		var err error
+		if *mode == "retained-pilot" {
+			err = runRetainedPilot(*binary, *worker, *goBinary, *output, *revision, *nativeRevision)
+		} else {
+			var value map[string]any
+			value, err = auditRetained(*output, *revision, *nativeRevision)
+			if err == nil {
+				err = save(*auditOutput, value)
+			}
+		}
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "retained-native:", err)
+			os.Exit(1)
+		}
+		return
+	}
 	if *mode == "native-unfixed-audit" {
 		value, err := auditNativeUnfixed(*output, *revision, *nativeRevision)
 		if err == nil {

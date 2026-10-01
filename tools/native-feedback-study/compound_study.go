@@ -120,9 +120,13 @@ func compoundRows() ([]compoundstudy.Case, error) {
 }
 
 func inspectCompound(v nativeResult, r compoundstudy.Case, a familyArm) (compoundObservation, error) {
+	return inspectCompoundFor(v, r, a, compoundNative)
+}
+
+func inspectCompoundFor(v nativeResult, r compoundstudy.Case, a familyArm, native string) (compoundObservation, error) {
 	var result compoundObservation
 	p := v.Report.Paths
-	if v.Report.Decision != "PASS" || !v.Report.Types || !v.Report.Replay || v.Report.Writes != 0 || v.Report.Compiler != compoundNative || !p.Bound || v.Report.ActivityID != "compound-study://activity/compose-paths" || v.Source == "" || len(p.Cases) != len(r.Document.Cases) || p.Search.TrainingTotal != len(r.Document.Cases) || p.Search.DeclaredCombinations != 4 || len(p.Search.Attempts) < 1 || len(p.Search.Attempts) > 4 || p.Search.TypeRejected != 0 || p.Search.Selection.ExternalCalls != 0 || !p.Search.Selection.ExternalCallsKnown {
+	if v.Report.Decision != "PASS" || !v.Report.Types || !v.Report.Replay || v.Report.Writes != 0 || v.Report.Compiler != native || !p.Bound || v.Report.ActivityID != "compound-study://activity/compose-paths" || v.Source == "" || len(p.Cases) != len(r.Document.Cases) || p.Search.TrainingTotal != len(r.Document.Cases) || p.Search.DeclaredCombinations != 4 || len(p.Search.Attempts) < 1 || len(p.Search.Attempts) > 4 || p.Search.TypeRejected != 0 || p.Search.Selection.ExternalCalls != 0 || !p.Search.Selection.ExternalCallsKnown {
 		return result, errors.New("compound native verification differs")
 	}
 	prepared, err := pathplan.Prepare(r.Document.Plan)
@@ -191,7 +195,7 @@ func inspectCompound(v nativeResult, r compoundstudy.Case, a familyArm) (compoun
 		f.SHA = ""
 		raw, err := json.Marshal(f)
 		from, ok := progresses[f.FromProgressSHA]
-		if err != nil || hash(raw) != sha || !ok || !a.Feedback || f.PreviousSHA != prior || f.Round != i+1 || f.Attempted != from.Attempted || f.Passed != from.SelectedPassed || f.Cases != from.Cases || f.TypeRejected != from.TypeRejected || f.CaseSHA != from.CaseSHA || f.PlanSHA != prepared.PlanSHA256() || f.MetadataSHA != a.Metadata || f.WeightsSHA != a.Weights || f.CIIsAuthority || f.CI == nil || *f.CI != (pathplan.CIHint{SourceSHA: compoundNative, Status: "PASS"}) || f.ContextDeclined || f.Error != "" {
+		if err != nil || hash(raw) != sha || !ok || !a.Feedback || f.PreviousSHA != prior || f.Round != i+1 || f.Attempted != from.Attempted || f.Passed != from.SelectedPassed || f.Cases != from.Cases || f.TypeRejected != from.TypeRejected || f.CaseSHA != from.CaseSHA || f.PlanSHA != prepared.PlanSHA256() || f.MetadataSHA != a.Metadata || f.WeightsSHA != a.Weights || f.CIIsAuthority || f.CI == nil || *f.CI != (pathplan.CIHint{SourceSHA: native, Status: "PASS"}) || f.ContextDeclined || f.Error != "" {
 			return result, errors.New("compound feedback lineage differs")
 		}
 		var first *pathplan.TestResult
