@@ -197,7 +197,7 @@ func get(url string) ([]byte, error) {
 	}
 	return raw, err
 }
-func verify(bundle, revision, output string, includeAppendices bool) error {
+func verify(bundle, revision, output string, includeAppendices, includeMain bool) error {
 	if !regexp.MustCompile(`^[a-f0-9]{40}$`).MatchString(revision) {
 		return errors.New("immutable HF revision required")
 	}
@@ -260,6 +260,46 @@ func verify(bundle, revision, output string, includeAppendices bool) error {
 			appendices = append(appendices, artifact{pair[1], hash(remote), len(remote)})
 		}
 	}
+	if includeMain {
+		files := map[string]string{
+			"publication/compiler-context-feature-main-comparison-20261002.json": "research/main-comparison-20261002.json",
+			"publication/compiler-context-main-adoption-20261002.json":           "research/main-adoption-20261002.json",
+			"docs/compiler-context-main-results.md":                              "research/main-results-20261002.md",
+		}
+		root := "runs/compiler-context-native-main-replay-20261002"
+		entries, e := os.ReadDir(root)
+		if e != nil {
+			return e
+		}
+		if len(entries) != 162 {
+			return errors.New("162 frozen main replay files required")
+		}
+		for _, entry := range entries {
+			if !entry.Type().IsRegular() || !strings.HasSuffix(entry.Name(), ".json") {
+				return errors.New("unexpected main replay file")
+			}
+			files[filepath.Join(root, entry.Name())] = "research/main-replay-20261002/" + entry.Name()
+		}
+		var paths []string
+		for path := range files {
+			paths = append(paths, path)
+		}
+		sort.Strings(paths)
+		for _, path := range paths {
+			local, e := read(path)
+			if e != nil {
+				return e
+			}
+			remote, e := get(base + files[path])
+			if e != nil {
+				return e
+			}
+			if hash(remote) != hash(local) {
+				return errors.New("public main replay hash differs")
+			}
+			appendices = append(appendices, artifact{files[path], hash(remote), len(remote)})
+		}
+	}
 	return save(output, map[string]any{"schema": "gooo/compiler-context-public-verification/v1", "status": "PASS", "repo": value.Repo, "revision": revision,
 		"manifest_sha256": hash(raw), "verified_payload_files": len(value.Files) + len(appendices), "anonymous_payload_gets": len(value.Files) + 1 + len(appendices), "appendices": appendices, "archive_entries": len(value.Archive), "api_discovery_gets": 1, "scope": "anonymous immutable-revision byte hashes; selected allowlist only"})
 }
@@ -269,12 +309,13 @@ func main() {
 	revision := flag.String("revision", "", "HF commit SHA")
 	output := flag.String("output", "", "verification receipt")
 	appendices := flag.Bool("appendices", false, "verify source-bound diagnostic and next-study appendices")
+	mainReplay := flag.Bool("main-replay", false, "verify installed-main captures and adoption appendices")
 	flag.Parse()
 	var err error
 	if *mode == "pack" {
 		err = pack(*bundle)
 	} else if *mode == "verify" {
-		err = verify(*bundle, *revision, *output, *appendices)
+		err = verify(*bundle, *revision, *output, *appendices, *mainReplay)
 	} else {
 		err = errors.New("unknown publication mode")
 	}
