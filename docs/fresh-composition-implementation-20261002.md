@@ -33,4 +33,13 @@ Next, the released native main must source-bind and export both feature arms
 for every view. Collection must reject any complete-input overflow or source/
 oracle discrepancy before training. No collection denominator may be reduced
 after observations. Matched training, calibration selection, feedback cost and
-144 native dogfood executions remain subsequent measured stages.
+144 native dogfood calls remain subsequent measured stages.
+
+`tools/fresh-composition-curriculum` consumes clean released main build metadata
+and independently verified public implementation evidence. It makes 4608 bounded
+native export calls, captures their raw zero-prediction receipts and retains
+9216 decision rows across both feature arms. Source/document/input/feature hashes,
+finite target ties and complete natural suffixes are checked before rows enter
+the collection. Each child has a 15-second deadline and bounded output. A failed
+collection retains its actual attempted-call/row counts and cannot be used for
+training. This tool is preparation until its fixed collection is actually run.
