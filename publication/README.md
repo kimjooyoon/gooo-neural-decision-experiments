@@ -72,3 +72,29 @@ go run ./tools/verify-public-export /tmp/gooo-public-export-replay /tmp/gooo-pub
 Normal CI reproduces synthetic data, tests the runtime and publication failure
 cases, checks the exact public bundle, and independently evaluates saved
 parity/held-out data. It neither trains nor uploads to Hugging Face.
+
+## Prepared bilingual native paths, 2026-10-01
+
+The Go-only [SDK v0.2.1-experimental](https://github.com/kimjooyoon/gooo-decision-runtime/tree/v0.2.1-experimental)
+prepares one immutable validated plan snapshot per generation. The
+[160-call paired study](../runs/prepared-native-conditional-20261001/) records
+720 fresh local predictions, 80 identical baseline/prepared code and search
+pairs, 1,440 independent emitted-Go observations and 50 retained partial calls.
+Functional completeness and authored structural-label agreement are separate.
+No model is trained or selected on this compound fixture.
+
+The [fixed 222-file bundle](hf-typed-path-v1-prepared-native/publication-manifest.json)
+is public on [Hugging Face at immutable revision d137202](https://huggingface.co/asketeddy/gooo-typed-path-tiny-v1/tree/d137202a5cd79ec6aa616ec877b0a09dce8b4459).
+All 222 files were fetched without authentication and matched their SHA-256 and
+byte counts; the [Go verification receipt](typed-path-prepared-public-verification.json)
+records 223 read-only requests and zero additional model calls. The prior
+211-file publication and all nine weights remain unchanged in their frozen
+folders and Hub history. The new compact edition carries the full comparison,
+preexecution bindings, eight cohort files and independent Go events; GitHub
+retains all 643 raw capture files.
+
+CI reproduces the exact allowlist and independently recomputes captured search,
+finite outcomes, paired equivalence, arithmetic, structure agreement and costs.
+It does not re-run inference for this historical observation. Failed publication
+comparison during a concurrent document edit and the clean repeated validation
+are [retained in the validation notes](prepared-publication-validation-notes-20261001.json).
