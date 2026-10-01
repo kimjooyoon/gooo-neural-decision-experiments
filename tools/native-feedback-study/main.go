@@ -429,6 +429,23 @@ func main() {
 	worker := flag.String("worker", "", "optional retained native body worker executable")
 	familyCIStatus := flag.String("family-ci-status", "PASS", "caller family-study CI context: PASS, FAIL or UNKNOWN")
 	flag.Parse()
+	if *mode == "budget-study" || *mode == "budget-audit" {
+		var err error
+		if *mode == "budget-study" {
+			err = runBudgetStudy(*worker, *goBinary, *output, *revision, *nativeRevision)
+		} else {
+			var value map[string]any
+			value, err = auditBudget(*output, *revision, *nativeRevision)
+			if err == nil {
+				err = save(*auditOutput, value)
+			}
+		}
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "budget:", err)
+			os.Exit(1)
+		}
+		return
+	}
 	if *mode == "retained-completeness" {
 		if err := saveRetainedCompleteness(*output, *auditOutput); err != nil {
 			fmt.Fprintln(os.Stderr, "retained-completeness:", err)

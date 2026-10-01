@@ -94,6 +94,12 @@ func verifyUnfixedFor(c unfixedCapture, r compoundstudy.Case, arm familyArm, ciS
 }
 
 func verifyUnfixedWithCI(c unfixedCapture, r compoundstudy.Case, arm familyArm, ci pathplan.CIHint) (int, error) {
+	return verifyBoundedTrace(c, r, arm, ci, true)
+}
+
+// requireBest preserves the original full-budget study check. Partial-budget
+// studies verify actual best-so-far results without requiring the global maximum.
+func verifyBoundedTrace(c unfixedCapture, r compoundstudy.Case, arm familyArm, ci pathplan.CIHint, requireBest bool) (int, error) {
 	if err := ci.Validate(); err != nil {
 		return 0, err
 	}
@@ -123,7 +129,11 @@ func verifyUnfixedWithCI(c unfixedCapture, r compoundstudy.Case, arm familyArm, 
 			return 0, errors.New("unfixed attempt count differs")
 		}
 	}
-	if !reflect.DeepEqual(attempts, c.Search.Attempts) || len(c.Feedback) != len(attempts)-1 {
+	expectedFeedback := 0
+	if arm.Feedback {
+		expectedFeedback = len(attempts) - 1
+	}
+	if !reflect.DeepEqual(attempts, c.Search.Attempts) || len(c.Feedback) != expectedFeedback {
 		return 0, errors.New("unfixed attempts lost")
 	}
 	var seen [4]bool
@@ -156,7 +166,11 @@ func verifyUnfixedWithCI(c unfixedCapture, r compoundstudy.Case, arm familyArm, 
 		best = max(best, passed)
 	}
 	prior = ""
-	calls, skipped := 2, 0
+	initialCalls := 0
+	if arm.Path != "" {
+		initialCalls = 2
+	}
+	calls, skipped := initialCalls, 0
 	for i, f := range c.Feedback {
 		sha := f.SHA
 		f.SHA = ""
@@ -227,7 +241,7 @@ func verifyUnfixedWithCI(c unfixedCapture, r compoundstudy.Case, arm familyArm, 
 		prior = sha
 	}
 	last := c.Progress[len(c.Progress)-1]
-	if c.Search.DeclaredCombinations != 4 || c.Search.TrainingTotal != len(r.Document.Cases) || c.Search.TypeRejected != 0 || c.Search.Evaluated != len(attempts) || c.Search.Unattempted != 4-len(attempts) || last.FeedbackRounds != len(c.Feedback) || c.Search.Selection.ModelCalls != calls || last.Selection.ModelCalls != calls || last.FeedbackPredictions != calls-2 || last.LatestFeedbackSHA != prior || last.SelectedPassed != best || c.Search.SelectedTrainingPassed != best || best != r.FiniteBestPassed {
+	if c.Search.DeclaredCombinations != 4 || c.Search.TrainingTotal != len(r.Document.Cases) || c.Search.TypeRejected != 0 || c.Search.Evaluated != len(attempts) || c.Search.Unattempted != 4-len(attempts) || last.FeedbackRounds != len(c.Feedback) || c.Search.Selection.ModelCalls != calls || last.Selection.ModelCalls != calls || last.FeedbackPredictions != calls-initialCalls || last.LatestFeedbackSHA != prior || last.SelectedPassed != best || c.Search.SelectedTrainingPassed != best || requireBest && best != r.FiniteBestPassed {
 		return 0, errors.New("unfixed final completeness/accounting differs")
 	}
 	body, err := prepared.Compile(c.Search.Selection.Choices)
