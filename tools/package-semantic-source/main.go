@@ -19,7 +19,7 @@ import (
 	"sort"
 )
 
-const sdkRevision = "25c6911359a2009381f5e4388fb0f1ff60b279ad"
+const sdkRevision = "7a2bb0696a7f73620be5258253f03bcf2df46873"
 const researchRevision = "d9fc4d1c8140c278794c6aabde3a7585af4692c0"
 const maxPublicBytes = 4 << 20
 
