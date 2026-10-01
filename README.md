@@ -452,3 +452,23 @@ with original UNKNOWN post-push CI context retained. Its
 includes all raw observations and actual emitted-Go values. FP32/PTQ main medians
 increase slightly despite fewer calls; all median RSS values rise. Main push and
 full evidence-source CI verification remain separate records.
+
+## Retained native construction and finite completeness
+
+The [native retained-worker study](docs/retained-native-study.md) measures 180
+constructions over six reused bilingual views, using disconnected and four frozen
+own-model arms. The worker loads its optional model once, emits each finished
+request immediately and keeps fresh source-bound sessions per request. The same
+code tree is adopted in native main through
+[PR 1127](https://github.com/kimjooyoon/meta-ontology-go/pull/1127). Feature measurements,
+the six-check promotion proof, clean main build and subsequent push-CI observation
+are separate in the [source receipt](publication/retained-native-source-publication-20261001.json).
+
+[Finite completeness](docs/finite-construction-completeness.md) separates 87.5%
+declared-case completion, 100% attainment of the independently enumerated four-path
+maximum and the remaining 12.5% finite contradiction gap. Attempt-weighted progress
+also remains visible. All arms, including disconnected, reach the same final score;
+this cohort establishes no model-specific functional improvement. The
+[public HF appendix](https://huggingface.co/asketeddy/gooo-feedback-path-tiny-v1/tree/4f0d2c02719b48546c29f9a72a8ef13f34c11159/research/retained-native-completeness-20261001)
+preserves raw evidence and original UNKNOWN hints. First-shot correctness is not
+acceptance, and repeated views are not new independent experiments.

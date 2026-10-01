@@ -1,0 +1,23 @@
+{
+  "schema": "gooo/finite-completeness-development-negative-records/v1",
+  "source_report_sha256": "581c09ebb1746505a636a44d8eb34cdeef333fd3204e6ad9120775ba1c5c7e9b",
+  "rejected_derivations": [
+    {
+      "assumption": "Every progress record corresponds to a committed candidate attempt",
+      "reason": "Initial ranking checkpoints also occur without a new attempt",
+      "output_written": false
+    },
+    {
+      "assumption": "Only the initial checkpoint has no committed candidate attempt",
+      "reason": "Feedback-only checkpoints can repeat the current committed-attempt count and best result",
+      "output_written": false
+    }
+  ],
+  "repair": "Exclude checkpoints with zero new attempts only when their attempted count and selected result equal the preceding committed state. Require exactly four monotone committed-attempt points and a terminal result equal to the original native receipt.",
+  "original_evidence_rewritten": false,
+  "new_model_predictions": 0,
+  "new_native_processes": 0,
+  "new_generated_go_processes": 0,
+  "new_optimizer_steps": 0,
+  "scope": "Offline derivation failures and repair only; no model, compiler or generated-body measurement was repeated. First-shot perfection is not acceptance."
+}
