@@ -595,3 +595,8 @@ predictions; full contracts complete eight bodies with three additional attempts
 Three sparse wrong-intent choices remain in the raw captures. This is a separate
 Go SDK assembly stage; native main adoption and original-source context binding
 remain pending. CI replays these cells with independently retained captures.
+The [immutable HF SDK context appendix](https://huggingface.co/asketeddy/gooo-feedback-path-tiny-v1/tree/ddedb067b1fd366a1d3f80767e2e738ecbf8507a/research/own-model-sdk-context-20261001)
+preserves 25 archived inputs/evidence records and readable methods. Anonymous
+verification passes for 11 appendix files, 30 retained split-model files and
+25 selected core files. All five publication-source CI jobs pass in the
+[finalization receipt](publication/own-model-sdk-context-publication-finalization-20261001.json).
