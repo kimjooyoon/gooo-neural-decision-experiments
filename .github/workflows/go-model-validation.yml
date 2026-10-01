@@ -636,3 +636,47 @@ jobs:
         with:
           name: own-model-native-context
           path: runs/own-model-native-context-ci
+
+  compiler-context-own-model:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GOTOOLCHAIN: local
+      GOWORK: "off"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.27.1'
+          cache: false
+      - name: Audit canonical compiler data and model parity/completeness
+        run: |
+          go run ./tools/native-feedback-study --mode compiler-curriculum-audit --out runs/compiler-context-curriculum-validated-20261001
+          go run ./tools/native-feedback-study --mode compiler-model-audit \
+            --curriculum runs/compiler-context-curriculum-validated-20261001 \
+            --model-root runs/compiler-context-training-mps-20261001 \
+            --out runs/compiler-context-model-ci --source-revision "$GITHUB_SHA"
+          go run ./tools/native-feedback-study --mode compiler-native-dogfood-audit \
+            --curriculum runs/compiler-context-curriculum-validated-20261001 \
+            --model-root runs/compiler-context-training-mps-20261001 \
+            --out runs/compiler-context-native-dogfood-20261001 \
+            --native-revision 7d8768f86158022b494603e22e2589d121dee0b1
+      - name: Retrieve exact native context-export compiler
+        run: |
+          git clone --no-checkout https://github.com/kimjooyoon/meta-ontology-go.git .compiler-context-native
+          git -C .compiler-context-native checkout --detach 7d8768f86158022b494603e22e2589d121dee0b1
+          cd .compiler-context-native
+          go build -trimpath -o "$RUNNER_TEMP/gooo-context" ./cmd/gooo
+      - name: Reproduce actual native own-model dogfood
+        run: |
+          go run ./tools/native-feedback-study --mode compiler-native-dogfood \
+            --curriculum runs/compiler-context-curriculum-validated-20261001 \
+            --model-root runs/compiler-context-training-mps-20261001 \
+            --native "$RUNNER_TEMP/gooo-context" --native-revision 7d8768f86158022b494603e22e2589d121dee0b1 \
+            --go-bin "$(command -v go)" --out runs/compiler-context-native-ci --source-revision "$GITHUB_SHA"
+      - uses: actions/upload-artifact@v6
+        with:
+          name: compiler-context-own-model
+          path: |
+            runs/compiler-context-model-ci
+            runs/compiler-context-native-ci
