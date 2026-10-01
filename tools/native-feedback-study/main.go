@@ -44,11 +44,15 @@ type nativeResult struct {
 		Replay     bool   `json:"deterministic_replay"`
 		Writes     int    `json:"repository_writes"`
 		Paths      struct {
-			Bound    bool                       `json:"source_base_matched"`
-			Search   pathplan.SearchResult      `json:"search"`
-			Progress []pathplan.SessionProgress `json:"session_progress"`
-			Feedback []pathplan.FeedbackReceipt `json:"feedback_judgments"`
-			Cases    []struct {
+			Unfixed     bool                       `json:"feedback_unfixed,omitempty"`
+			OriginalSHA string                     `json:"original_source_sha256"`
+			DocumentSHA string                     `json:"document_sha256"`
+			SuiteSHA    string                     `json:"test_suite_sha256"`
+			Bound       bool                       `json:"source_base_matched"`
+			Search      pathplan.SearchResult      `json:"search"`
+			Progress    []pathplan.SessionProgress `json:"session_progress"`
+			Feedback    []pathplan.FeedbackReceipt `json:"feedback_judgments"`
+			Cases       []struct {
 				Input, Expected, Actual int64
 				Passed                  bool
 			} `json:"native_case_results"`
@@ -424,6 +428,24 @@ func main() {
 	nativeRevision := flag.String("native-revision", "", "clean binary source SHA")
 	familyCIStatus := flag.String("family-ci-status", "PASS", "caller family-study CI context: PASS, FAIL or UNKNOWN")
 	flag.Parse()
+	if *mode == "native-unfixed-audit" {
+		value, err := auditNativeUnfixed(*output, *revision, *nativeRevision)
+		if err == nil {
+			err = save(*auditOutput, value)
+		}
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "native-unfixed-audit:", err)
+			os.Exit(1)
+		}
+		return
+	}
+	if *mode == "native-unfixed-pilot" {
+		if err := runNativeUnfixedPilot(*binary, *goBinary, *output, *revision, *nativeRevision); err != nil {
+			fmt.Fprintln(os.Stderr, "native-unfixed:", err)
+			os.Exit(1)
+		}
+		return
+	}
 	if *mode == "unfixed-study" || *mode == "unfixed-audit" {
 		var err error
 		if *mode == "unfixed-study" {

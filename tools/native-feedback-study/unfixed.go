@@ -86,6 +86,10 @@ func captureUnfixed(ctx context.Context, prepared *pathplan.PreparedPlan, model 
 // verifyUnfixed interprets recorded candidates and verifies digest/call/skip
 // lineage. It performs no predictions and starts no subprocess.
 func verifyUnfixed(c unfixedCapture, r compoundstudy.Case, arm familyArm) (int, error) {
+	return verifyUnfixedFor(c, r, arm, compoundNative)
+}
+
+func verifyUnfixedFor(c unfixedCapture, r compoundstudy.Case, arm familyArm, ciSource string) (int, error) {
 	if c.CaseID != r.ID || c.Arm != arm.Name || c.WallNS <= 0 || len(c.Progress) < 2 || len(c.Search.Attempts) < 1 || len(c.Search.Attempts) > 4 {
 		return 0, errors.New("unfixed capture identity/bounds differ")
 	}
@@ -151,7 +155,7 @@ func verifyUnfixed(c unfixedCapture, r compoundstudy.Case, arm familyArm) (int, 
 		f.SHA = ""
 		raw, _ := json.Marshal(f)
 		from, ok := bySHA[f.FromProgressSHA]
-		if !ok || hash(raw) != sha || f.PreviousSHA != prior || f.Round != i+1 || f.Attempted != from.Attempted || f.Cases != from.Cases || f.Passed != from.SelectedPassed || f.PlanSHA != prepared.PlanSHA256() || f.CaseSHA != from.CaseSHA || f.MetadataSHA != arm.Metadata || f.WeightsSHA != arm.Weights || f.Error != "" || f.ContextDeclined || f.CIIsAuthority || f.CI == nil || *f.CI != (pathplan.CIHint{SourceSHA: compoundNative, Status: "PASS"}) {
+		if !ok || hash(raw) != sha || f.PreviousSHA != prior || f.Round != i+1 || f.Attempted != from.Attempted || f.Cases != from.Cases || f.Passed != from.SelectedPassed || f.PlanSHA != prepared.PlanSHA256() || f.CaseSHA != from.CaseSHA || f.MetadataSHA != arm.Metadata || f.WeightsSHA != arm.Weights || f.Error != "" || f.ContextDeclined || f.CIIsAuthority || f.CI == nil || *f.CI != (pathplan.CIHint{SourceSHA: ciSource, Status: "PASS"}) {
 			return 0, errors.New("unfixed feedback binding differs")
 		}
 		var first *pathplan.TestResult
