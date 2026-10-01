@@ -46,7 +46,7 @@ processing before attributing per-stage differences.
 The compact comparison/cohort/independent-Go evidence accompanies this model
 repository. Full 643-file raw captures, the initial missing-entity fixture
 failure, preliminary smokes and the runner are in the
-[public raw capture](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/runs/prepared-native-conditional-20261001).
+[public raw capture](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/853650502d93af88d4da84cacbe1ea768c3d72e8/runs/prepared-native-conditional-20261001).
 Runner/workload source is frozen at research revision
 `61f12318262e69520ab4af6663afb95004c494dc`.
 The first authoring failure was refused before inference and corrected by

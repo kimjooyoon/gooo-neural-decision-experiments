@@ -26,6 +26,7 @@ const repository = "asketeddy/gooo-typed-path-tiny-v1"
 const schema = "gooo/public-typed-path-allowlist/v1"
 const reviewedSchema = "gooo/public-typed-path-allowlist/v2"
 const directSchema = "gooo/public-typed-path-allowlist/v3"
+const preparedSchema = "gooo/public-typed-path-allowlist/v4"
 
 var privateText = regexp.MustCompile(`(?:hf_|ghp_|github_pat_|sk-)[A-Za-z0-9_-]{20,}|/Users/|/private/var/|Bearer\s+[A-Za-z0-9]`)
 
@@ -131,6 +132,10 @@ func assembleVersions(output string, reviewed, direct bool) error {
 	return assemblePublication(output, reviewed, direct, false)
 }
 func assemblePublication(output string, reviewed, direct, mainPromotion bool) error {
+	return assembleEdition(output, reviewed, direct, mainPromotion, false)
+}
+func assembleEdition(output string, reviewed, direct, mainPromotion, prepared bool) error {
+	mainPromotion = mainPromotion || prepared
 	direct = direct || mainPromotion
 	reviewed = reviewed || direct
 	if _, err := os.Stat(output); !os.IsNotExist(err) {
@@ -145,6 +150,12 @@ func assemblePublication(output string, reviewed, direct, mainPromotion bool) er
 	}
 	if direct {
 		value.Schema, files = directSchema, directSources()
+	}
+	if prepared {
+		value.Schema, files = preparedSchema, preparedSources()
+		if err := auditPreparedRepository(); err != nil {
+			return err
+		}
 	}
 	for name, source := range files {
 		raw, err := read(source)
@@ -175,6 +186,13 @@ func assemblePublication(output string, reviewed, direct, mainPromotion bool) er
 			note, err := read("docs/hf-typed-path-v1-main-promotion.md")
 			if err != nil || privateText.Match(note) {
 				return errors.New("invalid or private main-promotion text")
+			}
+			raw = append(append(raw, '\n'), note...)
+		}
+		if prepared && name == "README.md" {
+			note, err := read("docs/hf-typed-path-v1-prepared-native.md")
+			if err != nil || privateText.Match(note) {
+				return errors.New("invalid or private prepared-native text")
 			}
 			raw = append(append(raw, '\n'), note...)
 		}
@@ -240,7 +258,10 @@ func local(root string) ([]artifact, string, error) {
 	if value.Schema == directSchema {
 		expected = directSources()
 	}
-	if value.Schema != schema && value.Schema != reviewedSchema && value.Schema != directSchema || !value.TextScanned || value.BinaryProvenance == "" || len(value.Files) != len(expected) {
+	if value.Schema == preparedSchema {
+		expected = preparedSources()
+	}
+	if value.Schema != schema && value.Schema != reviewedSchema && value.Schema != directSchema && value.Schema != preparedSchema || !value.TextScanned || value.BinaryProvenance == "" || len(value.Files) != len(expected) {
 		return nil, "", errors.New("invalid fixed publication manifest")
 	}
 	seen := map[string]bool{}
@@ -284,6 +305,11 @@ func local(root string) ([]artifact, string, error) {
 	})
 	if err != nil {
 		return nil, "", err
+	}
+	if value.Schema == preparedSchema {
+		if err := auditPreparedDirectory(filepath.Join(root, "native-prepared"), filepath.Join(root, "conditional-cohort"), ""); err != nil {
+			return nil, "", err
+		}
 	}
 	return append(value.Files, artifact{"publication-manifest.json", digest(raw), len(raw)}), digest(raw), nil
 }
@@ -399,12 +425,13 @@ func main() {
 	reviewed := flag.Bool("native-review", false, "include separately captured native structural replay")
 	direct := flag.Bool("native-direct", false, "include fresh native structural inference and exact Go observations")
 	mainPromotion := flag.Bool("main-promotion", false, "append verified native source main availability")
+	prepared := flag.Bool("prepared-native", false, "include paired prepared native evidence and fixed bilingual cohort")
 	flag.Parse()
 	var err error
 	if *output == "" || flag.NArg() != 0 {
 		err = errors.New("fresh output required")
 	} else if *mode == "assemble" {
-		err = assemblePublication(*output, *reviewed, *direct, *mainPromotion)
+		err = assembleEdition(*output, *reviewed, *direct, *mainPromotion, *prepared)
 	} else if *mode == "verify" {
 		err = verify(*bundle, *revision, *output)
 	} else {

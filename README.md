@@ -57,7 +57,34 @@ See the [native measurement scopes](docs/hf-typed-path-v1-native-direct.md),
 [actual main smoke and promotion receipt](publication/native-typed-path-main-promotion-20261001.json)
 and [anonymous HF verification](publication/typed-path-native-main-public-verification.json).
 The nine model weight bundles are unchanged in this integration update.
-Actual post-main [CI 36787975612](https://github.com/kimjooyoon/meta-ontology-go/actions/runs/36787975612)
+
+## Prepared conditional paths and completeness
+
+The Go-only [SDK v0.2.1-experimental](https://github.com/kimjooyoon/gooo-decision-runtime/tree/v0.2.1-experimental)
+owns one immutable validated plan and fallback. Compiler
+[PR 1114](https://github.com/kimjooyoon/meta-ontology-go/pull/1114) is merged to
+`dev`; [PR 1115](https://github.com/kimjooyoon/meta-ontology-go/pull/1115) promotes
+the exact tree to `main`. Repeated native preflight preparation goes from four
+to one; each combined candidate retains its type/scope checks and native replay.
+
+The [paired raw study](runs/prepared-native-conditional-20261001/) uses six
+interacting Boolean/Integer/conditional decisions, English/Korean instructions,
+four arms and budgets 8/64. Five balanced repetitions produce 160 actual native
+generations and 720 fresh local predictions. All 80 baseline/prepared pairs have
+identical emitted code and search results. Nine independent arithmetic inputs
+pass 645/720 per version; full-budget results pass 360/360, with authored internal
+structure agreement separately 220/240. Fifty partial calls remain recorded.
+
+On this one local workload, median native stages are 3.202/1.562 ms and complete
+child wall times are 9.839/8.448 ms. This is not a universal speedup or an estimate
+of general natural-language accuracy. No weights are trained or selected on the
+new fixture. [Measurement scope and public model-card addition](docs/hf-typed-path-v1-prepared-native.md)
+disclose peak child RSS, one-core CPU/wall, the first fixture failure and the
+functional/structural distinction. The fixed compact HF publication adds 11
+evidence files and preserves all nine existing model bundles byte for byte.
+
+For the earlier structural integration, actual post-main
+[CI 36787975612](https://github.com/kimjooyoon/meta-ontology-go/actions/runs/36787975612)
 also passed; its downloaded proof and append-only receipt passed the Go verifier.
 The [post-main evidence receipt](publication/native-typed-path-post-main-ci-20261001.json)
 binds that result and the research repository's four successful jobs to their

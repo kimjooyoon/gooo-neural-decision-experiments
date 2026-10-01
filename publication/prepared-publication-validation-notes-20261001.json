@@ -1,0 +1,27 @@
+{
+  "schema": "gooo/prepared-publication-validation-notes/v1",
+  "scope": "Publication-tool validation only; no model inference, optimizer steps or upstream Laya calls.",
+  "first_focused_race_run_before_arena_audit_addition": {
+    "status": "PASS",
+    "duration_seconds": 81.246
+  },
+  "following_focused_race_run": {
+    "status": "FAIL",
+    "duration_seconds": 91.236,
+    "test": "TestPreparedPublicationPreservesFrozenModels",
+    "observed": "changed frozen artifact README.md",
+    "concurrent_document_edit_observed": true,
+    "diagnosis": "The prepared model-card note was edited while its old bundle was being assembled; the later expected-note read saw different bytes. This is an authoring/process error. Re-run with source inputs held unchanged.",
+    "source_inputs_committed": false,
+    "external_publication_after_this_failed_run": false
+  },
+  "fresh_focused_unit_and_race_repeat": {
+    "status": "PASS",
+    "unit_duration_seconds": 4.542,
+    "race_duration_seconds": 90.672,
+    "source_inputs_unchanged_during_repeat": true,
+    "vet": "PASS"
+  },
+  "research_all_package_unit_tests": "PASS",
+  "research_all_package_vet": "PASS"
+}
