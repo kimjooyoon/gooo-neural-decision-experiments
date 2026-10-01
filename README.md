@@ -11,6 +11,9 @@ match. QAT saved two candidate attempts but used 112 extra predictions, while
 the parent spent one extra attempt. The audit records 97 predictions for already
 fixed coordinates as an unimplemented cost opportunity. Sparse ambiguity and
 commuting updates retain distinct functional and structural denominators.
+[The public compound appendix](https://huggingface.co/asketeddy/gooo-feedback-path-tiny-v1/tree/c902d14550eda5de08ff7a5bbd8507e60f02c31f/research/compound-path-main-20261001)
+preserves 674 raw records in a 1,729,483-byte archive, with anonymous byte checks
+and [successful source CI](publication/compound-path-source-publication-20261001.json).
 
 Korean/English Gooo intentions can now rank bounded structural paths once and
 continue finite construction in batches. First-shot accuracy is not the goal:

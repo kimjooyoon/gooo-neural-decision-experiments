@@ -126,3 +126,20 @@ CPU-time medians 4.839–5.054 ms, median peak RSS 17,211,392–17,514,496 bytes
 median CPU/wall ratios 86.66–87.37% of one core. The full records retain outliers.
 This fixed-order local measurement does not show a causal wall-speedup or host
 CPU utilization increase. No GPU training or upstream Laya call occurred.
+
+## Public source and model evidence
+
+The implementation and recorded experiments at
+`c42c9e4c1061d4f47d3c99d63e5347249b397f80` passed all four research CI jobs in
+[run 36821564541](https://github.com/kimjooyoon/gooo-neural-decision-experiments/actions/runs/36821564541).
+The [source/publication receipt](../publication/compound-path-source-publication-20261001.json)
+keeps that implementation check separate from the original measured runner,
+actual main source and public byte verification.
+
+The [immutable Hugging Face appendix](https://huggingface.co/asketeddy/gooo-feedback-path-tiny-v1/tree/c902d14550eda5de08ff7a5bbd8507e60f02c31f/research/compound-path-main-20261001)
+contains nine verified payload files and a deterministic 1,729,483-byte archive
+covering 674 raw allowlisted records. Ten anonymous requests verified the new
+appendix. At the same revision, 26 anonymous requests reverified the 25-file
+original model/core bundle and eight requests reverified the seven-file previous
+main appendix. Credentials were absent from those requests. No new checkpoint
+weights or original model-card edits were published in this iteration.
