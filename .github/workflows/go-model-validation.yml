@@ -702,6 +702,18 @@ jobs:
           go run ./tools/native-feedback-study --mode paired-compiler-audit \
             --curriculum runs/compiler-context-curriculum-validated-20261001 \
             --model-root runs/paired-compiler-context-mps-20261002 --out runs/paired-compiler-go-ci
+      - name: Audit frozen observations and reproduce privacy-checked public appendix
+        run: |
+          go run ./tools/native-feedback-study --mode paired-compiler-audit \
+            --curriculum runs/compiler-context-curriculum-validated-20261001 \
+            --model-root runs/paired-compiler-context-mps-20261002 --out runs/paired-compiler-context-go-audit-20261002
+          go run ./tools/native-feedback-study --mode paired-compiler-native-audit \
+            --curriculum runs/compiler-context-curriculum-validated-20261001 \
+            --model-root runs/paired-compiler-context-mps-20261002 \
+            --selection runs/paired-compiler-context-go-audit-20261002/selection.json \
+            --out runs/paired-compiler-context-native-20261002 --native-revision b431ef7547a968e2532fa2dcf0891ee44ec2ee86
+          go run ./tools/package-paired-compiler --bundle "$RUNNER_TEMP/paired-public-appendix"
+          cmp publication/hf-paired-compiler-20261002/publication-manifest.json "$RUNNER_TEMP/paired-public-appendix/publication-manifest.json"
       - name: Retrieve pinned deployed Gooo compiler
         run: |
           git clone --no-checkout https://github.com/kimjooyoon/meta-ontology-go.git .paired-compiler-native

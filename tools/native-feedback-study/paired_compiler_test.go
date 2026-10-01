@@ -1,7 +1,10 @@
 package main
 
 import (
+	"encoding/json"
 	"math"
+	"os"
+	"path/filepath"
 	"testing"
 )
 
@@ -32,6 +35,46 @@ func TestPairedSelectionUsesCandidateCostBeforeLanguageAgreement(t *testing.T) {
 	scores["js03-fp32"] = better
 	if _, err = choosePaired(scores); err == nil {
 		t.Fatal("nonfinite candidate accepted")
+	}
+}
+
+func TestPairedNativeAuditRejectsChangedCompiledActual(t *testing.T) {
+	t.Chdir("../..")
+	root := "runs/paired-compiler-context-native-20261002"
+	models := "runs/paired-compiler-context-mps-20261002"
+	curriculum := "runs/compiler-context-curriculum-validated-20261001"
+	selection := "runs/paired-compiler-context-go-audit-20261002/selection.json"
+	if err := auditPairedNative(curriculum, models, selection, root, pairedNativeMain); err != nil {
+		t.Fatal(err)
+	}
+	dir := t.TempDir()
+	entries, err := os.ReadDir(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, entry := range entries {
+		raw, err := os.ReadFile(filepath.Join(root, entry.Name()))
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err = os.WriteFile(filepath.Join(dir, entry.Name()), raw, 0600); err != nil {
+			t.Fatal(err)
+		}
+	}
+	raw, err := read(filepath.Join(dir, "report.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var report pairedNativeReport
+	if err = json.Unmarshal(raw, &report); err != nil {
+		t.Fatal(err)
+	}
+	report.Cells[0].GoValues[0]++
+	if err = save(filepath.Join(dir, "report.json"), report); err != nil {
+		t.Fatal(err)
+	}
+	if auditPairedNative(curriculum, models, selection, dir, pairedNativeMain) == nil {
+		t.Fatal("forged compiled Go actual accepted")
 	}
 }
 
