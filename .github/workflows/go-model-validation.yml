@@ -593,7 +593,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           repository: kimjooyoon/meta-ontology-go
-          ref: 052c250208e38f33a65242e38b042aab80cf85b7
+          ref: 6e0ad85e91c6de0e2c74c55ed7cd4f1e9fa3e6bb
           path: .own-native-context
           persist-credentials: false
       - name: Build pinned source-bound Gooo compiler
@@ -610,11 +610,26 @@ jobs:
           go run ./tools/package-family-evidence --kind own-model-native-context-feature --pack --bundle "$RUNNER_TEMP/own-native-context-bundle"
           cmp publication/hf-own-model-native-context-feature-20261001/publication-manifest.json "$RUNNER_TEMP/own-native-context-bundle/publication-manifest.json"
           go run ./tools/package-family-evidence --kind own-model-native-context-feature --bundle "$RUNNER_TEMP/own-native-context-bundle" --output "$RUNNER_TEMP/own-native-context-verification.json"
+      - name: Audit main replay and reproduce its public appendix
+        run: |
+          go run ./tools/native-feedback-study --mode own-native-context-audit \
+            --out runs/own-model-native-context-main-20261001 \
+            --source-revision 56940d9c36ff3a926b6da74c8cc91967f01744fb \
+            --native-revision 6e0ad85e91c6de0e2c74c55ed7cd4f1e9fa3e6bb \
+            --audit-output "$RUNNER_TEMP/own-native-main-audit.json"
+          cmp runs/own-model-native-context-main-20261001/audit.json "$RUNNER_TEMP/own-native-main-audit.json"
+          go run ./tools/native-feedback-study --mode own-native-context-compare \
+            --native-root runs/own-model-native-context-feature-20261001 --out runs/own-model-native-context-main-20261001 \
+            --audit-output "$RUNNER_TEMP/own-native-feature-main-comparison.json"
+          cmp publication/own-model-native-context-feature-main-comparison-20261001.json "$RUNNER_TEMP/own-native-feature-main-comparison.json"
+          go run ./tools/package-family-evidence --kind own-model-native-context-main --pack --bundle "$RUNNER_TEMP/own-native-main-bundle"
+          cmp publication/hf-own-model-native-context-main-20261001/publication-manifest.json "$RUNNER_TEMP/own-native-main-bundle/publication-manifest.json"
+          go run ./tools/package-family-evidence --kind own-model-native-context-main --bundle "$RUNNER_TEMP/own-native-main-bundle" --output "$RUNNER_TEMP/own-native-main-verification.json"
       - name: Run fresh native judgments and independently execute emitted Go
         run: |
           go run ./tools/native-feedback-study --mode own-native-context \
             --native "$RUNNER_TEMP/gooo-own-native-context" --go-bin "$(command -v go)" \
-            --source-revision "$GITHUB_SHA" --native-revision 052c250208e38f33a65242e38b042aab80cf85b7 \
+            --source-revision "$GITHUB_SHA" --native-revision 6e0ad85e91c6de0e2c74c55ed7cd4f1e9fa3e6bb \
             --out runs/own-model-native-context-ci
       - uses: actions/upload-artifact@v7
         if: always()

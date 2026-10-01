@@ -166,3 +166,11 @@ func TestOwnNativeContextRejectsChangedCapture(t *testing.T) {
 		t.Fatal("changed native capture accepted")
 	}
 }
+
+func TestOwnNativeMainContextInventory(t *testing.T) {
+	t.Chdir("../..")
+	names, err := namesKind("own-model-native-context-main")
+	if err != nil || len(names) != 113 {
+		t.Fatal("main native context inventory differs", err)
+	}
+}

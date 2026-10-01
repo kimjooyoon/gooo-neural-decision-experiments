@@ -114,6 +114,9 @@ func names() ([]string, error) {
 	return namesKind("")
 }
 func namesKind(kind string) ([]string, error) {
+	if kind == "own-model-native-context-main" {
+		return ownNativeContextNamesKind(true)
+	}
 	if kind == "own-model-native-context-feature" {
 		return ownNativeContextNames()
 	}
@@ -278,6 +281,11 @@ func buildKind(kind string) (manifest, map[string][]byte, error) {
 		m.Prefix = "research/own-model-native-context-feature-20261001/"
 		m.Scope = "Preregistered clean native feature source with SDK 0.2.9 and independently initialized own split-v2 FP32/PTQ/QAT models. 32 actual compiler calls, 57 initial predictions, 32 separately compiled emitted-Go processes and 120 function invocations. Selected repeated finite cases 116/120; three sparse choices disagree with intended subtraction. Three oversized representations make zero model/feedback calls and continue deterministic partial assembly. Three reused intentions, zero new independent intentions. 455 candidates and 2999 attempted case evaluations are separate from selected cases. Main replay is a separate phase. Earlier weights/card and regression appendices remain unchanged. Packaging/audit makes no new model, compiler or execution calls; no training, upstream Laya, default promotion, host utilization or causal speedup claim."
 	}
+	if kind == "own-model-native-context-main" {
+		m.Schema = "gooo/own-model-native-context-publication/v1"
+		m.Prefix = "research/own-model-native-context-main-20261001/"
+		m.Scope = "Protected main adoption of source-bound own-model Gooo judgment with Go SDK 0.2.9. Main replay: 32 actual compiler calls, 57 initial predictions, 32 separately compiled emitted-Go processes and 120 function invocations; 116/120 repeated finite observations, three sparse wrong-intent selections and three zero-prediction representation declines. All 32 feature/main cells preserve deterministic choices, context hashes, generated Go, candidates and finite/compiled actuals. Local two-phase total 64 compiler calls, 114 predictions, 64 Go execution processes and 240 function invocations; CI counts stay separate. Three reused intentions, no new independent intentions, optimizer steps, Laya calls or default model promotion. Native lowering is distinct from finite completeness. Main post-push CI was in progress in the frozen adoption receipt and is finalized separately. Packaging/audit makes no new model/compiler/execution calls or host-utilization/causal-speedup claim. Existing core weights/card and feature appendix unchanged."
+	}
 	n, err := namesKind(kind)
 	if err != nil {
 		return m, nil, err
@@ -393,6 +401,16 @@ func buildKind(kind string) (manifest, map[string][]byte, error) {
 	if kind == "own-model-native-context-feature" {
 		files["README.md"] = []byte("# Own small models linked to Gooo compiler facts\n\n" + m.Scope + "\n\nThe deterministic archive preserves 110 allowlisted inputs, receipts, resource sidecars and actual emitted-Go values. See per-entry hashes in publication-manifest.json and methods/negative results in docs/own-model-native-context-results.md. Experimental weights are in the separate split-context-gooo-judgment-20261001 appendix.\n")
 		for _, name := range []string{"docs/own-model-native-context-preregistration.md", "docs/own-model-native-context-results.md"} {
+			raw, err := read(name)
+			if err != nil {
+				return m, nil, err
+			}
+			files[name] = raw
+		}
+	}
+	if kind == "own-model-native-context-main" {
+		files["README.md"] = []byte("# Own-model Gooo compiler context on main\n\n" + m.Scope + "\n\nThe deterministic archive preserves 113 allowlisted source/capture/replay/adoption records. See per-entry hashes in publication-manifest.json and methods, negative results and main installation scope in docs/own-model-native-context-main-results.md. Weights are in the separate split-context-gooo-judgment-20261001 appendix.\n")
+		for _, name := range []string{"docs/own-model-native-context-main-replay.md", "docs/own-model-native-context-main-results.md"} {
 			raw, err := read(name)
 			if err != nil {
 				return m, nil, err
