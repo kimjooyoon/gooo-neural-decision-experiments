@@ -71,3 +71,23 @@ An argument-order defect was corrected by inspection before actual matrix calls.
 [Cohort](../studies/feedback-family-v1/manifest.json),
 [pilot audit](../runs/feedback-family-pilot-20261001/audit.json),
 [matrix and full captures](../runs/feedback-family-matrix-20261001/report.json).
+
+## Public evidence appendix
+
+The same frozen evidence is public on
+[Hugging Face at immutable revision 9b26f9d](https://huggingface.co/asketeddy/gooo-feedback-path-tiny-v1/tree/9b26f9dbe2afba9abb74886c1abfa6cac5ac7ee8/research/native-family-20261001).
+The deterministic gzip archive is 986,241 bytes and contains 1,128 allowlisted
+raw JSON/JSONL files with per-entry hashes and sizes. Nine publication files
+were verified by ten anonymous HTTP requests; the existing 25 core model files
+were separately verified at that same revision by 26 anonymous requests. The
+appendix adds evidence without replacing the frozen model card or weights.
+Packaging and verification execute zero new model/native/Go calls. Local CI
+reproduces the archive manifest without credentials or network publication.
+
+The SDK `v0.2.5-experimental` source release passes Go 1.27.1 format/vet/unit/race
+checks (run 36814919123). Native integration is tracked separately in
+[PR 1122](https://github.com/kimjooyoon/meta-ontology-go/pull/1122). The first
+focused native test edit had a missing loop brace; compilation failed before
+native execution, the brace was repaired, and bilingual focused race/vet passed.
+The first publication tool build had an unused import; no publication occurred
+until the corrected tool verified the frozen allowlist and archive.
