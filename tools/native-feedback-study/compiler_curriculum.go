@@ -220,8 +220,14 @@ func runCompilerCurriculum(binary, output, revision, nativeRevision string) erro
 	if err = captures.Close(); err != nil {
 		return err
 	}
-	data, _ := read(filepath.Join(output, "dataset.jsonl"))
-	raw, _ := read(filepath.Join(output, "exports.jsonl"))
+	data, err := readCompilerCurriculumFile(filepath.Join(output, "dataset.jsonl"))
+	if err != nil {
+		return err
+	}
+	raw, err := readCompilerCurriculumFile(filepath.Join(output, "exports.jsonl"))
+	if err != nil {
+		return err
+	}
 	return save(filepath.Join(output, "manifest.json"), map[string]any{
 		"schema": "gooo/compiler-curriculum/v1", "status": "SOURCE_BOUND_EXPORTED", "native_revision": nativeRevision, "runner_revision": revision,
 		"dataset_sha256": hash(data), "captures_sha256": hash(raw), "rows": count, "bilingual_pairs": len(pairs), "program_groups": len(programs), "views_by_split": splits,
@@ -247,11 +253,11 @@ func auditCompilerCurriculum(output string) error {
 	if err = json.Unmarshal(manifestRaw, &manifest); err != nil {
 		return err
 	}
-	data, err := read(filepath.Join(output, "dataset.jsonl"))
+	data, err := readCompilerCurriculumFile(filepath.Join(output, "dataset.jsonl"))
 	if err != nil {
 		return err
 	}
-	captures, err := read(filepath.Join(output, "exports.jsonl"))
+	captures, err := readCompilerCurriculumFile(filepath.Join(output, "exports.jsonl"))
 	if err != nil {
 		return err
 	}
@@ -293,4 +299,13 @@ func auditCompilerCurriculum(output string) error {
 		}
 	}
 	return nil
+}
+
+// Dedicated bounded cohort reader; the generic old-study 8MiB limit is unchanged.
+func readCompilerCurriculumFile(name string) ([]byte, error) {
+	info, err := os.Lstat(name)
+	if err != nil || !info.Mode().IsRegular() || info.Size() <= 0 || info.Size() > 32<<20 {
+		return nil, errors.New("bounded regular compiler cohort required")
+	}
+	return os.ReadFile(name)
 }
