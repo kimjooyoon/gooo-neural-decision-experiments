@@ -449,6 +449,9 @@ func main() {
 			err = runPairedCompilerAudit(*curriculum, *modelRoot, *output, *revision)
 		case "paired-compiler-audit":
 			err = auditPairedCompiler(*curriculum, *modelRoot, *output)
+			if err == nil && *auditOutput != "" {
+				err = writePairedAuditReceipt(*curriculum, *output, *auditOutput)
+			}
 		case "paired-compiler-native":
 			err = runPairedNative(*binary, *goBinary, *curriculum, *modelRoot, *selection, *output, *revision, *nativeRevision)
 		case "paired-compiler-native-audit":

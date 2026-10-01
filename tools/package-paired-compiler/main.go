@@ -13,6 +13,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"regexp"
 	"sort"
@@ -34,6 +35,20 @@ type manifest struct {
 }
 
 var privateText = regexp.MustCompile(`(?:hf_|ghp_|github_pat_|sk-)[A-Za-z0-9_-]{20,}|/Users/|/private/var/|Bearer\s+[A-Za-z0-9]`)
+
+const frozenRevision = "ed5d85f98e003824d75785cff69d2d3f26ae325a"
+
+// Publication is a snapshot, independent of later compiler/diagnostic edits.
+func frozenRead(name string) ([]byte, error) {
+	if filepath.Clean(name) != name || filepath.IsAbs(name) || strings.Contains(name, "..") {
+		return nil, errors.New("unsafe snapshot path")
+	}
+	raw, err := exec.Command("git", "show", frozenRevision+":"+filepath.ToSlash(name)).Output()
+	if err != nil || len(raw) > 32<<20 {
+		return nil, errors.New("bounded immutable public source object required")
+	}
+	return raw, nil
+}
 
 func hash(raw []byte) string { v := sha256.Sum256(raw); return hex.EncodeToString(v[:]) }
 func read(name string) ([]byte, error) {
@@ -73,20 +88,16 @@ func allowlist() (map[string]string, []string, error) {
 	for _, root := range []string{"runs/compiler-context-curriculum-validated-20261001", "runs/paired-compiler-context-mps-20261002",
 		"runs/paired-compiler-context-go-audit-20261002", "runs/paired-compiler-context-native-20261002", "runs/paired-compiler-ci-rejected-20261002",
 		"tools/native-feedback-study", "internal/decision", "internal/pathplan", "internal/pathstudy"} {
-		err := filepath.WalkDir(root, func(path string, d os.DirEntry, e error) error {
-			if e != nil {
-				return e
-			}
-			if d.Type()&os.ModeSymlink != 0 {
-				return errors.New("symlink forbidden")
-			}
-			if !d.IsDir() {
-				archive = append(archive, path)
-			}
-			return nil
-		})
+		raw, err := exec.Command("git", "ls-tree", "-r", "--format=%(objectmode) %(path)", frozenRevision, "--", root).Output()
 		if err != nil {
 			return nil, nil, err
+		}
+		for _, line := range strings.Split(strings.TrimSpace(string(raw)), "\n") {
+			parts := strings.SplitN(line, " ", 2)
+			if len(parts) != 2 || (parts[0] != "100644" && parts[0] != "100755") {
+				return nil, nil, errors.New("regular immutable archive objects required")
+			}
+			archive = append(archive, parts[1])
 		}
 	}
 	for _, name := range []string{"training/train_paired_compiler_context_v1.py", "training/train_bilingual_judgment_v1.py", "training/train_pilot_v2.py",
@@ -108,7 +119,7 @@ func pack(output string) error {
 	}
 	all := map[string][]byte{}
 	for _, name := range archive {
-		raw, err := read(name)
+		raw, err := frozenRead(name)
 		if err != nil {
 			return err
 		}
@@ -118,7 +129,7 @@ func pack(output string) error {
 		all[name] = raw
 	}
 	for _, name := range files {
-		raw, err := read(name)
+		raw, err := frozenRead(name)
 		if err != nil {
 			return err
 		}

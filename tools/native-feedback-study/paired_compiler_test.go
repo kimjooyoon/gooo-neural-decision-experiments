@@ -38,6 +38,29 @@ func TestPairedSelectionUsesCandidateCostBeforeLanguageAgreement(t *testing.T) {
 	}
 }
 
+func TestPairedAuditAllowsOnlyBoundedNLLRounding(t *testing.T) {
+	a := pairedCounts{Views: 160, Extras: 54, FiniteNLL: 0.6359487564728445}
+	b := a
+	b.FiniteNLL += 2e-16
+	if !pairedCountsEqual(a, b) {
+		t.Fatal("last-ulp architecture rounding rejected")
+	}
+	b.Extras++
+	if pairedCountsEqual(a, b) {
+		t.Fatal("changed candidate count accepted")
+	}
+	b = a
+	b.FiniteNLL += 1e-8
+	if pairedCountsEqual(a, b) {
+		t.Fatal("changed probability score accepted")
+	}
+	b = a
+	b.FiniteNLL = math.NaN()
+	if pairedCountsEqual(a, b) {
+		t.Fatal("nonfinite score accepted")
+	}
+}
+
 func TestPairedNativeAuditRejectsChangedCompiledActual(t *testing.T) {
 	t.Chdir("../..")
 	root := "runs/paired-compiler-context-native-20261002"

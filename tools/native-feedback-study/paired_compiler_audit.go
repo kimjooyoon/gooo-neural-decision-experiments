@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"math"
 	"os"
 	"path/filepath"
@@ -211,6 +212,31 @@ func finishPairedCount(count *pairedCounts) {
 		count.FiniteNLL /= float64(count.Views)
 	}
 	sort.Slice(count.PredictionNS, func(i, j int) bool { return count.PredictionNS[i] < count.PredictionNS[j] })
+}
+
+// math.Log may differ by a final ulp between amd64 and arm64. Only the
+// reconstructed NLL accepts 1e-12 absolute error; every integer/latency field
+// and recorded input/model binding remains exact.
+func pairedCountsEqual(actual, expected pairedCounts) bool {
+	a, b := actual.FiniteNLL, expected.FiniteNLL
+	if math.IsNaN(a) || math.IsNaN(b) || math.IsInf(a, 0) || math.IsInf(b, 0) || math.Abs(a-b) > 1e-12 {
+		return false
+	}
+	actual.FiniteNLL, expected.FiniteNLL = 0, 0
+	return reflect.DeepEqual(actual, expected)
+}
+
+func pairedScoresEqual(actual, expected pairedScore) bool {
+	if !pairedCountsEqual(actual.Total, expected.Total) || len(actual.Families) != len(expected.Families) {
+		return false
+	}
+	for key, count := range actual.Families {
+		other, ok := expected.Families[key]
+		if !ok || !pairedCountsEqual(count, other) {
+			return false
+		}
+	}
+	return true
 }
 
 func choosePaired(scores map[string]pairedScore) (string, error) {
@@ -444,10 +470,66 @@ func auditPairedCompiler(curriculum, models, output string) error {
 			if err != nil {
 				return err
 			}
-			if !reflect.DeepEqual(actual, expected) || (split == "calibration" && !reflect.DeepEqual(actual, selection.Scores[id])) {
-				return errors.New("reconstructed finite scores differ")
+			if !pairedScoresEqual(actual, expected) || (split == "calibration" && !pairedScoresEqual(actual, selection.Scores[id])) {
+				return fmt.Errorf("reconstructed finite scores differ (%s/%s: NLL computed %.17g recorded %.17g)", id, split, actual.Total.FiniteNLL, expected.Total.FiniteNLL)
 			}
 		}
 	}
 	return nil
+}
+
+func writePairedAuditReceipt(curriculum, output, destination string) error {
+	if _, err := os.Lstat(destination); !os.IsNotExist(err) {
+		return errors.New("fresh audit receipt required")
+	}
+	rows, err := compilerTrainingRows(curriculum)
+	if err != nil {
+		return err
+	}
+	raw, err := read(filepath.Join(output, "report.json"))
+	if err != nil {
+		return err
+	}
+	var report pairedAuditReport
+	if err = json.Unmarshal(raw, &report); err != nil {
+		return err
+	}
+	maximum, comparisons := 0.0, 0
+	for _, arm := range pairedArms {
+		for _, variant := range pairedVariants {
+			for _, split := range []string{"calibration", "development"} {
+				id := arm + "-" + variant
+				raw, err := read(filepath.Join(output, id+"-"+split+".json"))
+				if err != nil {
+					return err
+				}
+				var observations []compilerModelObservation
+				if err = json.Unmarshal(raw, &observations); err != nil {
+					return err
+				}
+				rowSplit, expected := split, report.Calibration[id]
+				if split == "development" {
+					rowSplit, expected = "test", report.Development[id]
+				}
+				actual, err := summarizePaired(rows, rowSplit, observations)
+				if err != nil {
+					return err
+				}
+				if !pairedScoresEqual(actual, expected) {
+					return errors.New("receipt scores differ")
+				}
+				maximum = math.Max(maximum, math.Abs(actual.Total.FiniteNLL-expected.Total.FiniteNLL))
+				comparisons++
+				for key, count := range actual.Families {
+					maximum = math.Max(maximum, math.Abs(count.FiniteNLL-expected.Families[key].FiniteNLL))
+					comparisons++
+				}
+			}
+		}
+	}
+	raw, err = read(filepath.Join(output, "report.json"))
+	if err != nil {
+		return err
+	}
+	return save(destination, map[string]any{"schema": "gooo/paired-compiler-independent-audit/v1", "status": "PASS", "audited_report_sha256": hash(raw), "selected_candidate": report.Selected, "reconstructed_nll_comparisons": comparisons, "maximum_absolute_nll_rounding_difference": maximum, "nll_absolute_tolerance": 1e-12, "new_model_predictions": 0, "new_native_calls": 0, "scope": "independently reconstructed arithmetic actuals and counters exactly; only derived NLL accepts bounded CPU-architecture rounding; does not redo training or model inference"})
 }

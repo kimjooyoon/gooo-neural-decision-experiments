@@ -18,6 +18,8 @@ jobs:
       GOWORK: "off"
     steps:
       - uses: actions/checkout@v7
+      - name: Retrieve immutable paired publication source
+        run: git fetch --depth=1 origin ed5d85f98e003824d75785cff69d2d3f26ae325a
       - uses: actions/setup-go@v7
         with:
           go-version: '1.27.1'
@@ -689,6 +691,8 @@ jobs:
       GOWORK: "off"
     steps:
       - uses: actions/checkout@v7
+      - name: Retrieve immutable paired publication source
+        run: git fetch --depth=1 origin ed5d85f98e003824d75785cff69d2d3f26ae325a
       - uses: actions/setup-go@v7
         with:
           go-version: '1.27.1'
