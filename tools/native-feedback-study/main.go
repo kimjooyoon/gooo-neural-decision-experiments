@@ -441,6 +441,17 @@ func main() {
 	curriculum := flag.String("curriculum", "", "canonical compiler curriculum directory")
 	modelRoot := flag.String("model-root", "", "own-model training directory")
 	flag.Parse()
+	if *mode == "compiler-native-dogfood-compare" {
+		value, err := compareCompilerNativeDogfood(*root, *output)
+		if err == nil {
+			err = save(*auditOutput, value)
+		}
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "compiler-native-compare:", err)
+			os.Exit(1)
+		}
+		return
+	}
 	if *mode == "compiler-native-dogfood" || *mode == "compiler-native-dogfood-audit" {
 		var err error
 		if *mode == "compiler-native-dogfood" {
