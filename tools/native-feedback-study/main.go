@@ -414,7 +414,7 @@ func run(binary, nativeRoot, output, revision, nativeRevision string) error {
 	return nil
 }
 func main() {
-	mode := flag.String("mode", "study", "study, execute, audit, input-bound, continued-bound, continued-audit, trained-dogfood or trained-audit")
+	mode := flag.String("mode", "study", "study, execute, audit, input-bound, continued-bound, continued-audit, trained-dogfood, trained-audit, family modes or compound-cohort/compound-study/compound-pilot")
 	goBinary := flag.String("go-bin", "", "Go 1.27.1 executable for execute mode")
 	auditOutput := flag.String("audit-output", "", "audit receipt output; defaults to study directory")
 	binary := flag.String("native", "", "native binary")
@@ -424,6 +424,20 @@ func main() {
 	nativeRevision := flag.String("native-revision", "", "clean binary source SHA")
 	familyCIStatus := flag.String("family-ci-status", "PASS", "caller family-study CI context: PASS, FAIL or UNKNOWN")
 	flag.Parse()
+	if *mode == "compound-cohort" {
+		if err := writeCompoundCohort(*output); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+		return
+	}
+	if *mode == "compound-study" || *mode == "compound-pilot" {
+		if err := runCompound(*binary, *goBinary, *output, *revision, *mode == "compound-pilot"); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+		return
+	}
 	if *mode == "family-optimized" {
 		if err := runFamilyFor(*binary, *goBinary, *output, *revision, false, familySpec{Revision: *nativeRevision, SDK: "v0.2.5-experimental", NoChoice: true, CIStatus: *familyCIStatus}); err != nil {
 			fmt.Fprintln(os.Stderr, err)

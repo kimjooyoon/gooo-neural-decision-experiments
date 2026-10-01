@@ -43,6 +43,11 @@ jobs:
           go run ./tools/native-feedback-study --mode family-cohort --out "$RUNNER_TEMP/native-family-cohort"
           cmp studies/feedback-family-v1/cohort.jsonl "$RUNNER_TEMP/native-family-cohort/cohort.jsonl"
           cmp studies/feedback-family-v1/manifest.json "$RUNNER_TEMP/native-family-cohort/manifest.json"
+      - name: Reproduce interacting four-path body cohort
+        run: |
+          go run ./tools/native-feedback-study --mode compound-cohort --out "$RUNNER_TEMP/compound-path-cohort"
+          cmp studies/compound-path-v1/cohort.jsonl "$RUNNER_TEMP/compound-path-cohort/cohort.jsonl"
+          cmp studies/compound-path-v1/manifest.json "$RUNNER_TEMP/compound-path-cohort/manifest.json"
       - name: Reproduce finite feedback targets with preserved ambiguity
         run: |
           go run ./cmd/feedback-curriculum --out "$RUNNER_TEMP/feedback-path-curriculum"
