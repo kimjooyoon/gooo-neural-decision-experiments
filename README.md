@@ -505,8 +505,8 @@ intention groups, and does not itself repair a program or raise accuracy.
 The additional SDK diagnosis median is about 0.089–0.093 ms, excluding model load
 and plan preparation. The new
 [Go SDK v0.2.8 release](https://github.com/kimjooyoon/gooo-decision-runtime/releases/tag/v0.2.8-experimental)
-exposes bounded, cancellable `PreparedPlan.Diagnose`; native main adoption is a
-separate next step. [HF raw evidence](https://huggingface.co/asketeddy/gooo-feedback-path-tiny-v1/tree/f41547f98ffc76d015bc027826afa21d619b1904/research/path-diagnosis-sdk-20261001)
+exposes bounded, cancellable `PreparedPlan.Diagnose`; native main adoption is
+recorded below. [HF raw evidence](https://huggingface.co/asketeddy/gooo-feedback-path-tiny-v1/tree/f41547f98ffc76d015bc027826afa21d619b1904/research/path-diagnosis-sdk-20261001)
 includes all captures, preregistration and actual Go values. Earlier model weights,
 card and regression evidence remain available.
 
@@ -528,3 +528,20 @@ these eight calls do not establish a stable speedup or host CPU utilization.
 contains raw receipts, resource sidecars, selected emitted-Go values and the
 unchanged preregistration. This captures clean feature source; main adoption
 and canonical CI proof are recorded separately.
+
+[Main adoption PR 1129](https://github.com/kimjooyoon/meta-ontology-go/pull/1129)
+is merged after six successful canonical checks and independently verified
+promotion proof. Clean main compiler/worker builds use Go 1.27.1 and SDK 0.2.8.
+[Eight repeated main smoke calls](runs/native-path-diagnosis-main-20261001/report.json)
+preserve all four off/on pairs and the negative English choice. Four additional
+initial predictions and zero diagnostic predictions produce four actual
+selected-Go function evaluations. These repetitions are not new independent
+intention groups. Main diagnostic stages range from about 0.035 to 0.075 ms.
+
+The [HF main adoption appendix](https://huggingface.co/asketeddy/gooo-feedback-path-tiny-v1/tree/07f3e8bc8359a88f3e89d92ee38b96b346d1ab32/research/native-path-diagnosis-main-adoption-20261001)
+contains metadata and summary; full raw main captures stay on GitHub. Main push
+CI is a separate pending observation in the frozen adoption receipt. The scoped
+automatic promotion App remains unconfigured; ordinary authenticated CLI
+promotion completed without overrides or human approval requests. Existing
+weights remain unchanged. The [next experiment plan](docs/path-diagnosis-followup-plan.md)
+prioritizes bounded judgment, partial completion, provenance and iteration cost.

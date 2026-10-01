@@ -1,0 +1,167 @@
+{
+  "schema": "gooo/native-path-diagnosis-main-adoption/v1",
+  "decision": "PASS",
+  "native_main": "1e01c96c54f2f8dd43334b8f580af93ffaea24df",
+  "native_dev": "e68e511e391859bda5212a30a0ff9b4fd10bb7fd",
+  "tree": "0256cfd56c99d8fca6742665608f0db1c487a452",
+  "main_parent": "37fb287a9c888bd0262194f524dde16426eca3a9",
+  "promotion_candidate": "a947649b69556b3e556166d86b98138cb0d03c92",
+  "promotion_pr": 1129,
+  "promotion_merged_at": "2026-10-01T10:16:54Z",
+  "promotion_ci": 36846006343,
+  "promotion_ci_result": {
+    "conclusion": "success",
+    "headSha": "a947649b69556b3e556166d86b98138cb0d03c92",
+    "jobs": [
+      {
+        "conclusion": "success",
+        "name": "go test",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "gofmt",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "go vet",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "go test -race",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "Semantic conformance",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "CI policy",
+        "status": "completed"
+      }
+    ],
+    "status": "completed"
+  },
+  "promotion_proof": {
+    "decision": "PASS",
+    "independent_go_verifier_exit": 0,
+    "sha256": "b2465a1d585637d8dd295dee7286b6391a6f4a3c8ded6f0abf1808e27c1c6b92",
+    "provenance_receipt_sha256": "9775599e4c040a13dcb3650231aec8415f449a63fd5b10eba54fa2ef1ca81247",
+    "artifact_id": 11154321980,
+    "artifact_zip_sha256": "69e49a41f22829842d1640826306e7eddbb63f79ef9219c3fb4a1b5fcbd67c0e",
+    "authorization": "PASS",
+    "source": "dev",
+    "target": "main",
+    "operation": "fast_forward",
+    "live_parent_tree_tuple_verified": true
+  },
+  "main_push_ci": 36848147619,
+  "main_push_ci_observation": {
+    "conclusion": "",
+    "headSha": "1e01c96c54f2f8dd43334b8f580af93ffaea24df",
+    "jobs": [
+      {
+        "conclusion": "success",
+        "name": "Feedback predecessor",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "Language package execution",
+        "status": "completed"
+      },
+      {
+        "conclusion": "",
+        "name": "Semantic conformance",
+        "status": "in_progress"
+      },
+      {
+        "conclusion": "",
+        "name": "go test",
+        "status": "in_progress"
+      },
+      {
+        "conclusion": "success",
+        "name": "gofmt",
+        "status": "completed"
+      },
+      {
+        "conclusion": "",
+        "name": "go test -race",
+        "status": "in_progress"
+      },
+      {
+        "conclusion": "success",
+        "name": "go vet",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "COHERENCE boundary probe",
+        "status": "completed"
+      }
+    ],
+    "status": "in_progress"
+  },
+  "main_push_ci_claimed_pass": false,
+  "branch_protection": {
+    "required_checks": [
+      "CI policy",
+      "Semantic conformance",
+      "gofmt",
+      "go vet",
+      "go test",
+      "go test -race"
+    ],
+    "strict": true,
+    "enforce_admins": true,
+    "required_reviews": 0,
+    "guardian_required": false,
+    "override_used": false
+  },
+  "local_install": {
+    "go": "go1.27.1",
+    "sdk": "v0.2.8-experimental",
+    "vcs_modified": false,
+    "source": "1e01c96c54f2f8dd43334b8f580af93ffaea24df",
+    "cli_sha256": "234c3d7663afdeff882906d55f05454ce602a140e35280fbb138158b2bffc344",
+    "worker_sha256": "0bbdb85cb94100a3ea7b2eb0f1a95439a9285f5f308c6fb2be5dd778cd7b0918"
+  },
+  "main_smoke": {
+    "runner": "aed54e7b8e05e3907c80f8444790daed0f7202ea",
+    "report": "runs/native-path-diagnosis-main-20261001/report.json",
+    "report_sha256": "8d33c976b74a30eb99d8de72cde9133cd00c639dcbef8373d8fd95a0b6aab2b4",
+    "independent_audit": "PASS",
+    "actual_native_calls": 8,
+    "actual_initial_predictions": 4,
+    "diagnoses": 4,
+    "candidate_observations": 8,
+    "diagnostic_predictions": 0,
+    "same_source_pairs": 4,
+    "actual_generated_go_processes": 2,
+    "actual_generated_function_invocations": 4,
+    "diagnostic_ms": [
+      0.074833,
+      0.057958,
+      0.035209,
+      0.037209
+    ],
+    "new_independent_intentions": 0
+  },
+  "automatic_app_promotion": {
+    "run": 36847680174,
+    "conclusion": "failure",
+    "code": "PROMOTION_APP_CONFIGURATION_REQUIRED",
+    "human_action_requested": false,
+    "normal_cli_promotion_completed": true
+  },
+  "subagents_used": 0,
+  "new_training_calls": 0,
+  "new_optimizer_steps": 0,
+  "upstream_laya_calls": 0,
+  "scope": "Exact-tree main adoption and clean local compiler/worker installation after successful six-check PR CI and independent proof verification. Normal squash merge obeys repository linear history; no override or forced ref update. Main post-push CI is a distinct in-progress observation, not claimed PASS. Eight main smoke calls repeat the preregistered one-intention bilingual integration design and preserve the negative English choice. Selected emitted Go is actually executed, alternatives remain typed-arena observations. Source inference implementation is covered by successful research CI 36844872712; later runner commits are documentation/metadata only. Raw main capture/audit is locally reproduced without new inference during audit. Existing model weights, card and regression evidence remain unchanged. No new training/GPU/Laya work or host utilization claim."
+}
