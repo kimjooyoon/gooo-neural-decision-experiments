@@ -191,6 +191,37 @@ Archive source files are committed publication-producer snapshots. Individual
 preexecution records retain each original run revision in public Git history;
 native execution core and frozen model/runtime inputs remain digest-bound.
 
+The [complete public HF edition](https://huggingface.co/asketeddy/gooo-joint-path-tiny-v1/tree/5fb63c8092b4f1a2b1d0eb99b6d17f42cd6aac66)
+contains 39 payloads plus its manifest. Anonymous verification checked all 479
+regular archive members and their CRC/SHA/size bindings. The archive is
+12,310,159 bytes and expands to 169,030,493 bytes; this publication size is
+separate from inference memory.
+
+### Independent Linux CI replay
+
+[Source CI run 36940302546](https://github.com/kimjooyoon/gooo-neural-decision-experiments/actions/runs/36940302546)
+at `25eb7e3cd33b2a726bf2cc3dc25f01865f044b58` passed the new
+`joint-own-model-native` job and all eight other jobs. It fetched the immutable HF bytes, reconstructed
+2,304 source exports, 5,376 SDK sessions and the frozen 192 native captures,
+then built adopted main and performed another 192 native generations, 470 model
+predictions, 192 independent Go executions and 3,072 invocations. Every generated
+value passed. Calls, candidate paths and completeness curves matched the frozen
+study. These are cross-platform replays, not new intentions or optimizer updates.
+The downloaded fresh Linux captures also passed the local Go auditor, with no
+additional inference or execution. The downloaded artifact ZIP SHA256 matched
+GitHub's reported digest. The [finalization receipt](../publication/joint-composition-finalization-20261002.json)
+binds the tested source, nine CI jobs, model publication and these audit digests.
+
+The first CI replay at `482d0f72cb5049e77e03dc9259fc238453b90557` failed an exact
+comparison of a rederived SDK statistic. The repaired replay recorded one NLL
+difference in `development/independent-fp32`, `schedule_operand/ko`:
+44.04744268025131 captured versus 44.047442680251315 recomputed. Only rederived
+NLL and target-mass aggregates now allow `1e-10` absolute plus `1e-12` relative
+rounding, with both values reported. Counts, durations, receipts, paths and
+actual executed values retain their prior checks. Tests reject changed counts,
+curves, durations, NaN and materially changed mass. Frozen observations, model
+weights and the calibration-only selection were not rewritten.
+
 ## Next own-model direction
 
 1. Expand intent facts to distinguish the eight conflicting joint targets,
