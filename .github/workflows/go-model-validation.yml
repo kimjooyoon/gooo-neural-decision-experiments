@@ -10,6 +10,75 @@ permissions:
   contents: read
 
 jobs:
+  joint-own-model-native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GOTOOLCHAIN: local
+      GOWORK: "off"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.27.1'
+          cache: false
+      - name: Retrieve and independently verify immutable public own-model evidence
+        run: |
+          go run ./tools/package-joint-composition --mode fetch \
+            --bundle "$RUNNER_TEMP/joint-public-models" \
+            --verify-revision 5fb63c8092b4f1a2b1d0eb99b6d17f42cd6aac66 \
+            --manifest-sha256 6dd310035426da8c93e933c09174c6daa6e783eb79bbb8157bcf782cf6f5946a \
+            --evidence "$RUNNER_TEMP/joint-frozen-evidence" \
+            --output "$RUNNER_TEMP/joint-public-verification.json"
+      - name: Reconstruct frozen source curriculum, SDK sessions and actual native values
+        run: |
+          go run ./tools/joint-composition-curriculum \
+            --audit "$RUNNER_TEMP/joint-frozen-evidence/curriculum" \
+            --audit-report "$RUNNER_TEMP/joint-curriculum-audit.json"
+          go run ./tools/joint-composition-study \
+            --curriculum "$RUNNER_TEMP/joint-frozen-evidence/curriculum" \
+            --models models/joint-composition-v1 \
+            --audit-study "$RUNNER_TEMP/joint-frozen-evidence/sdk" \
+            --output "$RUNNER_TEMP/joint-sdk-audit.json"
+          go run ./tools/joint-composition-study --mode native-audit \
+            --curriculum "$RUNNER_TEMP/joint-frozen-evidence/curriculum" \
+            --models models/joint-composition-v1 \
+            --study "$RUNNER_TEMP/joint-frozen-evidence/sdk" \
+            --native "$RUNNER_TEMP/joint-frozen-evidence/native" \
+            --output "$RUNNER_TEMP/joint-frozen-native-audit.json"
+      - name: Build the adopted Gooo main and body worker
+        run: |
+          git clone --no-checkout https://github.com/kimjooyoon/meta-ontology-go.git "$RUNNER_TEMP/joint-native-source"
+          git -C "$RUNNER_TEMP/joint-native-source" checkout --detach 363a3d8aa365c35dd634c241248b444de0050973
+          cd "$RUNNER_TEMP/joint-native-source"
+          go build -trimpath -o "$RUNNER_TEMP/gooo-joint" ./cmd/gooo
+          go build -trimpath -o "$RUNNER_TEMP/gooo-body-worker" ./cmd/gooo-body-worker
+      - name: Perform new direct native generations and compiled-Go executions
+        run: |
+          go run ./tools/joint-composition-study --mode native \
+            --curriculum "$RUNNER_TEMP/joint-frozen-evidence/curriculum" \
+            --models models/joint-composition-v1 \
+            --study "$RUNNER_TEMP/joint-frozen-evidence/sdk" \
+            --output "$RUNNER_TEMP/joint-native-new" \
+            --source-revision "$GITHUB_SHA" \
+            --binary "$RUNNER_TEMP/gooo-joint" --go-binary "$(command -v go)"
+          go run ./tools/joint-composition-study --mode native-audit \
+            --curriculum "$RUNNER_TEMP/joint-frozen-evidence/curriculum" \
+            --models models/joint-composition-v1 \
+            --study "$RUNNER_TEMP/joint-frozen-evidence/sdk" \
+            --native "$RUNNER_TEMP/joint-native-new" \
+            --output "$RUNNER_TEMP/joint-native-new/independent-audit.json"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: joint-own-model-native
+          path: |
+            ${{ runner.temp }}/joint-native-new
+            ${{ runner.temp }}/joint-public-verification.json
+            ${{ runner.temp }}/joint-curriculum-audit.json
+            ${{ runner.temp }}/joint-sdk-audit.json
+            ${{ runner.temp }}/joint-frozen-native-audit.json
+
   runtime-and-artifacts:
     runs-on: ubuntu-latest
     timeout-minutes: 15

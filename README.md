@@ -1,5 +1,49 @@
 # Gooo neural decision experiments
 
+## Own joint Gooo model — latest experiment
+
+[Six fresh own models and direct Gooo execution](docs/joint-composition-model-results-20261002.md)
+now compare independent choices with one joint four-mask prediction. There are
+480 actual MPS optimizer updates, no inherited pretrained/Laya/earlier own-model
+weights, and six FP32/PTQ/QAT exports. Complete source-bound Korean/English
+intent ranks legal compiler-owned fragments; actual failure feedback can rerank
+remaining paths. Disconnected or unsupported input continues deterministically.
+
+On 384 development function views, joint FP32 reduces predictions 1,447→777
+but increases extra assembly attempts 448→455. All seven policies complete their
+16-case finite contracts by four candidates. Calibration selects independent
+FP32; no default model is promoted. Warm joint prediction is about 10.7 µs with
+zero per-call heap allocations. Ternary files occupy 2,590 bytes and execute as
+decoded int8 tensors, separately from whole-process memory.
+
+Gooo [main 363a3d8](https://github.com/kimjooyoon/meta-ontology-go/commit/363a3d8aa365c35dd634c241248b444de0050973)
+uses released SDK v0.2.12 and supports an explicit joint path model after source
+binding. Actual main dogfood makes 192 compiler calls and 470 predictions,
+independently compiles 192 emitted outputs and passes 3,072 ordered Go function
+invocations. Joint prediction reduces calls in that native subset too, but
+median compiler-child latency remains about 10.9 ms. Global host CPU delta is
+unmeasured; process CPU/RSS observations are retained with their scope.
+
+The [complete immutable public model edition](https://huggingface.co/asketeddy/gooo-joint-path-tiny-v1/tree/5fb63c8092b4f1a2b1d0eb99b6d17f42cd6aac66)
+contains all six models, both frozen protocol documents, negative comparisons,
+PROV-O chains and raw source/curriculum/SDK/native evidence. Anonymous Go
+verification passes for 39 payloads, the manifest and 479 regular ZIP members.
+The new CI job retrieves this pinned edition, reconstructs original evidence
+and performs new direct native generations and compiled-Go executions.
+
+Install both compiler executables with Go 1.27.1, then provide source and its
+typed legal path plan:
+
+```sh
+GOTOOLCHAIN=go1.27.1 go install github.com/kimjooyoon/meta-ontology-go/cmd/gooo@363a3d8aa365c35dd634c241248b444de0050973
+GOTOOLCHAIN=go1.27.1 go install github.com/kimjooyoon/meta-ontology-go/cmd/gooo-body-worker@363a3d8aa365c35dd634c241248b444de0050973
+gooo body-codegen --json --path-plan plan.json --path-model joint/models/fp32/model.json --path-step-attempts 1 --path-feedback-rounds 3 --path-feedback-unfixed --activity ChoosePath source.gooo
+```
+
+Joint v1 supports exactly two binary choices. More decisions use deterministic
+continuation; future own-model work expands variable/assignment/condition
+composition and measures completeness, total attempts and inference cost.
+
 ## Own source-aware small model
 
 The [actual fresh-model training and native dogfood](docs/fresh-composition-model-results-20261002.md)
