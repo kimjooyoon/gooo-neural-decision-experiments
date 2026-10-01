@@ -162,7 +162,7 @@ func child(ctx context.Context, binary string, args []string) ([]byte, process, 
 	cmd := exec.CommandContext(bounded, binary, args...)
 	configureProcess(cmd)
 	cmd.WaitDelay = time.Second
-	cmd.Env = []string{"PATH=" + os.Getenv("PATH"), "HOME=" + os.TempDir(), "LANG=C", "GOTOOLCHAIN=go1.27.1", "GOWORK=off"}
+	cmd.Env = []string{"PATH=" + os.Getenv("PATH"), "LANG=C", "GOTOOLCHAIN=go1.27.1", "GOWORK=off"}
 	var out, errout limited
 	cmd.Stdout = &out
 	cmd.Stderr = &errout
