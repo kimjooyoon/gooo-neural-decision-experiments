@@ -165,6 +165,9 @@ jobs:
           go run ./tools/native-feedback-study --mode family-audit --out runs/feedback-family-optimized-feature-20261001 \
             --audit-output "$RUNNER_TEMP/family-optimized-feature-audit.json"
           cmp runs/feedback-family-optimized-feature-20261001/audit.json "$RUNNER_TEMP/family-optimized-feature-audit.json"
+          go run ./tools/native-feedback-study --mode family-audit --out runs/feedback-family-optimized-main-20261001 \
+            --audit-output "$RUNNER_TEMP/family-optimized-main-audit.json"
+          cmp runs/feedback-family-optimized-main-20261001/audit.json "$RUNNER_TEMP/family-optimized-main-audit.json"
       - name: Reproduce compressed native-family publication without credentials
         run: |
           go run ./tools/package-family-evidence --pack --bundle "$RUNNER_TEMP/native-family-bundle"
@@ -177,6 +180,12 @@ jobs:
           go run ./tools/package-family-evidence --kind optimized-feature \
             --bundle "$RUNNER_TEMP/native-family-optimized-feature-bundle" \
             --output "$RUNNER_TEMP/native-family-optimized-feature-verification.json"
+          go run ./tools/package-family-evidence --kind optimized-main --pack \
+            --bundle "$RUNNER_TEMP/native-family-optimized-main-bundle"
+          cmp publication/hf-native-family-optimized-main-20261001/publication-manifest.json "$RUNNER_TEMP/native-family-optimized-main-bundle/publication-manifest.json"
+          go run ./tools/package-family-evidence --kind optimized-main \
+            --bundle "$RUNNER_TEMP/native-family-optimized-main-bundle" \
+            --output "$RUNNER_TEMP/native-family-optimized-main-verification.json"
       - uses: actions/upload-artifact@v7
         with:
           name: go-model-validation
@@ -208,6 +217,8 @@ jobs:
             ${{ runner.temp }}/family-pilot-audit.json
             ${{ runner.temp }}/family-matrix-audit.json
             ${{ runner.temp }}/family-optimized-feature-audit.json
+            ${{ runner.temp }}/family-optimized-main-audit.json
+            ${{ runner.temp }}/native-family-optimized-main-verification.json
           if-no-files-found: error
 
   compiler-model-dogfood:

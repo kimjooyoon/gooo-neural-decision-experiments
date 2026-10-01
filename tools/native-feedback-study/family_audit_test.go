@@ -81,7 +81,7 @@ func TestFamilyUnknownCIContextDoesNotImplyPass(t *testing.T) {
 
 func TestFamilyFrozenAuditAndChangedPilotCapture(t *testing.T) {
 	t.Chdir("../..")
-	for _, name := range []string{"feedback-family-pilot-20261001", "feedback-family-matrix-20261001", "feedback-family-optimized-feature-20261001"} {
+	for _, name := range []string{"feedback-family-pilot-20261001", "feedback-family-matrix-20261001", "feedback-family-optimized-feature-20261001", "feedback-family-optimized-main-20261001"} {
 		value, err := auditFamily(filepath.Join("runs", name))
 		if err != nil || value["new_model_predictions"] != 0 {
 			t.Fatalf("%s %v", name, err)

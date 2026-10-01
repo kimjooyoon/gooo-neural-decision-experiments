@@ -127,12 +127,42 @@ were anonymously verified by eight requests. The older nine-file appendix and
 25-file core were separately reverified at that same revision. No unpublished
 host path or credential was included by the allowlist packager.
 
-Go-derived [descriptive resource metrics](../publication/native-family-descriptive-metrics-20261001.json)
+Go-derived [frozen feature resource metrics](../publication/native-family-descriptive-metrics-feature-20261001.json)
 retain all 120 process observations per arm and both editions. Optimized native
 wall medians are 5.280–5.485 ms, CPU-time medians 4.562–4.760 ms, and median peak
 RSS 16,891,904–17,203,200 bytes. Median process CPU/wall ratios are 86.12–86.99%
 of one core. These figures are whole compiler subprocess measurements, not
 host CPU utilization or its increase, and do not establish a wall-speedup claim.
+
+## Actual main comparison
+
+[PR 1123](https://github.com/kimjooyoon/meta-ontology-go/pull/1123) merged SDK
+v0.2.5 into main at `ef63060ed1aebd9d92a2fe4cf24ce9c5929b8726`. The protected
+promotion passed all six required machine checks, downloaded Go proof and
+append-only receipt verification. Main's tree exactly matches the merged dev
+tree `263c0bc24923dd44125532d06734d12dab4e2b5b`. Required reviews remain zero;
+Guardian is absent from the required checks.
+
+Runner `e8bdb7447ddadc21971e6be8f72d6ff74f90b250` then executed the same 1,080
+views using the clean main binary. The captured caller CI hint is `UNKNOWN`
+because main's post-push CI was pending at execution. Subsequent CI results
+are separate evidence; the original captures retain that hint unchanged.
+
+The [main matrix](../runs/feedback-family-optimized-main-20261001/report.json)
+and [independent replay audit](../runs/feedback-family-optimized-main-20261001/audit.json)
+record 960 initialization predictions, zero feedback predictions and 244
+hashed zero-call receipts. All 1,080 baseline pairs retain the selected label,
+Go source, finite/separate-input outcomes and candidate count. The 1,638
+candidate attempts and 20 actual Go processes with 440 function evaluations
+are unchanged. The new checkpoints still underperform the parent on intention
+agreement; no first-choice accuracy improvement is claimed.
+
+[Main resource metrics](../publication/native-family-descriptive-metrics-20261001.json)
+retain all 120 observations per arm. Across nine arms, median whole compiler
+wall time is 5.288–5.494 ms, median CPU time 4.577–4.762 ms, median peak RSS
+16,891,904–17,235,968 bytes, and median process CPU/wall ratio 86.17–86.66%
+of one core. This measures the compiler subprocess, not host utilization.
+The fixed measurement order does not establish causal wall-speedup.
 
 ## 개발에 사용하는 방식
 
@@ -162,6 +192,6 @@ gooo body-codegen --json --path-plan plan.json \
 모델을 연결하지 않을 때는 모델·피드백 옵션을 생략합니다. 같은 원본·계획·테스트·
 예산에서 선언된 순서로 후보를 평가하므로 최종 코드와 선택 경로를 재현할 수
 있습니다. 실행시간 측정은 별도로 기록합니다. 새 모델은 실험 체크포인트로
-보존하며, 이전 모델과의 회귀 결과도 공개합니다. SDK v0.2.5 연결은 개발
-브랜치에 병합됐고 [main 승격 PR 1123](https://github.com/kimjooyoon/meta-ontology-go/pull/1123)은
-별도의 필수 CI와 소스 연결 증거를 검사합니다.
+보존하며, 이전 모델과의 회귀 결과도 공개합니다. SDK v0.2.5 연결은
+[main 승격 PR 1123](https://github.com/kimjooyoon/meta-ontology-go/pull/1123)에서
+필수 CI와 소스 연결 증거를 통과한 뒤 main에 병합됐습니다.

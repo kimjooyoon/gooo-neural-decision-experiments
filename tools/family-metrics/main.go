@@ -89,6 +89,7 @@ func generate() (map[string]any, error) {
 	for _, item := range []struct{ Edition, Root, SHA string }{
 		{"baseline_sdk_2_4_main", "runs/feedback-family-matrix-20261001", "9c00cf48dae46bdc793b39c5ae94f15c825194d33eabe2bcf3002161aba87c2d"},
 		{"optimized_sdk_2_5_feature", "runs/feedback-family-optimized-feature-20261001", "0346231d22f540a844fc9296b408a64c59bb33d538223603c10f65a281c63d62"},
+		{"optimized_sdk_2_5_main", "runs/feedback-family-optimized-main-20261001", "4537080ed58d19f6744e6d615c5c6eb63632c9494d96637282c4f36a2990b083"},
 	} {
 		path := item.Root + "/report.json"
 		info, err := os.Lstat(path)
@@ -137,7 +138,7 @@ func generate() (map[string]any, error) {
 		}
 	}
 	return map[string]any{"schema": "gooo/native-family-descriptive-metrics/v1", "decision": "PASS", "source_report_sha256": pins, "summaries": summaries, "new_model_predictions": 0, "new_native_calls": 0, "new_go_processes": 0,
-		"scope": "Whole native compiler subprocess lifetime per repeated policy view; CPU percentage is process CPU time divided by wall time in units of one core, not host utilization or utilization increase. Single baseline-first ordering per edition; no repeated randomized trials, isolated model kernel attribution or causal speedup claim. Every recorded outlier retained. Main SDK 2.4 and feature SDK 2.5 deployment states remain distinct. Separate-input observations reuse actual Go executions."}, nil
+		"scope": "Whole native compiler subprocess lifetime per repeated policy view; CPU percentage is process CPU time divided by wall time in units of one core, not host utilization or utilization increase. Single baseline-first ordering per edition; no repeated randomized trials, isolated model kernel attribution or causal speedup claim. Every recorded outlier retained. Baseline main SDK 2.4, feature SDK 2.5 and deployed main SDK 2.5 source editions remain distinct. Main SDK 2.5 caller CI context was UNKNOWN while post-push checks were pending; verified promotion proof is separate. Separate-input observations reuse actual Go executions."}, nil
 }
 func main() {
 	out := flag.String("output", "", "descriptive metrics output")

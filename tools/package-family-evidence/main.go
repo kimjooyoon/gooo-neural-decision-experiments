@@ -36,6 +36,8 @@ var fixed = map[string]string{
 	"runs/feedback-family-matrix-20261001/audit.json":             "c732643f2312543a3bc669f878bef0d63ed8c9d671d6225db20d4b073512d0b2",
 	"runs/feedback-family-optimized-feature-20261001/report.json": "0346231d22f540a844fc9296b408a64c59bb33d538223603c10f65a281c63d62",
 	"runs/feedback-family-optimized-feature-20261001/audit.json":  "8fcbc56ad12c812755d6925082a72baeab739c0e006d12fdfb27a56ac86adc47",
+	"runs/feedback-family-optimized-main-20261001/report.json":    "4537080ed58d19f6744e6d615c5c6eb63632c9494d96637282c4f36a2990b083",
+	"runs/feedback-family-optimized-main-20261001/audit.json":     "770b268ac84ab0fadb4a489b193f2008e3ec95fa027921b41da77742dd761be4",
 }
 
 type entry struct {
@@ -78,6 +80,9 @@ func namesKind(kind string) ([]string, error) {
 	expected := 1128
 	if kind == "optimized-feature" {
 		roots = []string{"runs/feedback-family-optimized-feature-20261001"}
+		expected = 1105
+	} else if kind == "optimized-main" {
+		roots = []string{"runs/feedback-family-optimized-main-20261001"}
 		expected = 1105
 	} else if kind != "" {
 		return nil, errors.New("unknown frozen evidence kind")
@@ -152,6 +157,9 @@ func buildKind(kind string) (manifest, map[string][]byte, error) {
 	if kind == "optimized-feature" {
 		m.Prefix = "research/native-family-optimized-feature-20261001/"
 		m.Scope = "Frozen feature SDK v0.2.5 evidence only, not main deployment. 1080 native calls, 960 initial predictions, zero feedback predictions, 244 zero-call ranking_unnecessary receipts, 1638 candidates, 20 actual Go processes and 440 function evaluations. All 1080 baseline pairs preserve selected label/Go/finite/separate outcomes and attempts. Original feature CI failed obsolete module sums, then was canceled by the checksum repair; caller PASS hint was not authenticated CI. Existing core weights and card remain unchanged. No new training/model/native/Go calls during packaging. No host utilization or causal wall-speedup claim."
+	} else if kind == "optimized-main" {
+		m.Prefix = "research/native-family-optimized-main-20261001/"
+		m.Scope = "Frozen SDK v0.2.5 main ef63060ed1aebd9d92a2fe4cf24ce9c5929b8726 evidence. 1080 native calls, 960 initial predictions, zero feedback predictions, 244 zero-call ranking_unnecessary receipts, 1638 candidates, 20 actual Go processes and 440 function evaluations. All 1080 baseline pairs preserve selected label/Go/finite/separate outcomes and attempts. Captured caller CI status is UNKNOWN because post-push CI was pending at execution; this unauthenticated hint is retained unchanged. Existing core weights and card remain unchanged. No new training/model/native/Go calls during packaging. Repeated contract/language/arm views are not independent experiments. No host utilization or causal wall-speedup claim."
 	}
 	n, err := namesKind(kind)
 	if err != nil {
@@ -195,6 +203,8 @@ func buildKind(kind string) (manifest, map[string][]byte, error) {
 	var payload []string
 	if kind == "optimized-feature" {
 		files["README.md"] = []byte("# Gooo sole-remaining-path feature evidence\n\n" + m.Scope + "\n\nThe deterministic archive contains 1,105 allowlisted files. See per-entry hashes and sizes in publication-manifest.json and methods/failure limitations at https://github.com/kimjooyoon/gooo-neural-decision-experiments/blob/main/docs/native-feedback-families-study.md .\n")
+	} else if kind == "optimized-main" {
+		files["README.md"] = []byte("# Gooo sole-remaining-path main evidence\n\n" + m.Scope + "\n\nThe deterministic archive contains 1,105 allowlisted files. See per-entry hashes and sizes in publication-manifest.json and methods/failure limitations at https://github.com/kimjooyoon/gooo-neural-decision-experiments/blob/main/docs/native-feedback-families-study.md .\n\nVerified main promotion: https://github.com/kimjooyoon/meta-ontology-go/pull/1123 . Subsequent CI evidence is recorded separately without rewriting the original UNKNOWN hints.\n")
 	}
 	for name := range files {
 		payload = append(payload, name)
@@ -329,7 +339,7 @@ func main() {
 	revision := flag.String("revision", "", "immutable public revision")
 	output := flag.String("output", "", "verification record")
 	pack := flag.Bool("pack", false, "build deterministic archive")
-	kind := flag.String("kind", "", "frozen evidence kind: empty or optimized-feature")
+	kind := flag.String("kind", "", "frozen evidence kind: empty, optimized-feature or optimized-main")
 	flag.Parse()
 	if flag.NArg() != 0 || *bundle == "" {
 		fmt.Fprintln(os.Stderr, "package-family-evidence: bundle required")

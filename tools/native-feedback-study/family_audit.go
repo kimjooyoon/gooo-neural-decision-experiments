@@ -23,6 +23,10 @@ type frozenFamily struct {
 }
 
 var optimizedFamilies = map[string]frozenFamily{
+	"4537080ed58d19f6744e6d615c5c6eb63632c9494d96637282c4f36a2990b083": {
+		Runner: "e8bdb7447ddadc21971e6be8f72d6ff74f90b250", Binary: "b6bc1cc0ef2b58f28f54247c71ebc2593fb494d8287d16e1f895d0d41b91ef2e",
+		Spec: familySpec{Revision: "ef63060ed1aebd9d92a2fe4cf24ce9c5929b8726", SDK: "v0.2.5-experimental", NoChoice: true, CIStatus: "UNKNOWN"},
+	},
 	"0346231d22f540a844fc9296b408a64c59bb33d538223603c10f65a281c63d62": {
 		Runner: "1727f64e5636ae1fec985aaa1fa1a2da27035a57", Binary: "dfaa23b207bead2762cb94b2fb056a77121bfb4331ceb2f550c528af11b3892d",
 		Spec: familySpec{Revision: "bf19d5b84fe27c15f3571a6ec14e6f95fed565c5", SDK: "v0.2.5-experimental", NoChoice: true},

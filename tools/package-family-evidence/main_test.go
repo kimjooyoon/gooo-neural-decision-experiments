@@ -41,11 +41,13 @@ func TestArchiveRejectsChangedDigestAndExtraEntries(t *testing.T) {
 
 func TestOptimizedInventoryIsBounded(t *testing.T) {
 	t.Chdir("../..")
-	names, err := namesKind("optimized-feature")
-	if err != nil || len(names) != 1105 {
-		t.Fatal("optimized frozen inventory differs", err)
+	for _, kind := range []string{"optimized-feature", "optimized-main"} {
+		names, err := namesKind(kind)
+		if err != nil || len(names) != 1105 {
+			t.Fatal("optimized frozen inventory differs", kind, err)
+		}
 	}
-	if _, err = namesKind("untrusted"); err == nil {
+	if _, err := namesKind("untrusted"); err == nil {
 		t.Fatal("unknown evidence inventory accepted")
 	}
 }
