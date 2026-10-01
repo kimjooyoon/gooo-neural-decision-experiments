@@ -19,6 +19,15 @@ The optional native flag is `--path-step-attempts 8`, backed by public Go SDK
 `v0.2.2-experimental`. [HF edition and scope](docs/hf-typed-path-v1-incremental.md)
 preserve previous weights and publications.
 
+The [main deployment receipt](publication/incremental-typed-path-main-20261001.json)
+records protected main `307159f041644a3aa56dfd325c345f5325aec902`, exact six-check
+PR proof and four main smokes: real model execution, deterministic offline
+replay, and preserved 6/7 partial output. The
+[experimental Go SDK release](https://github.com/kimjooyoon/gooo-decision-runtime/releases/tag/v0.2.2-experimental)
+is public. [Laya cancellation repair](publication/laya-cancellation-repair-20261001.json)
+separately fixes a buffered-response race with 100 repeated mock tests per case;
+it does not add live model or training measurements.
+
 Public experimental Gooo-specific natural-language to typed IR decisions.
 Runtime, orchestration, data generation and compiler bridges are written in Go.
 Python is used for offline PyTorch/MPS training and checkpoint export. The
