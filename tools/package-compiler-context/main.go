@@ -197,7 +197,7 @@ func get(url string) ([]byte, error) {
 	}
 	return raw, err
 }
-func verify(bundle, revision, output string) error {
+func verify(bundle, revision, output string, includeAppendices bool) error {
 	if !regexp.MustCompile(`^[a-f0-9]{40}$`).MatchString(revision) {
 		return errors.New("immutable HF revision required")
 	}
@@ -240,20 +240,41 @@ func verify(bundle, revision, output string) error {
 			return fmt.Errorf("public hash differs: %s", file.Path)
 		}
 	}
+	var appendices []artifact
+	if includeAppendices {
+		for _, pair := range [][2]string{
+			{"publication/compiler-context-bottlenecks-20261002.json", "research/bottlenecks-20261002.json"},
+			{"docs/own-gooo-model-next-study-plan.md", "research/next-study-plan-20261002.md"},
+		} {
+			local, e := read(pair[0])
+			if e != nil {
+				return e
+			}
+			remote, e := get(base + pair[1])
+			if e != nil {
+				return e
+			}
+			if hash(remote) != hash(local) {
+				return errors.New("public appendix hash differs")
+			}
+			appendices = append(appendices, artifact{pair[1], hash(remote), len(remote)})
+		}
+	}
 	return save(output, map[string]any{"schema": "gooo/compiler-context-public-verification/v1", "status": "PASS", "repo": value.Repo, "revision": revision,
-		"manifest_sha256": hash(raw), "verified_payload_files": len(value.Files), "anonymous_payload_gets": len(value.Files) + 1, "archive_entries": len(value.Archive), "api_discovery_gets": 1, "scope": "anonymous immutable-revision byte hashes; selected allowlist only"})
+		"manifest_sha256": hash(raw), "verified_payload_files": len(value.Files) + len(appendices), "anonymous_payload_gets": len(value.Files) + 1 + len(appendices), "appendices": appendices, "archive_entries": len(value.Archive), "api_discovery_gets": 1, "scope": "anonymous immutable-revision byte hashes; selected allowlist only"})
 }
 func main() {
 	mode := flag.String("mode", "pack", "pack or verify")
 	bundle := flag.String("bundle", "", "fresh model publication directory")
 	revision := flag.String("revision", "", "HF commit SHA")
 	output := flag.String("output", "", "verification receipt")
+	appendices := flag.Bool("appendices", false, "verify source-bound diagnostic and next-study appendices")
 	flag.Parse()
 	var err error
 	if *mode == "pack" {
 		err = pack(*bundle)
 	} else if *mode == "verify" {
-		err = verify(*bundle, *revision, *output)
+		err = verify(*bundle, *revision, *output, *appendices)
 	} else {
 		err = errors.New("unknown publication mode")
 	}
