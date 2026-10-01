@@ -311,9 +311,11 @@ func packageBundle(models, study, native, output, revision string) error {
 		"scope": "Six own random-init bounded structural models, all variants and negative comparisons; fixed allowlist contains public synthetic source/targets/captures only. Offline Python optimizer, Go runtime/oracle/orchestration/audit/publication."})
 }
 func main() {
-	mode := flag.String("mode", "package", "package or verify")
+	mode := flag.String("mode", "package", "package, verify or fetch")
 	bundle := flag.String("bundle", "", "local frozen public bundle for verification")
 	publicRevision := flag.String("verify-revision", "", "immutable public Hugging Face revision")
+	manifestSHA := flag.String("manifest-sha256", "", "immutable public manifest digest for fetch")
+	evidence := flag.String("evidence", "", "fresh bounded raw evidence extraction directory for fetch")
 	models := flag.String("models", "models/joint-composition-v1", "six public frozen models")
 	study := flag.String("study", "", "SDK raw observation directory")
 	native := flag.String("native", "", "native raw capture directory")
@@ -337,6 +339,18 @@ func main() {
 			err = errors.New("local frozen bundle required")
 		} else {
 			err = verify(*bundle, *publicRevision, *output)
+		}
+	case "fetch":
+		if *bundle == "" || *manifestSHA == "" {
+			err = errors.New("fresh bundle and pinned manifest digest required")
+		} else {
+			err = fetchBundle(*bundle, *publicRevision, *manifestSHA)
+			if err == nil {
+				err = verify(*bundle, *publicRevision, *output)
+			}
+			if err == nil && *evidence != "" {
+				err = extractEvidence(*bundle, *evidence)
+			}
 		}
 	default:
 		err = errors.New("unknown publication mode")

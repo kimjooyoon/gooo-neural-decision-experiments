@@ -3,6 +3,7 @@ package main
 import (
 	"archive/zip"
 	"bytes"
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"testing"
@@ -88,5 +89,53 @@ func TestPublicationPrivacyAndRegularFileBounds(t *testing.T) {
 	}
 	if _, err := hashFile(dir); err == nil {
 		t.Fatal("directory accepted")
+	}
+}
+
+func TestEvidenceExtractionUsesVerifiedFixedInventory(t *testing.T) {
+	dir := t.TempDir()
+	input := filepath.Join(dir, "synthetic")
+	if err := os.WriteFile(input, []byte("public evidence\n"), 0600); err != nil {
+		t.Fatal(err)
+	}
+	members := rawMembers("", "")
+	for i := range members {
+		members[i].Local = input
+	}
+	entries, err := archive(filepath.Join(dir, "raw-evidence.zip"), members)
+	if err != nil {
+		t.Fatal(err)
+	}
+	raw, err := json.Marshal(map[string]any{"archive_members": entries})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err = os.WriteFile(filepath.Join(dir, "publication-manifest.json"), raw, 0600); err != nil {
+		t.Fatal(err)
+	}
+	output := filepath.Join(dir, "evidence")
+	if err = extractEvidence(dir, output); err != nil {
+		t.Fatal(err)
+	}
+	for _, entry := range entries {
+		value, e := os.ReadFile(filepath.Join(output, entry.Path))
+		if e != nil || string(value) != "public evidence\n" {
+			t.Fatal(entry.Path, e)
+		}
+	}
+	if err = extractEvidence(dir, output); err == nil {
+		t.Fatal("existing extraction accepted")
+	}
+	entries[0].SHA = "changed"
+	raw, _ = json.Marshal(map[string]any{"archive_members": entries})
+	if err = os.WriteFile(filepath.Join(dir, "publication-manifest.json"), raw, 0600); err != nil {
+		t.Fatal(err)
+	}
+	bad := filepath.Join(dir, "rejected")
+	if err = extractEvidence(dir, bad); err == nil {
+		t.Fatal("tampered inventory accepted")
+	}
+	if _, err = os.Stat(bad); !os.IsNotExist(err) {
+		t.Fatal("invalid extraction wrote output")
 	}
 }
