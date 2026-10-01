@@ -1,0 +1,310 @@
+{
+  "evaluation": "Separate Go parity, bilingual judgment and finite continuation reports required",
+  "exports": {
+    "control": {
+      "fp32": {
+        "metadata_sha256": "d19d98f6a4f2fc55524332a79db4e65ce019e5172f0e891d633e896c8f0115e6",
+        "packed_weights_bytes": 50912,
+        "temperature": 1.0,
+        "weights_sha256": "e411e0f6bad0087b040a146d0a1030c272196d19df078aba87c38bd11e10db53"
+      },
+      "ptq_ternary": {
+        "metadata_sha256": "88b2cdda4fd9bd9bcd12caea597eaf3ac407fb63915dd4def1621960640b8ec3",
+        "packed_weights_bytes": 2759,
+        "temperature": 1.0,
+        "weights_sha256": "030dd5400202f0522a70217e5f16f2dcfc9cb447f899c94582d5688efae86b5e"
+      },
+      "qat_ternary": {
+        "metadata_sha256": "91e4ac583e3e078e03d1ac88c303574c469e7683560c3dd74d736c846f6736d7",
+        "packed_weights_bytes": 2759,
+        "temperature": 0.5,
+        "weights_sha256": "00525b0674ade3f95b85b6e620f8ea0b376c0231734239a27df1c0d5c7f710eb"
+      }
+    },
+    "paired": {
+      "fp32": {
+        "metadata_sha256": "ccb48c6fd0f76458a231d0bd1266e88252708aa6f64093742aead6a5ede27dc3",
+        "packed_weights_bytes": 50912,
+        "temperature": 1.0,
+        "weights_sha256": "1dad702576db50fdb08c62f07728eb06e81c6d8a3011b78ce38b0338406aacf4"
+      },
+      "ptq_ternary": {
+        "metadata_sha256": "5233de7a91a997358de890c6431cf0fa2fd6fcd4d3dfb10a8cd851349028b6c9",
+        "packed_weights_bytes": 2759,
+        "temperature": 1.0,
+        "weights_sha256": "d6fb8f32a29a674b5ee904f2300f51b9a0d610f57ec0ebcbc52635f73e45d619"
+      },
+      "qat_ternary": {
+        "metadata_sha256": "47524ff50c41b5bde0be95a7447126ee20abfae59f2e2fdc1e3f78c42c5613d0",
+        "packed_weights_bytes": 2759,
+        "temperature": 0.5,
+        "weights_sha256": "1673c7cf839bf8d7fe317495c5a118d67430ae3247afcc7eda2844dd9a9c11f4"
+      }
+    }
+  },
+  "limitations": [
+    "Control and paired arms share seed/data/initial FP32; QAT starts from each arm FP32",
+    "Agreement can select the same wrong path; finite tie targets do not prove linguistic intent",
+    "Existing development split reused, zero new independent intention groups",
+    "MPS memory samples and process lifetime RSS are not host GPU/CPU utilization",
+    "Ternary disk packing decodes to int8; weights are experimental without default promotion"
+  ],
+  "optimizer_steps": 224,
+  "preexecution_sha256": "535d154552df0780b9c9600b272920878f9de405c9a3710785c511989b2f3c02",
+  "schema": "gooo/bilingual-judgment-training-report/v1",
+  "status": "TRAINED_AND_EXPORTED",
+  "training": {
+    "control": {
+      "fp32": {
+        "consistency_weight": 0.0,
+        "epochs": 8,
+        "history": [
+          {
+            "calibration_bilingual_js": 0.08627698570489883,
+            "calibration_finite_nll": 0.41395625472068787,
+            "epoch": 1,
+            "train_objective": 0.32499743359429495
+          },
+          {
+            "calibration_bilingual_js": 0.08874155580997467,
+            "calibration_finite_nll": 0.43212684988975525,
+            "epoch": 2,
+            "train_objective": 0.2924360249723707
+          },
+          {
+            "calibration_bilingual_js": 0.08281097561120987,
+            "calibration_finite_nll": 0.40457218885421753,
+            "epoch": 3,
+            "train_objective": 0.3055798347507204
+          },
+          {
+            "calibration_bilingual_js": 0.07940874248743057,
+            "calibration_finite_nll": 0.39476338028907776,
+            "epoch": 4,
+            "train_objective": 0.29483249357768465
+          },
+          {
+            "calibration_bilingual_js": 0.08098433911800385,
+            "calibration_finite_nll": 0.40144309401512146,
+            "epoch": 5,
+            "train_objective": 0.27147663278239115
+          },
+          {
+            "calibration_bilingual_js": 0.08445011079311371,
+            "calibration_finite_nll": 0.41266027092933655,
+            "epoch": 6,
+            "train_objective": 0.27507355383464266
+          },
+          {
+            "calibration_bilingual_js": 0.08766905963420868,
+            "calibration_finite_nll": 0.41783779859542847,
+            "epoch": 7,
+            "train_objective": 0.27138627426964895
+          },
+          {
+            "calibration_bilingual_js": 0.08710484206676483,
+            "calibration_finite_nll": 0.4101777970790863,
+            "epoch": 8,
+            "train_objective": 0.27402038659368244
+          }
+        ],
+        "loop_wall_seconds": 1.288649250054732,
+        "mps_allocated_peak_sampled_bytes": 2033920,
+        "mps_driver_peak_sampled_bytes": 53166080,
+        "optimizer_steps": 56,
+        "process_lifetime_peak_rss_bytes": 521945088,
+        "selection": "minimum calibration finite NLL plus weighted bilingual JS; development test excluded",
+        "training_pairs": 800,
+        "training_views": 1600
+      },
+      "qat_ternary": {
+        "consistency_weight": 0.0,
+        "epochs": 8,
+        "history": [
+          {
+            "calibration_bilingual_js": 0.018491018563508987,
+            "calibration_finite_nll": 0.5630286931991577,
+            "epoch": 1,
+            "train_objective": 0.47267789925847736
+          },
+          {
+            "calibration_bilingual_js": 0.019454553723335266,
+            "calibration_finite_nll": 0.5532973408699036,
+            "epoch": 2,
+            "train_objective": 0.45271050930023193
+          },
+          {
+            "calibration_bilingual_js": 0.01863386668264866,
+            "calibration_finite_nll": 0.546625554561615,
+            "epoch": 3,
+            "train_objective": 0.4514418712684086
+          },
+          {
+            "calibration_bilingual_js": 0.0178647693246603,
+            "calibration_finite_nll": 0.544744610786438,
+            "epoch": 4,
+            "train_objective": 0.4563551204545157
+          },
+          {
+            "calibration_bilingual_js": 0.01690916158258915,
+            "calibration_finite_nll": 0.5444742441177368,
+            "epoch": 5,
+            "train_objective": 0.441873094865254
+          },
+          {
+            "calibration_bilingual_js": 0.015987079590559006,
+            "calibration_finite_nll": 0.5429291725158691,
+            "epoch": 6,
+            "train_objective": 0.43860537239483427
+          },
+          {
+            "calibration_bilingual_js": 0.015393257141113281,
+            "calibration_finite_nll": 0.5442538261413574,
+            "epoch": 7,
+            "train_objective": 0.4459982897554125
+          },
+          {
+            "calibration_bilingual_js": 0.015749486163258553,
+            "calibration_finite_nll": 0.5421851277351379,
+            "epoch": 8,
+            "train_objective": 0.4413776695728302
+          }
+        ],
+        "loop_wall_seconds": 0.07522045820951462,
+        "mps_allocated_peak_sampled_bytes": 2033920,
+        "mps_driver_peak_sampled_bytes": 53166080,
+        "optimizer_steps": 56,
+        "process_lifetime_peak_rss_bytes": 522682368,
+        "selection": "minimum calibration finite NLL plus weighted bilingual JS; development test excluded",
+        "training_pairs": 800,
+        "training_views": 1600
+      }
+    },
+    "paired": {
+      "fp32": {
+        "consistency_weight": 0.25,
+        "epochs": 8,
+        "history": [
+          {
+            "calibration_bilingual_js": 0.08620867133140564,
+            "calibration_finite_nll": 0.41367703676223755,
+            "epoch": 1,
+            "train_objective": 0.3263478917734964
+          },
+          {
+            "calibration_bilingual_js": 0.08859829604625702,
+            "calibration_finite_nll": 0.4316110610961914,
+            "epoch": 2,
+            "train_objective": 0.29387152194976807
+          },
+          {
+            "calibration_bilingual_js": 0.08270813524723053,
+            "calibration_finite_nll": 0.40424594283103943,
+            "epoch": 3,
+            "train_objective": 0.307049532021795
+          },
+          {
+            "calibration_bilingual_js": 0.07947338372468948,
+            "calibration_finite_nll": 0.39479437470436096,
+            "epoch": 4,
+            "train_objective": 0.29635951135839733
+          },
+          {
+            "calibration_bilingual_js": 0.08124524354934692,
+            "calibration_finite_nll": 0.40207332372665405,
+            "epoch": 5,
+            "train_objective": 0.2729123703071049
+          },
+          {
+            "calibration_bilingual_js": 0.08452852070331573,
+            "calibration_finite_nll": 0.412418931722641,
+            "epoch": 6,
+            "train_objective": 0.27659926457064493
+          },
+          {
+            "calibration_bilingual_js": 0.08743865042924881,
+            "calibration_finite_nll": 0.41656702756881714,
+            "epoch": 7,
+            "train_objective": 0.2729770711490086
+          },
+          {
+            "calibration_bilingual_js": 0.08687029778957367,
+            "calibration_finite_nll": 0.40897130966186523,
+            "epoch": 8,
+            "train_objective": 0.27547467393534525
+          }
+        ],
+        "loop_wall_seconds": 0.08172204112634063,
+        "mps_allocated_peak_sampled_bytes": 2033920,
+        "mps_driver_peak_sampled_bytes": 53166080,
+        "optimizer_steps": 56,
+        "process_lifetime_peak_rss_bytes": 528695296,
+        "selection": "minimum calibration finite NLL plus weighted bilingual JS; development test excluded",
+        "training_pairs": 800,
+        "training_views": 1600
+      },
+      "qat_ternary": {
+        "consistency_weight": 0.25,
+        "epochs": 8,
+        "history": [
+          {
+            "calibration_bilingual_js": 0.01868617720901966,
+            "calibration_finite_nll": 0.5630553960800171,
+            "epoch": 1,
+            "train_objective": 0.47338799067905973
+          },
+          {
+            "calibration_bilingual_js": 0.019224733114242554,
+            "calibration_finite_nll": 0.5534323453903198,
+            "epoch": 2,
+            "train_objective": 0.45437736596379963
+          },
+          {
+            "calibration_bilingual_js": 0.018178831785917282,
+            "calibration_finite_nll": 0.5529493689537048,
+            "epoch": 3,
+            "train_objective": 0.45243516990116667
+          },
+          {
+            "calibration_bilingual_js": 0.017919739708304405,
+            "calibration_finite_nll": 0.5446000099182129,
+            "epoch": 4,
+            "train_objective": 0.46067777276039124
+          },
+          {
+            "calibration_bilingual_js": 0.016833722591400146,
+            "calibration_finite_nll": 0.5442108511924744,
+            "epoch": 5,
+            "train_objective": 0.44320770672389437
+          },
+          {
+            "calibration_bilingual_js": 0.01646900363266468,
+            "calibration_finite_nll": 0.5432742238044739,
+            "epoch": 6,
+            "train_objective": 0.44047230056353975
+          },
+          {
+            "calibration_bilingual_js": 0.01569296605885029,
+            "calibration_finite_nll": 0.5453439354896545,
+            "epoch": 7,
+            "train_objective": 0.4464301126343863
+          },
+          {
+            "calibration_bilingual_js": 0.015689831227064133,
+            "calibration_finite_nll": 0.541408360004425,
+            "epoch": 8,
+            "train_objective": 0.44318767956324984
+          }
+        ],
+        "loop_wall_seconds": 0.0721320838201791,
+        "mps_allocated_peak_sampled_bytes": 2033920,
+        "mps_driver_peak_sampled_bytes": 53166080,
+        "optimizer_steps": 56,
+        "process_lifetime_peak_rss_bytes": 528809984,
+        "selection": "minimum calibration finite NLL plus weighted bilingual JS; development test excluded",
+        "training_pairs": 800,
+        "training_views": 1600
+      }
+    }
+  }
+}

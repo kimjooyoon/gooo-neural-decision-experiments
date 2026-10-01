@@ -62,6 +62,14 @@ jobs:
           go run ./cmd/bilingual-pairs --out "$RUNNER_TEMP/bilingual-gooo-pairs"
           cmp data/bilingual-gooo-pairs-v1/pairs.jsonl "$RUNNER_TEMP/bilingual-gooo-pairs/pairs.jsonl"
           cmp data/bilingual-gooo-pairs-v1/manifest.json "$RUNNER_TEMP/bilingual-gooo-pairs/manifest.json"
+      - name: Verify both bilingual judgment arms and finite continuation
+        run: |
+          go run ./tools/audit-feedback-model --models runs/bilingual-judgment-mps-20261001/control/models \
+            --output "$RUNNER_TEMP/bilingual-control-go-parity.json"
+          go run ./tools/audit-feedback-model --models runs/bilingual-judgment-mps-20261001/paired/models \
+            --output "$RUNNER_TEMP/bilingual-paired-go-parity.json"
+          go run ./tools/audit-bilingual-judgment --models runs/bilingual-judgment-mps-20261001 \
+            --out "$RUNNER_TEMP/bilingual-go-judgment"
       - name: Verify public export without credentials or network publication
         run: |
           go run ./tools/assemble-public-export --output "$RUNNER_TEMP/public-model-bundle" --allowlist "$RUNNER_TEMP/public-model-allowlist.json"

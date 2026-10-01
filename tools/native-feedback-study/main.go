@@ -433,6 +433,24 @@ func main() {
 	worker := flag.String("worker", "", "optional retained native body worker executable")
 	familyCIStatus := flag.String("family-ci-status", "PASS", "caller family-study CI context: PASS, FAIL or UNKNOWN")
 	flag.Parse()
+	if *mode == "bilingual-smoke" {
+		if err := runBilingualSmoke(*binary, *goBinary, *output, *revision, *nativeRevision); err != nil {
+			fmt.Fprintln(os.Stderr, "bilingual-smoke:", err)
+			os.Exit(1)
+		}
+		return
+	}
+	if *mode == "bilingual-audit" {
+		value, err := auditBilingualSmoke(*output, *revision, *nativeRevision)
+		if err == nil {
+			err = save(*auditOutput, value)
+		}
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "bilingual-audit:", err)
+			os.Exit(1)
+		}
+		return
+	}
 	if *mode == "native-diagnosis-smoke" || *mode == "native-diagnosis-audit" {
 		var err error
 		if *mode == "native-diagnosis-smoke" {
