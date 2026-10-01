@@ -24,12 +24,35 @@ func run(args []string, output io.Writer) error {
 	testsPath := flags.String("tests", "", "optional bounded finite TDD test document")
 	maxAttempts := flags.Int("max-attempts", 16, "total candidate budget, 1..64 normally or 1..65536 with --step-attempts")
 	stepAttempts := flags.Int("step-attempts", 0, "optional 1..64 new candidates per incremental JSON-lines result")
+	feedbackRounds := flags.Int("feedback-rounds", 0, "optional 1..16 frozen-model reconsiderations after partial batches")
+	feedbackCI := flags.String("feedback-ci", "", "optional bounded caller CI hint JSON, not semantic authority")
 	timeout := flags.Duration("timeout", 2*time.Second, "TDD deadline, 1ms..30s")
 	if err := flags.Parse(args); err != nil || flags.NArg() != 0 || *planPath == "" {
 		return errors.New("supply --plan and optional --model/--seed/--tests")
 	}
 	if *stepAttempts < 0 || *stepAttempts > 64 || (*stepAttempts != 0 && *testsPath == "") {
 		return errors.New("incremental step requires finite tests and a budget of 1..64")
+	}
+	if *feedbackRounds < 0 || *feedbackRounds > 16 || (*feedbackRounds != 0 && (*stepAttempts == 0 || *modelPath == "")) || (*feedbackCI != "" && *feedbackRounds == 0) {
+		return errors.New("feedback requires incremental finite tests, a model and 1..16 rounds")
+	}
+	var ci *pathplan.CIHint
+	if *feedbackCI != "" {
+		info, err := os.Lstat(*feedbackCI)
+		if err != nil || !info.Mode().IsRegular() || info.Size() <= 0 || info.Size() > 512 {
+			return errors.New("CI hint must be a bounded regular file")
+		}
+		raw, err := os.ReadFile(*feedbackCI)
+		if err != nil {
+			return errors.New("CI hint could not be read")
+		}
+		ci = &pathplan.CIHint{}
+		if err := strictjson.Decode(raw, ci); err != nil {
+			return errors.New("CI hint JSON is invalid")
+		}
+		if err := ci.Validate(); err != nil {
+			return err
+		}
 	}
 	info, err := os.Lstat(*planPath)
 	if err != nil || !info.Mode().IsRegular() || info.Size() <= 0 || info.Size() > 128<<10 {
@@ -92,7 +115,7 @@ func run(args []string, output io.Writer) error {
 		ctx, cancel := context.WithTimeout(context.Background(), *timeout)
 		defer cancel()
 		if *stepAttempts != 0 {
-			return composeSession(ctx, prepared, model, tests, *maxAttempts, *stepAttempts, *seed, output)
+			return composeSessionFeedback(ctx, prepared, model, tests, *maxAttempts, *stepAttempts, *seed, *feedbackRounds, ci, output)
 		}
 		result, program, err := pathplan.Search(ctx, plan, model, tests, *maxAttempts, *seed)
 		if err != nil {

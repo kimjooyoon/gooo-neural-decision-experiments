@@ -30,6 +30,10 @@ func emitSession(output io.Writer, progress pathplan.SessionProgress, body *body
 	return json.NewEncoder(output).Encode(value)
 }
 func composeSession(ctx context.Context, prepared *pathplan.PreparedPlan, model *decision.Model, cases []pathplan.TestCase, total, step int, seed string, output io.Writer) error {
+	return composeSessionFeedback(ctx, prepared, model, cases, total, step, seed, 0, nil, output)
+}
+
+func composeSessionFeedback(ctx context.Context, prepared *pathplan.PreparedPlan, model *decision.Model, cases []pathplan.TestCase, total, step int, seed string, rounds int, ci *pathplan.CIHint, output io.Writer) error {
 	session, startErr := prepared.NewSession(ctx, model, cases, seed)
 	if session == nil {
 		return startErr
@@ -64,6 +68,18 @@ func composeSession(ctx context.Context, prepared *pathplan.PreparedPlan, model 
 		}
 		if attempted >= total {
 			return failure
+		}
+		if rounds > 0 {
+			receipt, err := session.Reconsider(ctx, model, ci)
+			if receipt.Schema != "" {
+				if writeErr := json.NewEncoder(output).Encode(receipt); writeErr != nil {
+					return writeErr
+				}
+			}
+			if err != nil {
+				return err
+			}
+			rounds--
 		}
 	}
 	return nil
