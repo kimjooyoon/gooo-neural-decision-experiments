@@ -44,6 +44,22 @@ pre-cancellation makes zero calls. There are no retries or waiting mutex calls.
 This bounds the local CPU operation; arbitrary output-writer deadlock freedom
 is not claimed.
 
+When the formatted context exceeds 512 bytes but the original intention was
+valid, `Reconsider` returns `ErrFeedbackContextBound` with a hashed
+`context_declined` receipt, zero new predictions, original-intent/input hashes
+and the attempted input byte count. This consumes one bounded feedback round
+and prevents retrying the same committed batch. It leaves the frontier and best
+body unchanged. The research batch helper and stream CLI continue from the
+existing ranking after this specific decline; cancellation, invalid model/ABI
+and other prediction failures still stop the operation. Successful/default
+receipts omit the new decline fields and retain their previous serialization.
+
+The native SDK `v0.2.3-experimental` predates this decline repair. Actual
+English 475-byte and Korean 478-byte probes with that SDK show the optional
+feedback veto after eight candidates; they are retained in
+`runs/feedback-input-bound-20261001`. The compiler needs a new pinned SDK
+integration before this repair can be claimed for native execution.
+
 ## CLI
 
 ```sh

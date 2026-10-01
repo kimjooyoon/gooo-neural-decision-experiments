@@ -1,0 +1,91 @@
+{
+  "actual_model_predictions": 24,
+  "feedback_predictions": 0,
+  "native_calls": 4,
+  "native_revision": "7430d23583223d59def01d4cff772dbab7e8bdab",
+  "records": [
+    {
+      "candidate_attempts": 64,
+      "capture_sha256": "422842191b3f9b13942970ba7a3b01934dbba4f575b8ef80de39421c35cdf717",
+      "decision": "PASS",
+      "emitted_go": true,
+      "finite_cases": 7,
+      "intent_bytes": 475,
+      "language": "en",
+      "mode": "baseline",
+      "model_predictions": 6,
+      "passed": 6,
+      "process_metrics": {
+        "wall_ns": 59761209,
+        "user_cpu_ns": 9142000,
+        "system_cpu_ns": 9584000,
+        "child_max_rss_bytes": 21495808,
+        "process_cpu_percent_of_one_core_over_wall": 31.334707435386722
+      }
+    },
+    {
+      "candidate_attempts": 8,
+      "capture_sha256": "7cc6ed3607b3ad4abfa35f58b4a5e8c5041039c90dcc90c1bc5e0608c1626fd0",
+      "decision": "FAIL_CLOSED",
+      "emitted_go": false,
+      "error": "feedback context exceeds the model input bound; original intent was not truncated",
+      "feedback_predictions": 0,
+      "finite_cases": 7,
+      "intent_bytes": 475,
+      "language": "en",
+      "mode": "feedback",
+      "model_predictions": 6,
+      "passed": 6,
+      "process_metrics": {
+        "wall_ns": 7864667,
+        "user_cpu_ns": 5101000,
+        "system_cpu_ns": 2264000,
+        "child_max_rss_bytes": 20168704,
+        "process_cpu_percent_of_one_core_over_wall": 93.64668586731008
+      }
+    },
+    {
+      "candidate_attempts": 64,
+      "capture_sha256": "668da2956e90a8b467c3af333a33aeadc0a2c00c937cf6556ec76c268da227e3",
+      "decision": "PASS",
+      "emitted_go": true,
+      "finite_cases": 7,
+      "intent_bytes": 478,
+      "language": "ko",
+      "mode": "baseline",
+      "model_predictions": 6,
+      "passed": 6,
+      "process_metrics": {
+        "wall_ns": 10284250,
+        "user_cpu_ns": 7856000,
+        "system_cpu_ns": 2305000,
+        "child_max_rss_bytes": 21233664,
+        "process_cpu_percent_of_one_core_over_wall": 98.80156550064419
+      }
+    },
+    {
+      "candidate_attempts": 8,
+      "capture_sha256": "5e48acc62ebdda33172b5ec0021a4ae38459bc211f889e0abecc5522adb0f4ac",
+      "decision": "FAIL_CLOSED",
+      "emitted_go": false,
+      "error": "feedback context exceeds the model input bound; original intent was not truncated",
+      "feedback_predictions": 0,
+      "finite_cases": 7,
+      "intent_bytes": 478,
+      "language": "ko",
+      "mode": "feedback",
+      "model_predictions": 6,
+      "passed": 5,
+      "process_metrics": {
+        "wall_ns": 7452708,
+        "user_cpu_ns": 4938000,
+        "system_cpu_ns": 2110000,
+        "child_max_rss_bytes": 19841024,
+        "process_cpu_percent_of_one_core_over_wall": 94.56965172927747
+      }
+    }
+  ],
+  "runner_revision": "5a118d1e8685b89481146ffdb349548e75c01421",
+  "schema": "gooo/feedback-input-bound-probe/v1",
+  "scope": "Two synthetic long-intent variants of the same existing compound source, not new independent tasks or model training. Baseline retains 6/7 and emits Go; explicit feedback currently stops after its first 8 candidates before new feedback predictions. This reproduces a recoverable representation-bound veto; it does not modify frozen primary measurements."
+}

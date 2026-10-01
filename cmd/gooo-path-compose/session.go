@@ -76,7 +76,7 @@ func composeSessionFeedback(ctx context.Context, prepared *pathplan.PreparedPlan
 					return writeErr
 				}
 			}
-			if err != nil {
+			if err != nil && !(errors.Is(err, pathplan.ErrFeedbackContextBound) && receipt.ContextDeclined && receipt.ModelCalls == 0 && receipt.SHA != "") {
 				return err
 			}
 			rounds--

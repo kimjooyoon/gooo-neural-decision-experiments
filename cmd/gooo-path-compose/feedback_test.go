@@ -112,4 +112,51 @@ func TestFeedbackCLIEmitsBoundedModelJudgmentsAndKeepsPartialCases(t *testing.T)
 	if err = run(args, &invalidOutput); err == nil || invalidOutput.Len() != 0 {
 		t.Fatal("duplicate CI hint keys reached generation")
 	}
+	// A valid long original intention must not make optional representation
+	// feedback a veto on continued construction. This checks wiring, not quality.
+	for len(fixture.Plan.Decisions[0].Intent)+len(" 설명") <= 480 {
+		fixture.Plan.Decisions[0].Intent += " 설명"
+	}
+	raw, _ = json.Marshal(fixture.Plan)
+	if err = os.WriteFile(plan, raw, 0600); err != nil {
+		t.Fatal(err)
+	}
+	raw, _ = json.Marshal(pathplan.CIHint{SourceSHA: strings.Repeat("a", 40), Status: "UNKNOWN"})
+	if err = os.WriteFile(ci, raw, 0600); err != nil {
+		t.Fatal(err)
+	}
+	var continued bytes.Buffer
+	if err = run(args, &continued); err != nil {
+		t.Fatal("context decline blocked streamed construction", err)
+	}
+	decoder = json.NewDecoder(&continued)
+	declines := 0
+	for {
+		var row json.RawMessage
+		if err = decoder.Decode(&row); err == io.EOF {
+			break
+		}
+		if err != nil {
+			t.Fatal(err)
+		}
+		var receipt pathplan.FeedbackReceipt
+		if err = json.Unmarshal(row, &receipt); err != nil {
+			t.Fatal(err)
+		}
+		if receipt.Schema == "gooo/typed-path-feedback-judgment/v1" {
+			if !receipt.ContextDeclined || receipt.ModelCalls != 0 || receipt.Applied || receipt.SHA == "" {
+				t.Fatal("decline inferred or changed remaining ranking")
+			}
+			declines++
+		} else {
+			last = sessionComposeResult{}
+			if err = json.Unmarshal(row, &last); err != nil {
+				t.Fatal(err)
+			}
+		}
+	}
+	if declines != 2 || last.GoSource == "" || last.Progress.Attempted != 64 || last.Progress.SelectedPassed != 6 ||
+		last.Progress.Selection.ModelCalls != 6 || last.Progress.FeedbackPredictions != 0 || last.Progress.FeedbackRounds != 2 {
+		t.Fatalf("CLI lost valid partial body after input decline: declines=%d attempts=%d calls=%d feedback_calls=%d", declines, last.Progress.Attempted, last.Progress.Selection.ModelCalls, last.Progress.FeedbackPredictions)
+	}
 }
