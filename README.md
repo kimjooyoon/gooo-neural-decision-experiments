@@ -564,3 +564,19 @@ The [HF bilingual judgment appendix](https://huggingface.co/asketeddy/gooo-feedb
 contains six experimental exports and selected evidence. Anonymous immutable
 byte verification passes for all 33 appendix files and 25 selected core files.
 The existing core weights and card remain unchanged.
+
+## Separate structure and bilingual intent inputs
+
+The [fixed-channel study](docs/split-context-judgment-results.md) publishes a
+matched positioned-v1 / split-v2 comparison: 560 actual MPS optimizer steps,
+six own-model exports, zero new independent intentions. Every new split variant
+requires more continuation attempts in this capture. FP32 adds 103 attempts
+versus 69 in v1 across 320 views. Full authored contracts still complete all
+3,840 finite cases per cell with zero extra predictions in the two-path Go
+evaluation. Greater language agreement alone can mean the same wrong body.
+
+Raw captures and numerical parity are retained. One actual compiler probe of v2
+is rejected by the current SDK before inference; this is compatibility evidence,
+not successful native adoption. The [next controlled studies](docs/split-context-followup-plan.md)
+prioritize bounded judgment, typed source context and measurable continuation
+cost. Runtime and publication are in Go; training/export are offline.

@@ -81,6 +81,18 @@ jobs:
           cmp publication/hf-bilingual-gooo-judgment-20261001/publication-manifest.json "$RUNNER_TEMP/bilingual-judgment-bundle/publication-manifest.json"
           go run ./tools/package-bilingual-judgment --mode verify --bundle "$RUNNER_TEMP/bilingual-judgment-bundle" \
             --output "$RUNNER_TEMP/bilingual-publication-verification.json"
+      - name: Replay separated context and intent experiment including regressions
+        run: |
+          go run ./tools/audit-feedback-model --models runs/split-context-judgment-mps-20261001/v1/models \
+            --output "$RUNNER_TEMP/split-v1-parity.json"
+          go run ./tools/audit-feedback-model --models runs/split-context-judgment-mps-20261001/v2/models \
+            --output "$RUNNER_TEMP/split-v2-parity.json"
+          go run ./tools/audit-bilingual-judgment --models runs/split-context-judgment-mps-20261001 --arms v1,v2 \
+            --out "$RUNNER_TEMP/split-context-judgment"
+          go run ./tools/package-split-context --bundle "$RUNNER_TEMP/split-context-bundle"
+          cmp publication/hf-split-context-gooo-judgment-20261001/publication-manifest.json "$RUNNER_TEMP/split-context-bundle/publication-manifest.json"
+          go run ./tools/package-split-context --mode verify --bundle "$RUNNER_TEMP/split-context-bundle" \
+            --output "$RUNNER_TEMP/split-context-publication-verification.json"
       - name: Verify public export without credentials or network publication
         run: |
           go run ./tools/assemble-public-export --output "$RUNNER_TEMP/public-model-bundle" --allowlist "$RUNNER_TEMP/public-model-allowlist.json"
