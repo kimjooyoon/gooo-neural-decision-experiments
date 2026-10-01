@@ -65,6 +65,20 @@ func TestOptimizedFamilyRejectsMissingReceiptAndHiddenCall(t *testing.T) {
 	}
 }
 
+func TestFamilyUnknownCIContextDoesNotImplyPass(t *testing.T) {
+	spec := legacyFamily
+	spec.CIStatus = "UNKNOWN"
+	hint := familyCIHint(spec)
+	if hint.Status != "UNKNOWN" || hint.SourceSHA != familyNativeSHA || hint.Validate() != nil {
+		t.Fatal("unknown context changed into PASS")
+	}
+	spec.CIStatus = "passed"
+	hint = familyCIHint(spec)
+	if hint.Validate() == nil {
+		t.Fatal("non-enumerated caller context accepted")
+	}
+}
+
 func TestFamilyFrozenAuditAndChangedPilotCapture(t *testing.T) {
 	t.Chdir("../..")
 	for _, name := range []string{"feedback-family-pilot-20261001", "feedback-family-matrix-20261001", "feedback-family-optimized-feature-20261001"} {

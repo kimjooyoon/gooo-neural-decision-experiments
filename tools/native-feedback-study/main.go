@@ -422,9 +422,10 @@ func main() {
 	output := flag.String("out", "", "fresh relative runs directory")
 	revision := flag.String("source-revision", "", "committed runner SHA")
 	nativeRevision := flag.String("native-revision", "", "clean binary source SHA")
+	familyCIStatus := flag.String("family-ci-status", "PASS", "caller family-study CI context: PASS, FAIL or UNKNOWN")
 	flag.Parse()
 	if *mode == "family-optimized" {
-		if err := runFamilyFor(*binary, *goBinary, *output, *revision, false, familySpec{Revision: *nativeRevision, SDK: "v0.2.5-experimental", NoChoice: true}); err != nil {
+		if err := runFamilyFor(*binary, *goBinary, *output, *revision, false, familySpec{Revision: *nativeRevision, SDK: "v0.2.5-experimental", NoChoice: true, CIStatus: *familyCIStatus}); err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}

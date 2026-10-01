@@ -31,6 +31,15 @@ const familyNativeSHA = "4dced73b26dde567cb7129f3e4ba5733850196d0"
 type familySpec struct {
 	Revision, SDK string
 	NoChoice      bool
+	CIStatus      string
+}
+
+func familyCIHint(spec familySpec) pathplan.CIHint {
+	status := spec.CIStatus
+	if status == "" {
+		status = "PASS"
+	}
+	return pathplan.CIHint{SourceSHA: spec.Revision, Status: status}
 }
 
 var legacyFamily = familySpec{Revision: familyNativeSHA, SDK: "v0.2.4-experimental"}
@@ -106,6 +115,10 @@ func familyPreflight(binary, goBinary, output, revision string) ([]familystudy.C
 func familyPreflightFor(binary, goBinary, output, revision string, spec familySpec) ([]familystudy.Case, []familyArm, error) {
 	if !regexp.MustCompile(`^[a-f0-9]{40}$`).MatchString(spec.Revision) || spec.NoChoice && spec.SDK != "v0.2.5-experimental" {
 		return nil, nil, errors.New("explicit source-pinned family SDK contract required")
+	}
+	hint := familyCIHint(spec)
+	if err := hint.Validate(); err != nil {
+		return nil, nil, err
 	}
 	head, err := exec.Command("git", "rev-parse", "HEAD").Output()
 	if err != nil || strings.TrimSpace(string(head)) != revision {
@@ -241,7 +254,7 @@ func inspectFamilyFor(v nativeResult, r familystudy.Case, a familyArm, spec fami
 		f.SHA = ""
 		encoded, err := json.Marshal(f)
 		from, ok := progressBySHA[f.FromProgressSHA]
-		if err != nil || hash(encoded) != sha || !ok || f.PreviousSHA != prior || f.Round != i+1 || !a.Feedback || f.CIIsAuthority || f.CI == nil || f.CI.SourceSHA != spec.Revision || f.CI.Status != "PASS" || f.MetadataSHA != a.Metadata || f.WeightsSHA != a.Weights || from.Attempted != f.Attempted || f.PlanSHA != prepared.PlanSHA256() || f.CaseSHA != from.CaseSHA || f.Passed != from.SelectedPassed || f.Cases != from.Cases || f.TypeRejected != from.TypeRejected {
+		if err != nil || hash(encoded) != sha || !ok || f.PreviousSHA != prior || f.Round != i+1 || !a.Feedback || f.CIIsAuthority || f.CI == nil || *f.CI != familyCIHint(spec) || f.MetadataSHA != a.Metadata || f.WeightsSHA != a.Weights || from.Attempted != f.Attempted || f.PlanSHA != prepared.PlanSHA256() || f.CaseSHA != from.CaseSHA || f.Passed != from.SelectedPassed || f.Cases != from.Cases || f.TypeRejected != from.TypeRejected {
 			return familyObservation{}, errors.New("family feedback binding differs")
 		}
 		var first *pathplan.TestResult
@@ -351,7 +364,7 @@ func runFamilyFor(binary, goBinary, output, revision string, pilot bool, spec fa
 	for _, a := range arms {
 		pins[a.Name] = map[string]string{"metadata": a.Metadata, "weights": a.Weights}
 	}
-	if err = save(filepath.Join(output, "preexecution.json"), map[string]any{"schema": "gooo/native-feedback-family-preexecution/v1", "runner_revision": revision, "native_revision": spec.Revision, "binary_sha256": binSHA, "go_binary_sha256": goSHA, "go": "1.27.1", "sdk": spec.SDK, "cohort_sha256": familyCohortSHA, "planned_native_calls": len(rows) * len(arms), "models": pins, "caller_ci_hint": pathplan.CIHint{SourceSHA: spec.Revision, Status: "PASS"}, "caller_ci_hint_is_authority": false, "pilot": pilot}); err != nil {
+	if err = save(filepath.Join(output, "preexecution.json"), map[string]any{"schema": "gooo/native-feedback-family-preexecution/v1", "runner_revision": revision, "native_revision": spec.Revision, "binary_sha256": binSHA, "go_binary_sha256": goSHA, "go": "1.27.1", "sdk": spec.SDK, "cohort_sha256": familyCohortSHA, "planned_native_calls": len(rows) * len(arms), "models": pins, "caller_ci_hint": familyCIHint(spec), "caller_ci_hint_is_authority": false, "pilot": pilot}); err != nil {
 		return err
 	}
 	dir, err := os.MkdirTemp("", "gooo-family-study-")
@@ -359,7 +372,7 @@ func runFamilyFor(binary, goBinary, output, revision string, pilot bool, spec fa
 		return err
 	}
 	defer os.RemoveAll(dir)
-	if err = save(filepath.Join(dir, "ci.json"), pathplan.CIHint{SourceSHA: spec.Revision, Status: "PASS"}); err != nil {
+	if err = save(filepath.Join(dir, "ci.json"), familyCIHint(spec)); err != nil {
 		return err
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
