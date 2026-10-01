@@ -22,7 +22,7 @@ func run(args []string, output io.Writer) error {
 	modelPath := flags.String("model", "", "optional path-model metadata")
 	seed := flags.String("seed", "", "optional reproducible probability sampling seed")
 	testsPath := flags.String("tests", "", "optional bounded finite TDD test document")
-	maxAttempts := flags.Int("max-attempts", 16, "TDD candidate budget, 1..64")
+	maxAttempts := flags.Int("max-attempts", 16, "total candidate budget, 1..64 normally or 1..65536 with --step-attempts")
 	stepAttempts := flags.Int("step-attempts", 0, "optional 1..64 new candidates per incremental JSON-lines result")
 	timeout := flags.Duration("timeout", 2*time.Second, "TDD deadline, 1ms..30s")
 	if err := flags.Parse(args); err != nil || flags.NArg() != 0 || *planPath == "" {
@@ -49,7 +49,11 @@ func run(args []string, output io.Writer) error {
 	}
 	var tests []pathplan.TestCase
 	if *testsPath != "" {
-		if *maxAttempts < 1 || *maxAttempts > 64 || *timeout < time.Millisecond || *timeout > 30*time.Second {
+		limit := 64
+		if *stepAttempts != 0 {
+			limit = 1 << 16
+		}
+		if *maxAttempts < 1 || *maxAttempts > limit || *timeout < time.Millisecond || *timeout > 30*time.Second {
 			return errors.New("TDD budget or deadline is invalid")
 		}
 		info, err := os.Lstat(*testsPath)
@@ -61,13 +65,21 @@ func run(args []string, output io.Writer) error {
 			return errors.New("tests could not be read")
 		}
 		var document struct {
-			Schema string              `json:"schema"`
-			Cases  []pathplan.TestCase `json:"cases"`
+			Schema string `json:"schema"`
+			Cases  []struct {
+				Input    *int64 `json:"input"`
+				Expected *int64 `json:"expected"`
+			} `json:"cases"`
 		}
 		if err := strictjson.Decode(raw, &document); err != nil || document.Schema != "gooo/typed-path-finite-tests/v1" || len(document.Cases) == 0 || len(document.Cases) > 128 {
 			return errors.New("finite tests contract is invalid")
 		}
-		tests = document.Cases
+		for _, test := range document.Cases {
+			if test.Input == nil || test.Expected == nil {
+				return errors.New("finite cases require explicit non-null input and expected integers")
+			}
+			tests = append(tests, pathplan.TestCase{Input: *test.Input, Expected: *test.Expected})
+		}
 	}
 	var model *decision.Model
 	if *modelPath != "" {

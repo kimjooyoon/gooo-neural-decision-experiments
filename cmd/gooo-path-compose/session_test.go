@@ -3,11 +3,15 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
+	"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/bodyplan"
+	"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/decision"
 	"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/pathplan"
 	"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/pathstudy"
 )
@@ -86,5 +90,86 @@ func TestIncrementalCLIBindsInitializationAndDeterministicPartialSteps(t *testin
 		if err := run(invalid, &bytes.Buffer{}); err == nil {
 			t.Fatal("invalid incremental CLI contract accepted")
 		}
+	}
+}
+
+func TestIncrementalCLICanTraverse128WithoutRepeatingMasks(t *testing.T) {
+	plan := pathplan.Plan{Schema: pathplan.Schema, Base: bodyplan.Plan{Schema: bodyplan.Schema, ID: "cli-128-masks",
+		Name: "MaskBounds", ResultType: decision.TypeInt, Expressions: []bodyplan.Expr{{Kind: "input", Name: "input"}, {Kind: "int", Int: 2}},
+		Statements: []bodyplan.Stmt{{Kind: "return", Expr: 8}}, Root: []int{0}}}
+	for i := range 7 {
+		left := 0
+		if i > 0 {
+			left = i + 1
+		}
+		plan.Base.Expressions = append(plan.Base.Expressions, bodyplan.Expr{Kind: "binary", Operation: "add", Left: left, Right: 1})
+		plan.Decisions = append(plan.Decisions, pathplan.Choice{ID: fmt.Sprintf("sum-%d", i), Kind: pathplan.OperandOrder, Target: i + 2,
+			Intent: "Carry this sum.", Fallback: "layout_reverse", Options: []pathplan.Option{{Label: "layout_forward"}, {Label: "layout_reverse", Reverse: true}}})
+	}
+	dir := t.TempDir()
+	planPath := filepath.Join(dir, "plan.json")
+	testsPath := filepath.Join(dir, "tests.json")
+	raw, err := json.Marshal(plan)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(planPath, raw, 0600); err != nil {
+		t.Fatal(err)
+	}
+	valid := []byte(`{"schema":"gooo/typed-path-finite-tests/v1","cases":[{"input":3,"expected":999}]}`)
+	if err := os.WriteFile(testsPath, valid, 0600); err != nil {
+		t.Fatal(err)
+	}
+	args := []string{"--plan", planPath, "--tests", testsPath, "--step-attempts", "64", "--max-attempts", "128"}
+	var output bytes.Buffer
+	if err := run(args, &output); err != nil {
+		t.Fatal(err)
+	}
+	decoder := json.NewDecoder(&output)
+	seen := map[uint16]bool{}
+	count := 0
+	var last sessionComposeResult
+	for {
+		var row sessionComposeResult
+		err := decoder.Decode(&row)
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			t.Fatal(err)
+		}
+		count++
+		last = row
+		for _, a := range row.Progress.NewAttempts {
+			if seen[a.Mask] {
+				t.Fatal("repeated mask")
+			}
+			seen[a.Mask] = true
+		}
+	}
+	if count != 3 || len(seen) != 128 || last.Progress.Attempted != 128 || last.Progress.Unattempted != 0 ||
+		!last.Progress.Exhausted || last.Progress.Status != "PARTIAL" || last.Progress.SelectedPassed != 0 ||
+		last.Progress.Cases != 1 || last.Progress.ScheduledBytes != 16 || last.Progress.Selection.ModelCalls != 0 {
+		t.Fatal("CLI lost bounded full-space partial observations")
+	}
+	for _, invalid := range []string{
+		`{"schema":"gooo/typed-path-finite-tests/v1","cases":[{"input":null,"expected":999}]}`,
+		`{"schema":"gooo/typed-path-finite-tests/v1","cases":[{"input":3}]}`,
+	} {
+		if err := os.WriteFile(testsPath, []byte(invalid), 0600); err != nil {
+			t.Fatal(err)
+		}
+		if err := run(args, &bytes.Buffer{}); err == nil || !strings.Contains(err.Error(), "explicit non-null") {
+			t.Fatal("invalid finite denominator was accepted")
+		}
+	}
+	if err := os.WriteFile(testsPath, valid, 0600); err != nil {
+		t.Fatal(err)
+	}
+	if err := run([]string{"--plan", planPath, "--tests", testsPath, "--max-attempts", "128"}, &bytes.Buffer{}); err == nil {
+		t.Fatal("legacy search lost its 64 cap")
+	}
+	if err := run([]string{"--plan", planPath, "--tests", testsPath, "--step-attempts", "64", "--max-attempts", "65537"}, &bytes.Buffer{}); err == nil {
+		t.Fatal("session lost its finite cap")
 	}
 }

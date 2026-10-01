@@ -55,6 +55,18 @@ step and its current best Gooo/Go body. Partial functional results remain marked
 `PARTIAL`; exhaustion and passing all stated cases are separate fields. The
 same model-free inputs reproduce identical records and code.
 
+With `--step-attempts`, `--max-attempts` accepts 1..65536 total candidates;
+each advance is still limited to 1..64. The prepared plan declares at most
+65536 masks and exhaustion can stop before the requested budget. Without the
+step option, legacy search retains its 1..64 cap. Tests require explicit,
+non-null integer `input` and `expected` values. The CLI deadline remains at
+most 30 seconds and does not cover a blocking generic output writer.
+
+The CLI race regression now traverses all 128 masks of a seven-choice synthetic
+plan over two 64-attempt records. This tests the interface boundary, not trained
+model quality, inference performance, another independent intent or execution
+of all 65536 masks. The primary 288-call native measurements remain unchanged.
+
 The core deadline/cancellation/nonblocking-lock contract covers its local
 ranking and finite evaluation. Output writers are a caller-owned I/O boundary;
 process harnesses must drain or bound them rather than leave stdout unread.
