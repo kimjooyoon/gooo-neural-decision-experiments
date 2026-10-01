@@ -10,10 +10,21 @@ inspectable. Models are optional; the disconnected order is deterministic.
 The optional [observed feedback judgment](docs/feedback-path-judgment.md)
 can now ask the same frozen model again after a partial batch. It supplies a
 bounded failure summary and optional caller CI hint, and changes only remaining
-path priority. Go SDK `v0.2.3-experimental` exports this bounded API;
-default sessions still rank once. The native feature is in
-[compiler PR 1118](https://github.com/kimjooyoon/meta-ontology-go/pull/1118).
+path priority. Go SDK `v0.2.4-experimental` exports this bounded API;
+default sessions still rank once. The native feedback feature was deployed to
+main in [compiler PR 1119](https://github.com/kimjooyoon/meta-ontology-go/pull/1119),
+with [source-bound post-main CI](publication/native-feedback-main-push-20261001.json).
 This is an experiment with an existing model, not feedback training.
+
+The [continued-judgment repair study](docs/continued-judgment-results.md) preserves
+the failing long-input comparison and shows four actual native calls with 24
+local predictions. Optional context overflow now records zero-call declines and
+continues the same 64 candidates, retaining 6/7 completeness in both languages.
+One deduplicated generated Go execution agrees with native and typed values.
+The [public HF repair appendix](https://huggingface.co/asketeddy/gooo-typed-path-tiny-v1/tree/15efbf6c49e15b59ac4de36c185df01bc723c4e3/research/continued-judgment-20261001)
+adds synthetic evidence without changing weights. The native SDK upgrade is
+[compiler PR 1120](https://github.com/kimjooyoon/meta-ontology-go/pull/1120);
+feature measurements remain separate from its merge and deployment status.
 
 The [actual native integration study](docs/native-feedback-results.md) measured
 28 native generations and 246 local predictions with three existing models.
