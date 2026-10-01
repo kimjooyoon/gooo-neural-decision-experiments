@@ -489,3 +489,23 @@ outliers and all raw observations are retained in the
 [public HF appendix](https://huggingface.co/asketeddy/gooo-feedback-path-tiny-v1/tree/fb09079ece12f9bee821730b5e0514016098fd77/research/native-budget-main-20261001).
 An initial model hint plus bounded deterministic tests is useful here; feedback
 and any checkpoint promotion need evidence of marginal benefit.
+
+## Distinguishing passed tests from resolved paths
+
+The [finite diagnosis study](docs/path-diagnosis.md) performs 144 two-candidate
+SDK searches followed by 144 deterministic diagnoses, comparing 576 candidates.
+Own FP32 uses 144 initial predictions; diagnosis adds zero predictions. Twelve
+actual emitted-Go executions evaluate 372 function inputs against an independent
+state oracle. All 24 sparse FP32 views pass their tests but remain case-ambiguous;
+twenty have a supplied probe where an alternative differs. Four retain unresolved
+bounded probe agreement. Witnesses contain two observed candidate outputs and no
+invented expected answer. This is reused development evidence over twelve existing
+intention groups, and does not itself repair a program or raise accuracy.
+
+The additional SDK diagnosis median is about 0.089–0.093 ms, excluding model load
+and plan preparation. The new
+[Go SDK v0.2.8 release](https://github.com/kimjooyoon/gooo-decision-runtime/releases/tag/v0.2.8-experimental)
+exposes bounded, cancellable `PreparedPlan.Diagnose`; native main adoption is a
+separate next step. [HF raw evidence](https://huggingface.co/asketeddy/gooo-feedback-path-tiny-v1/tree/f41547f98ffc76d015bc027826afa21d619b1904/research/path-diagnosis-sdk-20261001)
+includes all captures, preregistration and actual Go values. Earlier model weights,
+card and regression evidence remain available.

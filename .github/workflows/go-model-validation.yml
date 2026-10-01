@@ -222,6 +222,17 @@ jobs:
           go run ./tools/package-family-evidence --kind native-budget-main \
             --bundle "$RUNNER_TEMP/native-budget-bundle" \
             --output "$RUNNER_TEMP/native-budget-verification.json"
+          go run ./tools/native-feedback-study --mode diagnosis-audit \
+            --out runs/path-diagnosis-sdk-20261001 \
+            --source-revision a2b7c0c6960888d93f408f0f45af698c579d68cf \
+            --audit-output "$RUNNER_TEMP/path-diagnosis-audit.json"
+          cmp runs/path-diagnosis-sdk-20261001/report.json "$RUNNER_TEMP/path-diagnosis-audit.json"
+          go run ./tools/package-family-evidence --kind path-diagnosis-sdk --pack \
+            --bundle "$RUNNER_TEMP/path-diagnosis-bundle"
+          cmp publication/hf-path-diagnosis-sdk-20261001/publication-manifest.json "$RUNNER_TEMP/path-diagnosis-bundle/publication-manifest.json"
+          go run ./tools/package-family-evidence --kind path-diagnosis-sdk \
+            --bundle "$RUNNER_TEMP/path-diagnosis-bundle" \
+            --output "$RUNNER_TEMP/path-diagnosis-verification.json"
           go run ./tools/native-feedback-study --mode retained-metrics \
             --out runs/retained-native-feature-pilot-20261001 \
             --audit-output "$RUNNER_TEMP/retained-native-metrics.json"
@@ -290,6 +301,8 @@ jobs:
           path: |
             ${{ runner.temp }}/retained-native-audit.json
             ${{ runner.temp }}/native-budget-audit.json
+            ${{ runner.temp }}/path-diagnosis-audit.json
+            ${{ runner.temp }}/path-diagnosis-verification.json
             ${{ runner.temp }}/native-budget-verification.json
             ${{ runner.temp }}/retained-completeness.json
             ${{ runner.temp }}/retained-completeness-verification.json

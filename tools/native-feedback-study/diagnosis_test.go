@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"testing"
@@ -78,5 +79,21 @@ func TestDiagnosisOracleRejectsTamperedWitnessesAndAccounting(t *testing.T) {
 		if err = validateDiagnosisCapture(row, altered); err == nil {
 			t.Fatalf("accepted altered %s", change)
 		}
+	}
+}
+
+func TestFrozenPathDiagnosisReplaysWithoutModelOrExecution(t *testing.T) {
+	t.Chdir("../..")
+	value, err := auditDiagnosisStudy("runs/path-diagnosis-sdk-20261001", "a2b7c0c6960888d93f408f0f45af698c579d68cf")
+	if err != nil {
+		t.Fatal(err)
+	}
+	raw, err := read("runs/path-diagnosis-sdk-20261001/report.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	encoded, _ := json.MarshalIndent(value, "", "  ")
+	if !bytes.Equal(append(encoded, '\n'), raw) {
+		t.Fatal("frozen diagnosis report differs")
 	}
 }

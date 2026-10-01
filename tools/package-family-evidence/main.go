@@ -114,6 +114,9 @@ func names() ([]string, error) {
 	return namesKind("")
 }
 func namesKind(kind string) ([]string, error) {
+	if kind == "path-diagnosis-sdk" {
+		return pathDiagnosisNames()
+	}
 	if kind == "native-budget-main" {
 		return nativeBudgetNames()
 	}
@@ -246,6 +249,11 @@ func buildKind(kind string) (manifest, map[string][]byte, error) {
 		m.Prefix = "research/native-budget-main-20261001/"
 		m.Scope = "Actual main 37fb287a9c888bd0262194f524dde16426eca3a9 with 1944 valid constructions, 162 zero-prediction source rejections, 162 sequential native processes, 4041 predictions (3456 initial, 585 feedback), 3005 committed candidates and 97 fixed-coordinate skips. Twelve distinct emitted Go programs and 192 actual function invocations against independent state oracles. Seventy-two reused bilingual/contract views over twelve existing intention groups, nine arms and budgets 1/2/4 are not independent new tasks. New FP32 at budget two reaches the restricted 93.75% mixture maximum and 100% separate-input observations; no checkpoint is promoted. QAT feedback improves one Korean intention repeated across three contracts; parent feedback worsens one English complete-contract view. Eighty of 972 bilingual pairs differ in selected body. Earlier regressions and original unauthenticated UNKNOWN CI context remain. Request latency excludes startup/setup; whole-child CPU/RSS includes one rejection and twelve valid requests. Initial disconnected startup outlier retained; no host CPU, causal speedup, arbitrary language, maximum-input/long-stream memory or all-input correctness claim. Separate inputs and authored mask are evaluator-only. Core weights/card and listed previous appendices preserved. No new training/GPU/upstream Laya or model/native/generated-Go calls during packaging/audit."
 	}
+	if kind == "path-diagnosis-sdk" {
+		m.Schema = "gooo/path-diagnosis-publication/v1"
+		m.Prefix = "research/path-diagnosis-sdk-20261001/"
+		m.Scope = "144 two-candidate SDK searches followed by 144 deterministic four-candidate diagnoses, 576 observed typed candidates, 144 actual own-FP32 initial predictions and zero diagnostic predictions. Twelve distinct emitted Go programs execute 31 generic probes each, yielding 372 actual function invocations. Independent integer-state oracle verifies all vectors and 46 candidate-pair distinguishing witnesses. All 24 sparse FP32 views pass declared cases but remain case-ambiguous; twenty admit a distinguishing probe and four retain unresolved probe agreement. Existing 72 bilingual/contract views over twelve intention groups are reused development evidence. Witness outputs are candidate observations, never authoritative expected answers or permission to modify source. Probe agreement is not all-input equivalence. Median SDK diagnosis timing excludes model loading/preparation; extra candidate checks are not a causal speedup or native latency measurement. Core models and card remain unchanged. No new training/GPU/Laya/native integration or model/native/generated-Go calls during packaging or offline audit."
+	}
 	n, err := namesKind(kind)
 	if err != nil {
 		return m, nil, err
@@ -321,6 +329,16 @@ func buildKind(kind string) (manifest, map[string][]byte, error) {
 	if kind == "native-budget-main" {
 		files["README.md"] = []byte("# Gooo native main bounded-budget evidence\n\n" + m.Scope + "\n\nThe deterministic archive contains 342 allowlisted source/evidence files. Per-entry hashes and sizes are in publication-manifest.json. Methods, bounded completeness, budget-position curve definitions and negative results are in docs/native-budget-study.md; the preregistration is included unchanged. Whole-child resources exclude controller and independently compiled emitted Go.\n")
 		for _, path := range []string{"docs/native-budget-preregistration.md", "docs/native-budget-study.md"} {
+			raw, err := read(path)
+			if err != nil {
+				return m, nil, err
+			}
+			files[path] = raw
+		}
+	}
+	if kind == "path-diagnosis-sdk" {
+		files["README.md"] = []byte("# Gooo finite path ambiguity diagnosis\n\n" + m.Scope + "\n\nThe deterministic archive contains 19 allowlisted evidence/source files, including unchanged preregistration and actual emitted-Go values. Methods and limitations are in docs/path-diagnosis.md. All per-entry hashes and sizes are in publication-manifest.json. This is SDK evidence; deployed native compiler integration is a separate future action.\n")
+		for _, path := range []string{"docs/path-diagnosis-preregistration.md", "docs/path-diagnosis.md"} {
 			raw, err := read(path)
 			if err != nil {
 				return m, nil, err
@@ -551,6 +569,9 @@ func executeKind(bundle, revision, output string, pack bool, kind string) error 
 	}
 	if kind == "native-budget-main" {
 		value["schema"] = "gooo/native-budget-publication-verification/v1"
+	}
+	if kind == "path-diagnosis-sdk" {
+		value["schema"] = "gooo/path-diagnosis-publication-verification/v1"
 	}
 	if output == "" {
 		return errors.New("verification output required")
