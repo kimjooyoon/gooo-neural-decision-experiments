@@ -69,3 +69,23 @@ recorded separately from repository delivery time. The existing optional
 historical implementation-only certificate rejects a broader identity change;
 its failure should expose which identity axes differ and preserve evidence,
 without claiming an implementation-only certificate for that transition.
+
+## Observed bilingual continuation iteration
+
+The [paired judgment comparison](bilingual-judgment-results.md) now records 224
+actual optimizer steps, both control and consistency arms, six exports, actual
+main dogfood and negative evidence. The paired penalty did not improve its control
+on the reused development pairs. New ternary checkpoints require more finite
+continuation attempts than their own parents, despite increased pair agreement.
+Both-wrong agreement is therefore a required metric, alongside actual path cost.
+
+The next bounded comparison should examine an explicit typed-slot/structure
+feature channel together with a compact Korean/English intent channel, keeping
+source and contract digests separate. The current positioned hashed-ngram encoder
+shares a small feature space across Gooo structure, feedback and intent; whether
+channel separation helps must be measured. Preserve the current control, retain
+ambiguous soft targets and disjoint program/template partitions, and use a fixed
+small step budget. New source groups should precede capture and reserve evaluation
+groups; this completed reused-corpus comparison does not supply an untouched
+benchmark. No additional architecture, training or model promotion is performed
+by this follow-up note.

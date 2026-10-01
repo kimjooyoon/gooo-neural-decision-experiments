@@ -1,0 +1,112 @@
+{
+  "schema": "gooo/bilingual-judgment-source-publication/v1",
+  "decision": "PASS",
+  "training_source": "d4016f9708a931fe1095d7509a4c4787fab21dff",
+  "training_source_ci": {
+    "conclusion": "success",
+    "headSha": "d4016f9708a931fe1095d7509a4c4787fab21dff",
+    "jobs": [
+      {
+        "conclusion": "success",
+        "name": "compiler-model-dogfood",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "runtime-and-artifacts",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "native-typed-structural-inference",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "native-body-integration",
+        "status": "completed"
+      }
+    ],
+    "status": "completed"
+  },
+  "native_runner": "90dbefe731cb95a65798ef6d380f22cfd811b5ca",
+  "native_runner_ci": {
+    "conclusion": "success",
+    "headSha": "90dbefe731cb95a65798ef6d380f22cfd811b5ca",
+    "jobs": [
+      {
+        "conclusion": "success",
+        "name": "native-body-integration",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "native-typed-structural-inference",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "runtime-and-artifacts",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "compiler-model-dogfood",
+        "status": "completed"
+      }
+    ],
+    "status": "completed"
+  },
+  "native_main": "1e01c96c54f2f8dd43334b8f580af93ffaea24df",
+  "native_audit": {
+    "decision": "PASS",
+    "new_go_processes": 0,
+    "new_model_calls": 0,
+    "new_native_calls": 0,
+    "preexecution_sha256": "5b974752f9e92b5a9b4cbb214aa16d2da5dd7a5b1951f32959544da9714ebeef",
+    "recorded_go_function_invocations": 4,
+    "recorded_go_processes": 2,
+    "recorded_model_predictions": 24,
+    "recorded_native_calls": 28,
+    "report_sha256": "d1679a36e8a05d7af007f1effb4ebdccda501fbe2cac9b6269a33c4130d761cf",
+    "schema": "gooo/bilingual-native-audit/v1",
+    "scope": "Offline reconciliation of captures, source/model/test identities, selected typed/native function and actual emitted-Go oracle values; ranking origin relies on pinned runner and native source evidence. No inference or subprocess replay."
+  },
+  "hf_appendix": {
+    "credentials_sent": false,
+    "decision": "PASS",
+    "explicit_anonymous_requests": 34,
+    "manifest_sha256": "cc66a6a91ba9eff83035d05e13b56e9d8b324705666d657c8620c5745fdd350a",
+    "new_model_predictions": 0,
+    "new_native_calls": 0,
+    "new_optimizer_steps": 0,
+    "prefix": "research/bilingual-gooo-judgment-20261001/",
+    "publication_files": 33,
+    "repository": "asketeddy/gooo-feedback-path-tiny-v1",
+    "request_scope": "One public identity API and one explicit file request per selected file; automatic redirects and prior publications excluded.",
+    "revision": "e930f1e3f6041477db166f8cb74ea74e6ea12937",
+    "schema": "gooo/bilingual-judgment-verification/v1"
+  },
+  "core_retention": {
+    "anonymous_requests": 26,
+    "credentials_sent": false,
+    "decision": "PASS",
+    "manifest_sha256": "3689f09e1013733a1c0bbb827de1acd371a8b2b18d6cec8e3b5bf26b29dca55d",
+    "new_model_predictions": 0,
+    "new_native_calls": 0,
+    "new_optimizer_steps": 0,
+    "publication_files": 25,
+    "repository": "asketeddy/gooo-feedback-path-tiny-v1",
+    "revision": "e930f1e3f6041477db166f8cb74ea74e6ea12937",
+    "schema": "gooo/feedback-path-model-verification/v1"
+  },
+  "new_optimizer_steps": 224,
+  "new_independent_intentions": 0,
+  "controlled_captured_model_predictions_excluding_unit_and_ci": 14616,
+  "source_fixture_intentions_reused": true,
+  "paired_term_improvement_observed": false,
+  "new_default_checkpoint_promoted": false,
+  "subagents_used": 0,
+  "upstream_laya_calls": 0,
+  "scope": "Two preregistered tiny MPS tuning arms and bounded typed/full-contract continuation, with negative comparisons preserved. Training and native runner source CI each pass four jobs. Later packaging/capture finalization source CI is a separate future observation. HF selected 58 files verified with 60 explicit verifier API/file requests, automatic redirects and initial discovery API excluded. Core weights/card unchanged. Native smoke 28 calls, 24 predictions, two actual selected-Go processes/four function invocations; typed continuation has zero extra predictions but native full contracts are separate calls. No new independent intentions, untouched holdout, host utilization or global model promotion claim."
+}

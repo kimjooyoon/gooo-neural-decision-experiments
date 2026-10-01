@@ -548,3 +548,19 @@ automatic promotion App remains unconfigured; ordinary authenticated CLI
 promotion completed without overrides or human approval requests. Existing
 weights remain unchanged. The [next experiment plan](docs/path-diagnosis-followup-plan.md)
 prioritizes bounded judgment, partial completion, provenance and iteration cost.
+
+## Continued bilingual Gooo judgment
+
+The [paired-judgment study](docs/bilingual-judgment-results.md) performs 224 actual
+MPS optimizer steps in control and bilingual-consistency arms, retains all six
+exports and their negative comparisons, and makes 28 actual adopted-main compiler
+dogfood calls. The paired term did not improve the control. Sparse passing paths
+and language agreement can both be wrong. Explicit full contracts allow bounded
+two-path continuation to complete the measured finite cases; this is not universal
+intent correctness. Prediction medians are about 10–12 microseconds, while decoded
+ternary tensors occupy 12,896 bytes. The new models remain experimental. Raw
+captures, independent emitted-Go execution and source/test/model digests are public.
+The [HF bilingual judgment appendix](https://huggingface.co/asketeddy/gooo-feedback-path-tiny-v1/tree/e930f1e3f6041477db166f8cb74ea74e6ea12937/research/bilingual-gooo-judgment-20261001)
+contains six experimental exports and selected evidence. Anonymous immutable
+byte verification passes for all 33 appendix files and 25 selected core files.
+The existing core weights and card remain unchanged.

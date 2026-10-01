@@ -70,6 +70,17 @@ jobs:
             --output "$RUNNER_TEMP/bilingual-paired-go-parity.json"
           go run ./tools/audit-bilingual-judgment --models runs/bilingual-judgment-mps-20261001 \
             --out "$RUNNER_TEMP/bilingual-go-judgment"
+      - name: Reconcile captured bilingual main dogfood and publication
+        run: |
+          go run ./tools/native-feedback-study --mode bilingual-audit --out runs/bilingual-judgment-native-main-20261001 \
+            --source-revision 90dbefe731cb95a65798ef6d380f22cfd811b5ca \
+            --native-revision 1e01c96c54f2f8dd43334b8f580af93ffaea24df \
+            --audit-output "$RUNNER_TEMP/bilingual-native-audit.json"
+          cmp runs/bilingual-judgment-native-main-20261001/audit.json "$RUNNER_TEMP/bilingual-native-audit.json"
+          go run ./tools/package-bilingual-judgment --bundle "$RUNNER_TEMP/bilingual-judgment-bundle"
+          cmp publication/hf-bilingual-gooo-judgment-20261001/publication-manifest.json "$RUNNER_TEMP/bilingual-judgment-bundle/publication-manifest.json"
+          go run ./tools/package-bilingual-judgment --mode verify --bundle "$RUNNER_TEMP/bilingual-judgment-bundle" \
+            --output "$RUNNER_TEMP/bilingual-publication-verification.json"
       - name: Verify public export without credentials or network publication
         run: |
           go run ./tools/assemble-public-export --output "$RUNNER_TEMP/public-model-bundle" --allowlist "$RUNNER_TEMP/public-model-allowlist.json"

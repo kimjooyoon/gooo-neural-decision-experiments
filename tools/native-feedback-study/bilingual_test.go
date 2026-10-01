@@ -52,3 +52,16 @@ func TestBilingualNativeInspectionRetainsSparseWrongAndRejectsFullWrong(t *testi
 		t.Fatal("offline calls hidden")
 	}
 }
+
+func TestFrozenBilingualMainReconcilesWithoutModelOrProcessCalls(t *testing.T) {
+	t.Chdir("../..")
+	value, err := auditBilingualSmoke("runs/bilingual-judgment-native-main-20261001",
+		"90dbefe731cb95a65798ef6d380f22cfd811b5ca", "1e01c96c54f2f8dd43334b8f580af93ffaea24df")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if value["recorded_native_calls"] != 28 || value["recorded_model_predictions"] != 24 ||
+		value["new_model_calls"] != 0 || value["new_go_processes"] != 0 || value["new_native_calls"] != 0 {
+		t.Fatal("reconciliation created calls or lost counts", value)
+	}
+}
