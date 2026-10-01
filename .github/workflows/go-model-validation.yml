@@ -143,6 +143,10 @@ jobs:
           cmp publication/hf-feedback-path-tiny-v1-20261001/publication-manifest.json "$RUNNER_TEMP/feedback-model-bundle/publication-manifest.json"
           go run ./tools/package-feedback-model --mode verify --bundle "$RUNNER_TEMP/feedback-model-bundle" \
             --output "$RUNNER_TEMP/feedback-model-verification.json"
+      - name: Replay recorded partial-completeness curves without inference
+        run: |
+          go run ./tools/continuation-metrics --output "$RUNNER_TEMP/feedback-continuation-curves.json"
+          cmp publication/feedback-continuation-curves-20261001.json "$RUNNER_TEMP/feedback-continuation-curves.json"
       - uses: actions/upload-artifact@v7
         with:
           name: go-model-validation
@@ -170,6 +174,7 @@ jobs:
             ${{ runner.temp }}/trained-main-audit.json
             ${{ runner.temp }}/decline-main-audit.json
             ${{ runner.temp }}/feedback-model-verification.json
+            ${{ runner.temp }}/feedback-continuation-curves.json
           if-no-files-found: error
 
   compiler-model-dogfood:

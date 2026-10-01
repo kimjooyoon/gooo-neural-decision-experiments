@@ -37,6 +37,11 @@ control show a regression against the parent, which remains recorded. The new
 models have also been used inside actual Gooo codegen on both feature and main
 sources, with hashed captures and independently executed generated Go. See the
 [experimental model card](docs/model-card-feedback-path-v1.md).
+The [public new-model edition](https://huggingface.co/asketeddy/gooo-feedback-path-tiny-v1/tree/4a52615b4889966c3f7e6916b456a554e132b38d)
+contains all three checkpoints and synthetic evidence. Go verified all 25 files
+anonymously at the immutable revision; the [public-byte receipt](publication/feedback-path-model-public-verification-20261001.json)
+is separate from inference and training. [Observed continuation curves](docs/feedback-continuation-curves.md)
+track completeness at candidate batch boundaries rather than only the final outcome.
 
 The [actual native integration study](docs/native-feedback-results.md) measured
 28 native generations and 246 local predictions with three existing models.
