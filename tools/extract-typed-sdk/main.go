@@ -33,6 +33,8 @@ func inventory() map[string]string {
 		"model.go": "internal/decision/model.go", "bridge.go": "internal/decision/bridge.go", "ir.go": "internal/decision/ir.go", "LICENSE": "LICENSE",
 		"model_test.go": "internal/decision/model_test.go", "ir_test.go": "internal/decision/ir_test.go", "path_model_test.go": "internal/decision/path_model_test.go", "path_features_test.go": "internal/decision/path_features_test.go",
 		"split_features.go": "internal/decision/split_features.go", "split_features_test.go": "internal/decision/split_features_test.go",
+		"semantic_features.go": "internal/decision/semantic_features.go", "semantic_features_test.go": "internal/decision/semantic_features_test.go",
+		"pathplan/source_features.go": "internal/pathplan/source_features.go", "pathplan/source_features_test.go": "internal/pathplan/source_features_test.go",
 		"testdata/split-context-features-parity.json": "studies/split-context-features-v2/parity.json",
 		"bodyplan/bodyplan.go":                        "internal/bodyplan/bodyplan.go", "bodyplan/bodyplan_test.go": "internal/bodyplan/bodyplan_test.go",
 		"pathplan/pathplan.go": "internal/pathplan/pathplan.go", "pathplan/search.go": "internal/pathplan/search.go", "pathplan/pathplan_test.go": "internal/pathplan/pathplan_test.go", "pathplan/search_test.go": "internal/pathplan/search_test.go",
