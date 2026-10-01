@@ -438,7 +438,29 @@ func main() {
 	nativeRevision := flag.String("native-revision", "", "clean binary source SHA")
 	worker := flag.String("worker", "", "optional retained native body worker executable")
 	familyCIStatus := flag.String("family-ci-status", "PASS", "caller family-study CI context: PASS, FAIL or UNKNOWN")
+	curriculum := flag.String("curriculum", "", "canonical compiler curriculum directory")
+	modelRoot := flag.String("model-root", "", "own-model training directory")
 	flag.Parse()
+	if *mode == "compiler-native-dogfood" || *mode == "compiler-native-dogfood-audit" {
+		var err error
+		if *mode == "compiler-native-dogfood" {
+			err = runCompilerNativeDogfood(*binary, *goBinary, *curriculum, *modelRoot, *output, *revision, *nativeRevision)
+		} else {
+			err = auditCompilerNativeDogfood(*curriculum, *modelRoot, *output, *nativeRevision)
+		}
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "compiler-native-dogfood:", err)
+			os.Exit(1)
+		}
+		return
+	}
+	if *mode == "compiler-model-audit" {
+		if err := runCompilerModelAudit(*curriculum, *modelRoot, *output, *revision); err != nil {
+			fmt.Fprintln(os.Stderr, "compiler-model-audit:", err)
+			os.Exit(1)
+		}
+		return
+	}
 	if *mode == "compiler-curriculum" || *mode == "compiler-curriculum-audit" {
 		var err error
 		if *mode == "compiler-curriculum" {
