@@ -1,0 +1,56 @@
+{
+  "dataset_sha256": "570d1d73bfea32662b869e5cfbf77e6d04df838b703191b076be58c1d2180dbf",
+  "independent_new_intention_families": 0,
+  "input_max_bytes": 512,
+  "labels": [
+    "reference_first",
+    "reference_second",
+    "assign_first",
+    "assign_second",
+    "layout_forward",
+    "layout_reverse",
+    "schedule_forward",
+    "schedule_reverse"
+  ],
+  "model_schema": "gooo/tiny-path-decision-model/v1",
+  "oracle": "independent arithmetic pathstudy.Oracle; two typed candidates evaluated per row",
+  "parent_dataset_sha256": "942b76c3eee49c83fc0abccc3b33f3e92835c9ad7743918fa9c6a6b976d99f7b",
+  "preserved_original_instruction_groups": 2080,
+  "rows": {
+    "calibration": {
+      "bounded": 480,
+      "complete_finite": 160,
+      "inconsistent_finite": 160,
+      "multiple_best_finite_labels": 36,
+      "rows": 480,
+      "sparse_finite": 160
+    },
+    "test": {
+      "bounded": 960,
+      "complete_finite": 320,
+      "inconsistent_finite": 320,
+      "multiple_best_finite_labels": 76,
+      "rows": 960,
+      "sparse_finite": 320
+    },
+    "train": {
+      "bounded": 4800,
+      "complete_finite": 1600,
+      "inconsistent_finite": 1600,
+      "multiple_best_finite_labels": 384,
+      "rows": 4800,
+      "sparse_finite": 1600
+    }
+  },
+  "schema": "gooo/feedback-path-curriculum/v1",
+  "scope": "Existing closed five-family bilingual synthetic curriculum with new finite-feedback views. Sparse and contradictory cases retain ambiguity and partial denominators. Over-bound contexts remain recorded without truncation and are ineligible for model training. Caller CI status is unverified context. Reused source/test groups are development evaluation, not an untouched holdout or 6240 new independent tasks.",
+  "source_sha256": {
+    "cmd/feedback-curriculum/main.go": "d88e4905801744f81358147319c260bfa1cd0168348523ee1c3e2c4437e37c56",
+    "internal/bodyplan/bodyplan.go": "6ebd90bde6e97ffc93dede1ae741a262cb56408194ca3696e9ced530dd109a07",
+    "internal/feedbackstudy/curriculum.go": "6528516f5fb4f7b989740d2d1c7e3c055dfe6052a37c685f9e6aa311f79ccba1",
+    "internal/pathplan/prepared.go": "1bea56b29572055d31f9f3ac218be45acd9c8849a52bec869c993746218d2b2b",
+    "internal/pathstudy/study.go": "5708818e0ee2d093fcd755573fc3c9a66eac276feccbaeff3441cdbd0aebade6"
+  },
+  "target": "all labels tied for maximum declared finite pass count; separate original intention label retained",
+  "total_rows": 6240
+}

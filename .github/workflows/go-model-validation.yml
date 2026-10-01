@@ -38,6 +38,11 @@ jobs:
           go run ./studies/body-plan-v1 "$RUNNER_TEMP/body-plan-cohort"
           cmp studies/body-plan-v1/cohort.jsonl "$RUNNER_TEMP/body-plan-cohort/cohort.jsonl"
           cmp studies/body-plan-v1/manifest.json "$RUNNER_TEMP/body-plan-cohort/manifest.json"
+      - name: Reproduce finite feedback targets with preserved ambiguity
+        run: |
+          go run ./cmd/feedback-curriculum --out "$RUNNER_TEMP/feedback-path-curriculum"
+          cmp data/feedback-path-v1/dataset.jsonl "$RUNNER_TEMP/feedback-path-curriculum/dataset.jsonl"
+          cmp data/feedback-path-v1/manifest.json "$RUNNER_TEMP/feedback-path-curriculum/manifest.json"
       - name: Verify public export without credentials or network publication
         run: |
           go run ./tools/assemble-public-export --output "$RUNNER_TEMP/public-model-bundle" --allowlist "$RUNNER_TEMP/public-model-allowlist.json"
