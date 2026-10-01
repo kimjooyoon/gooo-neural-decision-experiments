@@ -52,8 +52,9 @@ feedback falls from 438 to 341. Thus 97 calls are skipped: 22.15% of feedback an
 9.57% of total predictions in the opt-in arm. All 288 pairs retain candidate
 sequence and final body/finite outcomes. The legacy SDK matches all 288 original
 native references. Twelve selected Go programs were actually executed, with 192
-function evaluations against the independent oracle. This iteration adds zero
-native compiler invocations, training steps, GPU work or upstream Laya requests.
+function evaluations against the independent oracle. The recorded local SDK
+study makes zero native compiler invocations, training steps, GPU work or upstream
+Laya requests. CI's fresh native integration checks are reported separately.
 
 | Model | Predictions, legacy → opt-in | Skipped | Attempts in each arm | Session p50 ms, legacy → opt-in |
 |---|---:|---:|---:|---:|
@@ -90,6 +91,15 @@ publication files and every archive entry passed anonymous byte verification
 nine-file compound appendix were independently verified at the same revision.
 These verification steps execute zero predictions, native calls or Go processes.
 The core model card, weights and previous negative studies remain unchanged.
+
+The measured runner passed [its source CI](https://github.com/kimjooyoon/gooo-neural-decision-experiments/actions/runs/36822984167).
+The complete raw evidence, offline audit, deterministic compression, descriptive
+metrics and fresh compiler integration passed all four jobs in
+[research source CI 36823441149](https://github.com/kimjooyoon/gooo-neural-decision-experiments/actions/runs/36823441149)
+at `5623e5156798dbd055c235568acf45e5e24893f3`.
+The [source/publication receipt](../publication/unfixed-feedback-source-publication-20261001.json)
+binds exact successful source runs to immutable HF bytes and the SDK release.
+This final documentation/receipt commit adds no implementation changes.
 
 Native main remains SDK 2.5; this release adds an explicit SDK API and measured
 development evidence. Compiler adoption needs a source-bound integration of the
