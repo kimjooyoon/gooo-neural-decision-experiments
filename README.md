@@ -7,6 +7,12 @@ continue finite construction in batches. First-shot accuracy is not the goal:
 partial results, failed cases, type rejections, unattempted paths and cost remain
 inspectable. Models are optional; the disconnected order is deterministic.
 
+The research-only [observed feedback option](docs/feedback-path-judgment.md)
+can now ask the same frozen model again after a partial batch. It supplies a
+bounded failure summary and optional caller CI hint, and changes only remaining
+path priority. Default sessions and released native SDK still rank once.
+This is an experiment with an existing model, not feedback training.
+
 [Session API and limits](docs/incremental-typed-paths.md),
 [Korean judgment and partial-construction policy](docs/judgment-and-partial-construction.md),
 [actual 288-call native study](runs/incremental-native-20261001/), and
@@ -27,6 +33,10 @@ replay, and preserved 6/7 partial output. The
 is public. [Laya cancellation repair](publication/laya-cancellation-repair-20261001.json)
 separately fixes a buffered-response race with 100 repeated mock tests per case;
 it does not add live model or training measurements.
+
+[Actual post-main CI](publication/incremental-typed-path-main-push-20261001.json)
+also passed all six checks; its downloaded proof and provenance receipt passed
+the Go verifier. This is separately bound to the merged main source.
 
 Public experimental Gooo-specific natural-language to typed IR decisions.
 Runtime, orchestration, data generation and compiler bridges are written in Go.
