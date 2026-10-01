@@ -139,3 +139,20 @@ func TestEvidenceExtractionUsesVerifiedFixedInventory(t *testing.T) {
 		t.Fatal("invalid extraction wrote output")
 	}
 }
+
+func TestIntermediateEditionExcludesUnfinishedNativeClaims(t *testing.T) {
+	paths := stagePaths()
+	if len(paths) != 28 || !paths["joint/models/fp32/model.json"] || paths["native-report.json"] || paths["raw-evidence.zip"] || paths["provenance/joint-fp32.ttl"] {
+		t.Fatal("intermediate scope differs", len(paths))
+	}
+	output := filepath.Join(t.TempDir(), "rejected")
+	if err := verifyStage("unused", "main", output); err == nil {
+		t.Fatal("mutable stage revision accepted")
+	}
+	if err := fetchBundle(output, "main", "invalid"); err == nil {
+		t.Fatal("unpinned download accepted")
+	}
+	if _, err := os.Stat(output); !os.IsNotExist(err) {
+		t.Fatal("invalid pins created output")
+	}
+}

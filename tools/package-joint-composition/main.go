@@ -346,6 +346,12 @@ func main() {
 		} else {
 			err = verify(*bundle, *publicRevision, *output)
 		}
+	case "stage-verify":
+		if *bundle == "" {
+			err = errors.New("local intermediate bundle required")
+		} else {
+			err = verifyStage(*bundle, *publicRevision, *output)
+		}
 	case "fetch":
 		if *bundle == "" || *manifestSHA == "" {
 			err = errors.New("fresh bundle and pinned manifest digest required")
