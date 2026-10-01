@@ -185,6 +185,14 @@ jobs:
             --source-revision e5d115f79944765d7a675f2f99664d556333ef2a \
             --audit-output "$RUNNER_TEMP/unfixed-feedback-sdk-audit.json"
           cmp runs/unfixed-feedback-sdk-20261001/report.json "$RUNNER_TEMP/unfixed-feedback-sdk-audit.json"
+          go run ./tools/native-feedback-study --mode native-unfixed-audit \
+            --out runs/unfixed-native-feature-pilot-20261001 \
+            --source-revision 3749fdc6c1f218c36d944a7899bb1125061c6906 \
+            --native-revision d869be3219a7798b6cc3b13c31efa8a6d899ae22 \
+            --audit-output "$RUNNER_TEMP/unfixed-native-feature-audit.json"
+          cmp runs/unfixed-native-feature-pilot-20261001/report.json "$RUNNER_TEMP/unfixed-native-feature-audit.json"
+          go run ./tools/native-unfixed-metrics --output "$RUNNER_TEMP/unfixed-native-feature-metrics.json"
+          cmp publication/unfixed-native-feature-descriptive-metrics-20261001.json "$RUNNER_TEMP/unfixed-native-feature-metrics.json"
       - name: Reproduce compressed native-family publication without credentials
         run: |
           go run ./tools/package-family-evidence --pack --bundle "$RUNNER_TEMP/native-family-bundle"
@@ -215,10 +223,19 @@ jobs:
           go run ./tools/package-family-evidence --kind unfixed-sdk \
             --bundle "$RUNNER_TEMP/unfixed-feedback-sdk-bundle" \
             --output "$RUNNER_TEMP/unfixed-feedback-sdk-verification.json"
+          go run ./tools/package-family-evidence --kind unfixed-native-feature --pack \
+            --bundle "$RUNNER_TEMP/unfixed-native-feature-bundle"
+          cmp publication/hf-unfixed-native-feature-pilot-20261001/publication-manifest.json "$RUNNER_TEMP/unfixed-native-feature-bundle/publication-manifest.json"
+          go run ./tools/package-family-evidence --kind unfixed-native-feature \
+            --bundle "$RUNNER_TEMP/unfixed-native-feature-bundle" \
+            --output "$RUNNER_TEMP/unfixed-native-feature-verification.json"
       - uses: actions/upload-artifact@v7
         with:
           name: go-model-validation
           path: |
+            ${{ runner.temp }}/unfixed-native-feature-audit.json
+            ${{ runner.temp }}/unfixed-native-feature-metrics.json
+            ${{ runner.temp }}/unfixed-native-feature-verification.json
             ${{ runner.temp }}/unfixed-feedback-sdk-audit.json
             ${{ runner.temp }}/unfixed-feedback-sdk-verification.json
             ${{ runner.temp }}/go-audit-ci.json

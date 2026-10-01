@@ -431,3 +431,15 @@ with all six required machine checks and post-main CI passing. The
 [promotion receipt](publication/native-integer-main-promotion-1106.json) records
 the exact source, proof and merge bindings, the retained auxiliary dev-run
 503 failure, and the remaining Actions-only promotion limitation.
+
+## Native partial construction with varying-coordinate feedback
+
+The [SDK 0.2.7 native pilot](docs/native-unfixed-pilot.md) opts into skipping model
+predictions on typed coordinates constant in every remaining path. In 24 paired
+bilingual observations, calls fall from 144 to 120 with unchanged candidate order,
+body and retained 87.5% contradictory-case completeness. Three actual emitted Go
+programs pass 42 independent state-oracle evaluations. QAT median CPU time and
+all median RSS values rise slightly despite fewer predictions. Exact CI/proof,
+source-bound raw captures, resource sidecars and compressed public HF evidence
+are available; main promotion is separate. Reused views do not establish arbitrary
+natural-language accuracy or causal speedup. First-shot correctness is not acceptance.

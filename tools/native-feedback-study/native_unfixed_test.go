@@ -1,10 +1,31 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"path/filepath"
 	"testing"
 )
+
+func TestNativeUnfixedFrozenPilotReproducesWithoutInference(t *testing.T) {
+	t.Chdir("../..")
+	root := "runs/unfixed-native-feature-pilot-20261001"
+	v, err := auditNativeUnfixed(root, "3749fdc6c1f218c36d944a7899bb1125061c6906", "d869be3219a7798b6cc3b13c31efa8a6d899ae22")
+	if err != nil {
+		t.Fatal(err)
+	}
+	raw, err := json.MarshalIndent(v, "", "  ")
+	if err != nil {
+		t.Fatal(err)
+	}
+	expected, err := read(filepath.Join(root, "report.json"))
+	if err != nil || hash(expected) != "4dba2dab42c17af2c069a442b18053fc804bc50a32f5b4276799ddf3f96d3962" || !bytes.Equal(append(raw, '\n'), expected) {
+		t.Fatal("frozen native pilot audit differs")
+	}
+	if _, err := auditNativeUnfixed(root, "3749fdc6c1f218c36d944a7899bb1125061c6906", compoundNative); err == nil {
+		t.Fatal("other native source accepted")
+	}
+}
 
 func TestNativeUnfixedInspectorBindsNativeSourceAndPartialOutcome(t *testing.T) {
 	t.Chdir("../..")
