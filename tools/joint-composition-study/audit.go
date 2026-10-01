@@ -4,9 +4,9 @@ import (
 	"bufio"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
-	"reflect"
 )
 
 func receiptLinks(o observation) error {
@@ -175,6 +175,7 @@ func auditSDK(curriculum, models, study, output string) error {
 		return errors.New("frozen calibration selection required")
 	}
 	records, calls := 0, 192+12012
+	var rounding []roundingDifference
 	calibration := map[string]score{}
 	ids := []string{"offline"}
 	for _, arm := range arms {
@@ -194,16 +195,20 @@ func auditSDK(curriculum, models, study, output string) error {
 			} else {
 				calibration[id] = s
 			}
-			if !reflect.DeepEqual(s, expected) {
-				return errors.New("frozen independent summary differs")
+			if !sameScore(s, expected) {
+				return fmt.Errorf("frozen summary differs %s/%s: actual=%+v captured=%+v", split, id, s.Total, expected.Total)
+			}
+			rounding = appendRounding(rounding, split+"/"+id, "total", s.Total, expected.Total)
+			for key, c := range s.Families {
+				rounding = appendRounding(rounding, split+"/"+id, key, c, expected.Families[key])
 			}
 			calls += s.Total.Calls
 			records += s.Total.Views
 		}
 	}
 	chosen, err := choose(calibration, pins)
-	if err != nil || chosen != report.Selected || chosen != selection.Selected || !reflect.DeepEqual(calibration, selection.Scores) || calls != report.Calls || records != 5376 {
+	if err != nil || chosen != report.Selected || chosen != selection.Selected || !sameScoreMaps(calibration, selection.Scores) || calls != report.Calls || records != 5376 {
 		return errors.New("calibration choice/actual-call totals differ")
 	}
-	return save(output, map[string]any{"schema": "gooo/joint-composition-sdk-audit/v1", "status": "PASS", "dataset_sha256": datasetSHA, "frozen_sdk_function_observations": records, "actual_model_predictions_all_stages": calls, "selected_candidate": chosen, "new_model_predictions": 0, "new_native_calls": 0, "new_optimizer_updates": 0, "native_execution_verified": false, "scope": "Independent Go arithmetic reconstruction, full probabilities, source hashes, progress/feedback chains, model pins, language pairs and calibration selector; four-path finite construction only. Native integration remains a separate stage."})
+	return save(output, map[string]any{"schema": "gooo/joint-composition-sdk-audit/v1", "status": "PASS", "dataset_sha256": datasetSHA, "frozen_sdk_function_observations": records, "actual_model_predictions_all_stages": calls, "selected_candidate": chosen, "new_model_predictions": 0, "new_native_calls": 0, "new_optimizer_updates": 0, "native_execution_verified": false, "floating_aggregate_rounding_differences": rounding, "floating_aggregate_tolerance": "1e-10 absolute + 1e-12 relative for rederived target NLL/mass only; counts, durations, paths, receipts and actual values remain exact", "scope": "Independent Go arithmetic reconstruction, full probabilities, source hashes, progress/feedback chains, model pins, language pairs and calibration selector; four-path finite construction only. Native integration remains a separate stage."})
 }

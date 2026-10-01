@@ -183,8 +183,12 @@ func auditNative(curriculum, models, study, native, output string) error {
 			return errors.New("native policy denominator differs")
 		}
 	}
-	if calls != 192 || predictions != report.Predictions || !reflect.DeepEqual(totals, report.Totals) {
+	if calls != 192 || predictions != report.Predictions || !sameCountMaps(totals, report.Totals) {
 		return errors.New("native aggregate reconstruction differs")
 	}
-	return save(output, map[string]any{"schema": "gooo/joint-composition-native-audit/v1", "status": "PASS", "dataset_sha256": datasetSHA, "native_revision": nativeDeployed, "native_captures": calls, "independently_executed_go_captures": calls, "ordered_go_function_invocations": calls * 16, "recorded_native_model_predictions": predictions, "selected_candidate": chosen, "reconstructed_native_totals": totals, "new_native_calls": 0, "new_model_predictions": 0, "new_optimizer_updates": 0, "scope": "Source/model/intent hashes, independent int64 arithmetic, all ordered cases, actual compiled Go values, progress/feedback chains, four policies and bilingual pairs. Selected and independent FP32 are explicit replays of the same model; they are not separate intentions."})
+	var rounding []roundingDifference
+	for _, policy := range policies {
+		rounding = appendRounding(rounding, "native", policy, totals[policy], report.Totals[policy])
+	}
+	return save(output, map[string]any{"schema": "gooo/joint-composition-native-audit/v1", "status": "PASS", "dataset_sha256": datasetSHA, "native_revision": nativeDeployed, "native_captures": calls, "independently_executed_go_captures": calls, "ordered_go_function_invocations": calls * 16, "recorded_native_model_predictions": predictions, "selected_candidate": chosen, "reconstructed_native_totals": totals, "new_native_calls": 0, "new_model_predictions": 0, "new_optimizer_updates": 0, "floating_aggregate_rounding_differences": rounding, "floating_aggregate_tolerance": "1e-10 absolute + 1e-12 relative for rederived target NLL/mass only", "scope": "Source/model/intent hashes, independent int64 arithmetic, all ordered cases, actual compiled Go values, progress/feedback chains, four policies and bilingual pairs. Selected and independent FP32 are explicit replays of the same model; they are not separate intentions."})
 }

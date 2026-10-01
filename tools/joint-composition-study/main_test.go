@@ -134,3 +134,20 @@ func TestDescriptiveDistributionPreservesInputsAndRejectsNonfiniteValues(t *test
 		}
 	}
 }
+
+func TestOnlyDerivedFloatingAggregatesToleratePlatformRounding(t *testing.T) {
+	a := counts{Views: 384, Cases: 6144, Calls: 777, PredictionNS: 123, InitialOutside: 271.007082, InitialNLL: 530.123456}
+	b := a
+	b.InitialOutside = math.Nextafter(b.InitialOutside, math.Inf(1))
+	b.InitialNLL = math.Nextafter(b.InitialNLL, math.Inf(-1))
+	if !sameCounts(a, b) {
+		t.Fatal("one-ulp derived aggregate rejected")
+	}
+	for _, change := range []func(*counts){func(c *counts) { c.Calls++ }, func(c *counts) { c.CurveComplete[2]++ }, func(c *counts) { c.PredictionNS++ }, func(c *counts) { c.InitialOutside += 1e-6 }, func(c *counts) { c.InitialNLL = math.NaN() }} {
+		b = a
+		change(&b)
+		if sameCounts(a, b) {
+			t.Fatal("non-rounding change accepted", b)
+		}
+	}
+}
