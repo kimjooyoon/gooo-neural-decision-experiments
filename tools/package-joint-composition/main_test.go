@@ -156,3 +156,22 @@ func TestIntermediateEditionExcludesUnfinishedNativeClaims(t *testing.T) {
 		t.Fatal("invalid pins created output")
 	}
 }
+
+func TestPinnedPrivacyDetectorLiteralExemptionCannotHideModifiedSource(t *testing.T) {
+	name := filepath.Join("..", "joint-composition-curriculum", "main.go")
+	if err := scan(name); err != nil {
+		t.Fatal("known public detector source rejected", err)
+	}
+	raw, err := os.ReadFile(name)
+	if err != nil {
+		t.Fatal(err)
+	}
+	changed := filepath.Join(t.TempDir(), "changed.go")
+	raw = append(raw, []byte("\n// /Users/local/private-data\n")...)
+	if err = os.WriteFile(changed, raw, 0600); err != nil {
+		t.Fatal(err)
+	}
+	if err = scan(changed); err == nil {
+		t.Fatal("modified detector source bypassed privacy scan")
+	}
+}

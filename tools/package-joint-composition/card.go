@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 // Filled after the same main proof verified for native execution.
-const deployedCompiler = ""
+const deployedCompiler = "363a3d8aa365c35dd634c241248b444de0050973"
 
 func modelCard(predictions int) string {
 	return fmt.Sprintf(`---

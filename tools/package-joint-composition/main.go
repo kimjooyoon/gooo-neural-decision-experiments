@@ -62,6 +62,15 @@ func scan(name string) error {
 	s.Buffer(make([]byte, 4096), 1<<20)
 	for s.Scan() {
 		if sensitive.Match(s.Bytes()) {
+			// This exact already-public collector source contains the detector
+			// definition itself. A different file digest or any other matching
+			// line still fails; raw evidence has no exemption.
+			if string(s.Bytes()) == "var privatePattern = regexp.MustCompile(`"+sensitive.String()+"`)" {
+				entry, e := hashFile(name)
+				if e == nil && entry.SHA == "7c7f90ca403a72d9b3dfe908ec4bd81870716577efb8b7102069b18745232957" {
+					continue
+				}
+			}
 			return errors.New("sensitive text in publication input")
 		}
 	}
@@ -306,7 +315,8 @@ func packageBundle(models, study, native, output, revision string) error {
 	sort.Slice(payloads, func(i, j int) bool { return payloads[i].Path < payloads[j].Path })
 	return save(filepath.Join(output, "publication-manifest.json"), map[string]any{"schema": "gooo/own-joint-composition-publication/v1", "repository": repository,
 		"source_revision": revision, "files": payloads, "archive_members": members, "credentials_and_host_paths_scanned": true,
-		"dataset_sha256": datasetSHA, "optimizer_updates": 480, "model_exports": 6, "actual_native_calls": 192, "actual_native_predictions": audit.Predictions,
+		"static_privacy_detector_source_sha256": "7c7f90ca403a72d9b3dfe908ec4bd81870716577efb8b7102069b18745232957",
+		"dataset_sha256":                        datasetSHA, "optimizer_updates": 480, "model_exports": 6, "actual_native_calls": 192, "actual_native_predictions": audit.Predictions,
 		"independently_compiled_go_executions": 192, "ordered_go_function_invocations": 3072, "default_model_promoted": false,
 		"scope": "Six own random-init bounded structural models, all variants and negative comparisons; fixed allowlist contains public synthetic source/targets/captures only. Offline Python optimizer, Go runtime/oracle/orchestration/audit/publication."})
 }

@@ -21,7 +21,7 @@ import (
 )
 
 // Filled only after independently verified main promotion; empty blocks execution.
-const nativeDeployed = ""
+const nativeDeployed = "363a3d8aa365c35dd634c241248b444de0050973"
 
 type metrics struct {
 	Wall   int64   `json:"wall_ns"`
