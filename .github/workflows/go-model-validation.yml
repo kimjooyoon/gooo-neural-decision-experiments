@@ -126,6 +126,17 @@ jobs:
           cmp publication/hf-continued-judgment-20261001/publication-manifest.json "$RUNNER_TEMP/continued-judgment-bundle/publication-manifest.json"
           go run ./tools/package-continued-judgment --mode verify --bundle "$RUNNER_TEMP/continued-judgment-bundle" \
             --output "$RUNNER_TEMP/continued-judgment-verification.json"
+      - name: Audit actual feedback-trained native bodies in both source editions
+        run: |
+          go run ./tools/native-feedback-study --mode trained-audit \
+            --out runs/feedback-trained-native-20261001 --audit-output "$RUNNER_TEMP/trained-native-audit.json"
+          cmp runs/feedback-trained-native-20261001/audit.json "$RUNNER_TEMP/trained-native-audit.json"
+          go run ./tools/native-feedback-study --mode trained-audit \
+            --out runs/feedback-trained-main-smokes-20261001 --audit-output "$RUNNER_TEMP/trained-main-audit.json"
+          cmp runs/feedback-trained-main-smokes-20261001/audit.json "$RUNNER_TEMP/trained-main-audit.json"
+          go run ./tools/native-feedback-study --mode continued-audit \
+            --out runs/feedback-decline-main-smokes-20261001 --audit-output "$RUNNER_TEMP/decline-main-audit.json"
+          cmp runs/feedback-decline-main-smokes-20261001/audit.json "$RUNNER_TEMP/decline-main-audit.json"
       - uses: actions/upload-artifact@v7
         with:
           name: go-model-validation
@@ -149,6 +160,8 @@ jobs:
             ${{ runner.temp }}/continued-judgment-audit.json
             ${{ runner.temp }}/continued-judgment-verification.json
             ${{ runner.temp }}/feedback-path-model-audit.json
+            ${{ runner.temp }}/trained-native-audit.json
+            ${{ runner.temp }}/trained-main-audit.json
           if-no-files-found: error
 
   compiler-model-dogfood:

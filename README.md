@@ -26,8 +26,17 @@ adds synthetic evidence without changing weights. The native SDK upgrade is
 merged to dev in [compiler PR 1120](https://github.com/kimjooyoon/meta-ontology-go/pull/1120),
 with [verified six-check evidence](publication/context-decline-dev-20261001.json).
 [Main promotion PR 1121](https://github.com/kimjooyoon/meta-ontology-go/pull/1121)
-is pending its source-bound CI; feature measurements remain separate from
-deployed-main observations.
+is merged at `4dced73b26dde567cb7129f3e4ba5733850196d0`. The clean main
+compiler separately preserves long-context partial construction and disconnected
+deterministic replay; feature measurements remain separate from main observations.
+
+The [first finite-feedback GPU tuning](docs/feedback-path-training-results.md)
+completed 760 optimizer steps on our own 12,728-parameter model. It preserves
+ambiguous finite targets and original intentions. The six model arms and offline
+control show a regression against the parent, which remains recorded. The new
+models have also been used inside actual Gooo codegen on both feature and main
+sources, with hashed captures and independently executed generated Go. See the
+[experimental model card](docs/model-card-feedback-path-v1.md).
 
 The [actual native integration study](docs/native-feedback-results.md) measured
 28 native generations and 246 local predictions with three existing models.

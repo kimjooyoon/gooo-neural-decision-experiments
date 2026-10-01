@@ -11,9 +11,14 @@ import (
 
 const continuedReportSHA = "a5ceff7c5d373333a89e301e23a86a601a73d4fd39eaa28d093a9cdcb84d72fd"
 
+var continuedReports = map[string]string{
+	continuedReportSHA: "6a3e45d7f185c74f5136ab81b560a14a1366f367",
+	"87be8176d76e6ddedb937394cf16672977d65faa8600d6fd3602fee46de1552b": "4dced73b26dde567cb7129f3e4ba5733850196d0",
+}
+
 func auditContinuedBound(dir string) (map[string]any, error) {
 	raw, err := read(filepath.Join(dir, "report.json"))
-	if err != nil || hash(raw) != continuedReportSHA {
+	if err != nil || continuedReports[hash(raw)] == "" {
 		return nil, errors.New("fixed continued-construction report required")
 	}
 	var report struct {
@@ -29,7 +34,7 @@ func auditContinuedBound(dir string) (map[string]any, error) {
 		} `json:"observations"`
 	}
 	if err = json.Unmarshal(raw, &report); err != nil || len(report.Observations) != 4 ||
-		report.Native != "6a3e45d7f185c74f5136ab81b560a14a1366f367" {
+		report.Native != continuedReports[hash(raw)] {
 		return nil, errors.New("continued report source differs")
 	}
 	execution, err := read(filepath.Join(dir, "go-execution.json"))

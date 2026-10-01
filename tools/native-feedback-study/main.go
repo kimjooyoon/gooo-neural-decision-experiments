@@ -414,7 +414,7 @@ func run(binary, nativeRoot, output, revision, nativeRevision string) error {
 	return nil
 }
 func main() {
-	mode := flag.String("mode", "study", "study, execute, audit, input-bound or continued-bound")
+	mode := flag.String("mode", "study", "study, execute, audit, input-bound, continued-bound, continued-audit, trained-dogfood or trained-audit")
 	goBinary := flag.String("go-bin", "", "Go 1.27.1 executable for execute mode")
 	auditOutput := flag.String("audit-output", "", "audit receipt output; defaults to study directory")
 	binary := flag.String("native", "", "native binary")
@@ -430,8 +430,14 @@ func main() {
 		}
 		return
 	}
-	if *mode == "continued-audit" {
-		value, err := auditContinuedBound(*output)
+	if *mode == "continued-audit" || *mode == "trained-audit" {
+		var value map[string]any
+		var err error
+		if *mode == "trained-audit" {
+			value, err = auditTrainedDogfood(*output)
+		} else {
+			value, err = auditContinuedBound(*output)
+		}
 		if err == nil {
 			path := *auditOutput
 			if path == "" {

@@ -43,5 +43,20 @@ them to int8; no 1.58-bit total RAM or packed-compute acceleration is claimed.
 Source-pinned execution conditions and complete histories are in
 `runs/feedback-path-soft-target-mps-20261001/{preexecution,report,go-parity,go-audit}.json`.
 The source/trainer commit is `439da7bce8e801da94720696fbf16165a3bd099e`.
-This is an experimental checkpoint. Actual native dogfood and public HF weight
-verification remain separate required observations before public weight release.
+Actual feature-source native dogfood is now captured in
+`runs/feedback-trained-native-20261001`: six calls, 108 predictions, 384 candidates,
+6/7 completeness in all six views, and one deduplicated generated Go execution
+with 16 values (nine disjoint inputs). Native process wall times were 10.051–54.775
+ms and child maximum RSS 21,577,728–22,216,704 bytes. The first 54.775 ms observation
+is retained. Go audit verifies all candidates and captured execution without new
+inference. These are one existing compound intention and six policy/language views.
+
+The clean deployed-main compiler has a separate observation in
+`runs/feedback-trained-main-smokes-20261001`, with another six calls, 108 predictions
+and one actual Go execution. Its first native wall observation was 484.862 ms,
+and subsequent observations were 10.782–15.758 ms; none is removed as a warmup.
+Both source editions retain their own frozen timings and audits.
+
+The [model card](model-card-feedback-path-v1.md) describes the bounded use and
+negative comparison. HF public-byte verification is recorded separately from
+all training, evaluation and native executions.
