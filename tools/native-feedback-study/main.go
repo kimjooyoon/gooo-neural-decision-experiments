@@ -440,7 +440,7 @@ func main() {
 		return
 	}
 	if *mode == "native-unfixed-pilot" {
-		if err := runNativeUnfixedPilot(*binary, *goBinary, *output, *revision, *nativeRevision); err != nil {
+		if err := runNativeUnfixedPilot(*binary, *goBinary, *output, *revision, *nativeRevision, *familyCIStatus); err != nil {
 			fmt.Fprintln(os.Stderr, "native-unfixed:", err)
 			os.Exit(1)
 		}

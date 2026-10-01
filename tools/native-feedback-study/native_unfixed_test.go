@@ -4,7 +4,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"path/filepath"
+	"strings"
 	"testing"
+
+	"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/pathplan"
 )
 
 func TestNativeUnfixedFrozenPilotReproducesWithoutInference(t *testing.T) {
@@ -56,6 +59,9 @@ func TestNativeUnfixedInspectorBindsNativeSourceAndPartialOutcome(t *testing.T) 
 	if _, err := inspectNativeUnfixed(v, row, arm, compoundNative, false, 1); err != nil {
 		t.Fatal(err)
 	}
+	if _, err := inspectNativeUnfixedFor(v, row, arm, pathplan.CIHint{SourceSHA: compoundNative, Status: "UNKNOWN"}, false, 1); err == nil {
+		t.Fatal("stored PASS receipt accepted as UNKNOWN")
+	}
 	if v.Report.Paths.Completeness != 87.5 {
 		t.Fatal("contradictory partial completeness must be retained")
 	}
@@ -76,5 +82,14 @@ func TestNativeUnfixedInspectorBindsNativeSourceAndPartialOutcome(t *testing.T) 
 				t.Fatal("mutated native evidence accepted")
 			}
 		})
+	}
+}
+
+func TestNativeUnfixedInvalidCIRejectedBeforeBinaryOrOutput(t *testing.T) {
+	for _, status := range []string{"", "passed"} {
+		err := runNativeUnfixedPilot("missing binary", "missing go", filepath.Join(t.TempDir(), "unwritten"), "runner", compoundNative, status)
+		if err == nil || !strings.Contains(err.Error(), "CI hint requires") {
+			t.Fatal("invalid CI was not rejected before execution", err)
+		}
 	}
 }

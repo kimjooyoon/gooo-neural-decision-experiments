@@ -90,6 +90,13 @@ func verifyUnfixed(c unfixedCapture, r compoundstudy.Case, arm familyArm) (int, 
 }
 
 func verifyUnfixedFor(c unfixedCapture, r compoundstudy.Case, arm familyArm, ciSource string) (int, error) {
+	return verifyUnfixedWithCI(c, r, arm, pathplan.CIHint{SourceSHA: ciSource, Status: "PASS"})
+}
+
+func verifyUnfixedWithCI(c unfixedCapture, r compoundstudy.Case, arm familyArm, ci pathplan.CIHint) (int, error) {
+	if err := ci.Validate(); err != nil {
+		return 0, err
+	}
 	if c.CaseID != r.ID || c.Arm != arm.Name || c.WallNS <= 0 || len(c.Progress) < 2 || len(c.Search.Attempts) < 1 || len(c.Search.Attempts) > 4 {
 		return 0, errors.New("unfixed capture identity/bounds differ")
 	}
@@ -155,7 +162,7 @@ func verifyUnfixedFor(c unfixedCapture, r compoundstudy.Case, arm familyArm, ciS
 		f.SHA = ""
 		raw, _ := json.Marshal(f)
 		from, ok := bySHA[f.FromProgressSHA]
-		if !ok || hash(raw) != sha || f.PreviousSHA != prior || f.Round != i+1 || f.Attempted != from.Attempted || f.Cases != from.Cases || f.Passed != from.SelectedPassed || f.PlanSHA != prepared.PlanSHA256() || f.CaseSHA != from.CaseSHA || f.MetadataSHA != arm.Metadata || f.WeightsSHA != arm.Weights || f.Error != "" || f.ContextDeclined || f.CIIsAuthority || f.CI == nil || *f.CI != (pathplan.CIHint{SourceSHA: ciSource, Status: "PASS"}) {
+		if !ok || hash(raw) != sha || f.PreviousSHA != prior || f.Round != i+1 || f.Attempted != from.Attempted || f.Cases != from.Cases || f.Passed != from.SelectedPassed || f.PlanSHA != prepared.PlanSHA256() || f.CaseSHA != from.CaseSHA || f.MetadataSHA != arm.Metadata || f.WeightsSHA != arm.Weights || f.Error != "" || f.ContextDeclined || f.CIIsAuthority || f.CI == nil || *f.CI != ci {
 			return 0, errors.New("unfixed feedback binding differs")
 		}
 		var first *pathplan.TestResult
@@ -194,7 +201,7 @@ func verifyUnfixedFor(c unfixedCapture, r compoundstudy.Case, arm familyArm, ciS
 			if !reflect.DeepEqual(fixed, f.FixedCoordinates) || !f.Applied || f.RankingUnnecessary || f.ModelCalls != 2-len(fixed) || len(f.Judgments) != f.ModelCalls {
 				return 0, errors.New("unfixed skip/call evidence differs")
 			}
-			prefix := fmt.Sprintf("feedback: tried=%d passed=%d/%d rejected=%d remaining=%d mismatch=%d:%d:%d ci=PASS", f.Attempted, f.Passed, f.Cases, f.TypeRejected, from.Unattempted, first.Input, first.Actual, first.Expected)
+			prefix := fmt.Sprintf("feedback: tried=%d passed=%d/%d rejected=%d remaining=%d mismatch=%d:%d:%d ci=%s", f.Attempted, f.Passed, f.Cases, f.TypeRejected, from.Unattempted, first.Input, first.Actual, first.Expected, ci.Status)
 			j := 0
 			for _, choice := range r.Document.Plan.Decisions {
 				isFixed := false

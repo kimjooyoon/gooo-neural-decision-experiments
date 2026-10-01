@@ -102,3 +102,25 @@ The additional implementation-successor workflow failed with the existing
 It is outside the six required checks. The failed certificate is retained; the
 pilot does not establish all-input implementation-only compatibility or relax
 branch policy. Earlier broad checkpoint regressions remain valid.
+
+## Next main measurement, planned before execution
+
+After normal protected snapshot promotion, rebuild the clean actual main revision
+and repeat the same 48-call pilot. The runner accepts explicit PASS, FAIL or
+UNKNOWN through `--family-ci-status`; a pending post-push run is recorded UNKNOWN,
+with its real source SHA. Source-bound promotion proof and eventual main push CI
+are retained separately; the hint never authorizes generation or merge. The
+offline audit checks the recorded hint and exact feedback prefix, and cannot
+silently relabel PASS as UNKNOWN. Invalid hints fail before binary/output access.
+No model, corpus or first-shot acceptance threshold changes are planned. Paired
+candidate/body differences, if any, are retained. Feature and main views are
+repeated deployment observations rather than additional independent experiments.
+
+The [observed CI costs](../publication/unfixed-native-feature-ci-observed-costs-20261001.json)
+use GitHub job timestamps. Native feature CI queued 86 seconds before its first
+job; all job spans lasted 849 seconds, while the six canonical checks spanned
+707 seconds. Their summed job durations were 1,451 seconds because jobs overlap;
+that sum is not workflow elapsed time or measured CPU/billing. Runner-source CI
+spanned 292 seconds. These full-repository checks have a different workload from
+local candidate construction. Local finite feedback therefore stays in the
+bounded codegen loop, with source CI evidence used as additional context.

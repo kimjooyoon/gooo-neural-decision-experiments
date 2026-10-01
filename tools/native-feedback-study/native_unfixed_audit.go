@@ -10,6 +10,7 @@ import (
 	"sort"
 
 	"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/compoundstudy"
+	"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/pathplan"
 )
 
 func nativeUnfixedRows() ([]compoundstudy.Case, error) {
@@ -57,8 +58,12 @@ func auditNativeUnfixed(dir, revision, native string) (map[string]any, error) {
 	if err != nil || json.Unmarshal(pre, &binding) != nil || binding.Schema != "gooo/native-unfixed-preexecution/v1" ||
 		binding.Runner != revision || binding.Native != native || !sha64.MatchString(binding.Binary) ||
 		!sha64.MatchString(binding.GoBinary) || binding.Go != "1.27.1" || binding.SDK != "v0.2.7-experimental" ||
-		binding.Calls != 48 || binding.Views != 6 || binding.Authority || binding.Hint.Source != native || binding.Hint.Status != "PASS" {
+		binding.Calls != 48 || binding.Views != 6 || binding.Authority || binding.Hint.Source != native {
 		return nil, errors.New("native unfixed preexecution differs")
+	}
+	ci := pathplan.CIHint{SourceSHA: binding.Hint.Source, Status: binding.Hint.Status}
+	if err := ci.Validate(); err != nil {
+		return nil, err
 	}
 	rows, err := nativeUnfixedRows()
 	if err != nil {
@@ -109,7 +114,7 @@ func auditNativeUnfixed(dir, revision, native string) (map[string]any, error) {
 					return nil, errors.New("native resource observation invalid")
 				}
 				files[metricPath] = hash(metricRaw)
-				skipped, err := inspectNativeUnfixed(value, row, arm, native, unfixed, m.Wall)
+				skipped, err := inspectNativeUnfixedFor(value, row, arm, ci, unfixed, m.Wall)
 				if err != nil {
 					return nil, fmt.Errorf("%s: %w", id, err)
 				}

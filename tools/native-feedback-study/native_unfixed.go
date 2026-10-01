@@ -16,10 +16,14 @@ import (
 
 func inspectNativeUnfixed(v nativeResult, row compoundstudy.Case, arm familyArm, source string,
 	unfixed bool, wall int64) (int, error) {
+	return inspectNativeUnfixedFor(v, row, arm, pathplan.CIHint{SourceSHA: source, Status: "PASS"}, unfixed, wall)
+}
+
+func inspectNativeUnfixedFor(v nativeResult, row compoundstudy.Case, arm familyArm, ci pathplan.CIHint, unfixed bool, wall int64) (int, error) {
 	p := v.Report.Paths
 	document, _ := json.Marshal(row.Document)
 	cases, _ := json.Marshal(row.Document.Cases)
-	if v.Report.Decision != "PASS" || v.Report.Compiler != source || !v.Report.Types || !v.Report.Replay ||
+	if v.Report.Decision != "PASS" || v.Report.Compiler != ci.SourceSHA || !v.Report.Types || !v.Report.Replay ||
 		v.Report.Writes != 0 || v.Report.ActivityID != "compound-study://activity/compose-paths" ||
 		!p.Bound || p.Unfixed != unfixed || p.OriginalSHA != "sha256:"+hash([]byte(row.Source)) ||
 		p.DocumentSHA != "sha256:"+hash(document) || p.SuiteSHA != "sha256:"+hash(cases) || len(p.Cases) != len(row.Document.Cases) {
@@ -42,7 +46,7 @@ func inspectNativeUnfixed(v nativeResult, row compoundstudy.Case, arm familyArm,
 	// function AST. This adapts the trace verifier, not the captured native bytes.
 	capture := unfixedCapture{CaseID: row.ID, Arm: arm.Name, Unfixed: unfixed, Progress: p.Progress,
 		Feedback: p.Feedback, Search: p.Search, Source: body.GoSource(), WallNS: wall}
-	skipped, err := verifyUnfixedFor(capture, row, arm, source)
+	skipped, err := verifyUnfixedWithCI(capture, row, arm, ci)
 	if err != nil {
 		return 0, err
 	}
@@ -67,9 +71,13 @@ func inspectNativeUnfixed(v nativeResult, row compoundstudy.Case, arm familyArm,
 	return skipped, nil
 }
 
-func runNativeUnfixedPilot(binary, goBinary, output, revision, native string) error {
+func runNativeUnfixedPilot(binary, goBinary, output, revision, native, ciStatus string) error {
+	ci := pathplan.CIHint{SourceSHA: native, Status: ciStatus}
+	if err := ci.Validate(); err != nil {
+		return err
+	}
 	_, arms, err := familyPreflightFor(binary, goBinary, output, revision,
-		familySpec{Revision: native, SDK: "v0.2.7-experimental", CIStatus: "PASS"})
+		familySpec{Revision: native, SDK: "v0.2.7-experimental", CIStatus: ciStatus})
 	if err != nil {
 		return err
 	}
@@ -94,7 +102,7 @@ func runNativeUnfixedPilot(binary, goBinary, output, revision, native string) er
 	if err = save(filepath.Join(output, "preexecution.json"), map[string]any{"schema": "gooo/native-unfixed-preexecution/v1",
 		"runner_revision": revision, "native_revision": native, "native_binary_sha256": binarySHA, "go_binary_sha256": goSHA,
 		"go": "1.27.1", "sdk": "v0.2.7-experimental", "planned_native_calls": 48, "views": 6,
-		"caller_ci_hint": pathplan.CIHint{SourceSHA: native, Status: "PASS"}, "caller_ci_hint_is_authority": false,
+		"caller_ci_hint": ci, "caller_ci_hint_is_authority": false,
 		"scope": "Three reused compound templates, one numeric configuration, mask-zero intentions, contradictory eight-case contracts, two languages, four own frozen models and paired legacy/opt-in mode. Source CI verification is recorded separately; this unauthenticated caller hint is not authority."}); err != nil {
 		return err
 	}
@@ -103,7 +111,7 @@ func runNativeUnfixedPilot(binary, goBinary, output, revision, native string) er
 		return err
 	}
 	defer os.RemoveAll(dir)
-	if err = save(filepath.Join(dir, "hint.json"), pathplan.CIHint{SourceSHA: native, Status: "PASS"}); err != nil {
+	if err = save(filepath.Join(dir, "hint.json"), ci); err != nil {
 		return err
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
@@ -147,7 +155,7 @@ func runNativeUnfixedPilot(binary, goBinary, output, revision, native string) er
 				if json.Unmarshal(raw, &value) != nil {
 					return errors.New("native unfixed capture decode failed")
 				}
-				_, err := inspectNativeUnfixed(value, row, arm, native, unfixed, m.Wall)
+				_, err := inspectNativeUnfixedFor(value, row, arm, ci, unfixed, m.Wall)
 				if err != nil {
 					return fmt.Errorf("%s: %w", id, err)
 				}
