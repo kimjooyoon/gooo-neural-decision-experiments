@@ -44,6 +44,11 @@ type nativeResult struct {
 		Replay     bool   `json:"deterministic_replay"`
 		Writes     int    `json:"repository_writes"`
 		Paths      struct {
+			Context *ownContextReceipt `json:"model_context,omitempty"`
+			Binding struct {
+				Source     string `json:"source_semantic_digest"`
+				Equivalent bool   `json:"equivalent"`
+			} `json:"source_binding"`
 			Diagnosis       *pathplan.Diagnosis        `json:"diagnosis,omitempty"`
 			DiagnosisBudget int                        `json:"diagnosis_budget,omitempty"`
 			DiagnosisSHA    string                     `json:"diagnosis_options_sha256,omitempty"`
@@ -61,6 +66,7 @@ type nativeResult struct {
 			} `json:"native_case_results"`
 			Completeness float64 `json:"finite_functional_completeness_percent"`
 			Timing       struct {
+				Context   float64 `json:"context_prepare_ms"`
 				Diagnosis float64 `json:"diagnosis_ms"`
 				Total     float64 `json:"total_ms"`
 				Search    float64 `json:"bounded_search_ms"`
@@ -433,6 +439,23 @@ func main() {
 	worker := flag.String("worker", "", "optional retained native body worker executable")
 	familyCIStatus := flag.String("family-ci-status", "PASS", "caller family-study CI context: PASS, FAIL or UNKNOWN")
 	flag.Parse()
+	if *mode == "own-native-context" || *mode == "own-native-context-audit" {
+		var err error
+		if *mode == "own-native-context" {
+			err = runOwnNativeContext(*binary, *goBinary, *output, *revision, *nativeRevision)
+		} else {
+			var value map[string]any
+			value, err = auditOwnNativeContext(*output, *revision, *nativeRevision)
+			if err == nil {
+				err = save(*auditOutput, value)
+			}
+		}
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "own-native-context:", err)
+			os.Exit(1)
+		}
+		return
+	}
 	if *mode == "bilingual-smoke" {
 		if err := runBilingualSmoke(*binary, *goBinary, *output, *revision, *nativeRevision); err != nil {
 			fmt.Fprintln(os.Stderr, "bilingual-smoke:", err)

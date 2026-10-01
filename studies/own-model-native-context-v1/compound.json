@@ -1,0 +1,61 @@
+{
+  "schema": "gooo/body-codegen-typed-path-plan/v1",
+  "path_plan": {
+    "schema": "gooo/typed-body-path-plan/v1",
+    "base": {
+      "schema": "gooo/typed-body-plan/v1",
+      "id": "compound-reference-branch-order",
+      "name": "Combined",
+      "result_type": "Int",
+      "expressions": [
+        {"kind":"input","name":"input"},
+        {"kind":"int","int":2},
+        {"kind":"binary","operation":"add","left":0,"right":1},
+        {"kind":"binary","operation":"multiply","left":0,"right":1},
+        {"kind":"local","name":"first"},
+        {"kind":"local","name":"chosen"},
+        {"kind":"local","name":"first"},
+        {"kind":"local","name":"second"},
+        {"kind":"binary","operation":"add","left":6,"right":7},
+        {"kind":"binary","operation":"add","left":5,"right":8},
+        {"kind":"int","int":0},
+        {"kind":"binary","operation":"less_than","left":0,"right":10},
+        {"kind":"int","int":3},
+        {"kind":"binary","operation":"add","left":5,"right":12},
+        {"kind":"binary","operation":"subtract","left":5,"right":12}
+      ],
+      "statements": [
+        {"kind":"let","name":"first","expr":2},
+        {"kind":"let","name":"second","expr":3},
+        {"kind":"let","name":"chosen","expr":4},
+        {"kind":"assign","name":"chosen","expr":13},
+        {"kind":"assign","name":"chosen","expr":14},
+        {"kind":"if","expr":11,"then":[3],"else":[4]},
+        {"kind":"return","expr":9}
+      ],
+      "root":[0,1,2,5,6]
+    },
+    "decisions": [
+      {
+        "id":"reference","kind":"local_reference","target":4,
+        "intent":"Gooo typed local reference. intent: 두 번째 지역 변수를 선택해라.",
+        "fallback":"reference_first",
+        "options":[{"label":"reference_first","name":"first"},{"label":"reference_second","name":"second"}]
+      },
+      {
+        "id":"branch","kind":"branch_layout","target":5,
+        "intent":"Gooo Boolean condition and assignment bodies. intent: Swap the then and else bodies.",
+        "fallback":"layout_forward",
+        "options":[{"label":"layout_forward","reverse":false},{"label":"layout_reverse","reverse":true}]
+      },
+      {
+        "id":"order","kind":"root_order","target":0,
+        "intent":"Gooo declaration dependencies. intent: 선언 순서를 그대로 유지해라.",
+        "fallback":"schedule_forward",
+        "options":[{"label":"schedule_forward","order":[0,1,2,5,6]},{"label":"schedule_reverse","order":[0,2,1,5,6]}]
+      }
+    ]
+  },
+  "test_cases":[{"input":-3,"expected":-16},{"input":0,"expected":5},{"input":3,"expected":20}],
+  "max_attempts":8
+}
