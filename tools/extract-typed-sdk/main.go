@@ -36,6 +36,8 @@ func inventory() map[string]string {
 		"pathplan/pathplan.go": "internal/pathplan/pathplan.go", "pathplan/search.go": "internal/pathplan/search.go", "pathplan/pathplan_test.go": "internal/pathplan/pathplan_test.go", "pathplan/search_test.go": "internal/pathplan/search_test.go",
 		"pathplan/prepared.go": "internal/pathplan/prepared.go", "pathplan/prepared_test.go": "internal/pathplan/prepared_test.go",
 		"pathplan/session.go": "internal/pathplan/session.go", "pathplan/session_test.go": "internal/pathplan/session_test.go",
+		"pathplan/feedback.go": "internal/pathplan/feedback.go", "pathplan/feedback_test.go": "internal/pathplan/feedback_test.go",
+		"pathplan/feedback_batches.go": "internal/pathplan/feedback_batches.go", "pathplan/feedback_batches_test.go": "internal/pathplan/feedback_batches_test.go",
 		"internal/strictjson/decode.go": "internal/strictjson/decode.go", "internal/strictjson/decode_test.go": "internal/strictjson/decode_test.go",
 	}
 }

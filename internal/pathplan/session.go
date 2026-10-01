@@ -185,6 +185,10 @@ func (prepared *PreparedPlan) NewSession(ctx context.Context, model *decision.Mo
 // execution. It is also available after a failed initialization so calls made
 // before cancellation or a numerical prediction error remain accountable.
 func (session *Session) Observe() (SessionProgress, error) {
+	return session.observe(false)
+}
+
+func (session *Session) observe(interrupted bool) (SessionProgress, error) {
 	if session == nil {
 		return SessionProgress{}, errors.New("path session is required")
 	}
@@ -192,7 +196,7 @@ func (session *Session) Observe() (SessionProgress, error) {
 		return SessionProgress{}, ErrSessionBusy
 	}
 	defer session.lock.Unlock()
-	return session.progress(nil, session.initialError != nil)
+	return session.progress(nil, interrupted || session.initialError != nil)
 }
 func (session *Session) score(mask uint16) float64 {
 	if !session.ranked {
