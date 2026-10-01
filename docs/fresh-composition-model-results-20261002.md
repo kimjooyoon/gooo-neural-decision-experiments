@@ -53,8 +53,8 @@ Relative to v2 FP32, v3 FP32 reduces extra attempts by 24.2%; selected v3 QAT by
 All arms finish their finite contract by four candidates. The model changes
 priority and cost; complete enumeration is not evidence of general language
 understanding. Initial bilingual disagreement remains high, including 138/192
-calibration pairs for selected v3 QAT. Agreement and functional completeness
-have separate denominators.
+calibration pairs and 166/192 development pairs for selected v3 QAT. Agreement
+and functional completeness have separate denominators.
 
 Across calibration/development, parity and warm/allocation probes, the Go study
 makes 29,106 actual predictions. Of those, 12,012 are explicit performance probes
@@ -90,7 +90,9 @@ biases/scales. This is not whole-process 1.58-bit RAM.
 The first native aggregator did not populate bilingual pair fields and emitted
 zeros there. Raw captures are preserved. The independent audit reconstructs 24
 language pairs per policy, appends corrected statistics and validates every
-source/input/model/hash chain and captured Go value. Future aggregation is fixed.
+source/input/model/hash chain and captured Go value. Initial language masks
+disagree in 18/24 selected pairs versus 14/24 reference pairs. Future aggregation
+is fixed.
 Cancellation kills child process groups; regression tests cover held pipes and
 atomic output overflow. No deadlock was observed in this bounded run.
 
@@ -109,5 +111,12 @@ Existing test observations must not silently become untouched evaluation data.
 
 [Public weights and trainer](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/models/fresh-composition-v1)
 and [Go measurement source](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/tools/fresh-composition-study)
-are available. A standalone Hugging Face edition contains all six variants,
-their negative comparisons, raw synthetic evidence and digest verification.
+are available. The
+[standalone Hugging Face edition](https://huggingface.co/asketeddy/gooo-semantic-composition-tiny-v1/tree/1102d2c1c157cd72054cc9fd16f81a61043cc660)
+contains all six variants, their negative comparisons, six PROV-O derivations
+and 327 raw/source archive members. Anonymous immutable verification passes
+for all 35 payloads plus the manifest. The archive compresses 132,429,624 bytes
+to 9,682,825 bytes. [Publication-source CI](https://github.com/kimjooyoon/gooo-neural-decision-experiments/actions/runs/36924760889)
+passes all eight jobs; the [finalization receipt](../publication/semantic-composition-iteration-finalization-20261002.json)
+and [growth roadmap](own-small-model-growth-roadmap-20261002.md) retain exact
+pins and the scope of further studies.

@@ -9,6 +9,12 @@ Source v3 FP32 reduces development continuation attempts 524→397; the frozen
 calibration-selected v3 QAT needs 470. All negative comparisons remain recorded.
 Warm selected inference is about 9.7 microseconds, with zero per-call heap
 allocation. Published ternary disk packing decodes to int8 runtime matrices.
+The [standalone own-model edition](https://huggingface.co/asketeddy/gooo-semantic-composition-tiny-v1/tree/1102d2c1c157cd72054cc9fd16f81a61043cc660)
+publishes all six variants, PROV-O model derivations and 327 archived evidence
+members. [Anonymous byte verification](publication/semantic-composition-tiny-public-verification-20261002.json)
+passes for 35 payloads plus the manifest; all eight publication-source CI jobs
+pass. The [growth roadmap](docs/own-small-model-growth-roadmap-20261002.md)
+prioritizes new frozen source, joint-path and Korean/English judgment studies.
 
 The [source ABI and fresh curriculum preparation](docs/semantic-source-v3-preparation-results-20261002.md)
 connects our optional small model directly to typed Gooo source in protected
