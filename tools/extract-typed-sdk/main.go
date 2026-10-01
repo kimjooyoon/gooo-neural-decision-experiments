@@ -30,6 +30,9 @@ type entry struct {
 func hash(raw []byte) string { sum := sha256.Sum256(raw); return hex.EncodeToString(sum[:]) }
 func inventory() map[string]string {
 	return map[string]string{
+		"jointdecision/input.go": "internal/jointdecision/input.go", "jointdecision/model.go": "internal/jointdecision/model.go", "jointdecision/load.go": "internal/jointdecision/load.go",
+		"jointdecision/input_test.go": "internal/jointdecision/input_test.go", "jointdecision/model_test.go": "internal/jointdecision/model_test.go",
+		"pathplan/joint.go": "internal/pathplan/joint.go", "pathplan/joint_feedback.go": "internal/pathplan/joint_feedback.go", "pathplan/joint_batches.go": "internal/pathplan/joint_batches.go", "pathplan/joint_test.go": "internal/pathplan/joint_test.go",
 		"model.go": "internal/decision/model.go", "bridge.go": "internal/decision/bridge.go", "ir.go": "internal/decision/ir.go", "LICENSE": "LICENSE",
 		"model_test.go": "internal/decision/model_test.go", "ir_test.go": "internal/decision/ir_test.go", "path_model_test.go": "internal/decision/path_model_test.go", "path_features_test.go": "internal/decision/path_features_test.go",
 		"split_features.go": "internal/decision/split_features.go", "split_features_test.go": "internal/decision/split_features_test.go",
@@ -54,7 +57,7 @@ func run(output string) error {
 	if err != nil {
 		return err
 	}
-	paths := []string{"diff", "--quiet", "HEAD", "--", "internal/decision", "internal/bodyplan", "internal/pathplan", "internal/strictjson", "studies/split-context-features-v2", "LICENSE"}
+	paths := []string{"diff", "--quiet", "HEAD", "--", "internal/decision", "internal/jointdecision", "internal/bodyplan", "internal/pathplan", "internal/strictjson", "studies/split-context-features-v2", "LICENSE"}
 	if err := exec.Command("git", paths...).Run(); err != nil {
 		return errors.New("origin source must be committed before extraction")
 	}
@@ -71,10 +74,11 @@ func run(output string) error {
 		}
 		transformed := string(raw)
 		for old, newName := range map[string]string{
-			"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/decision":   "github.com/kimjooyoon/gooo-decision-runtime",
-			"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/bodyplan":   "github.com/kimjooyoon/gooo-decision-runtime/bodyplan",
-			"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/pathplan":   "github.com/kimjooyoon/gooo-decision-runtime/pathplan",
-			"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/strictjson": "github.com/kimjooyoon/gooo-decision-runtime/internal/strictjson",
+			"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/jointdecision": "github.com/kimjooyoon/gooo-decision-runtime/jointdecision",
+			"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/decision":      "github.com/kimjooyoon/gooo-decision-runtime",
+			"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/bodyplan":      "github.com/kimjooyoon/gooo-decision-runtime/bodyplan",
+			"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/pathplan":      "github.com/kimjooyoon/gooo-decision-runtime/pathplan",
+			"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/strictjson":    "github.com/kimjooyoon/gooo-decision-runtime/internal/strictjson",
 		} {
 			transformed = strings.ReplaceAll(transformed, old, newName)
 		}

@@ -237,12 +237,19 @@ func main() {
 	models := flag.String("models", "", "six own model exports")
 	output := flag.String("output", "", "fresh study output")
 	revision := flag.String("source-revision", "", "exact clean runner source")
+	study := flag.String("audit-study", "", "existing frozen SDK captures; zero new model calls")
 	flag.Parse()
-	if flag.NArg() != 0 || *curriculum == "" || *models == "" || *output == "" || *revision == "" {
+	if flag.NArg() != 0 || *curriculum == "" || *models == "" || *output == "" || (*revision == "" && *study == "") {
 		fmt.Fprintln(os.Stderr, "complete study arguments required")
 		os.Exit(2)
 	}
-	if err := run(*curriculum, *models, *output, *revision); err != nil {
+	var err error
+	if *study != "" {
+		err = auditSDK(*curriculum, *models, *study, *output)
+	} else {
+		err = run(*curriculum, *models, *output, *revision)
+	}
+	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
