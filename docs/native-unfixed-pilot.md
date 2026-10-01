@@ -173,3 +173,26 @@ SDK (seven) and feature (seven) appendices were reverified at the same revision:
 The [main source/publication receipt](../publication/unfixed-native-main-source-publication-20261001.json)
 binds exact promotion proof and immutable bytes. Subsequent main push CI and
 evidence-source CI are recorded separately without changing the raw hint/captures.
+
+## Final source verification
+
+All six required checks passed for actual main `6f69eb116336b4728db6f94a992130ea56003a48`
+in [post-push CI 36828207770 attempt 1](https://github.com/kimjooyoon/meta-ontology-go/actions/runs/36828207770).
+The downloaded GoProof and append-only receipt independently passed verification,
+including exact push/head/base/ref/run/attempt and all six successful source jobs.
+Proof SHA256 is `8ffaaa104416276eeb34581e11117fffcae393fa94141154180dfac2814b3286`;
+receipt SHA256 is `33ea47d671b774c297e4bdf95cdc9c798bf05f19f93c64dcc6d739d3df856ac4`.
+The original captured UNKNOWN remains unchanged.
+
+Complete main evidence, strict frozen replay, raw values, model/process descriptive
+metrics and compressed publication passed all four jobs at source
+`019e89a1c6121489c64ec6e87dc2bff741047f08` in
+[research CI 36828837293](https://github.com/kimjooyoon/gooo-neural-decision-experiments/actions/runs/36828837293).
+Complete feature evidence passed all four jobs at
+`37d9129852bb75f583660b67887215d46839699d` in
+[CI 36827097109](https://github.com/kimjooyoon/gooo-neural-decision-experiments/actions/runs/36827097109).
+Final metadata adds these verification outcomes, explicit HTTP-fetch count scope
+(automatic redirects not instrumented), and a
+[next construction-cost plan](native-construction-cost-next.md). It changes no
+code, model/corpus or captures. The proposed retained-model native worker is not
+implemented and has no measured speedup claim.
