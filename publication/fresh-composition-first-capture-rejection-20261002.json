@@ -1,0 +1,21 @@
+{
+  "schema": "gooo/fresh-composition-capture-rejection/v1",
+  "status": "FAILED_POST_COLLECTION_BYTE_AUDIT",
+  "collection_source_revision": "8f1a1f3e9f09464b608c11b377722fa4d0a43607",
+  "native_main_revision": "f4813dc6251037767c8cff7295ccfdab2b044ff2",
+  "retained_native_export_calls": 4608,
+  "retained_decision_rows": 9216,
+  "dataset_sha256": "9cf18db36abded320e28d64c3bfd5c865cb5085089f8e69adc428a78d45c3e31",
+  "captures_sha256": "585d8f1cd7a3e673161986a9bd569b99c8a5f9c8a382b7c5464174e22ab339f6",
+  "cause": "json.RawMessage embedded native responses lost the final encoder newline while rows pinned the complete original native response bytes",
+  "first_row_original_capture_sha256": "32400f00f0ba18450151cda6c1fdff550a45143c67af595899f3c813cf05d5bc",
+  "first_stored_compacted_capture_sha256": "5edb17c939fa29ba8357d0af3553f99692c524a85e12f4523ddebcaf88524163",
+  "restoring_the_final_newline_matches_original_first_row_sha256": true,
+  "resolution": "a new versioned capture envelope stores original native bytes as a JSON base64 byte value; round-trip tests require exact original-byte hashes",
+  "cohort_goals_templates_parameters_feature_rules_changed": false,
+  "optimizer_updates": 0,
+  "model_predictions": 0,
+  "candidate_tests": 0,
+  "used_for_training": false,
+  "scope": "original failed attempt retained; exact full fixed cohort will be recollected, without dropping or relabeling rows"
+}

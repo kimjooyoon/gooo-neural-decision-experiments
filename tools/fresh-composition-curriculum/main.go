@@ -129,11 +129,15 @@ func inspect(raw []byte, doc document, source []byte, feature string) (export, e
 	if err != nil {
 		return value, err
 	}
+	caseRaw, err := json.Marshal(doc.Cases)
+	if err != nil {
+		return value, err
+	}
 	schema, contextSchema := "gooo/compiler-path-input-export/v1", "gooo/compiler-typed-path-context/v2"
 	if feature == decision.SemanticContextIntentFeatureVersion {
 		schema, contextSchema = "gooo/compiler-path-input-export/v2", "gooo/compiler-typed-path-context/v3"
 	}
-	if value.Schema != schema || value.Source != "sha256:"+hash(source) || value.Document != "sha256:"+hash(docRaw) || value.TestsSHA == "" || !value.Binding.Equivalent || value.Binding.Semantic == "" || value.Context.Semantic != value.Binding.Semantic || value.Context.Schema != contextSchema || value.Context.Status != "ENCODED" || value.Context.Feature != feature || value.Context.Original != prepared.PlanSHA256() || value.Context.Metadata != "" || len(value.Inputs) != 2 || len(value.Context.Inputs) != 2 || value.Predictions != 0 || value.Tests != 0 || value.Emission || value.Writes != 0 {
+	if value.Schema != schema || value.Source != "sha256:"+hash(source) || value.Document != "sha256:"+hash(docRaw) || value.TestsSHA != "sha256:"+hash(caseRaw) || !value.Binding.Equivalent || value.Binding.Semantic == "" || value.Context.Semantic != value.Binding.Semantic || value.Context.Schema != contextSchema || value.Context.Status != "ENCODED" || value.Context.Feature != feature || value.Context.Original != prepared.PlanSHA256() || value.Context.Metadata != "" || len(value.Inputs) != 2 || len(value.Context.Inputs) != 2 || value.Predictions != 0 || value.Tests != 0 || value.Emission || value.Writes != 0 {
 		return value, errors.New("native source-bound zero-prediction export contract differs")
 	}
 	for i, in := range value.Inputs {
@@ -314,7 +318,7 @@ func collect(binary, evidencePath, output, revision string) (resultErr error) {
 						if !json.Valid(raw) || privatePattern.Match(raw) {
 							return errors.New("native export did not provide public bounded JSON")
 						}
-						if err = captures.Encode(map[string]any{"id": id, "native_receipt": json.RawMessage(raw), "wall_ns": wall, "child_succeeded": runErr == nil}); err != nil {
+						if err = captures.Encode(map[string]any{"schema": "gooo/fresh-composition-native-capture/v2", "id": id, "native_receipt": raw, "wall_ns": wall, "child_succeeded": runErr == nil}); err != nil {
 							return err
 						}
 						if runErr != nil {
@@ -351,15 +355,15 @@ func collect(binary, evidencePath, output, revision string) (resultErr error) {
 	if err = captureFile.Close(); err != nil {
 		return err
 	}
-	dataset, err := os.ReadFile(filepath.Join(output, "dataset.jsonl"))
+	datasetSHA, datasetBytes, err := fileDigest(filepath.Join(output, "dataset.jsonl"))
 	if err != nil {
 		return err
 	}
-	raw, err := os.ReadFile(filepath.Join(output, "exports.jsonl"))
+	captureSHA, captureBytes, err := fileDigest(filepath.Join(output, "exports.jsonl"))
 	if err != nil {
 		return err
 	}
-	return save(filepath.Join(output, "manifest.json"), map[string]any{"schema": "gooo/fresh-composition-curriculum/v1", "status": "SOURCE_BOUND_EXPORTED", "runner_revision": revision, "native_main_revision": native, "native_binary_sha256": binarySHA, "sdk": "v0.2.11-experimental", "protocol_revision": protocolRevision, "protocol_sha256": hash(protocolRaw), "dataset_sha256": hash(dataset), "captures_sha256": hash(raw), "dataset_bytes": len(dataset), "capture_bytes": len(raw), "program_contract_groups": 1152, "bilingual_function_views": 2304, "native_export_calls": calls, "decision_rows": count, "decision_views_per_arm": 4608, "bilingual_decision_pairs_per_arm": 2304, "split_decision_rows": splits, "model_predictions": 0, "candidate_tests": 0, "selected_emissions": 0, "new_optimizer_updates": 0, "scope": "six compositions and four goals with parameter/language variants; independent full finite targets retain ties; no learned-quality or independent-intention claim"})
+	return save(filepath.Join(output, "manifest.json"), map[string]any{"schema": "gooo/fresh-composition-curriculum/v1", "status": "SOURCE_BOUND_EXPORTED", "runner_revision": revision, "native_main_revision": native, "native_binary_sha256": binarySHA, "sdk": "v0.2.11-experimental", "protocol_revision": protocolRevision, "protocol_sha256": hash(protocolRaw), "dataset_sha256": datasetSHA, "captures_sha256": captureSHA, "dataset_bytes": datasetBytes, "capture_bytes": captureBytes, "program_contract_groups": 1152, "bilingual_function_views": 2304, "native_export_calls": calls, "decision_rows": count, "decision_views_per_arm": 4608, "bilingual_decision_pairs_per_arm": 2304, "split_decision_rows": splits, "model_predictions": 0, "candidate_tests": 0, "selected_emissions": 0, "new_optimizer_updates": 0, "scope": "six compositions and four goals with parameter/language variants; independent full finite targets retain ties; no learned-quality or independent-intention claim"})
 }
 
 func main() {
@@ -367,7 +371,21 @@ func main() {
 	evidence := flag.String("native-evidence", "", "public verified native main evidence")
 	output := flag.String("output", "", "fresh collection directory")
 	revision := flag.String("runner-revision", "", "clean committed runner source")
+	audit := flag.String("audit", "", "existing fixed collection directory; zero new native calls")
+	report := flag.String("audit-report", "", "audit report output")
 	flag.Parse()
+	if *audit != "" {
+		if *report == "" || flag.NArg() != 0 || *binary != "" || *evidence != "" || *output != "" || *revision != "" {
+			fmt.Fprintln(os.Stderr, "audit requires only audit and audit-report")
+			os.Exit(2)
+		}
+		if err := auditCollection(*audit, *report); err != nil {
+			fmt.Fprintln(os.Stderr, "fresh-composition audit:", err)
+			os.Exit(1)
+		}
+		fmt.Println(`{"status":"AUDITED","native_captures":4608,"new_predictions":0}`)
+		return
+	}
 	if flag.NArg() != 0 || *binary == "" || *evidence == "" || *output == "" || *revision == "" {
 		fmt.Fprintln(os.Stderr, "binary, native-evidence, output and runner-revision required")
 		os.Exit(2)

@@ -43,3 +43,18 @@ finite target ties and complete natural suffixes are checked before rows enter
 the collection. Each child has a 15-second deadline and bounded output. A failed
 collection retains its actual attempted-call/row counts and cannot be used for
 training. This tool is preparation until its fixed collection is actually run.
+
+The first full 4608-call collection used embedded `json.RawMessage` responses,
+which omitted the native encoder's final newline. The row hashes pinned complete
+original response bytes, so a subsequent byte audit rejected this collection.
+Its hashes/counters remain in `publication/fresh-composition-first-capture-rejection-20261002.json`.
+No weights were trained and no rows/goals/templates were changed. Capture v2
+stores the original byte slice as a base64 JSON value with exact round-trip
+tests. A complete recollection is required; reconstructing an omitted newline
+for diagnosis does not relabel the old capture as original-byte evidence.
+
+The streaming audit reconstructs all independent finite targets and compares
+every source/document/test/input/native-byte hash. It also reports byte-identical
+model inputs with conflicting finite marginals, retaining those representation
+limits in the study. Collection and audit digests stream through a fixed 32 KiB
+buffer, so complete evidence files are not loaded into memory for hashing.
