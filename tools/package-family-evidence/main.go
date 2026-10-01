@@ -29,11 +29,13 @@ const maxTotal = 40 << 20
 
 var privacy = regexp.MustCompile(`(?:hf_|ghp_|github_pat_|sk-)[A-Za-z0-9_-]{20,}|/Users/|/private/var/|Bearer\s+[A-Za-z0-9]`)
 var fixed = map[string]string{
-	"studies/feedback-family-v1/cohort.jsonl":          "0e9d5c2cb9a816ca4d05c2e6e2d94ceccb9a0d02912edd4cc1063c0adb648a70",
-	"runs/feedback-family-pilot-20261001/report.json":  "58090950d759d47d7c0c42ca9e6edd1929c50864cceb5a4b9f37fbc33c00da00",
-	"runs/feedback-family-pilot-20261001/audit.json":   "92884e427b9499b643f7a588e8eb39a7425f6d2d079edfbe3691fdf45e2103a8",
-	"runs/feedback-family-matrix-20261001/report.json": "9c00cf48dae46bdc793b39c5ae94f15c825194d33eabe2bcf3002161aba87c2d",
-	"runs/feedback-family-matrix-20261001/audit.json":  "c732643f2312543a3bc669f878bef0d63ed8c9d671d6225db20d4b073512d0b2",
+	"studies/feedback-family-v1/cohort.jsonl":                     "0e9d5c2cb9a816ca4d05c2e6e2d94ceccb9a0d02912edd4cc1063c0adb648a70",
+	"runs/feedback-family-pilot-20261001/report.json":             "58090950d759d47d7c0c42ca9e6edd1929c50864cceb5a4b9f37fbc33c00da00",
+	"runs/feedback-family-pilot-20261001/audit.json":              "92884e427b9499b643f7a588e8eb39a7425f6d2d079edfbe3691fdf45e2103a8",
+	"runs/feedback-family-matrix-20261001/report.json":            "9c00cf48dae46bdc793b39c5ae94f15c825194d33eabe2bcf3002161aba87c2d",
+	"runs/feedback-family-matrix-20261001/audit.json":             "c732643f2312543a3bc669f878bef0d63ed8c9d671d6225db20d4b073512d0b2",
+	"runs/feedback-family-optimized-feature-20261001/report.json": "0346231d22f540a844fc9296b408a64c59bb33d538223603c10f65a281c63d62",
+	"runs/feedback-family-optimized-feature-20261001/audit.json":  "8fcbc56ad12c812755d6925082a72baeab739c0e006d12fdfb27a56ac86adc47",
 }
 
 type entry struct {
@@ -66,10 +68,21 @@ func read(path string) ([]byte, error) {
 	return raw, nil
 }
 func names() ([]string, error) {
+	return namesKind("")
+}
+func namesKind(kind string) ([]string, error) {
 	names := []string{"studies/feedback-family-v1/cohort.jsonl", "studies/feedback-family-v1/manifest.json"}
 	idRE := regexp.MustCompile(`^[a-z0-9_-]+$`)
 	shaRE := regexp.MustCompile(`^[a-f0-9]{64}$`)
-	for _, root := range []string{"runs/feedback-family-pilot-20261001", "runs/feedback-family-matrix-20261001"} {
+	roots := []string{"runs/feedback-family-pilot-20261001", "runs/feedback-family-matrix-20261001"}
+	expected := 1128
+	if kind == "optimized-feature" {
+		roots = []string{"runs/feedback-family-optimized-feature-20261001"}
+		expected = 1105
+	} else if kind != "" {
+		return nil, errors.New("unknown frozen evidence kind")
+	}
+	for _, root := range roots {
 		for _, name := range []string{"report.json", "preexecution.json", "audit.json"} {
 			names = append(names, root+"/"+name)
 		}
@@ -114,7 +127,7 @@ func names() ([]string, error) {
 		}
 	}
 	sort.Strings(names)
-	if len(names) != 1128 {
+	if len(names) != expected {
 		return nil, errors.New("fixed raw inventory count differs")
 	}
 	for i, name := range names {
@@ -125,9 +138,16 @@ func names() ([]string, error) {
 	return names, nil
 }
 func build() (manifest, map[string][]byte, error) {
+	return buildKind("")
+}
+func buildKind(kind string) (manifest, map[string][]byte, error) {
 	m := manifest{Schema: "gooo/native-family-publication/v1", Repository: repository, Prefix: prefix,
 		Scope: "Appendix only; existing model weights/card unchanged. 1080 native calls, 1204 predictions including 244 redundant feedback predictions, 1638 candidates, 20 actual Go processes and 440 actual function evaluations. 120 contract/language views are not independent experiments. Sparse tests do not establish complete intent; new models underperform the parent. No new training/model/native/Go calls during packaging; no host utilization or causal speedup claim."}
-	n, err := names()
+	if kind == "optimized-feature" {
+		m.Prefix = "research/native-family-optimized-feature-20261001/"
+		m.Scope = "Frozen feature SDK v0.2.5 evidence only, not main deployment. 1080 native calls, 960 initial predictions, zero feedback predictions, 244 zero-call ranking_unnecessary receipts, 1638 candidates, 20 actual Go processes and 440 function evaluations. All 1080 baseline pairs preserve selected label/Go/finite/separate outcomes and attempts. Original feature CI failed obsolete module sums, then was canceled by the checksum repair; caller PASS hint was not authenticated CI. Existing core weights and card remain unchanged. No new training/model/native/Go calls during packaging. No host utilization or causal wall-speedup claim."
+	}
+	n, err := namesKind(kind)
 	if err != nil {
 		return m, nil, err
 	}
@@ -167,6 +187,9 @@ func build() (manifest, map[string][]byte, error) {
 	files["evidence.tar.gz"] = append([]byte(nil), buf.Bytes()...)
 	files["README.md"] = []byte("# Native Gooo five-family evidence\n\nFrozen SDK v0.2.4 matrix and independent replay audit. The archive contains the complete 1,128-file allowlist; hashes and byte sizes are in publication-manifest.json. Core model artifacts remain unchanged.\n\nRead the methods, negative results, finite completion and resource limitations at https://github.com/kimjooyoon/gooo-neural-decision-experiments/blob/main/docs/native-feedback-families-study.md .\n\nThis appendix is evidence of bounded bilingual path construction, not arbitrary natural-language-to-code correctness. Separate-input observations reuse 20 actual Go executions; 120 views are not 120 independent experiments.\n")
 	var payload []string
+	if kind == "optimized-feature" {
+		files["README.md"] = []byte("# Gooo sole-remaining-path feature evidence\n\n" + m.Scope + "\n\nThe deterministic archive contains 1,105 allowlisted files. See per-entry hashes and sizes in publication-manifest.json and methods/failure limitations at https://github.com/kimjooyoon/gooo-neural-decision-experiments/blob/main/docs/native-feedback-families-study.md .\n")
+	}
 	for name := range files {
 		payload = append(payload, name)
 	}
@@ -200,7 +223,10 @@ func checkArchive(raw []byte, entries []entry) error {
 	return nil
 }
 func execute(bundle, revision, output string, pack bool) error {
-	m, files, err := build()
+	return executeKind(bundle, revision, output, pack, "")
+}
+func executeKind(bundle, revision, output string, pack bool, kind string) error {
+	m, files, err := buildKind(kind)
 	if err != nil {
 		return err
 	}
@@ -227,37 +253,9 @@ func execute(bundle, revision, output string, pack bool) error {
 		}
 		return nil
 	}
-	count := 0
-	if err = filepath.WalkDir(bundle, func(path string, d os.DirEntry, err error) error {
-		if err != nil {
-			return err
-		}
-		if d.Type()&os.ModeSymlink != 0 {
-			return errors.New("symlink rejected")
-		}
-		if d.IsDir() {
-			return nil
-		}
-		name, err := filepath.Rel(bundle, path)
-		if err != nil {
-			return err
-		}
-		expected, ok := files[name]
-		if !ok {
-			return errors.New("extra payload rejected")
-		}
-		i, err := os.Lstat(path)
-		if err != nil || !i.Mode().IsRegular() || i.Size() != int64(len(expected)) {
-			return errors.New("payload size differs")
-		}
-		data, err := os.ReadFile(path)
-		if err != nil || !bytes.Equal(data, expected) {
-			return errors.New("payload bytes differ")
-		}
-		count++
-		return nil
-	}); err != nil || count != len(files) {
-		return errors.New("local payload inventory differs")
+	count, err := checkLocal(bundle, files)
+	if err != nil {
+		return err
 	}
 	gets := 0
 	if revision != "" {
@@ -304,13 +302,13 @@ func execute(bundle, revision, output string, pack bool) error {
 		}
 		sort.Strings(sorted)
 		for _, name := range sorted {
-			data, err := fetch("https://huggingface.co/"+repository+"/resolve/"+revision+"/"+prefix+name, len(files[name]))
+			data, err := fetch("https://huggingface.co/"+repository+"/resolve/"+revision+"/"+m.Prefix+name, len(files[name]))
 			if err != nil || !bytes.Equal(data, files[name]) {
 				return errors.New("anonymous immutable payload differs")
 			}
 		}
 	}
-	value := map[string]any{"schema": "gooo/native-family-publication-verification/v1", "decision": "PASS", "repository": repository, "revision": revision, "prefix": prefix, "files_verified": count, "archive_entries_verified": len(m.Raw), "archive_bytes": len(files["evidence.tar.gz"]), "manifest_sha256": hash(files["publication-manifest.json"]), "anonymous_http_gets": gets, "credentials_sent": false, "new_model_predictions": 0, "new_native_calls": 0, "new_go_processes": 0}
+	value := map[string]any{"schema": "gooo/native-family-publication-verification/v1", "decision": "PASS", "repository": repository, "revision": revision, "prefix": m.Prefix, "files_verified": count, "archive_entries_verified": len(m.Raw), "archive_bytes": len(files["evidence.tar.gz"]), "manifest_sha256": hash(files["publication-manifest.json"]), "anonymous_http_gets": gets, "credentials_sent": false, "new_model_predictions": 0, "new_native_calls": 0, "new_go_processes": 0}
 	if output == "" {
 		return errors.New("verification output required")
 	}
@@ -325,13 +323,51 @@ func main() {
 	revision := flag.String("revision", "", "immutable public revision")
 	output := flag.String("output", "", "verification record")
 	pack := flag.Bool("pack", false, "build deterministic archive")
+	kind := flag.String("kind", "", "frozen evidence kind: empty or optimized-feature")
 	flag.Parse()
 	if flag.NArg() != 0 || *bundle == "" {
 		fmt.Fprintln(os.Stderr, "package-family-evidence: bundle required")
 		os.Exit(1)
 	}
-	if err := execute(*bundle, *revision, *output, *pack); err != nil {
+	if err := executeKind(*bundle, *revision, *output, *pack, *kind); err != nil {
 		fmt.Fprintln(os.Stderr, "package-family-evidence:", err)
 		os.Exit(1)
 	}
+}
+
+func checkLocal(bundle string, files map[string][]byte) (int, error) {
+	count := 0
+	err := filepath.WalkDir(bundle, func(path string, d os.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if d.Type()&os.ModeSymlink != 0 {
+			return errors.New("symlink rejected")
+		}
+		if d.IsDir() {
+			return nil
+		}
+		name, err := filepath.Rel(bundle, path)
+		if err != nil {
+			return err
+		}
+		expected, ok := files[name]
+		if !ok {
+			return errors.New("extra payload rejected")
+		}
+		i, err := os.Lstat(path)
+		if err != nil || !i.Mode().IsRegular() || i.Size() != int64(len(expected)) {
+			return errors.New("payload size differs")
+		}
+		data, err := os.ReadFile(path)
+		if err != nil || !bytes.Equal(data, expected) {
+			return errors.New("payload bytes differ")
+		}
+		count++
+		return nil
+	})
+	if err != nil || count != len(files) {
+		return count, errors.New("local payload inventory differs")
+	}
+	return count, nil
 }

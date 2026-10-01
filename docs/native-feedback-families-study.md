@@ -119,3 +119,17 @@ CI and proof. These feature results do not establish main deployment.
 
 [Optimized feature matrix](../runs/feedback-family-optimized-feature-20261001/report.json)
 and [zero-inference paired audit](../runs/feedback-family-optimized-feature-20261001/audit.json).
+
+The optimized feature archive is also public at
+[immutable Hugging Face revision 651e956](https://huggingface.co/asketeddy/gooo-feedback-path-tiny-v1/tree/651e956c8287e59244f5ee68a359254028c8fec6/research/native-family-optimized-feature-20261001).
+Its 878,001 compressed bytes retain 1,105 raw allowlisted files. Seven files
+were anonymously verified by eight requests. The older nine-file appendix and
+25-file core were separately reverified at that same revision. No unpublished
+host path or credential was included by the allowlist packager.
+
+Go-derived [descriptive resource metrics](../publication/native-family-descriptive-metrics-20261001.json)
+retain all 120 process observations per arm and both editions. Optimized native
+wall medians are 5.280–5.485 ms, CPU-time medians 4.562–4.760 ms, and median peak
+RSS 16,891,904–17,203,200 bytes. Median process CPU/wall ratios are 86.12–86.99%
+of one core. These figures are whole compiler subprocess measurements, not
+host CPU utilization or its increase, and do not establish a wall-speedup claim.

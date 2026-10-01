@@ -152,6 +152,8 @@ jobs:
         run: |
           go run ./tools/continuation-metrics --output "$RUNNER_TEMP/feedback-continuation-curves.json"
           cmp publication/feedback-continuation-curves-20261001.json "$RUNNER_TEMP/feedback-continuation-curves.json"
+          go run ./tools/family-metrics --output "$RUNNER_TEMP/native-family-descriptive-metrics.json"
+          cmp publication/native-family-descriptive-metrics-20261001.json "$RUNNER_TEMP/native-family-descriptive-metrics.json"
       - name: Audit captured five-family native generation and independent Go
         run: |
           go run ./tools/native-feedback-study --mode family-audit --out runs/feedback-family-pilot-20261001 \
@@ -169,6 +171,12 @@ jobs:
           cmp publication/hf-native-family-20261001/publication-manifest.json "$RUNNER_TEMP/native-family-bundle/publication-manifest.json"
           go run ./tools/package-family-evidence --bundle "$RUNNER_TEMP/native-family-bundle" \
             --output "$RUNNER_TEMP/native-family-publication-verification.json"
+          go run ./tools/package-family-evidence --kind optimized-feature --pack \
+            --bundle "$RUNNER_TEMP/native-family-optimized-feature-bundle"
+          cmp publication/hf-native-family-optimized-feature-20261001/publication-manifest.json "$RUNNER_TEMP/native-family-optimized-feature-bundle/publication-manifest.json"
+          go run ./tools/package-family-evidence --kind optimized-feature \
+            --bundle "$RUNNER_TEMP/native-family-optimized-feature-bundle" \
+            --output "$RUNNER_TEMP/native-family-optimized-feature-verification.json"
       - uses: actions/upload-artifact@v7
         with:
           name: go-model-validation

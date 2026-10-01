@@ -39,20 +39,32 @@ func TestArchiveRejectsChangedDigestAndExtraEntries(t *testing.T) {
 	}
 }
 
-func TestFrozenLocalPublicationDeterministicAndRejectsExtra(t *testing.T) {
+func TestOptimizedInventoryIsBounded(t *testing.T) {
 	t.Chdir("../..")
-	dir := filepath.Join(t.TempDir(), "bundle")
-	if err := execute(dir, "", "", true); err != nil {
+	names, err := namesKind("optimized-feature")
+	if err != nil || len(names) != 1105 {
+		t.Fatal("optimized frozen inventory differs", err)
+	}
+	if _, err = namesKind("untrusted"); err == nil {
+		t.Fatal("unknown evidence inventory accepted")
+	}
+}
+
+func TestFrozenLocalPublicationDeterministicAndRejectsExtra(t *testing.T) {
+	// Full frozen archive reproduction is a separate CI command. Race tests
+	// exercise the filesystem contract without recompressing 30 MiB three times.
+	dir := t.TempDir()
+	files := map[string][]byte{"report.json": []byte("synthetic record")}
+	if err := os.WriteFile(filepath.Join(dir, "report.json"), files["report.json"], 0600); err != nil {
 		t.Fatal(err)
 	}
-	output := filepath.Join(t.TempDir(), "verified.json")
-	if err := execute(dir, "", output, false); err != nil {
-		t.Fatal(err)
+	if count, err := checkLocal(dir, files); err != nil || count != 1 {
+		t.Fatal("local inventory differs", err)
 	}
 	if err := os.WriteFile(filepath.Join(dir, "private.txt"), []byte("unexpected"), 0600); err != nil {
 		t.Fatal(err)
 	}
-	if err := execute(dir, "", output, false); err == nil {
+	if _, err := checkLocal(dir, files); err == nil {
 		t.Fatal("extra local payload accepted")
 	}
 }
