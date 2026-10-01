@@ -472,3 +472,20 @@ this cohort establishes no model-specific functional improvement. The
 [public HF appendix](https://huggingface.co/asketeddy/gooo-feedback-path-tiny-v1/tree/4f0d2c02719b48546c29f9a72a8ef13f34c11159/research/retained-native-completeness-20261001)
 preserves raw evidence and original UNKNOWN hints. First-shot correctness is not
 acceptance, and repeated views are not new independent experiments.
+
+## Candidate budgets and bilingual partial construction
+
+The [main budget study](docs/native-budget-study.md) now executes 1,944 real
+constructions with candidate budgets 1/2/4, including initial-only and feedback
+arms. At budget two, existing new FP32 reaches the restricted 93.75% mixed-contract
+maximum and all observed separate-input cases; disconnected reaches 58.33% and
+60.58% respectively. These are reused views over twelve existing intention groups,
+with sixteen execution inputs, not a new language-generalization benchmark.
+
+Matched feedback helps one QAT Korean intention repeated across three contracts
+and hurts one parent English complete-contract view. Eighty of 972 bilingual
+pairs emit different bodies. Curves, failures, model calls, CPU/RSS, startup
+outliers and all raw observations are retained in the
+[public HF appendix](https://huggingface.co/asketeddy/gooo-feedback-path-tiny-v1/tree/fb09079ece12f9bee821730b5e0514016098fd77/research/native-budget-main-20261001).
+An initial model hint plus bounded deterministic tests is useful here; feedback
+and any checkpoint promotion need evidence of marginal benefit.
