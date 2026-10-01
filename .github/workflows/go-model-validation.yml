@@ -97,6 +97,16 @@ jobs:
           go run ./tools/package-feedback-pilot --bundle "$RUNNER_TEMP/feedback-pilot-bundle"
           cmp publication/hf-feedback-path-pilot-20261001/publication-manifest.json "$RUNNER_TEMP/feedback-pilot-bundle/publication-manifest.json"
           go run ./tools/package-feedback-pilot --mode verify --bundle "$RUNNER_TEMP/feedback-pilot-bundle" --output "$RUNNER_TEMP/feedback-pilot-verification.json"
+      - name: Audit captured native feedback and actual generated Go
+        run: |
+          go run ./tools/native-feedback-study --mode audit --native-root studies/native-feedback-v1 \
+            --out runs/native-feedback-integration-fixed-20261001 \
+            --audit-output "$RUNNER_TEMP/native-feedback-audit.json"
+          cmp runs/native-feedback-integration-fixed-20261001/audit.json "$RUNNER_TEMP/native-feedback-audit.json"
+          go run ./tools/package-native-feedback --bundle "$RUNNER_TEMP/native-feedback-bundle"
+          cmp publication/hf-native-feedback-20261001/publication-manifest.json "$RUNNER_TEMP/native-feedback-bundle/publication-manifest.json"
+          go run ./tools/package-native-feedback --mode verify --bundle "$RUNNER_TEMP/native-feedback-bundle" \
+            --output "$RUNNER_TEMP/native-feedback-verification.json"
       - uses: actions/upload-artifact@v7
         with:
           name: go-model-validation

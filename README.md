@@ -7,11 +7,24 @@ continue finite construction in batches. First-shot accuracy is not the goal:
 partial results, failed cases, type rejections, unattempted paths and cost remain
 inspectable. Models are optional; the disconnected order is deterministic.
 
-The research-only [observed feedback option](docs/feedback-path-judgment.md)
+The optional [observed feedback judgment](docs/feedback-path-judgment.md)
 can now ask the same frozen model again after a partial batch. It supplies a
 bounded failure summary and optional caller CI hint, and changes only remaining
-path priority. Default sessions and released native SDK still rank once.
+path priority. Go SDK `v0.2.3-experimental` exports this bounded API;
+default sessions still rank once. The native feature is in
+[compiler PR 1118](https://github.com/kimjooyoon/meta-ontology-go/pull/1118).
 This is an experiment with an existing model, not feedback training.
+
+The [actual native integration study](docs/native-feedback-results.md) measured
+28 native generations and 246 local predictions with three existing models.
+All 12 model pairs emitted identical Go and finite completeness. Native process
+wall medians were 8.816→9.021 ms and maximum RSS medians 20,865,024→20,971,520
+bytes. Captured Go was separately executed twice and agreed with both
+interpreters. These are one-intent, baseline-first observations; host CPU
+utilization and new training were not measured.
+The [public HF native evidence appendix](https://huggingface.co/asketeddy/gooo-typed-path-tiny-v1/tree/dc87b6c8f6784accd60bd93535c14e2d0b20f470/research/native-feedback-integration-20261001)
+is anonymously digest-verified; the earlier nine weight and metadata files,
+model card and previous evidence appendix remain unchanged.
 
 The [actual feedback pilot](docs/feedback-path-pilot-results.md) made 246 small-model
 predictions, including 102 reconsideration predictions, and 32 native generations.

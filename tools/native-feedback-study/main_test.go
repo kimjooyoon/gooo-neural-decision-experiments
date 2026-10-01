@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 	"time"
@@ -18,6 +20,72 @@ func TestDocumentEnvelopeRetainsNativeSchema(t *testing.T) {
 	raw, err := json.Marshal(d)
 	if err != nil || !strings.Contains(string(raw), `"schema":"gooo/body-codegen-typed-path-plan/v1"`) {
 		t.Fatal("study lost the compiler document schema")
+	}
+}
+
+func TestRecordedAuditRejectsChangedCountsAndExecutedGo(t *testing.T) {
+	t.Chdir("../..")
+	const original = "runs/native-feedback-integration-fixed-20261001"
+	if _, err := audit(original, "studies/native-feedback-v1", "", false); err != nil {
+		t.Fatal(err)
+	}
+	dir := t.TempDir()
+	if err := filepath.WalkDir(original, func(path string, entry os.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		rel, err := filepath.Rel(original, path)
+		if err != nil {
+			return err
+		}
+		if entry.IsDir() {
+			return os.MkdirAll(filepath.Join(dir, rel), 0700)
+		}
+		raw, err := read(path)
+		if err != nil {
+			return err
+		}
+		return os.WriteFile(filepath.Join(dir, rel), raw, 0600)
+	}); err != nil {
+		t.Fatal(err)
+	}
+	raw, err := read(filepath.Join(dir, "report.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var value report
+	if err := json.Unmarshal(raw, &value); err != nil {
+		t.Fatal(err)
+	}
+	value.Observations[0].Calls++
+	if err := save(filepath.Join(dir, "report.json"), value); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := audit(dir, "studies/native-feedback-v1", "", false); err == nil {
+		t.Fatal("changed local prediction observation accepted")
+	}
+	if err := os.WriteFile(filepath.Join(dir, "report.json"), raw, 0600); err != nil {
+		t.Fatal(err)
+	}
+	entries, err := os.ReadDir(filepath.Join(dir, "executions"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	path := filepath.Join(dir, "executions", entries[0].Name())
+	raw, err = read(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var values []int64
+	if err := json.Unmarshal(raw, &values); err != nil {
+		t.Fatal(err)
+	}
+	values[0]++
+	if err := save(path, values); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := audit(dir, "studies/native-feedback-v1", "", false); err == nil {
+		t.Fatal("changed generated Go execution accepted")
 	}
 }
 

@@ -140,7 +140,7 @@ func child(ctx context.Context, dir, binary string, args ...string) ([]byte, met
 	cmd := exec.CommandContext(ctx, binary, args...)
 	cmd.Dir = dir
 	cmd.WaitDelay = time.Second
-	cmd.Env = append(os.Environ(), "GOOO_LAYA_URL=", "GOOO_LAYA_API_KEY=", "GOWORK=off", "GOTOOLCHAIN=local")
+	cmd.Env = append(os.Environ(), "GOOO_LAYA_URL=", "GOOO_LAYA_API_KEY=", "GOWORK=off", "GOTOOLCHAIN=local", "GOPROXY=off", "GOSUMDB=off")
 	configure(cmd)
 	var out, stderr bounded
 	cmd.Stdout = &out
@@ -414,12 +414,34 @@ func run(binary, nativeRoot, output, revision, nativeRevision string) error {
 	return nil
 }
 func main() {
+	mode := flag.String("mode", "study", "study, execute or audit")
+	goBinary := flag.String("go-bin", "", "Go 1.27.1 executable for execute mode")
+	auditOutput := flag.String("audit-output", "", "audit receipt output; defaults to study directory")
 	binary := flag.String("native", "", "native binary")
 	root := flag.String("native-root", "", "native fixtures")
 	output := flag.String("out", "", "fresh relative runs directory")
 	revision := flag.String("source-revision", "", "committed runner SHA")
 	nativeRevision := flag.String("native-revision", "", "clean binary source SHA")
 	flag.Parse()
+	if *mode == "audit" || *mode == "execute" {
+		value, err := audit(*output, *root, *goBinary, *mode == "execute")
+		if err == nil {
+			path := *auditOutput
+			if path == "" {
+				path = filepath.Join(*output, "audit.json")
+			}
+			err = save(path, value)
+		}
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+		return
+	}
+	if *mode != "study" {
+		fmt.Fprintln(os.Stderr, "unknown mode")
+		os.Exit(1)
+	}
 	if err := run(*binary, *root, *output, *revision, *nativeRevision); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
