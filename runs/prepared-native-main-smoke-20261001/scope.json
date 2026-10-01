@@ -1,0 +1,24 @@
+{
+ "schema":"gooo/prepared-native-main-smoke/v1",
+ "compiler_source":"81ee98edf031be0d93f3dc0e59b4697d72d82a26",
+ "compiler_binary_sha256":"972c795aae3dcf009a339cecb02a9f53c4625d3bb3de3334e1e333e2c7f3a128",
+ "go_version":"go1.27.1",
+ "vcs_modified":false,
+ "sdk":"v0.2.1-experimental",
+ "native_calls":3,
+ "fresh_local_model_predictions":6,
+ "external_provider_calls":0,
+ "model_calls":1,
+ "offline_calls":2,
+ "offline_source_and_search_exact_repeat":true,
+ "finite_case_observations_passed":21,
+ "finite_case_observations_total":21,
+ "source_matched_typecheck_and_replay":true,
+ "initial_assertion_failure":{
+  "observed":"false; expected selection.model_calls/external_calls, actual public keys are local_model_predictions/external_provider_calls",
+  "cause":"Throwaway shell verification used incorrect JSON field names; native reports already passed and were retained unchanged",
+  "additional_native_calls_after_fix":0,
+  "corrected_assertions":"PASS"
+ },
+ "scope":"Three post-main smoke calls on the declared seven finite cases, excluded from the 160-call primary comparison. They do not provide new heldout accuracy or a speed estimate. No optimizer steps."
+}

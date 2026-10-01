@@ -63,8 +63,9 @@ The nine model weight bundles are unchanged in this integration update.
 The Go-only [SDK v0.2.1-experimental](https://github.com/kimjooyoon/gooo-decision-runtime/tree/v0.2.1-experimental)
 owns one immutable validated plan and fallback. Compiler
 [PR 1114](https://github.com/kimjooyoon/meta-ontology-go/pull/1114) is merged to
-`dev`; [PR 1115](https://github.com/kimjooyoon/meta-ontology-go/pull/1115) promotes
-the exact tree to `main`. Repeated native preflight preparation goes from four
+`dev`; [PR 1115](https://github.com/kimjooyoon/meta-ontology-go/pull/1115) is merged
+to `main` after six exact machine checks and verified source-bound proof.
+Repeated native preflight preparation goes from four
 to one; each combined candidate retains its type/scope checks and native replay.
 
 The [paired raw study](runs/prepared-native-conditional-20261001/) uses six
@@ -82,6 +83,11 @@ new fixture. [Measurement scope and public model-card addition](docs/hf-typed-pa
 disclose peak child RSS, one-core CPU/wall, the first fixture failure and the
 functional/structural distinction. The fixed compact HF publication adds 11
 evidence files and preserves all nine existing model bundles byte for byte.
+The [promotion and main smoke receipt](publication/prepared-typed-path-main-20261001.json)
+records the exact source/tree and three actual clean main invocations. Two
+model-free invocations have identical emitted code and search results; one
+model-backed invocation makes six fresh local predictions. All three retain
+7/7 declared finite cases. These smokes are excluded from the primary study.
 
 For the earlier structural integration, actual post-main
 [CI 36787975612](https://github.com/kimjooyoon/meta-ontology-go/actions/runs/36787975612)

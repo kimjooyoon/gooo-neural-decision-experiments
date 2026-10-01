@@ -1,0 +1,158 @@
+{
+  "schema": "gooo/prepared-typed-path-main-publication/v1",
+  "repository": "kimjooyoon/meta-ontology-go",
+  "feature_pr": 1114,
+  "feature_source": "e155148f5ce114ee4c55e720a0e90cc34cc458ce",
+  "feature_dev_sha": "7f7c34254bba34ed3a70e3179de5c25458b59346",
+  "main_pr": 1115,
+  "promotion_head": "875eb7ac1a6306f385abe3859d4597c06e88db2a",
+  "previous_main_sha": "9b8b900e32384b5397fb3d08dc545e22cc7530da",
+  "merged_main_sha": "81ee98edf031be0d93f3dc0e59b4697d72d82a26",
+  "merged_at_utc": "2026-10-01T00:10:02Z",
+  "dev_main_source_tree": "3b7b88e47686627c2202c405db3270d68d5da7e8",
+  "main_tree_matches_dev": true,
+  "ordinary_protected_squash_merge": true,
+  "proof_go_verifier": "PASS",
+  "proof_file_sha256": "dc490feaf0cf35dc6d78f49c2bafa6a60461ff6260bc55aab6afc989bfcdc7d5",
+  "append_only_receipt_sha256": "f63cadeb492dd7cce0eaa9880f0efde7e1758ec78fadbb98980b931d6519f630",
+  "actual_pr_ci": {
+    "decision": "PASS",
+    "event": "pull_request",
+    "run_id": 36793563669,
+    "run_attempt": 1,
+    "pr_number": 1115,
+    "base_sha": "9b8b900e32384b5397fb3d08dc545e22cc7530da",
+    "head_sha": "875eb7ac1a6306f385abe3859d4597c06e88db2a",
+    "base_ref": "main",
+    "head_ref": "agent/main-promotion-snapshot-7f7c34254bba34ed3a70e3179de5c25458b59346",
+    "jobs": [
+      {
+        "id": 110151737927,
+        "name": "gofmt",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "875eb7ac1a6306f385abe3859d4597c06e88db2a",
+        "run_id": 36793563669,
+        "run_attempt": 1
+      },
+      {
+        "id": 110151738185,
+        "name": "go vet",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "875eb7ac1a6306f385abe3859d4597c06e88db2a",
+        "run_id": 36793563669,
+        "run_attempt": 1
+      },
+      {
+        "id": 110151738061,
+        "name": "go test",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "875eb7ac1a6306f385abe3859d4597c06e88db2a",
+        "run_id": 36793563669,
+        "run_attempt": 1
+      },
+      {
+        "id": 110151738068,
+        "name": "go test -race",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "875eb7ac1a6306f385abe3859d4597c06e88db2a",
+        "run_id": 36793563669,
+        "run_attempt": 1
+      },
+      {
+        "id": 110151738048,
+        "name": "Semantic conformance",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "875eb7ac1a6306f385abe3859d4597c06e88db2a",
+        "run_id": 36793563669,
+        "run_attempt": 1
+      },
+      {
+        "id": 110153909922,
+        "name": "CI policy",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "875eb7ac1a6306f385abe3859d4597c06e88db2a",
+        "run_id": 36793563669,
+        "run_attempt": 1
+      }
+    ],
+    "promotion_authorization": {
+      "decision": "PASS",
+      "code": null,
+      "operation": "fast_forward",
+      "source": "dev",
+      "target": "main",
+      "base_sha": "9b8b900e32384b5397fb3d08dc545e22cc7530da",
+      "head_sha": "875eb7ac1a6306f385abe3859d4597c06e88db2a",
+      "proof_digest": "28cd0a7a63c68ca9246b42c2198417d233bd6b8c94d760e990de3a3aeb5d5c74"
+    }
+  },
+  "actual_pr_ci_conclusion": "success",
+  "guardian_required": false,
+  "required_approving_reviews": 0,
+  "protection_modified": false,
+  "required_machine_checks": [
+    "CI policy",
+    "Semantic conformance",
+    "gofmt",
+    "go vet",
+    "go test",
+    "go test -race"
+  ],
+  "main_smoke": {
+    "schema": "gooo/prepared-native-main-smoke/v1",
+    "compiler_source": "81ee98edf031be0d93f3dc0e59b4697d72d82a26",
+    "compiler_binary_sha256": "972c795aae3dcf009a339cecb02a9f53c4625d3bb3de3334e1e333e2c7f3a128",
+    "go_version": "go1.27.1",
+    "vcs_modified": false,
+    "sdk": "v0.2.1-experimental",
+    "native_calls": 3,
+    "fresh_local_model_predictions": 6,
+    "external_provider_calls": 0,
+    "model_calls": 1,
+    "offline_calls": 2,
+    "offline_source_and_search_exact_repeat": true,
+    "finite_case_observations_passed": 21,
+    "finite_case_observations_total": 21,
+    "source_matched_typecheck_and_replay": true,
+    "initial_assertion_failure": {
+      "observed": "false; expected selection.model_calls/external_calls, actual public keys are local_model_predictions/external_provider_calls",
+      "cause": "Throwaway shell verification used incorrect JSON field names; native reports already passed and were retained unchanged",
+      "additional_native_calls_after_fix": 0,
+      "corrected_assertions": "PASS"
+    },
+    "scope": "Three post-main smoke calls on the declared seven finite cases, excluded from the 160-call primary comparison. They do not provide new heldout accuracy or a speed estimate. No optimizer steps."
+  },
+  "main_smoke_captures": {
+    "model_sha256": "9a3322ac823f11a427ce11493aa0f28f3bd0e7ff5e3098da8dc61fbf85137081",
+    "offline_a_sha256": "cd4f416cd7d69ff9da004d6921a363d1e64d8d007dd2993c5c8d2212e4fee039",
+    "offline_b_sha256": "ad03e80f9ffae40357a942ecefcf067a3a7977ed29090c71e0c628c9b86397c1"
+  },
+  "hf_publication": {
+    "commit_oid": "d137202a5cd79ec6aa616ec877b0a09dce8b4459",
+    "credentials_sent": false,
+    "local_files_verified": 222,
+    "local_model_predictions": 0,
+    "manifest_sha256": "93d4cb190db09c9ddf514d95b874fe3a533d70eed221c231b15eea48037a8e3d",
+    "network_requests": 223,
+    "public_files_verified": 222,
+    "repository": "asketeddy/gooo-typed-path-tiny-v1",
+    "schema": "gooo/typed-path-public-verification/v1",
+    "status": "PASS"
+  },
+  "optimizer_steps": 0,
+  "published_weights_changed": false,
+  "new_packaged_native_release": false,
+  "permanent_actions_only_promotion_configured": false,
+  "post_main_ci": {
+    "run_id": 36794783553,
+    "status": "queued_at_last_observation",
+    "conclusion": "not_yet_observed"
+  },
+  "scope": "Protected source main, public Go SDK and immutable HF evidence publication. The primary 160-call comparison remains frozen; three actual main smokes are additional and separate. The single host/workload does not establish universal performance or general language accuracy."
+}
