@@ -4,8 +4,10 @@ import (
 	"archive/tar"
 	"bytes"
 	"compress/gzip"
+	"encoding/json"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -65,6 +67,9 @@ func TestOptimizedInventoryIsBounded(t *testing.T) {
 	if _, err := namesKind("untrusted"); err == nil {
 		t.Fatal("unknown evidence inventory accepted")
 	}
+	if names, err := namesKind("own-model-sdk-context"); err != nil || len(names) != 25 {
+		t.Fatal("own-model SDK context evidence differs", err)
+	}
 }
 
 func TestFrozenLocalPublicationDeterministicAndRejectsExtra(t *testing.T) {
@@ -83,5 +88,51 @@ func TestFrozenLocalPublicationDeterministicAndRejectsExtra(t *testing.T) {
 	}
 	if _, err := checkLocal(dir, files); err == nil {
 		t.Fatal("extra local payload accepted")
+	}
+}
+
+func TestOwnContextRejectsForgedArithmetic(t *testing.T) {
+	t.Chdir("../..")
+	names, err := ownContextNames()
+	if err != nil {
+		t.Fatal(err)
+	}
+	root := t.TempDir()
+	for _, name := range names {
+		raw, err := os.ReadFile(name)
+		if err != nil {
+			t.Fatal(err)
+		}
+		copied := filepath.Join(root, name)
+		if err := os.MkdirAll(filepath.Dir(copied), 0700); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(copied, raw, 0600); err != nil {
+			t.Fatal(err)
+		}
+	}
+	t.Chdir(root)
+	name := "runs/own-model-sdk-context-20261001/en-sparse-fp32.json"
+	raw, err := os.ReadFile(name)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var value map[string]any
+	if err := json.Unmarshal(raw, &value); err != nil {
+		t.Fatal(err)
+	}
+	search := value["search"].(map[string]any)
+	attempt := search["attempts"].([]any)[0].(map[string]any)
+	result := attempt["case_results"].([]any)[0].(map[string]any)
+	result["actual"] = float64(99)
+	raw, err = json.Marshal(value)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(name, raw, 0600); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := ownContextNames(); err == nil || !strings.Contains(err.Error(), "independent candidate arithmetic") {
+		t.Fatal("forged arithmetic accepted or failed a different check", err)
 	}
 }

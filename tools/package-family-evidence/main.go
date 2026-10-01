@@ -114,6 +114,9 @@ func names() ([]string, error) {
 	return namesKind("")
 }
 func namesKind(kind string) ([]string, error) {
+	if kind == "own-model-sdk-context" {
+		return ownContextNames()
+	}
 	if kind == "native-path-diagnosis-feature" {
 		return nativePathDiagnosisNames()
 	}
@@ -262,6 +265,11 @@ func buildKind(kind string) (manifest, map[string][]byte, error) {
 		m.Prefix = "research/native-path-diagnosis-feature-20261001/"
 		m.Scope = "Preregistered native feature SDK 0.2.8 smoke: eight actual compiler invocations, four own-FP32 initial predictions, four deterministic diagnoses with eight typed candidate observations and zero diagnostic predictions. Four off/on pairs retain selected choices and emitted Go. Two distinct selected Go programs run two inputs each, yielding four actual function evaluations. One synthetic bilingual intention; English model selection disagrees with its instruction despite passing the single sparse test. All diagnostic pairs expose input-three ambiguity. Witnesses are observations without expected-answer authority; alternatives are not native-executed. Small whole-child resource observations preserve the first startup outlier and do not estimate host utilization or causal speedup. Feature evidence is separate from main adoption. Core weights/card and previous appendices are unchanged. No training/GPU/upstream Laya/model promotion or new inference/processes during packaging/audit."
 	}
+	if kind == "own-model-sdk-context" {
+		m.Schema = "gooo/own-model-sdk-context-publication/v1"
+		m.Prefix = "research/own-model-sdk-context-20261001/"
+		m.Scope = "Own tiny split-v2 models in published Go SDK 0.2.9: sixteen real SDK child calls, twelve predictions, twenty-four selected finite cases and thirty attempted case evaluations. Eight full-contract bodies complete with three added candidates; three sparse bodies disagree with the intended subtraction. One reused intention, no new training. Context facts differ from training text. Original-file binding and native main adoption are pending; native/emitted-Go calls are zero. Core weights/card and earlier appendices unchanged. Packaging and independent Go arithmetic verification make no new model/process calls."
+	}
 	n, err := namesKind(kind)
 	if err != nil {
 		return m, nil, err
@@ -362,6 +370,16 @@ func buildKind(kind string) (manifest, map[string][]byte, error) {
 				return m, nil, err
 			}
 			files[path] = raw
+		}
+	}
+	if kind == "own-model-sdk-context" {
+		files["README.md"] = []byte("# Own-model Gooo typed-context SDK dogfood\n\n" + m.Scope + "\n\nThe deterministic archive contains 25 allowlisted documents, SDK release evidence, preregistration and raw captures. Public experimental weights are in the separate split-context-gooo-judgment-20261001 appendix. See docs/own-model-sdk-context-results.md for scope and negative observations.\n")
+		for _, name := range []string{"docs/own-model-sdk-context-preregistration.md", "docs/own-model-sdk-context-results.md"} {
+			raw, err := read(name)
+			if err != nil {
+				return m, nil, err
+			}
+			files[name] = raw
 		}
 	}
 	for name := range files {
@@ -593,6 +611,9 @@ func executeKind(bundle, revision, output string, pack bool, kind string) error 
 	}
 	if kind == "native-path-diagnosis-feature" {
 		value["schema"] = "gooo/native-path-diagnosis-publication-verification/v1"
+	}
+	if kind == "own-model-sdk-context" {
+		value["schema"] = "gooo/own-model-sdk-context-publication-verification/v1"
 	}
 	if output == "" {
 		return errors.New("verification output required")

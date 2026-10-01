@@ -93,6 +93,11 @@ jobs:
           cmp publication/hf-split-context-gooo-judgment-20261001/publication-manifest.json "$RUNNER_TEMP/split-context-bundle/publication-manifest.json"
           go run ./tools/package-split-context --mode verify --bundle "$RUNNER_TEMP/split-context-bundle" \
             --output "$RUNNER_TEMP/split-context-publication-verification.json"
+      - name: Reconcile own-model SDK context archive without network publication
+        run: |
+          go run ./tools/package-family-evidence --kind own-model-sdk-context --pack --bundle "$RUNNER_TEMP/own-model-sdk-context-bundle"
+          cmp publication/hf-own-model-sdk-context-20261001/publication-manifest.json "$RUNNER_TEMP/own-model-sdk-context-bundle/publication-manifest.json"
+          go run ./tools/package-family-evidence --kind own-model-sdk-context --bundle "$RUNNER_TEMP/own-model-sdk-context-bundle" --output "$RUNNER_TEMP/own-model-sdk-context-verification.json"
       - name: Verify public export without credentials or network publication
         run: |
           go run ./tools/assemble-public-export --output "$RUNNER_TEMP/public-model-bundle" --allowlist "$RUNNER_TEMP/public-model-allowlist.json"
@@ -347,6 +352,7 @@ jobs:
         with:
           name: go-model-validation
           path: |
+            ${{ runner.temp }}/own-model-sdk-context-verification.json
             ${{ runner.temp }}/split-v1-parity.json
             ${{ runner.temp }}/split-v2-parity.json
             ${{ runner.temp }}/split-context-judgment

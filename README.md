@@ -586,3 +586,12 @@ passes for 30 appendix files and 25 selected core files. The
 [finite completeness and attempt metrics](publication/split-context-descriptive-metrics-20261001.json)
 retain their explicit case/view denominators. CI preserves its own fresh parity,
 judgment and packaging reports as downloadable artifacts.
+
+The [own-model SDK context dogfood](docs/own-model-sdk-context-results.md) uses
+[SDK v0.2.9](https://github.com/kimjooyoon/gooo-decision-runtime/releases/tag/v0.2.9-experimental)
+to serialize verified typed-plan facts and actual Korean/English intents, then
+rank legal paths with the explicit own model. Sixteen SDK calls make twelve
+predictions; full contracts complete eight bodies with three additional attempts.
+Three sparse wrong-intent choices remain in the raw captures. This is a separate
+Go SDK assembly stage; native main adoption and original-source context binding
+remain pending. CI replays these cells with independently retained captures.
