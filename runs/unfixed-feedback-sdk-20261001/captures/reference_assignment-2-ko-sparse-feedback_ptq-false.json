@@ -1,0 +1,328 @@
+{
+  "case_id": "reference_assignment-2-ko-sparse",
+  "arm": "feedback_ptq",
+  "unfixed_only": false,
+  "progress": [
+    {
+      "schema": "gooo/typed-path-session-progress/v1",
+      "sequence": 1,
+      "progress_sha256": "ddf7c2438a94a63e3dec3d87ea457203d112a72174507b58afa0fbdb3c2b8a4a",
+      "finite_cases_sha256": "05667b23bab1e71263d60339a7f0f94a9e50e07a67b62b0c2b89d639d9f4f696",
+      "status": "PARTIAL",
+      "selection": {
+        "schema": "gooo/typed-body-path-selection/v1",
+        "plan_sha256": "a00faf5e1a3eab7064271f735a910aeb023793143a2a2bccefd8335819ffea5a",
+        "choices": {
+          "read": "reference_first",
+          "write": "assign_first"
+        },
+        "receipts": [
+          {
+            "id": "read",
+            "kind": "local_reference",
+            "intent_sha256": "a0bd14fad6f696c0755b4a387c55773bb5fb22d5b8697376a05ae6ad459149d7",
+            "mode": "typed_probability_rank_before_finite_validation",
+            "proposed": "schedule_reverse",
+            "selected": "reference_first",
+            "global_confidence": 0.29313147,
+            "raw_probabilities": [
+              0.059546903,
+              0.018357245,
+              0.2825251,
+              0.08110565,
+              0.040849105,
+              0.057304554,
+              0.16717999,
+              0.29313147
+            ],
+            "predict_ns": 9583
+          },
+          {
+            "id": "write",
+            "kind": "assignment_target",
+            "intent_sha256": "8d9c13a2c4a72f5a24ff6f6c3a91c914ca5e4b98dfea276ca88a184c732a5f27",
+            "mode": "typed_probability_rank_before_finite_validation",
+            "proposed": "assign_second",
+            "selected": "assign_second",
+            "global_confidence": 0.29704237,
+            "raw_probabilities": [
+              0.036772553,
+              0.05760965,
+              0.13249826,
+              0.29704237,
+              0.0801725,
+              0.083195746,
+              0.12825371,
+              0.18445523
+            ],
+            "predict_ns": 9583
+          }
+        ],
+        "model_variant": "ptq_ternary",
+        "model_metadata_sha256": "a7b66676af2eb5a7e6952f3c65c812f231865ac4974a3c3c1f329b125e55124c",
+        "model_weights_sha256": "c0ee9fc41c16030786103cbf771afe40ba6b7866c25095214d062daa6dcc47a0",
+        "local_model_predictions": 2,
+        "external_provider_calls": 0,
+        "external_provider_calls_known": true
+      },
+      "declared_combinations": 4,
+      "cumulative_attempts": 0,
+      "unattempted_combinations": 4,
+      "cumulative_evaluated_candidates": 0,
+      "cumulative_type_rejected_candidates": 0,
+      "selected_training_passed": 0,
+      "training_cases": 1,
+      "initial_proposals": {
+        "read": "reference_first",
+        "write": "assign_second"
+      },
+      "eligible_probabilities": [
+        [
+          0.7643611284807108,
+          0.23563887151928925
+        ],
+        [
+          0.3084650347530397,
+          0.6915349652469602
+        ]
+      ],
+      "model_abstentions_observed": 2,
+      "new_local_model_predictions": 0,
+      "space_exhausted": false,
+      "interrupted": false,
+      "scope": "Fixed finite cases and declared typed paths; not general language accuracy or all-input correctness. Digests link observations, not authorization to mutate source.",
+      "ranking_complete": true,
+      "scheduled_bitset_bytes": 8,
+      "frontier_nodes": 1,
+      "frontier_capacity_bytes": 64
+    },
+    {
+      "schema": "gooo/typed-path-session-progress/v1",
+      "sequence": 2,
+      "previous_progress_sha256": "ddf7c2438a94a63e3dec3d87ea457203d112a72174507b58afa0fbdb3c2b8a4a",
+      "progress_sha256": "28a7ea17faa45b5979c049c76b00db94f76711162d777acee09092dcead5e827",
+      "finite_cases_sha256": "05667b23bab1e71263d60339a7f0f94a9e50e07a67b62b0c2b89d639d9f4f696",
+      "status": "TRAINING_COMPLETE",
+      "selection": {
+        "schema": "gooo/typed-body-path-selection/v1",
+        "plan_sha256": "a00faf5e1a3eab7064271f735a910aeb023793143a2a2bccefd8335819ffea5a",
+        "choices": {
+          "read": "reference_first",
+          "write": "assign_second"
+        },
+        "receipts": [
+          {
+            "id": "read",
+            "kind": "local_reference",
+            "intent_sha256": "a0bd14fad6f696c0755b4a387c55773bb5fb22d5b8697376a05ae6ad459149d7",
+            "mode": "finite_tdd_selection",
+            "proposed": "schedule_reverse",
+            "selected": "reference_first",
+            "global_confidence": 0.29313147,
+            "raw_probabilities": [
+              0.059546903,
+              0.018357245,
+              0.2825251,
+              0.08110565,
+              0.040849105,
+              0.057304554,
+              0.16717999,
+              0.29313147
+            ],
+            "predict_ns": 9583
+          },
+          {
+            "id": "write",
+            "kind": "assignment_target",
+            "intent_sha256": "8d9c13a2c4a72f5a24ff6f6c3a91c914ca5e4b98dfea276ca88a184c732a5f27",
+            "mode": "finite_tdd_selection",
+            "proposed": "assign_second",
+            "selected": "assign_second",
+            "global_confidence": 0.29704237,
+            "raw_probabilities": [
+              0.036772553,
+              0.05760965,
+              0.13249826,
+              0.29704237,
+              0.0801725,
+              0.083195746,
+              0.12825371,
+              0.18445523
+            ],
+            "predict_ns": 9583
+          }
+        ],
+        "model_variant": "ptq_ternary",
+        "model_metadata_sha256": "a7b66676af2eb5a7e6952f3c65c812f231865ac4974a3c3c1f329b125e55124c",
+        "model_weights_sha256": "c0ee9fc41c16030786103cbf771afe40ba6b7866c25095214d062daa6dcc47a0",
+        "local_model_predictions": 2,
+        "external_provider_calls": 0,
+        "external_provider_calls_known": true
+      },
+      "declared_combinations": 4,
+      "cumulative_attempts": 1,
+      "unattempted_combinations": 3,
+      "cumulative_evaluated_candidates": 1,
+      "cumulative_type_rejected_candidates": 0,
+      "selected_training_passed": 1,
+      "training_cases": 1,
+      "selected_case_results": [
+        {
+          "input": 0,
+          "expected": -10,
+          "actual": -10,
+          "passed": true
+        }
+      ],
+      "new_attempts": [
+        {
+          "choice_mask": 2,
+          "choices": {
+            "read": "reference_first",
+            "write": "assign_second"
+          },
+          "status": "EVALUATED",
+          "training_cases_passed": 1,
+          "training_cases_total": 1,
+          "case_results": [
+            {
+              "input": 0,
+              "expected": -10,
+              "actual": -10,
+              "passed": true
+            }
+          ],
+          "gooo_source_sha256": "340891caed6fc8b723dcd8d36d3e97f11c1fe1d27211c9c45c42b619fff9ea22"
+        }
+      ],
+      "initial_proposals": {
+        "read": "reference_first",
+        "write": "assign_second"
+      },
+      "eligible_probabilities": [
+        [
+          0.7643611284807108,
+          0.23563887151928925
+        ],
+        [
+          0.3084650347530397,
+          0.6915349652469602
+        ]
+      ],
+      "model_abstentions_observed": 2,
+      "new_local_model_predictions": 0,
+      "space_exhausted": false,
+      "interrupted": false,
+      "scope": "Fixed finite cases and declared typed paths; not general language accuracy or all-input correctness. Digests link observations, not authorization to mutate source.",
+      "ranking_complete": true,
+      "scheduled_bitset_bytes": 8,
+      "frontier_nodes": 0,
+      "frontier_capacity_bytes": 64
+    }
+  ],
+  "feedback": null,
+  "search": {
+    "schema": "gooo/typed-path-tdd-search/v1",
+    "status": "TRAINING_COMPLETE",
+    "selection": {
+      "schema": "gooo/typed-body-path-selection/v1",
+      "plan_sha256": "a00faf5e1a3eab7064271f735a910aeb023793143a2a2bccefd8335819ffea5a",
+      "choices": {
+        "read": "reference_first",
+        "write": "assign_second"
+      },
+      "receipts": [
+        {
+          "id": "read",
+          "kind": "local_reference",
+          "intent_sha256": "a0bd14fad6f696c0755b4a387c55773bb5fb22d5b8697376a05ae6ad459149d7",
+          "mode": "finite_tdd_selection",
+          "proposed": "schedule_reverse",
+          "selected": "reference_first",
+          "global_confidence": 0.29313147,
+          "raw_probabilities": [
+            0.059546903,
+            0.018357245,
+            0.2825251,
+            0.08110565,
+            0.040849105,
+            0.057304554,
+            0.16717999,
+            0.29313147
+          ],
+          "predict_ns": 9583
+        },
+        {
+          "id": "write",
+          "kind": "assignment_target",
+          "intent_sha256": "8d9c13a2c4a72f5a24ff6f6c3a91c914ca5e4b98dfea276ca88a184c732a5f27",
+          "mode": "finite_tdd_selection",
+          "proposed": "assign_second",
+          "selected": "assign_second",
+          "global_confidence": 0.29704237,
+          "raw_probabilities": [
+            0.036772553,
+            0.05760965,
+            0.13249826,
+            0.29704237,
+            0.0801725,
+            0.083195746,
+            0.12825371,
+            0.18445523
+          ],
+          "predict_ns": 9583
+        }
+      ],
+      "model_variant": "ptq_ternary",
+      "model_metadata_sha256": "a7b66676af2eb5a7e6952f3c65c812f231865ac4974a3c3c1f329b125e55124c",
+      "model_weights_sha256": "c0ee9fc41c16030786103cbf771afe40ba6b7866c25095214d062daa6dcc47a0",
+      "local_model_predictions": 2,
+      "external_provider_calls": 0,
+      "external_provider_calls_known": true
+    },
+    "declared_combinations": 4,
+    "unattempted_combinations": 3,
+    "evaluated_candidates": 1,
+    "type_rejected_candidates": 0,
+    "selected_training_passed": 1,
+    "training_cases": 1,
+    "attempts": [
+      {
+        "choice_mask": 2,
+        "choices": {
+          "read": "reference_first",
+          "write": "assign_second"
+        },
+        "status": "EVALUATED",
+        "training_cases_passed": 1,
+        "training_cases_total": 1,
+        "case_results": [
+          {
+            "input": 0,
+            "expected": -10,
+            "actual": -10,
+            "passed": true
+          }
+        ],
+        "gooo_source_sha256": "340891caed6fc8b723dcd8d36d3e97f11c1fe1d27211c9c45c42b619fff9ea22"
+      }
+    ],
+    "model_abstentions_observed": 2,
+    "eligible_probabilities": [
+      [
+        0.7643611284807108,
+        0.23563887151928925
+      ],
+      [
+        0.3084650347530397,
+        0.6915349652469602
+      ]
+    ],
+    "initial_proposals": {
+      "read": "reference_first",
+      "write": "assign_second"
+    }
+  },
+  "generated_go": "package generated\n\nfunc ComposePaths(input int64) int64 {\n\tvar first = (input * int64(4))\n\tvar second = (input * int64(14))\n\tsecond = (first + int64(10))\n\treturn (first - second)\n}\n",
+  "prepared_session_wall_ns": 45792
+}

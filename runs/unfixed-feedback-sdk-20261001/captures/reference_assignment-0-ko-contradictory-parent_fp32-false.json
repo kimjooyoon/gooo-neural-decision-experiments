@@ -1,0 +1,1922 @@
+{
+  "case_id": "reference_assignment-0-ko-contradictory",
+  "arm": "parent_fp32",
+  "unfixed_only": false,
+  "progress": [
+    {
+      "schema": "gooo/typed-path-session-progress/v1",
+      "sequence": 1,
+      "progress_sha256": "d6a1acadbf2adda153b33937cce39d6f72d6bfc57057946a660ea8cb3b6cf5e0",
+      "finite_cases_sha256": "de7e1bb2e55dc5cb3b3753fbf84fab0d1c710ac991908c2de6c5b6868ad19d63",
+      "status": "PARTIAL",
+      "selection": {
+        "schema": "gooo/typed-body-path-selection/v1",
+        "plan_sha256": "b7e40dcb5c943cf27b919ed32847381d597df2395c60d62b636f8a8ca767b9c8",
+        "choices": {
+          "read": "reference_first",
+          "write": "assign_first"
+        },
+        "receipts": [
+          {
+            "id": "read",
+            "kind": "local_reference",
+            "intent_sha256": "a0bd14fad6f696c0755b4a387c55773bb5fb22d5b8697376a05ae6ad459149d7",
+            "mode": "typed_probability_rank_before_finite_validation",
+            "proposed": "schedule_reverse",
+            "selected": "reference_first",
+            "global_confidence": 0.5926386,
+            "raw_probabilities": [
+              0.024364641,
+              0.0029252095,
+              0.32078737,
+              0.03161844,
+              0.0045582014,
+              0.012365798,
+              0.010741742,
+              0.5926386
+            ],
+            "predict_ns": 8708
+          },
+          {
+            "id": "write",
+            "kind": "assignment_target",
+            "intent_sha256": "a23ff98993166dc62989309a6489fcdb849723a8b3697e862b7797d2f6ab2721",
+            "mode": "typed_probability_rank_before_finite_validation",
+            "proposed": "schedule_reverse",
+            "selected": "assign_first",
+            "global_confidence": 0.6182064,
+            "raw_probabilities": [
+              0.0040288153,
+              0.00040501595,
+              0.3537939,
+              0.011587839,
+              0.0008568335,
+              0.0038922953,
+              0.007228892,
+              0.6182064
+            ],
+            "predict_ns": 8583
+          }
+        ],
+        "model_variant": "fp32",
+        "model_metadata_sha256": "1ea3bada068f2487418f17270db4ba6785a98c3ad60e0ad7eb92359400a01bb5",
+        "model_weights_sha256": "3732a103720fdb0da0ea611471ecde7472e0b9166322394ba9352ffb855b9354",
+        "local_model_predictions": 2,
+        "external_provider_calls": 0,
+        "external_provider_calls_known": true
+      },
+      "declared_combinations": 4,
+      "cumulative_attempts": 0,
+      "unattempted_combinations": 4,
+      "cumulative_evaluated_candidates": 0,
+      "cumulative_type_rejected_candidates": 0,
+      "selected_training_passed": 0,
+      "training_cases": 8,
+      "initial_proposals": {
+        "read": "reference_first",
+        "write": "assign_first"
+      },
+      "eligible_probabilities": [
+        [
+          0.8928096172558795,
+          0.10719038274412054
+        ],
+        [
+          0.9682856664443807,
+          0.03171433355561911
+        ]
+      ],
+      "model_abstentions_observed": 2,
+      "new_local_model_predictions": 0,
+      "space_exhausted": false,
+      "interrupted": false,
+      "scope": "Fixed finite cases and declared typed paths; not general language accuracy or all-input correctness. Digests link observations, not authorization to mutate source.",
+      "ranking_complete": true,
+      "scheduled_bitset_bytes": 8,
+      "frontier_nodes": 1,
+      "frontier_capacity_bytes": 64
+    },
+    {
+      "schema": "gooo/typed-path-session-progress/v1",
+      "sequence": 2,
+      "previous_progress_sha256": "d6a1acadbf2adda153b33937cce39d6f72d6bfc57057946a660ea8cb3b6cf5e0",
+      "progress_sha256": "e0c19a1da8306199079a408a75ce3e6175020aebd29b8d7d19001e877f71182c",
+      "finite_cases_sha256": "de7e1bb2e55dc5cb3b3753fbf84fab0d1c710ac991908c2de6c5b6868ad19d63",
+      "status": "PARTIAL",
+      "selection": {
+        "schema": "gooo/typed-body-path-selection/v1",
+        "plan_sha256": "b7e40dcb5c943cf27b919ed32847381d597df2395c60d62b636f8a8ca767b9c8",
+        "choices": {
+          "read": "reference_first",
+          "write": "assign_first"
+        },
+        "receipts": [
+          {
+            "id": "read",
+            "kind": "local_reference",
+            "intent_sha256": "a0bd14fad6f696c0755b4a387c55773bb5fb22d5b8697376a05ae6ad459149d7",
+            "mode": "finite_tdd_selection",
+            "proposed": "schedule_reverse",
+            "selected": "reference_first",
+            "global_confidence": 0.5926386,
+            "raw_probabilities": [
+              0.024364641,
+              0.0029252095,
+              0.32078737,
+              0.03161844,
+              0.0045582014,
+              0.012365798,
+              0.010741742,
+              0.5926386
+            ],
+            "predict_ns": 8708
+          },
+          {
+            "id": "write",
+            "kind": "assignment_target",
+            "intent_sha256": "a23ff98993166dc62989309a6489fcdb849723a8b3697e862b7797d2f6ab2721",
+            "mode": "finite_tdd_selection",
+            "proposed": "schedule_reverse",
+            "selected": "assign_first",
+            "global_confidence": 0.6182064,
+            "raw_probabilities": [
+              0.0040288153,
+              0.00040501595,
+              0.3537939,
+              0.011587839,
+              0.0008568335,
+              0.0038922953,
+              0.007228892,
+              0.6182064
+            ],
+            "predict_ns": 8583
+          }
+        ],
+        "model_variant": "fp32",
+        "model_metadata_sha256": "1ea3bada068f2487418f17270db4ba6785a98c3ad60e0ad7eb92359400a01bb5",
+        "model_weights_sha256": "3732a103720fdb0da0ea611471ecde7472e0b9166322394ba9352ffb855b9354",
+        "local_model_predictions": 2,
+        "external_provider_calls": 0,
+        "external_provider_calls_known": true
+      },
+      "declared_combinations": 4,
+      "cumulative_attempts": 1,
+      "unattempted_combinations": 3,
+      "cumulative_evaluated_candidates": 1,
+      "cumulative_type_rejected_candidates": 0,
+      "selected_training_passed": 7,
+      "training_cases": 8,
+      "selected_case_results": [
+        {
+          "input": -7,
+          "expected": 80,
+          "actual": 80,
+          "passed": true
+        },
+        {
+          "input": -1,
+          "expected": 20,
+          "actual": 20,
+          "passed": true
+        },
+        {
+          "input": 0,
+          "expected": 10,
+          "actual": 10,
+          "passed": true
+        },
+        {
+          "input": 1,
+          "expected": 0,
+          "actual": 0,
+          "passed": true
+        },
+        {
+          "input": 3,
+          "expected": -20,
+          "actual": -20,
+          "passed": true
+        },
+        {
+          "input": 4,
+          "expected": -30,
+          "actual": -30,
+          "passed": true
+        },
+        {
+          "input": 5,
+          "expected": -40,
+          "actual": -40,
+          "passed": true
+        },
+        {
+          "input": -7,
+          "expected": 81,
+          "actual": 80,
+          "passed": false
+        }
+      ],
+      "new_attempts": [
+        {
+          "choice_mask": 0,
+          "choices": {
+            "read": "reference_first",
+            "write": "assign_first"
+          },
+          "status": "EVALUATED",
+          "training_cases_passed": 7,
+          "training_cases_total": 8,
+          "case_results": [
+            {
+              "input": -7,
+              "expected": 80,
+              "actual": 80,
+              "passed": true
+            },
+            {
+              "input": -1,
+              "expected": 20,
+              "actual": 20,
+              "passed": true
+            },
+            {
+              "input": 0,
+              "expected": 10,
+              "actual": 10,
+              "passed": true
+            },
+            {
+              "input": 1,
+              "expected": 0,
+              "actual": 0,
+              "passed": true
+            },
+            {
+              "input": 3,
+              "expected": -20,
+              "actual": -20,
+              "passed": true
+            },
+            {
+              "input": 4,
+              "expected": -30,
+              "actual": -30,
+              "passed": true
+            },
+            {
+              "input": 5,
+              "expected": -40,
+              "actual": -40,
+              "passed": true
+            },
+            {
+              "input": -7,
+              "expected": 81,
+              "actual": 80,
+              "passed": false
+            }
+          ],
+          "gooo_source_sha256": "13c576d01b53bda100f88e045feec391da4619e8ed54b6104f2783b331857688"
+        }
+      ],
+      "initial_proposals": {
+        "read": "reference_first",
+        "write": "assign_first"
+      },
+      "eligible_probabilities": [
+        [
+          0.8928096172558795,
+          0.10719038274412054
+        ],
+        [
+          0.9682856664443807,
+          0.03171433355561911
+        ]
+      ],
+      "model_abstentions_observed": 2,
+      "new_local_model_predictions": 0,
+      "space_exhausted": false,
+      "interrupted": false,
+      "scope": "Fixed finite cases and declared typed paths; not general language accuracy or all-input correctness. Digests link observations, not authorization to mutate source.",
+      "ranking_complete": true,
+      "scheduled_bitset_bytes": 8,
+      "frontier_nodes": 2,
+      "frontier_capacity_bytes": 64
+    },
+    {
+      "schema": "gooo/typed-path-session-progress/v1",
+      "sequence": 3,
+      "previous_progress_sha256": "e0c19a1da8306199079a408a75ce3e6175020aebd29b8d7d19001e877f71182c",
+      "progress_sha256": "474ba79d6375c74c8d1297a80355b0b36f8fb3efa60ae93b4cb20fe4e8b094ab",
+      "finite_cases_sha256": "de7e1bb2e55dc5cb3b3753fbf84fab0d1c710ac991908c2de6c5b6868ad19d63",
+      "status": "PARTIAL",
+      "selection": {
+        "schema": "gooo/typed-body-path-selection/v1",
+        "plan_sha256": "b7e40dcb5c943cf27b919ed32847381d597df2395c60d62b636f8a8ca767b9c8",
+        "choices": {
+          "read": "reference_first",
+          "write": "assign_first"
+        },
+        "receipts": [
+          {
+            "id": "read",
+            "kind": "local_reference",
+            "intent_sha256": "a0bd14fad6f696c0755b4a387c55773bb5fb22d5b8697376a05ae6ad459149d7",
+            "mode": "finite_tdd_selection",
+            "proposed": "schedule_reverse",
+            "selected": "reference_first",
+            "global_confidence": 0.5926386,
+            "raw_probabilities": [
+              0.024364641,
+              0.0029252095,
+              0.32078737,
+              0.03161844,
+              0.0045582014,
+              0.012365798,
+              0.010741742,
+              0.5926386
+            ],
+            "predict_ns": 8708
+          },
+          {
+            "id": "write",
+            "kind": "assignment_target",
+            "intent_sha256": "a23ff98993166dc62989309a6489fcdb849723a8b3697e862b7797d2f6ab2721",
+            "mode": "finite_tdd_selection",
+            "proposed": "schedule_reverse",
+            "selected": "assign_first",
+            "global_confidence": 0.6182064,
+            "raw_probabilities": [
+              0.0040288153,
+              0.00040501595,
+              0.3537939,
+              0.011587839,
+              0.0008568335,
+              0.0038922953,
+              0.007228892,
+              0.6182064
+            ],
+            "predict_ns": 8583
+          }
+        ],
+        "model_variant": "fp32",
+        "model_metadata_sha256": "1ea3bada068f2487418f17270db4ba6785a98c3ad60e0ad7eb92359400a01bb5",
+        "model_weights_sha256": "3732a103720fdb0da0ea611471ecde7472e0b9166322394ba9352ffb855b9354",
+        "local_model_predictions": 4,
+        "external_provider_calls": 0,
+        "external_provider_calls_known": true
+      },
+      "declared_combinations": 4,
+      "cumulative_attempts": 1,
+      "unattempted_combinations": 3,
+      "cumulative_evaluated_candidates": 1,
+      "cumulative_type_rejected_candidates": 0,
+      "selected_training_passed": 7,
+      "training_cases": 8,
+      "selected_case_results": [
+        {
+          "input": -7,
+          "expected": 80,
+          "actual": 80,
+          "passed": true
+        },
+        {
+          "input": -1,
+          "expected": 20,
+          "actual": 20,
+          "passed": true
+        },
+        {
+          "input": 0,
+          "expected": 10,
+          "actual": 10,
+          "passed": true
+        },
+        {
+          "input": 1,
+          "expected": 0,
+          "actual": 0,
+          "passed": true
+        },
+        {
+          "input": 3,
+          "expected": -20,
+          "actual": -20,
+          "passed": true
+        },
+        {
+          "input": 4,
+          "expected": -30,
+          "actual": -30,
+          "passed": true
+        },
+        {
+          "input": 5,
+          "expected": -40,
+          "actual": -40,
+          "passed": true
+        },
+        {
+          "input": -7,
+          "expected": 81,
+          "actual": 80,
+          "passed": false
+        }
+      ],
+      "initial_proposals": {
+        "read": "reference_first",
+        "write": "assign_first"
+      },
+      "eligible_probabilities": [
+        [
+          0.8928096172558795,
+          0.10719038274412054
+        ],
+        [
+          0.9682856664443807,
+          0.03171433355561911
+        ]
+      ],
+      "model_abstentions_observed": 4,
+      "new_local_model_predictions": 0,
+      "space_exhausted": false,
+      "interrupted": false,
+      "scope": "Fixed finite cases and declared typed paths; not general language accuracy or all-input correctness. Digests link observations, not authorization to mutate source.",
+      "ranking_complete": true,
+      "scheduled_bitset_bytes": 8,
+      "frontier_nodes": 2,
+      "frontier_capacity_bytes": 64,
+      "feedback_rounds": 1,
+      "feedback_local_model_predictions": 2,
+      "latest_feedback_sha256": "02460d4ed25896c7284739cee7423991bc5465670ecb532dfe4bceaffd4edb9f"
+    },
+    {
+      "schema": "gooo/typed-path-session-progress/v1",
+      "sequence": 4,
+      "previous_progress_sha256": "474ba79d6375c74c8d1297a80355b0b36f8fb3efa60ae93b4cb20fe4e8b094ab",
+      "progress_sha256": "3665df85eb39fdc8bf0403767b2679a91adb2c96556bd24220e44e2b6fa6141f",
+      "finite_cases_sha256": "de7e1bb2e55dc5cb3b3753fbf84fab0d1c710ac991908c2de6c5b6868ad19d63",
+      "status": "PARTIAL",
+      "selection": {
+        "schema": "gooo/typed-body-path-selection/v1",
+        "plan_sha256": "b7e40dcb5c943cf27b919ed32847381d597df2395c60d62b636f8a8ca767b9c8",
+        "choices": {
+          "read": "reference_first",
+          "write": "assign_first"
+        },
+        "receipts": [
+          {
+            "id": "read",
+            "kind": "local_reference",
+            "intent_sha256": "a0bd14fad6f696c0755b4a387c55773bb5fb22d5b8697376a05ae6ad459149d7",
+            "mode": "finite_tdd_selection",
+            "proposed": "schedule_reverse",
+            "selected": "reference_first",
+            "global_confidence": 0.5926386,
+            "raw_probabilities": [
+              0.024364641,
+              0.0029252095,
+              0.32078737,
+              0.03161844,
+              0.0045582014,
+              0.012365798,
+              0.010741742,
+              0.5926386
+            ],
+            "predict_ns": 8708
+          },
+          {
+            "id": "write",
+            "kind": "assignment_target",
+            "intent_sha256": "a23ff98993166dc62989309a6489fcdb849723a8b3697e862b7797d2f6ab2721",
+            "mode": "finite_tdd_selection",
+            "proposed": "schedule_reverse",
+            "selected": "assign_first",
+            "global_confidence": 0.6182064,
+            "raw_probabilities": [
+              0.0040288153,
+              0.00040501595,
+              0.3537939,
+              0.011587839,
+              0.0008568335,
+              0.0038922953,
+              0.007228892,
+              0.6182064
+            ],
+            "predict_ns": 8583
+          }
+        ],
+        "model_variant": "fp32",
+        "model_metadata_sha256": "1ea3bada068f2487418f17270db4ba6785a98c3ad60e0ad7eb92359400a01bb5",
+        "model_weights_sha256": "3732a103720fdb0da0ea611471ecde7472e0b9166322394ba9352ffb855b9354",
+        "local_model_predictions": 4,
+        "external_provider_calls": 0,
+        "external_provider_calls_known": true
+      },
+      "declared_combinations": 4,
+      "cumulative_attempts": 2,
+      "unattempted_combinations": 2,
+      "cumulative_evaluated_candidates": 2,
+      "cumulative_type_rejected_candidates": 0,
+      "selected_training_passed": 7,
+      "training_cases": 8,
+      "selected_case_results": [
+        {
+          "input": -7,
+          "expected": 80,
+          "actual": 80,
+          "passed": true
+        },
+        {
+          "input": -1,
+          "expected": 20,
+          "actual": 20,
+          "passed": true
+        },
+        {
+          "input": 0,
+          "expected": 10,
+          "actual": 10,
+          "passed": true
+        },
+        {
+          "input": 1,
+          "expected": 0,
+          "actual": 0,
+          "passed": true
+        },
+        {
+          "input": 3,
+          "expected": -20,
+          "actual": -20,
+          "passed": true
+        },
+        {
+          "input": 4,
+          "expected": -30,
+          "actual": -30,
+          "passed": true
+        },
+        {
+          "input": 5,
+          "expected": -40,
+          "actual": -40,
+          "passed": true
+        },
+        {
+          "input": -7,
+          "expected": 81,
+          "actual": 80,
+          "passed": false
+        }
+      ],
+      "new_attempts": [
+        {
+          "choice_mask": 1,
+          "choices": {
+            "read": "reference_second",
+            "write": "assign_first"
+          },
+          "status": "EVALUATED",
+          "training_cases_passed": 1,
+          "training_cases_total": 8,
+          "case_results": [
+            {
+              "input": -7,
+              "expected": 80,
+              "actual": 10,
+              "passed": false
+            },
+            {
+              "input": -1,
+              "expected": 20,
+              "actual": 10,
+              "passed": false
+            },
+            {
+              "input": 0,
+              "expected": 10,
+              "actual": 10,
+              "passed": true
+            },
+            {
+              "input": 1,
+              "expected": 0,
+              "actual": 10,
+              "passed": false
+            },
+            {
+              "input": 3,
+              "expected": -20,
+              "actual": 10,
+              "passed": false
+            },
+            {
+              "input": 4,
+              "expected": -30,
+              "actual": 10,
+              "passed": false
+            },
+            {
+              "input": 5,
+              "expected": -40,
+              "actual": 10,
+              "passed": false
+            },
+            {
+              "input": -7,
+              "expected": 81,
+              "actual": 10,
+              "passed": false
+            }
+          ],
+          "gooo_source_sha256": "8d0ffd05432330389952de952be6dbbf4e7a5f915216e2003b44f60b965f1632"
+        }
+      ],
+      "initial_proposals": {
+        "read": "reference_first",
+        "write": "assign_first"
+      },
+      "eligible_probabilities": [
+        [
+          0.8928096172558795,
+          0.10719038274412054
+        ],
+        [
+          0.9682856664443807,
+          0.03171433355561911
+        ]
+      ],
+      "model_abstentions_observed": 4,
+      "new_local_model_predictions": 0,
+      "space_exhausted": false,
+      "interrupted": false,
+      "scope": "Fixed finite cases and declared typed paths; not general language accuracy or all-input correctness. Digests link observations, not authorization to mutate source.",
+      "ranking_complete": true,
+      "scheduled_bitset_bytes": 8,
+      "frontier_nodes": 2,
+      "frontier_capacity_bytes": 64,
+      "feedback_rounds": 1,
+      "feedback_local_model_predictions": 2,
+      "latest_feedback_sha256": "02460d4ed25896c7284739cee7423991bc5465670ecb532dfe4bceaffd4edb9f"
+    },
+    {
+      "schema": "gooo/typed-path-session-progress/v1",
+      "sequence": 5,
+      "previous_progress_sha256": "3665df85eb39fdc8bf0403767b2679a91adb2c96556bd24220e44e2b6fa6141f",
+      "progress_sha256": "2d1b396c4ed98e81340402cd30cf10345eca76383ab76f9fd4d73234ed9f4f65",
+      "finite_cases_sha256": "de7e1bb2e55dc5cb3b3753fbf84fab0d1c710ac991908c2de6c5b6868ad19d63",
+      "status": "PARTIAL",
+      "selection": {
+        "schema": "gooo/typed-body-path-selection/v1",
+        "plan_sha256": "b7e40dcb5c943cf27b919ed32847381d597df2395c60d62b636f8a8ca767b9c8",
+        "choices": {
+          "read": "reference_first",
+          "write": "assign_first"
+        },
+        "receipts": [
+          {
+            "id": "read",
+            "kind": "local_reference",
+            "intent_sha256": "a0bd14fad6f696c0755b4a387c55773bb5fb22d5b8697376a05ae6ad459149d7",
+            "mode": "finite_tdd_selection",
+            "proposed": "schedule_reverse",
+            "selected": "reference_first",
+            "global_confidence": 0.5926386,
+            "raw_probabilities": [
+              0.024364641,
+              0.0029252095,
+              0.32078737,
+              0.03161844,
+              0.0045582014,
+              0.012365798,
+              0.010741742,
+              0.5926386
+            ],
+            "predict_ns": 8708
+          },
+          {
+            "id": "write",
+            "kind": "assignment_target",
+            "intent_sha256": "a23ff98993166dc62989309a6489fcdb849723a8b3697e862b7797d2f6ab2721",
+            "mode": "finite_tdd_selection",
+            "proposed": "schedule_reverse",
+            "selected": "assign_first",
+            "global_confidence": 0.6182064,
+            "raw_probabilities": [
+              0.0040288153,
+              0.00040501595,
+              0.3537939,
+              0.011587839,
+              0.0008568335,
+              0.0038922953,
+              0.007228892,
+              0.6182064
+            ],
+            "predict_ns": 8583
+          }
+        ],
+        "model_variant": "fp32",
+        "model_metadata_sha256": "1ea3bada068f2487418f17270db4ba6785a98c3ad60e0ad7eb92359400a01bb5",
+        "model_weights_sha256": "3732a103720fdb0da0ea611471ecde7472e0b9166322394ba9352ffb855b9354",
+        "local_model_predictions": 6,
+        "external_provider_calls": 0,
+        "external_provider_calls_known": true
+      },
+      "declared_combinations": 4,
+      "cumulative_attempts": 2,
+      "unattempted_combinations": 2,
+      "cumulative_evaluated_candidates": 2,
+      "cumulative_type_rejected_candidates": 0,
+      "selected_training_passed": 7,
+      "training_cases": 8,
+      "selected_case_results": [
+        {
+          "input": -7,
+          "expected": 80,
+          "actual": 80,
+          "passed": true
+        },
+        {
+          "input": -1,
+          "expected": 20,
+          "actual": 20,
+          "passed": true
+        },
+        {
+          "input": 0,
+          "expected": 10,
+          "actual": 10,
+          "passed": true
+        },
+        {
+          "input": 1,
+          "expected": 0,
+          "actual": 0,
+          "passed": true
+        },
+        {
+          "input": 3,
+          "expected": -20,
+          "actual": -20,
+          "passed": true
+        },
+        {
+          "input": 4,
+          "expected": -30,
+          "actual": -30,
+          "passed": true
+        },
+        {
+          "input": 5,
+          "expected": -40,
+          "actual": -40,
+          "passed": true
+        },
+        {
+          "input": -7,
+          "expected": 81,
+          "actual": 80,
+          "passed": false
+        }
+      ],
+      "initial_proposals": {
+        "read": "reference_first",
+        "write": "assign_first"
+      },
+      "eligible_probabilities": [
+        [
+          0.8928096172558795,
+          0.10719038274412054
+        ],
+        [
+          0.9682856664443807,
+          0.03171433355561911
+        ]
+      ],
+      "model_abstentions_observed": 6,
+      "new_local_model_predictions": 0,
+      "space_exhausted": false,
+      "interrupted": false,
+      "scope": "Fixed finite cases and declared typed paths; not general language accuracy or all-input correctness. Digests link observations, not authorization to mutate source.",
+      "ranking_complete": true,
+      "scheduled_bitset_bytes": 8,
+      "frontier_nodes": 2,
+      "frontier_capacity_bytes": 64,
+      "feedback_rounds": 2,
+      "feedback_local_model_predictions": 4,
+      "latest_feedback_sha256": "4af2d4dc390b0f988472563a96f1e1f17de02097713133320d82f9fcdfc8a074"
+    },
+    {
+      "schema": "gooo/typed-path-session-progress/v1",
+      "sequence": 6,
+      "previous_progress_sha256": "2d1b396c4ed98e81340402cd30cf10345eca76383ab76f9fd4d73234ed9f4f65",
+      "progress_sha256": "4943132fd51f587ed9c2d2879f61d4be599e66a983053f462fb19569aff2eed6",
+      "finite_cases_sha256": "de7e1bb2e55dc5cb3b3753fbf84fab0d1c710ac991908c2de6c5b6868ad19d63",
+      "status": "PARTIAL",
+      "selection": {
+        "schema": "gooo/typed-body-path-selection/v1",
+        "plan_sha256": "b7e40dcb5c943cf27b919ed32847381d597df2395c60d62b636f8a8ca767b9c8",
+        "choices": {
+          "read": "reference_first",
+          "write": "assign_first"
+        },
+        "receipts": [
+          {
+            "id": "read",
+            "kind": "local_reference",
+            "intent_sha256": "a0bd14fad6f696c0755b4a387c55773bb5fb22d5b8697376a05ae6ad459149d7",
+            "mode": "finite_tdd_selection",
+            "proposed": "schedule_reverse",
+            "selected": "reference_first",
+            "global_confidence": 0.5926386,
+            "raw_probabilities": [
+              0.024364641,
+              0.0029252095,
+              0.32078737,
+              0.03161844,
+              0.0045582014,
+              0.012365798,
+              0.010741742,
+              0.5926386
+            ],
+            "predict_ns": 8708
+          },
+          {
+            "id": "write",
+            "kind": "assignment_target",
+            "intent_sha256": "a23ff98993166dc62989309a6489fcdb849723a8b3697e862b7797d2f6ab2721",
+            "mode": "finite_tdd_selection",
+            "proposed": "schedule_reverse",
+            "selected": "assign_first",
+            "global_confidence": 0.6182064,
+            "raw_probabilities": [
+              0.0040288153,
+              0.00040501595,
+              0.3537939,
+              0.011587839,
+              0.0008568335,
+              0.0038922953,
+              0.007228892,
+              0.6182064
+            ],
+            "predict_ns": 8583
+          }
+        ],
+        "model_variant": "fp32",
+        "model_metadata_sha256": "1ea3bada068f2487418f17270db4ba6785a98c3ad60e0ad7eb92359400a01bb5",
+        "model_weights_sha256": "3732a103720fdb0da0ea611471ecde7472e0b9166322394ba9352ffb855b9354",
+        "local_model_predictions": 6,
+        "external_provider_calls": 0,
+        "external_provider_calls_known": true
+      },
+      "declared_combinations": 4,
+      "cumulative_attempts": 3,
+      "unattempted_combinations": 1,
+      "cumulative_evaluated_candidates": 3,
+      "cumulative_type_rejected_candidates": 0,
+      "selected_training_passed": 7,
+      "training_cases": 8,
+      "selected_case_results": [
+        {
+          "input": -7,
+          "expected": 80,
+          "actual": 80,
+          "passed": true
+        },
+        {
+          "input": -1,
+          "expected": 20,
+          "actual": 20,
+          "passed": true
+        },
+        {
+          "input": 0,
+          "expected": 10,
+          "actual": 10,
+          "passed": true
+        },
+        {
+          "input": 1,
+          "expected": 0,
+          "actual": 0,
+          "passed": true
+        },
+        {
+          "input": 3,
+          "expected": -20,
+          "actual": -20,
+          "passed": true
+        },
+        {
+          "input": 4,
+          "expected": -30,
+          "actual": -30,
+          "passed": true
+        },
+        {
+          "input": 5,
+          "expected": -40,
+          "actual": -40,
+          "passed": true
+        },
+        {
+          "input": -7,
+          "expected": 81,
+          "actual": 80,
+          "passed": false
+        }
+      ],
+      "new_attempts": [
+        {
+          "choice_mask": 2,
+          "choices": {
+            "read": "reference_first",
+            "write": "assign_second"
+          },
+          "status": "EVALUATED",
+          "training_cases_passed": 0,
+          "training_cases_total": 8,
+          "case_results": [
+            {
+              "input": -7,
+              "expected": 80,
+              "actual": -10,
+              "passed": false
+            },
+            {
+              "input": -1,
+              "expected": 20,
+              "actual": -10,
+              "passed": false
+            },
+            {
+              "input": 0,
+              "expected": 10,
+              "actual": -10,
+              "passed": false
+            },
+            {
+              "input": 1,
+              "expected": 0,
+              "actual": -10,
+              "passed": false
+            },
+            {
+              "input": 3,
+              "expected": -20,
+              "actual": -10,
+              "passed": false
+            },
+            {
+              "input": 4,
+              "expected": -30,
+              "actual": -10,
+              "passed": false
+            },
+            {
+              "input": 5,
+              "expected": -40,
+              "actual": -10,
+              "passed": false
+            },
+            {
+              "input": -7,
+              "expected": 81,
+              "actual": -10,
+              "passed": false
+            }
+          ],
+          "gooo_source_sha256": "340891caed6fc8b723dcd8d36d3e97f11c1fe1d27211c9c45c42b619fff9ea22"
+        }
+      ],
+      "initial_proposals": {
+        "read": "reference_first",
+        "write": "assign_first"
+      },
+      "eligible_probabilities": [
+        [
+          0.8928096172558795,
+          0.10719038274412054
+        ],
+        [
+          0.9682856664443807,
+          0.03171433355561911
+        ]
+      ],
+      "model_abstentions_observed": 6,
+      "new_local_model_predictions": 0,
+      "space_exhausted": false,
+      "interrupted": false,
+      "scope": "Fixed finite cases and declared typed paths; not general language accuracy or all-input correctness. Digests link observations, not authorization to mutate source.",
+      "ranking_complete": true,
+      "scheduled_bitset_bytes": 8,
+      "frontier_nodes": 1,
+      "frontier_capacity_bytes": 64,
+      "feedback_rounds": 2,
+      "feedback_local_model_predictions": 4,
+      "latest_feedback_sha256": "4af2d4dc390b0f988472563a96f1e1f17de02097713133320d82f9fcdfc8a074"
+    },
+    {
+      "schema": "gooo/typed-path-session-progress/v1",
+      "sequence": 7,
+      "previous_progress_sha256": "4943132fd51f587ed9c2d2879f61d4be599e66a983053f462fb19569aff2eed6",
+      "progress_sha256": "befeb18956d12e2db0d20de0ace0944a8e1ad8de792f037c1ce28037294d3511",
+      "finite_cases_sha256": "de7e1bb2e55dc5cb3b3753fbf84fab0d1c710ac991908c2de6c5b6868ad19d63",
+      "status": "PARTIAL",
+      "selection": {
+        "schema": "gooo/typed-body-path-selection/v1",
+        "plan_sha256": "b7e40dcb5c943cf27b919ed32847381d597df2395c60d62b636f8a8ca767b9c8",
+        "choices": {
+          "read": "reference_first",
+          "write": "assign_first"
+        },
+        "receipts": [
+          {
+            "id": "read",
+            "kind": "local_reference",
+            "intent_sha256": "a0bd14fad6f696c0755b4a387c55773bb5fb22d5b8697376a05ae6ad459149d7",
+            "mode": "finite_tdd_selection",
+            "proposed": "schedule_reverse",
+            "selected": "reference_first",
+            "global_confidence": 0.5926386,
+            "raw_probabilities": [
+              0.024364641,
+              0.0029252095,
+              0.32078737,
+              0.03161844,
+              0.0045582014,
+              0.012365798,
+              0.010741742,
+              0.5926386
+            ],
+            "predict_ns": 8708
+          },
+          {
+            "id": "write",
+            "kind": "assignment_target",
+            "intent_sha256": "a23ff98993166dc62989309a6489fcdb849723a8b3697e862b7797d2f6ab2721",
+            "mode": "finite_tdd_selection",
+            "proposed": "schedule_reverse",
+            "selected": "assign_first",
+            "global_confidence": 0.6182064,
+            "raw_probabilities": [
+              0.0040288153,
+              0.00040501595,
+              0.3537939,
+              0.011587839,
+              0.0008568335,
+              0.0038922953,
+              0.007228892,
+              0.6182064
+            ],
+            "predict_ns": 8583
+          }
+        ],
+        "model_variant": "fp32",
+        "model_metadata_sha256": "1ea3bada068f2487418f17270db4ba6785a98c3ad60e0ad7eb92359400a01bb5",
+        "model_weights_sha256": "3732a103720fdb0da0ea611471ecde7472e0b9166322394ba9352ffb855b9354",
+        "local_model_predictions": 6,
+        "external_provider_calls": 0,
+        "external_provider_calls_known": true
+      },
+      "declared_combinations": 4,
+      "cumulative_attempts": 3,
+      "unattempted_combinations": 1,
+      "cumulative_evaluated_candidates": 3,
+      "cumulative_type_rejected_candidates": 0,
+      "selected_training_passed": 7,
+      "training_cases": 8,
+      "selected_case_results": [
+        {
+          "input": -7,
+          "expected": 80,
+          "actual": 80,
+          "passed": true
+        },
+        {
+          "input": -1,
+          "expected": 20,
+          "actual": 20,
+          "passed": true
+        },
+        {
+          "input": 0,
+          "expected": 10,
+          "actual": 10,
+          "passed": true
+        },
+        {
+          "input": 1,
+          "expected": 0,
+          "actual": 0,
+          "passed": true
+        },
+        {
+          "input": 3,
+          "expected": -20,
+          "actual": -20,
+          "passed": true
+        },
+        {
+          "input": 4,
+          "expected": -30,
+          "actual": -30,
+          "passed": true
+        },
+        {
+          "input": 5,
+          "expected": -40,
+          "actual": -40,
+          "passed": true
+        },
+        {
+          "input": -7,
+          "expected": 81,
+          "actual": 80,
+          "passed": false
+        }
+      ],
+      "initial_proposals": {
+        "read": "reference_first",
+        "write": "assign_first"
+      },
+      "eligible_probabilities": [
+        [
+          0.8928096172558795,
+          0.10719038274412054
+        ],
+        [
+          0.9682856664443807,
+          0.03171433355561911
+        ]
+      ],
+      "model_abstentions_observed": 6,
+      "new_local_model_predictions": 0,
+      "space_exhausted": false,
+      "interrupted": false,
+      "scope": "Fixed finite cases and declared typed paths; not general language accuracy or all-input correctness. Digests link observations, not authorization to mutate source.",
+      "ranking_complete": true,
+      "scheduled_bitset_bytes": 8,
+      "frontier_nodes": 1,
+      "frontier_capacity_bytes": 64,
+      "feedback_rounds": 3,
+      "feedback_local_model_predictions": 4,
+      "latest_feedback_sha256": "e1c32512e328916becf34f901710ecee7adb94fb7e9a4350ba11b81f70bd4369"
+    },
+    {
+      "schema": "gooo/typed-path-session-progress/v1",
+      "sequence": 8,
+      "previous_progress_sha256": "befeb18956d12e2db0d20de0ace0944a8e1ad8de792f037c1ce28037294d3511",
+      "progress_sha256": "333497a88acbace7c9fa8f6b0bf5666064b900362c6cff3c0ddb9b991c700a43",
+      "finite_cases_sha256": "de7e1bb2e55dc5cb3b3753fbf84fab0d1c710ac991908c2de6c5b6868ad19d63",
+      "status": "PARTIAL",
+      "selection": {
+        "schema": "gooo/typed-body-path-selection/v1",
+        "plan_sha256": "b7e40dcb5c943cf27b919ed32847381d597df2395c60d62b636f8a8ca767b9c8",
+        "choices": {
+          "read": "reference_first",
+          "write": "assign_first"
+        },
+        "receipts": [
+          {
+            "id": "read",
+            "kind": "local_reference",
+            "intent_sha256": "a0bd14fad6f696c0755b4a387c55773bb5fb22d5b8697376a05ae6ad459149d7",
+            "mode": "finite_tdd_selection",
+            "proposed": "schedule_reverse",
+            "selected": "reference_first",
+            "global_confidence": 0.5926386,
+            "raw_probabilities": [
+              0.024364641,
+              0.0029252095,
+              0.32078737,
+              0.03161844,
+              0.0045582014,
+              0.012365798,
+              0.010741742,
+              0.5926386
+            ],
+            "predict_ns": 8708
+          },
+          {
+            "id": "write",
+            "kind": "assignment_target",
+            "intent_sha256": "a23ff98993166dc62989309a6489fcdb849723a8b3697e862b7797d2f6ab2721",
+            "mode": "finite_tdd_selection",
+            "proposed": "schedule_reverse",
+            "selected": "assign_first",
+            "global_confidence": 0.6182064,
+            "raw_probabilities": [
+              0.0040288153,
+              0.00040501595,
+              0.3537939,
+              0.011587839,
+              0.0008568335,
+              0.0038922953,
+              0.007228892,
+              0.6182064
+            ],
+            "predict_ns": 8583
+          }
+        ],
+        "model_variant": "fp32",
+        "model_metadata_sha256": "1ea3bada068f2487418f17270db4ba6785a98c3ad60e0ad7eb92359400a01bb5",
+        "model_weights_sha256": "3732a103720fdb0da0ea611471ecde7472e0b9166322394ba9352ffb855b9354",
+        "local_model_predictions": 6,
+        "external_provider_calls": 0,
+        "external_provider_calls_known": true
+      },
+      "declared_combinations": 4,
+      "cumulative_attempts": 4,
+      "unattempted_combinations": 0,
+      "cumulative_evaluated_candidates": 4,
+      "cumulative_type_rejected_candidates": 0,
+      "selected_training_passed": 7,
+      "training_cases": 8,
+      "selected_case_results": [
+        {
+          "input": -7,
+          "expected": 80,
+          "actual": 80,
+          "passed": true
+        },
+        {
+          "input": -1,
+          "expected": 20,
+          "actual": 20,
+          "passed": true
+        },
+        {
+          "input": 0,
+          "expected": 10,
+          "actual": 10,
+          "passed": true
+        },
+        {
+          "input": 1,
+          "expected": 0,
+          "actual": 0,
+          "passed": true
+        },
+        {
+          "input": 3,
+          "expected": -20,
+          "actual": -20,
+          "passed": true
+        },
+        {
+          "input": 4,
+          "expected": -30,
+          "actual": -30,
+          "passed": true
+        },
+        {
+          "input": 5,
+          "expected": -40,
+          "actual": -40,
+          "passed": true
+        },
+        {
+          "input": -7,
+          "expected": 81,
+          "actual": 80,
+          "passed": false
+        }
+      ],
+      "new_attempts": [
+        {
+          "choice_mask": 3,
+          "choices": {
+            "read": "reference_second",
+            "write": "assign_second"
+          },
+          "status": "EVALUATED",
+          "training_cases_passed": 0,
+          "training_cases_total": 8,
+          "case_results": [
+            {
+              "input": -7,
+              "expected": 80,
+              "actual": 60,
+              "passed": false
+            },
+            {
+              "input": -1,
+              "expected": 20,
+              "actual": 0,
+              "passed": false
+            },
+            {
+              "input": 0,
+              "expected": 10,
+              "actual": -10,
+              "passed": false
+            },
+            {
+              "input": 1,
+              "expected": 0,
+              "actual": -20,
+              "passed": false
+            },
+            {
+              "input": 3,
+              "expected": -20,
+              "actual": -40,
+              "passed": false
+            },
+            {
+              "input": 4,
+              "expected": -30,
+              "actual": -50,
+              "passed": false
+            },
+            {
+              "input": 5,
+              "expected": -40,
+              "actual": -60,
+              "passed": false
+            },
+            {
+              "input": -7,
+              "expected": 81,
+              "actual": 60,
+              "passed": false
+            }
+          ],
+          "gooo_source_sha256": "632e8ac7c1ea03fb7d35c594a714a2c85a026ad8978f461616823898a60f8e35"
+        }
+      ],
+      "initial_proposals": {
+        "read": "reference_first",
+        "write": "assign_first"
+      },
+      "eligible_probabilities": [
+        [
+          0.8928096172558795,
+          0.10719038274412054
+        ],
+        [
+          0.9682856664443807,
+          0.03171433355561911
+        ]
+      ],
+      "model_abstentions_observed": 6,
+      "new_local_model_predictions": 0,
+      "space_exhausted": true,
+      "interrupted": false,
+      "scope": "Fixed finite cases and declared typed paths; not general language accuracy or all-input correctness. Digests link observations, not authorization to mutate source.",
+      "ranking_complete": true,
+      "scheduled_bitset_bytes": 8,
+      "frontier_nodes": 0,
+      "frontier_capacity_bytes": 64,
+      "feedback_rounds": 3,
+      "feedback_local_model_predictions": 4,
+      "latest_feedback_sha256": "e1c32512e328916becf34f901710ecee7adb94fb7e9a4350ba11b81f70bd4369"
+    }
+  ],
+  "feedback": [
+    {
+      "schema": "gooo/typed-path-feedback-judgment/v1",
+      "round": 1,
+      "feedback_sha256": "02460d4ed25896c7284739cee7423991bc5465670ecb532dfe4bceaffd4edb9f",
+      "from_progress_sha256": "e0c19a1da8306199079a408a75ce3e6175020aebd29b8d7d19001e877f71182c",
+      "plan_sha256": "b7e40dcb5c943cf27b919ed32847381d597df2395c60d62b636f8a8ca767b9c8",
+      "finite_cases_sha256": "de7e1bb2e55dc5cb3b3753fbf84fab0d1c710ac991908c2de6c5b6868ad19d63",
+      "model_metadata_sha256": "1ea3bada068f2487418f17270db4ba6785a98c3ad60e0ad7eb92359400a01bb5",
+      "model_weights_sha256": "3732a103720fdb0da0ea611471ecde7472e0b9166322394ba9352ffb855b9354",
+      "prior_attempts": 1,
+      "prior_selected_passed": 7,
+      "finite_cases": 8,
+      "prior_type_rejections": 0,
+      "first_selected_failure": {
+        "input": -7,
+        "expected": 81,
+        "actual": 80,
+        "passed": false
+      },
+      "caller_ci_hint": {
+        "source_sha": "ef63060ed1aebd9d92a2fe4cf24ce9c5929b8726",
+        "status": "PASS"
+      },
+      "ci_hint_is_authority": false,
+      "judgments": [
+        {
+          "decision_id": "read",
+          "input": "feedback: tried=1 passed=7/8 rejected=0 remaining=3 mismatch=-7:80:81 ci=PASS selected=reference_first\nintent: 갱신 값에는 첫 번째 지역 변수 first를 참조한다. [first=input*4; second=input*14; offset=14; update=10]",
+          "input_sha256": "484087c05ef45bd0812a7ba513da7872115914091e4bf83bedc057f27cd060b1",
+          "prediction": {
+            "id": "read",
+            "kind": "local_reference",
+            "intent_sha256": "a0bd14fad6f696c0755b4a387c55773bb5fb22d5b8697376a05ae6ad459149d7",
+            "mode": "feedback_probability_rank_before_finite_validation",
+            "proposed": "schedule_reverse",
+            "selected": "reference_first",
+            "global_confidence": 0.6245117,
+            "raw_probabilities": [
+              0.02387308,
+              0.0023556296,
+              0.29694206,
+              0.024152651,
+              0.0034982017,
+              0.01231976,
+              0.012346916,
+              0.6245117
+            ],
+            "predict_ns": 9250
+          },
+          "eligible_probabilities": [
+            0.9101888846970374,
+            0.08981111530296274
+          ]
+        },
+        {
+          "decision_id": "write",
+          "input": "feedback: tried=1 passed=7/8 rejected=0 remaining=3 mismatch=-7:80:81 ci=PASS selected=assign_first\nintent: 갱신 값을 첫 번째 지역 변수 first에 대입한다. [first=input*4; second=input*14; offset=14; update=10]",
+          "input_sha256": "d4c0bf8555bc8c0d649d977345ed159710e60be58c31db6b275f874523a8c355",
+          "prediction": {
+            "id": "write",
+            "kind": "assignment_target",
+            "intent_sha256": "a23ff98993166dc62989309a6489fcdb849723a8b3697e862b7797d2f6ab2721",
+            "mode": "feedback_probability_rank_before_finite_validation",
+            "proposed": "schedule_reverse",
+            "selected": "assign_first",
+            "global_confidence": 0.6430275,
+            "raw_probabilities": [
+              0.004264529,
+              0.00036853293,
+              0.32998055,
+              0.009704532,
+              0.00072473823,
+              0.0038832272,
+              0.008046426,
+              0.6430275
+            ],
+            "predict_ns": 9209
+          },
+          "eligible_probabilities": [
+            0.9714307915731033,
+            0.028569208426896794
+          ]
+        }
+      ],
+      "new_local_model_predictions": 2,
+      "cumulative_local_model_predictions": 4,
+      "frontier_ranking_applied": true,
+      "new_proposal_scheduled": false,
+      "scope": "Finite observed failures condition the original frozen model; ranking hints are not acceptance, online learning, general language correctness or semantic edit authority."
+    },
+    {
+      "schema": "gooo/typed-path-feedback-judgment/v1",
+      "round": 2,
+      "previous_feedback_sha256": "02460d4ed25896c7284739cee7423991bc5465670ecb532dfe4bceaffd4edb9f",
+      "feedback_sha256": "4af2d4dc390b0f988472563a96f1e1f17de02097713133320d82f9fcdfc8a074",
+      "from_progress_sha256": "3665df85eb39fdc8bf0403767b2679a91adb2c96556bd24220e44e2b6fa6141f",
+      "plan_sha256": "b7e40dcb5c943cf27b919ed32847381d597df2395c60d62b636f8a8ca767b9c8",
+      "finite_cases_sha256": "de7e1bb2e55dc5cb3b3753fbf84fab0d1c710ac991908c2de6c5b6868ad19d63",
+      "model_metadata_sha256": "1ea3bada068f2487418f17270db4ba6785a98c3ad60e0ad7eb92359400a01bb5",
+      "model_weights_sha256": "3732a103720fdb0da0ea611471ecde7472e0b9166322394ba9352ffb855b9354",
+      "prior_attempts": 2,
+      "prior_selected_passed": 7,
+      "finite_cases": 8,
+      "prior_type_rejections": 0,
+      "first_selected_failure": {
+        "input": -7,
+        "expected": 81,
+        "actual": 80,
+        "passed": false
+      },
+      "caller_ci_hint": {
+        "source_sha": "ef63060ed1aebd9d92a2fe4cf24ce9c5929b8726",
+        "status": "PASS"
+      },
+      "ci_hint_is_authority": false,
+      "judgments": [
+        {
+          "decision_id": "read",
+          "input": "feedback: tried=2 passed=7/8 rejected=0 remaining=2 mismatch=-7:80:81 ci=PASS selected=reference_first\nintent: 갱신 값에는 첫 번째 지역 변수 first를 참조한다. [first=input*4; second=input*14; offset=14; update=10]",
+          "input_sha256": "03a520d15acbbb2ea2d42c78801118bcf6d4fd00bc16bc639824adcfd5d7a291",
+          "prediction": {
+            "id": "read",
+            "kind": "local_reference",
+            "intent_sha256": "a0bd14fad6f696c0755b4a387c55773bb5fb22d5b8697376a05ae6ad459149d7",
+            "mode": "feedback_probability_rank_before_finite_validation",
+            "proposed": "schedule_reverse",
+            "selected": "reference_first",
+            "global_confidence": 0.627253,
+            "raw_probabilities": [
+              0.0230149,
+              0.0022990669,
+              0.29477197,
+              0.023793317,
+              0.0036823414,
+              0.012908985,
+              0.012276412,
+              0.627253
+            ],
+            "predict_ns": 9125
+          },
+          "eligible_probabilities": [
+            0.9091779090502007,
+            0.09082209094979922
+          ]
+        },
+        {
+          "decision_id": "write",
+          "input": "feedback: tried=2 passed=7/8 rejected=0 remaining=2 mismatch=-7:80:81 ci=PASS selected=assign_first\nintent: 갱신 값을 첫 번째 지역 변수 first에 대입한다. [first=input*4; second=input*14; offset=14; update=10]",
+          "input_sha256": "c25f3a8aaeaeaa34a0bdbb8ed4351c81c04652d840a3207ad5dd274e22f4e259",
+          "prediction": {
+            "id": "write",
+            "kind": "assignment_target",
+            "intent_sha256": "a23ff98993166dc62989309a6489fcdb849723a8b3697e862b7797d2f6ab2721",
+            "mode": "feedback_probability_rank_before_finite_validation",
+            "proposed": "schedule_reverse",
+            "selected": "assign_first",
+            "global_confidence": 0.6452909,
+            "raw_probabilities": [
+              0.0041400907,
+              0.00036148087,
+              0.32776818,
+              0.009588279,
+              0.0007620876,
+              0.004089573,
+              0.007999389,
+              0.6452909
+            ],
+            "predict_ns": 9125
+          },
+          "eligible_probabilities": [
+            0.9715781923815887,
+            0.02842180761841138
+          ]
+        }
+      ],
+      "new_local_model_predictions": 2,
+      "cumulative_local_model_predictions": 6,
+      "frontier_ranking_applied": true,
+      "new_proposal_scheduled": false,
+      "scope": "Finite observed failures condition the original frozen model; ranking hints are not acceptance, online learning, general language correctness or semantic edit authority."
+    },
+    {
+      "schema": "gooo/typed-path-feedback-judgment/v1",
+      "round": 3,
+      "previous_feedback_sha256": "4af2d4dc390b0f988472563a96f1e1f17de02097713133320d82f9fcdfc8a074",
+      "feedback_sha256": "e1c32512e328916becf34f901710ecee7adb94fb7e9a4350ba11b81f70bd4369",
+      "from_progress_sha256": "4943132fd51f587ed9c2d2879f61d4be599e66a983053f462fb19569aff2eed6",
+      "plan_sha256": "b7e40dcb5c943cf27b919ed32847381d597df2395c60d62b636f8a8ca767b9c8",
+      "finite_cases_sha256": "de7e1bb2e55dc5cb3b3753fbf84fab0d1c710ac991908c2de6c5b6868ad19d63",
+      "model_metadata_sha256": "1ea3bada068f2487418f17270db4ba6785a98c3ad60e0ad7eb92359400a01bb5",
+      "model_weights_sha256": "3732a103720fdb0da0ea611471ecde7472e0b9166322394ba9352ffb855b9354",
+      "prior_attempts": 3,
+      "prior_selected_passed": 7,
+      "finite_cases": 8,
+      "prior_type_rejections": 0,
+      "first_selected_failure": {
+        "input": -7,
+        "expected": 81,
+        "actual": 80,
+        "passed": false
+      },
+      "caller_ci_hint": {
+        "source_sha": "ef63060ed1aebd9d92a2fe4cf24ce9c5929b8726",
+        "status": "PASS"
+      },
+      "ci_hint_is_authority": false,
+      "new_local_model_predictions": 0,
+      "cumulative_local_model_predictions": 6,
+      "frontier_ranking_applied": false,
+      "new_proposal_scheduled": false,
+      "ranking_unnecessary": true,
+      "scope": "Finite observed failures condition the original frozen model; ranking hints are not acceptance, online learning, general language correctness or semantic edit authority."
+    }
+  ],
+  "search": {
+    "schema": "gooo/typed-path-tdd-search/v1",
+    "status": "PARTIAL",
+    "selection": {
+      "schema": "gooo/typed-body-path-selection/v1",
+      "plan_sha256": "b7e40dcb5c943cf27b919ed32847381d597df2395c60d62b636f8a8ca767b9c8",
+      "choices": {
+        "read": "reference_first",
+        "write": "assign_first"
+      },
+      "receipts": [
+        {
+          "id": "read",
+          "kind": "local_reference",
+          "intent_sha256": "a0bd14fad6f696c0755b4a387c55773bb5fb22d5b8697376a05ae6ad459149d7",
+          "mode": "finite_tdd_selection",
+          "proposed": "schedule_reverse",
+          "selected": "reference_first",
+          "global_confidence": 0.5926386,
+          "raw_probabilities": [
+            0.024364641,
+            0.0029252095,
+            0.32078737,
+            0.03161844,
+            0.0045582014,
+            0.012365798,
+            0.010741742,
+            0.5926386
+          ],
+          "predict_ns": 8708
+        },
+        {
+          "id": "write",
+          "kind": "assignment_target",
+          "intent_sha256": "a23ff98993166dc62989309a6489fcdb849723a8b3697e862b7797d2f6ab2721",
+          "mode": "finite_tdd_selection",
+          "proposed": "schedule_reverse",
+          "selected": "assign_first",
+          "global_confidence": 0.6182064,
+          "raw_probabilities": [
+            0.0040288153,
+            0.00040501595,
+            0.3537939,
+            0.011587839,
+            0.0008568335,
+            0.0038922953,
+            0.007228892,
+            0.6182064
+          ],
+          "predict_ns": 8583
+        }
+      ],
+      "model_variant": "fp32",
+      "model_metadata_sha256": "1ea3bada068f2487418f17270db4ba6785a98c3ad60e0ad7eb92359400a01bb5",
+      "model_weights_sha256": "3732a103720fdb0da0ea611471ecde7472e0b9166322394ba9352ffb855b9354",
+      "local_model_predictions": 6,
+      "external_provider_calls": 0,
+      "external_provider_calls_known": true
+    },
+    "declared_combinations": 4,
+    "unattempted_combinations": 0,
+    "evaluated_candidates": 4,
+    "type_rejected_candidates": 0,
+    "selected_training_passed": 7,
+    "training_cases": 8,
+    "attempts": [
+      {
+        "choice_mask": 0,
+        "choices": {
+          "read": "reference_first",
+          "write": "assign_first"
+        },
+        "status": "EVALUATED",
+        "training_cases_passed": 7,
+        "training_cases_total": 8,
+        "case_results": [
+          {
+            "input": -7,
+            "expected": 80,
+            "actual": 80,
+            "passed": true
+          },
+          {
+            "input": -1,
+            "expected": 20,
+            "actual": 20,
+            "passed": true
+          },
+          {
+            "input": 0,
+            "expected": 10,
+            "actual": 10,
+            "passed": true
+          },
+          {
+            "input": 1,
+            "expected": 0,
+            "actual": 0,
+            "passed": true
+          },
+          {
+            "input": 3,
+            "expected": -20,
+            "actual": -20,
+            "passed": true
+          },
+          {
+            "input": 4,
+            "expected": -30,
+            "actual": -30,
+            "passed": true
+          },
+          {
+            "input": 5,
+            "expected": -40,
+            "actual": -40,
+            "passed": true
+          },
+          {
+            "input": -7,
+            "expected": 81,
+            "actual": 80,
+            "passed": false
+          }
+        ],
+        "gooo_source_sha256": "13c576d01b53bda100f88e045feec391da4619e8ed54b6104f2783b331857688"
+      },
+      {
+        "choice_mask": 1,
+        "choices": {
+          "read": "reference_second",
+          "write": "assign_first"
+        },
+        "status": "EVALUATED",
+        "training_cases_passed": 1,
+        "training_cases_total": 8,
+        "case_results": [
+          {
+            "input": -7,
+            "expected": 80,
+            "actual": 10,
+            "passed": false
+          },
+          {
+            "input": -1,
+            "expected": 20,
+            "actual": 10,
+            "passed": false
+          },
+          {
+            "input": 0,
+            "expected": 10,
+            "actual": 10,
+            "passed": true
+          },
+          {
+            "input": 1,
+            "expected": 0,
+            "actual": 10,
+            "passed": false
+          },
+          {
+            "input": 3,
+            "expected": -20,
+            "actual": 10,
+            "passed": false
+          },
+          {
+            "input": 4,
+            "expected": -30,
+            "actual": 10,
+            "passed": false
+          },
+          {
+            "input": 5,
+            "expected": -40,
+            "actual": 10,
+            "passed": false
+          },
+          {
+            "input": -7,
+            "expected": 81,
+            "actual": 10,
+            "passed": false
+          }
+        ],
+        "gooo_source_sha256": "8d0ffd05432330389952de952be6dbbf4e7a5f915216e2003b44f60b965f1632"
+      },
+      {
+        "choice_mask": 2,
+        "choices": {
+          "read": "reference_first",
+          "write": "assign_second"
+        },
+        "status": "EVALUATED",
+        "training_cases_passed": 0,
+        "training_cases_total": 8,
+        "case_results": [
+          {
+            "input": -7,
+            "expected": 80,
+            "actual": -10,
+            "passed": false
+          },
+          {
+            "input": -1,
+            "expected": 20,
+            "actual": -10,
+            "passed": false
+          },
+          {
+            "input": 0,
+            "expected": 10,
+            "actual": -10,
+            "passed": false
+          },
+          {
+            "input": 1,
+            "expected": 0,
+            "actual": -10,
+            "passed": false
+          },
+          {
+            "input": 3,
+            "expected": -20,
+            "actual": -10,
+            "passed": false
+          },
+          {
+            "input": 4,
+            "expected": -30,
+            "actual": -10,
+            "passed": false
+          },
+          {
+            "input": 5,
+            "expected": -40,
+            "actual": -10,
+            "passed": false
+          },
+          {
+            "input": -7,
+            "expected": 81,
+            "actual": -10,
+            "passed": false
+          }
+        ],
+        "gooo_source_sha256": "340891caed6fc8b723dcd8d36d3e97f11c1fe1d27211c9c45c42b619fff9ea22"
+      },
+      {
+        "choice_mask": 3,
+        "choices": {
+          "read": "reference_second",
+          "write": "assign_second"
+        },
+        "status": "EVALUATED",
+        "training_cases_passed": 0,
+        "training_cases_total": 8,
+        "case_results": [
+          {
+            "input": -7,
+            "expected": 80,
+            "actual": 60,
+            "passed": false
+          },
+          {
+            "input": -1,
+            "expected": 20,
+            "actual": 0,
+            "passed": false
+          },
+          {
+            "input": 0,
+            "expected": 10,
+            "actual": -10,
+            "passed": false
+          },
+          {
+            "input": 1,
+            "expected": 0,
+            "actual": -20,
+            "passed": false
+          },
+          {
+            "input": 3,
+            "expected": -20,
+            "actual": -40,
+            "passed": false
+          },
+          {
+            "input": 4,
+            "expected": -30,
+            "actual": -50,
+            "passed": false
+          },
+          {
+            "input": 5,
+            "expected": -40,
+            "actual": -60,
+            "passed": false
+          },
+          {
+            "input": -7,
+            "expected": 81,
+            "actual": 60,
+            "passed": false
+          }
+        ],
+        "gooo_source_sha256": "632e8ac7c1ea03fb7d35c594a714a2c85a026ad8978f461616823898a60f8e35"
+      }
+    ],
+    "model_abstentions_observed": 6,
+    "eligible_probabilities": [
+      [
+        0.8928096172558795,
+        0.10719038274412054
+      ],
+      [
+        0.9682856664443807,
+        0.03171433355561911
+      ]
+    ],
+    "initial_proposals": {
+      "read": "reference_first",
+      "write": "assign_first"
+    }
+  },
+  "generated_go": "package generated\n\nfunc ComposePaths(input int64) int64 {\n\tvar first = (input * int64(4))\n\tvar second = (input * int64(14))\n\tfirst = (first + int64(10))\n\treturn (first - second)\n}\n",
+  "prepared_session_wall_ns": 184083
+}

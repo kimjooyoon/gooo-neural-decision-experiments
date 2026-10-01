@@ -50,6 +50,9 @@ func TestOptimizedInventoryIsBounded(t *testing.T) {
 	if names, err := namesKind("compound-main"); err != nil || len(names) != 674 {
 		t.Fatal("compound frozen inventory differs", err)
 	}
+	if names, err := namesKind("unfixed-sdk"); err != nil || len(names) != 593 {
+		t.Fatal("unfixed SDK allowlist differs", err)
+	}
 	if _, err := namesKind("untrusted"); err == nil {
 		t.Fatal("unknown evidence inventory accepted")
 	}

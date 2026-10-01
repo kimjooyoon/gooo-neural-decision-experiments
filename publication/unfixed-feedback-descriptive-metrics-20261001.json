@@ -1,0 +1,93 @@
+{
+  "arm_summaries": [
+    {
+      "candidate_attempts": 147,
+      "model": "parent_fp32",
+      "predictions": 246,
+      "prepared_session_p50_ms": 0.0542295,
+      "prepared_session_p95_ms": 0.222416,
+      "repeated_views": 72,
+      "skipped_predictions": 0,
+      "unfixed": false
+    },
+    {
+      "candidate_attempts": 147,
+      "model": "parent_fp32",
+      "predictions": 221,
+      "prepared_session_p50_ms": 0.050625,
+      "prepared_session_p95_ms": 0.209333,
+      "repeated_views": 72,
+      "skipped_predictions": 25,
+      "unfixed": true
+    },
+    {
+      "candidate_attempts": 152,
+      "model": "feedback_fp32",
+      "predictions": 256,
+      "prepared_session_p50_ms": 0.056396,
+      "prepared_session_p95_ms": 0.298958,
+      "repeated_views": 72,
+      "skipped_predictions": 0,
+      "unfixed": false
+    },
+    {
+      "candidate_attempts": 152,
+      "model": "feedback_fp32",
+      "predictions": 232,
+      "prepared_session_p50_ms": 0.0549375,
+      "prepared_session_p95_ms": 0.207375,
+      "repeated_views": 72,
+      "skipped_predictions": 24,
+      "unfixed": true
+    },
+    {
+      "candidate_attempts": 152,
+      "model": "feedback_ptq",
+      "predictions": 256,
+      "prepared_session_p50_ms": 0.0578755,
+      "prepared_session_p95_ms": 0.235167,
+      "repeated_views": 72,
+      "skipped_predictions": 0,
+      "unfixed": false
+    },
+    {
+      "candidate_attempts": 152,
+      "model": "feedback_ptq",
+      "predictions": 232,
+      "prepared_session_p50_ms": 0.056646,
+      "prepared_session_p95_ms": 0.216041,
+      "repeated_views": 72,
+      "skipped_predictions": 24,
+      "unfixed": true
+    },
+    {
+      "candidate_attempts": 152,
+      "model": "feedback_qat",
+      "predictions": 256,
+      "prepared_session_p50_ms": 0.0584165,
+      "prepared_session_p95_ms": 0.218792,
+      "repeated_views": 72,
+      "skipped_predictions": 0,
+      "unfixed": false
+    },
+    {
+      "candidate_attempts": 152,
+      "model": "feedback_qat",
+      "predictions": 232,
+      "prepared_session_p50_ms": 0.059603500000000004,
+      "prepared_session_p95_ms": 0.211541,
+      "repeated_views": 72,
+      "skipped_predictions": 24,
+      "unfixed": true
+    }
+  ],
+  "decision": "PASS",
+  "feedback_prediction_reduction_percent": 22.14611872146119,
+  "new_go_processes": 0,
+  "new_model_predictions": 0,
+  "new_native_calls": 0,
+  "schema": "gooo/unfixed-feedback-descriptive-metrics/v1",
+  "scope": "Offline arithmetic over 576 frozen SDK session observations. Prepared-session times include two initial predictions, bounded TDD, optional feedback, receipts and SDK Go rendering; they exclude model load, plan preparation, native processes and Go execution. Fixed legacy-first order, reused development data, all outliers retained, nearest-rank p95 and midpoint median; no causal timing improvement, host CPU utilization or untouched language accuracy claim.",
+  "source_report_sha256": "41b0e37c2ba99fa44d2173a25e4c2d7174e21115b9dff0a29d3c512664bf839e",
+  "total_prediction_reduction_percent": 9.566074950690336
+}

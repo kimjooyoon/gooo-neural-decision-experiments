@@ -43,6 +43,8 @@ var fixed = map[string]string{
 	"runs/compound-path-pilot-20261001/audit.json":                "20335902beda6880732df639a038d684a7b841b8f35e286a240d1e2d8acd24dc",
 	"runs/compound-path-main-20261001/report.json":                "dec30461109eafcea587e7d78a533087df21879fb23bb7edc68c5645aefca66e",
 	"runs/compound-path-main-20261001/audit.json":                 "74d5ed1e3f36da15ad14c599a56c909d06a75b0411bdf795ad0fdfb44fb5d7c1",
+	"runs/unfixed-feedback-sdk-20261001/report.json":              "41b0e37c2ba99fa44d2173a25e4c2d7174e21115b9dff0a29d3c512664bf839e",
+	"runs/unfixed-feedback-sdk-20261001/audit.json":               "41b0e37c2ba99fa44d2173a25e4c2d7174e21115b9dff0a29d3c512664bf839e",
 }
 
 type entry struct {
@@ -78,6 +80,9 @@ func names() ([]string, error) {
 	return namesKind("")
 }
 func namesKind(kind string) ([]string, error) {
+	if kind == "unfixed-sdk" {
+		return unfixedNames()
+	}
 	names := []string{"studies/feedback-family-v1/cohort.jsonl", "studies/feedback-family-v1/manifest.json"}
 	idRE := regexp.MustCompile(`^[a-z0-9_-]+$`)
 	shaRE := regexp.MustCompile(`^[a-f0-9]{64}$`)
@@ -173,6 +178,10 @@ func buildKind(kind string) (manifest, map[string][]byte, error) {
 		m.Schema = "gooo/compound-path-publication/v1"
 		m.Prefix = "research/compound-path-main-20261001/"
 		m.Scope = "Three interacting body templates, twelve structural intention groups, two decisions and four whole-body paths. Main matrix: 648 native calls, 1590 predictions including 438 feedback predictions, 1405 candidates, 12 actual Go processes and 192 actual function evaluations. Pilot: three disconnected native calls, three Go processes and 42 evaluations. All 288 ranking/feedback pairs retain emitted Go and finite/separate outcomes; 16 candidate sequences differ. QAT uses two fewer candidate attempts while the parent uses one more. 97 feedback predictions concern coordinates constant among remaining paths; skipping them has not been implemented or measured. Exact typed function AST is reconciled modulo in-range int64 literal wrappers. One synthetic configuration; repeated policy views are not independent experiments or untouched language accuracy. Core weights/card and earlier appendices are unchanged. No training, model/native/Go calls during packaging; no upstream Laya call, host utilization or causal timing claim."
+	} else if kind == "unfixed-sdk" {
+		m.Schema = "gooo/unfixed-feedback-publication/v1"
+		m.Prefix = "research/unfixed-feedback-sdk-20261001/"
+		m.Scope = "Go SDK opt-in ReconsiderUnfixed; native main still uses SDK 2.5/default feedback. 576 actual SDK sessions, 1931 own frozen tiny-model predictions: 1014 legacy and 917 optimized, skipping 97 fixed-coordinate predictions. All 288 pairs retain candidate sequence and selected body/finite results; legacy matches 288 frozen native references. 12 actual generated Go processes and 192 function evaluations match an independent integer-state oracle. Counts use fixed 64-byte arrays. Removing common log factors can alter floating-point near ties on other data. Reused bilingual development views are not independent new tasks or untouched accuracy. Existing core model and earlier appendix bytes remain unchanged. No training/model/native/Go calls while packaging; no causal timing or host CPU improvement claim."
 	}
 	n, err := namesKind(kind)
 	if err != nil {
@@ -220,6 +229,8 @@ func buildKind(kind string) (manifest, map[string][]byte, error) {
 		files["README.md"] = []byte("# Gooo sole-remaining-path main evidence\n\n" + m.Scope + "\n\nThe deterministic archive contains 1,105 allowlisted files. See per-entry hashes and sizes in publication-manifest.json and methods/failure limitations at https://github.com/kimjooyoon/gooo-neural-decision-experiments/blob/main/docs/native-feedback-families-study.md .\n\nVerified main promotion: https://github.com/kimjooyoon/meta-ontology-go/pull/1123 . Subsequent CI evidence is recorded separately without rewriting the original UNKNOWN hints.\n")
 	} else if kind == "compound-main" {
 		files["README.md"] = []byte("# Interacting Gooo four-path main evidence\n\n" + m.Scope + "\n\nThe deterministic archive contains 674 allowlisted files. Per-entry hashes and sizes are in publication-manifest.json. Methods, distinct structural and functional denominators, finite ambiguity, resource observations and negative results are described at https://github.com/kimjooyoon/gooo-neural-decision-experiments/blob/main/docs/compound-path-study.md .\n")
+	} else if kind == "unfixed-sdk" {
+		files["README.md"] = []byte("# Gooo opt-in unfixed feedback SDK evidence\n\n" + m.Scope + "\n\nThe deterministic archive contains 593 allowlisted files. Per-entry hashes and sizes are in publication-manifest.json. Methods and limitations: https://github.com/kimjooyoon/gooo-neural-decision-experiments/blob/main/docs/unfixed-feedback-study.md .\n")
 	}
 	for name := range files {
 		payload = append(payload, name)
@@ -230,6 +241,33 @@ func buildKind(kind string) (manifest, map[string][]byte, error) {
 		m.Files = append(m.Files, entry{name, hash(raw), len(raw)})
 	}
 	return m, files, nil
+}
+
+func unfixedNames() ([]string, error) {
+	root := "runs/unfixed-feedback-sdk-20261001"
+	names := []string{"studies/compound-path-v1/cohort.jsonl", "studies/compound-path-v1/manifest.json",
+		root + "/report.json", root + "/audit.json", root + "/preexecution.json"}
+	raw, err := read(root + "/report.json")
+	var report struct {
+		Files map[string]string `json:"files_sha256"`
+	}
+	if err != nil || json.Unmarshal(raw, &report) != nil || len(report.Files) != 588 {
+		return nil, errors.New("fixed unfixed SDK inventory differs")
+	}
+	nameRE := regexp.MustCompile(`^(captures/[a-z0-9_-]+|executions/[a-f0-9]{64})\.json$`)
+	for path, pin := range report.Files {
+		if !nameRE.MatchString(path) || !regexp.MustCompile(`^[a-f0-9]{64}$`).MatchString(pin) {
+			return nil, errors.New("unsafe unfixed evidence name/hash")
+		}
+		full := root + "/" + path
+		data, err := read(full)
+		if err != nil || hash(data) != pin {
+			return nil, errors.New("unfixed evidence bytes differ")
+		}
+		names = append(names, full)
+	}
+	sort.Strings(names)
+	return names, nil
 }
 func checkArchive(raw []byte, entries []entry) error {
 	z, err := gzip.NewReader(bytes.NewReader(raw))
@@ -342,6 +380,8 @@ func executeKind(bundle, revision, output string, pack bool, kind string) error 
 	value := map[string]any{"schema": "gooo/native-family-publication-verification/v1", "decision": "PASS", "repository": repository, "revision": revision, "prefix": m.Prefix, "files_verified": count, "archive_entries_verified": len(m.Raw), "archive_bytes": len(files["evidence.tar.gz"]), "manifest_sha256": hash(files["publication-manifest.json"]), "anonymous_http_gets": gets, "credentials_sent": false, "new_model_predictions": 0, "new_native_calls": 0, "new_go_processes": 0}
 	if kind == "compound-main" {
 		value["schema"] = "gooo/compound-path-publication-verification/v1"
+	} else if kind == "unfixed-sdk" {
+		value["schema"] = "gooo/unfixed-feedback-publication-verification/v1"
 	}
 	if output == "" {
 		return errors.New("verification output required")
@@ -357,7 +397,7 @@ func main() {
 	revision := flag.String("revision", "", "immutable public revision")
 	output := flag.String("output", "", "verification record")
 	pack := flag.Bool("pack", false, "build deterministic archive")
-	kind := flag.String("kind", "", "frozen evidence kind: empty, optimized-feature, optimized-main or compound-main")
+	kind := flag.String("kind", "", "frozen evidence kind: empty, optimized-feature, optimized-main, compound-main or unfixed-sdk")
 	flag.Parse()
 	if flag.NArg() != 0 || *bundle == "" {
 		fmt.Fprintln(os.Stderr, "package-family-evidence: bundle required")

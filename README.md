@@ -2,14 +2,22 @@
 
 ## Continued partial construction
 
+The [opt-in varying-coordinate feedback study](docs/unfixed-feedback-study.md)
+uses own frozen tiny models in 576 actual Go SDK sessions. Across 288 pairs,
+`ReconsiderUnfixed` skips 97 fixed-coordinate predictions (1,014 → 917) with
+the same candidate sequences and final bodies/finite results. Twelve actual Go
+programs execute 192 independent-oracle checks. The counter costs 64 fixed bytes
+per session. This is SDK development evidence; native main keeps SDK 2.5/default
+feedback. Earlier model regressions and finite expression limits remain recorded.
+
 The [interacting four-path study](docs/compound-path-study.md) adds three new
 body compositions involving local references, assignment, subtraction, if
 branches and execution order. Actual main codegen ran 648 times and generated
 twelve distinct executed Go programs. Observed failure context changed sixteen
 candidate sequences among 288 pairs; final code and finite/separate outcomes
 match. QAT saved two candidate attempts but used 112 extra predictions, while
-the parent spent one extra attempt. The audit records 97 predictions for already
-fixed coordinates as an unimplemented cost opportunity. Sparse ambiguity and
+the parent spent one extra attempt. At that native revision, the audit recorded
+97 predictions for already fixed coordinates as a cost opportunity. Sparse ambiguity and
 commuting updates retain distinct functional and structural denominators.
 [The public compound appendix](https://huggingface.co/asketeddy/gooo-feedback-path-tiny-v1/tree/c902d14550eda5de08ff7a5bbd8507e60f02c31f/research/compound-path-main-20261001)
 preserves 674 raw records in a 1,729,483-byte archive, with anonymous byte checks

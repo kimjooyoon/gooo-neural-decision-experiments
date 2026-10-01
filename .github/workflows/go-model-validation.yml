@@ -159,6 +159,8 @@ jobs:
           cmp publication/feedback-continuation-curves-20261001.json "$RUNNER_TEMP/feedback-continuation-curves.json"
           go run ./tools/family-metrics --output "$RUNNER_TEMP/native-family-descriptive-metrics.json"
           cmp publication/native-family-descriptive-metrics-20261001.json "$RUNNER_TEMP/native-family-descriptive-metrics.json"
+          go run ./tools/unfixed-metrics --output "$RUNNER_TEMP/unfixed-feedback-descriptive-metrics.json"
+          cmp publication/unfixed-feedback-descriptive-metrics-20261001.json "$RUNNER_TEMP/unfixed-feedback-descriptive-metrics.json"
       - name: Audit captured five-family native generation and independent Go
         run: |
           go run ./tools/native-feedback-study --mode family-audit --out runs/feedback-family-pilot-20261001 \
@@ -179,6 +181,10 @@ jobs:
           go run ./tools/native-feedback-study --mode compound-audit --out runs/compound-path-main-20261001 \
             --audit-output "$RUNNER_TEMP/compound-main-audit.json"
           cmp runs/compound-path-main-20261001/audit.json "$RUNNER_TEMP/compound-main-audit.json"
+          go run ./tools/native-feedback-study --mode unfixed-audit --out runs/unfixed-feedback-sdk-20261001 \
+            --source-revision e5d115f79944765d7a675f2f99664d556333ef2a \
+            --audit-output "$RUNNER_TEMP/unfixed-feedback-sdk-audit.json"
+          cmp runs/unfixed-feedback-sdk-20261001/report.json "$RUNNER_TEMP/unfixed-feedback-sdk-audit.json"
       - name: Reproduce compressed native-family publication without credentials
         run: |
           go run ./tools/package-family-evidence --pack --bundle "$RUNNER_TEMP/native-family-bundle"
@@ -203,10 +209,18 @@ jobs:
           go run ./tools/package-family-evidence --kind compound-main \
             --bundle "$RUNNER_TEMP/compound-main-bundle" \
             --output "$RUNNER_TEMP/compound-main-verification.json"
+          go run ./tools/package-family-evidence --kind unfixed-sdk --pack \
+            --bundle "$RUNNER_TEMP/unfixed-feedback-sdk-bundle"
+          cmp publication/hf-unfixed-feedback-sdk-20261001/publication-manifest.json "$RUNNER_TEMP/unfixed-feedback-sdk-bundle/publication-manifest.json"
+          go run ./tools/package-family-evidence --kind unfixed-sdk \
+            --bundle "$RUNNER_TEMP/unfixed-feedback-sdk-bundle" \
+            --output "$RUNNER_TEMP/unfixed-feedback-sdk-verification.json"
       - uses: actions/upload-artifact@v7
         with:
           name: go-model-validation
           path: |
+            ${{ runner.temp }}/unfixed-feedback-sdk-audit.json
+            ${{ runner.temp }}/unfixed-feedback-sdk-verification.json
             ${{ runner.temp }}/go-audit-ci.json
             ${{ runner.temp }}/export-verification.json
             ${{ runner.temp }}/stream-end-to-end-ci.json
