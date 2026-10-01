@@ -9,6 +9,25 @@ import (
 	"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/pathplan"
 )
 
+func TestBudgetFrozenMainAuditReplaysWithoutPredictionsOrProcesses(t *testing.T) {
+	t.Chdir("../..")
+	value, err := auditBudget("runs/native-budget-main-20261001", "ab8e19b26e2298e713888a64e59602dc5c383529", budgetNative)
+	if err != nil {
+		t.Fatal(err)
+	}
+	raw, err := json.MarshalIndent(value, "", "  ")
+	if err != nil {
+		t.Fatal(err)
+	}
+	expected, err := read("runs/native-budget-main-20261001/report.json")
+	if err != nil || hash(expected) != "38889b5adcdbde926820cabc12923e42bc8823ab308c3ecd5b39fdef5d574046" || !bytes.Equal(append(raw, '\n'), expected) {
+		t.Fatal("frozen main budget audit differs")
+	}
+	if value["actual_model_predictions"] != 4041 || value["actual_generated_function_invocations"] != 192 {
+		t.Fatal("actual-call denominator differs")
+	}
+}
+
 func TestBudgetWireKeepsEvaluatorOnlyInformationOutOfSelection(t *testing.T) {
 	t.Chdir("../..")
 	arms, err := compoundArms()

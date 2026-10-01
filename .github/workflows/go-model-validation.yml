@@ -210,6 +210,18 @@ jobs:
             --native-revision faf932f85c6acc293ce3839a563665661cb53665 \
             --audit-output "$RUNNER_TEMP/retained-native-audit.json"
           cmp runs/retained-native-feature-pilot-20261001/report.json "$RUNNER_TEMP/retained-native-audit.json"
+          go run ./tools/native-feedback-study --mode budget-audit \
+            --out runs/native-budget-main-20261001 \
+            --source-revision ab8e19b26e2298e713888a64e59602dc5c383529 \
+            --native-revision 37fb287a9c888bd0262194f524dde16426eca3a9 \
+            --audit-output "$RUNNER_TEMP/native-budget-audit.json"
+          cmp runs/native-budget-main-20261001/report.json "$RUNNER_TEMP/native-budget-audit.json"
+          go run ./tools/package-family-evidence --kind native-budget-main --pack \
+            --bundle "$RUNNER_TEMP/native-budget-bundle"
+          cmp publication/hf-native-budget-main-20261001/publication-manifest.json "$RUNNER_TEMP/native-budget-bundle/publication-manifest.json"
+          go run ./tools/package-family-evidence --kind native-budget-main \
+            --bundle "$RUNNER_TEMP/native-budget-bundle" \
+            --output "$RUNNER_TEMP/native-budget-verification.json"
           go run ./tools/native-feedback-study --mode retained-metrics \
             --out runs/retained-native-feature-pilot-20261001 \
             --audit-output "$RUNNER_TEMP/retained-native-metrics.json"
@@ -277,6 +289,8 @@ jobs:
           name: go-model-validation
           path: |
             ${{ runner.temp }}/retained-native-audit.json
+            ${{ runner.temp }}/native-budget-audit.json
+            ${{ runner.temp }}/native-budget-verification.json
             ${{ runner.temp }}/retained-completeness.json
             ${{ runner.temp }}/retained-completeness-verification.json
             ${{ runner.temp }}/retained-native-metrics.json

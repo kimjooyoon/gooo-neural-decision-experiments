@@ -45,6 +45,11 @@ func privateText(raw []byte) bool {
 }
 
 var fixed = map[string]string{
+	"docs/native-budget-preregistration.md":                                 "fa853cec871550f62cc33dce0e6b16d7f3a273200f9c2796874a1ad7f4713f07",
+	"docs/native-budget-study.md":                                           "cf52e61be6153ce82905a9f529a7117f7435f75c403602ee45a22cad6574fe5a",
+	"runs/native-budget-main-20261001/preexecution.json":                    "4ec2a8de8d16cb10e7b7c4c054ee6d7850be876dc571b9dd9499456bfb3ee5f5",
+	"runs/native-budget-main-20261001/report.json":                          "38889b5adcdbde926820cabc12923e42bc8823ab308c3ecd5b39fdef5d574046",
+	"runs/native-budget-main-20261001/audit.json":                           "38889b5adcdbde926820cabc12923e42bc8823ab308c3ecd5b39fdef5d574046",
 	"docs/finite-construction-completeness.md":                              "8576953727667b946c985be6e962854a5d33bacc42324b0c04e6516de9412656",
 	"runs/retained-native-feature-pilot-20261001/completeness-summary.json": "8befd5ef343abd3d1194e39f960a9242e4d78ef701a89a3b60170c63886f2ea0",
 	"docs/retained-native-preregistration.md":                               "25b759ed3c054bdefad6a3263a36e02d07965aed0ac362b78ab3f6e0a373f959",
@@ -109,6 +114,9 @@ func names() ([]string, error) {
 	return namesKind("")
 }
 func namesKind(kind string) ([]string, error) {
+	if kind == "native-budget-main" {
+		return nativeBudgetNames()
+	}
 	if kind == "retained-native-feature" || kind == "retained-completeness" {
 		return retainedNativeNames()
 	}
@@ -233,6 +241,11 @@ func buildKind(kind string) (manifest, map[string][]byte, error) {
 		m.Prefix = "research/retained-native-completeness-20261001/"
 		m.Scope = "Additive offline completeness derivation over 180 frozen feature observations. Eight declared cases and four source-bound legal paths: 87.5% declared-case completion, 100% finite legal-space attainment, 12.5% irreducible finite gap. Mean committed-attempt completion is 65.625% or 87.5%; initial/feedback-only checkpoints are excluded. 100% attainment is not all-case correctness. Complete native enumeration and independent state-oracle maximum are checked; no all-input or arbitrary-source impossibility proof. Six reused bilingual views and repeated modes/arms are not independent new experiments. Original UNKNOWN hints, raw observations, core weights/card and previous appendices preserved. Reuses the identical raw archive. Zero new model/native/Go calls, training or GPU work during derivation/publication."
 	}
+	if kind == "native-budget-main" {
+		m.Schema = "gooo/native-budget-publication/v1"
+		m.Prefix = "research/native-budget-main-20261001/"
+		m.Scope = "Actual main 37fb287a9c888bd0262194f524dde16426eca3a9 with 1944 valid constructions, 162 zero-prediction source rejections, 162 sequential native processes, 4041 predictions (3456 initial, 585 feedback), 3005 committed candidates and 97 fixed-coordinate skips. Twelve distinct emitted Go programs and 192 actual function invocations against independent state oracles. Seventy-two reused bilingual/contract views over twelve existing intention groups, nine arms and budgets 1/2/4 are not independent new tasks. New FP32 at budget two reaches the restricted 93.75% mixture maximum and 100% separate-input observations; no checkpoint is promoted. QAT feedback improves one Korean intention repeated across three contracts; parent feedback worsens one English complete-contract view. Eighty of 972 bilingual pairs differ in selected body. Earlier regressions and original unauthenticated UNKNOWN CI context remain. Request latency excludes startup/setup; whole-child CPU/RSS includes one rejection and twelve valid requests. Initial disconnected startup outlier retained; no host CPU, causal speedup, arbitrary language, maximum-input/long-stream memory or all-input correctness claim. Separate inputs and authored mask are evaluator-only. Core weights/card and listed previous appendices preserved. No new training/GPU/upstream Laya or model/native/generated-Go calls during packaging/audit."
+	}
 	n, err := namesKind(kind)
 	if err != nil {
 		return m, nil, err
@@ -250,7 +263,7 @@ func buildKind(kind string) (manifest, map[string][]byte, error) {
 			return m, nil, err
 		}
 		total += len(raw)
-		if total > maxTotal {
+		if total > archiveBudget(kind) {
 			return m, nil, errors.New("raw archive budget exceeded")
 		}
 		m.Raw = append(m.Raw, entry{name, hash(raw), len(raw)})
@@ -298,6 +311,16 @@ func buildKind(kind string) (manifest, map[string][]byte, error) {
 	if kind == "retained-completeness" {
 		files["README.md"] = []byte("# Finite Gooo construction completeness\n\n" + m.Scope + "\n\nThe raw archive is byte-identical to the previous retained feature appendix; the new summary and methods distinguish declared completion, attainable completion, finite gap and iterative progress. This is an additive metric artifact, not a new model or experiment cohort.\n")
 		for _, path := range []string{"docs/finite-construction-completeness.md", "runs/retained-native-feature-pilot-20261001/completeness-summary.json"} {
+			raw, err := read(path)
+			if err != nil {
+				return m, nil, err
+			}
+			files[path] = raw
+		}
+	}
+	if kind == "native-budget-main" {
+		files["README.md"] = []byte("# Gooo native main bounded-budget evidence\n\n" + m.Scope + "\n\nThe deterministic archive contains 342 allowlisted source/evidence files. Per-entry hashes and sizes are in publication-manifest.json. Methods, bounded completeness, budget-position curve definitions and negative results are in docs/native-budget-study.md; the preregistration is included unchanged. Whole-child resources exclude controller and independently compiled emitted Go.\n")
+		for _, path := range []string{"docs/native-budget-preregistration.md", "docs/native-budget-study.md"} {
 			raw, err := read(path)
 			if err != nil {
 				return m, nil, err
@@ -393,12 +416,23 @@ func nativeUnfixedNames(kind string) ([]string, error) {
 	return names, nil
 }
 func checkArchive(raw []byte, entries []entry) error {
+	return checkArchiveBudget(raw, entries, maxTotal)
+}
+
+func archiveBudget(kind string) int {
+	if kind == "native-budget-main" {
+		return 72 << 20
+	}
+	return maxTotal
+}
+
+func checkArchiveBudget(raw []byte, entries []entry, budget int) error {
 	z, err := gzip.NewReader(bytes.NewReader(raw))
 	if err != nil {
 		return err
 	}
 	defer z.Close()
-	t := tar.NewReader(io.LimitReader(z, maxTotal+2<<20))
+	t := tar.NewReader(io.LimitReader(z, int64(budget+2<<20)))
 	for _, e := range entries {
 		h, err := t.Next()
 		if err != nil || h.Name != e.Path || h.Typeflag != tar.TypeReg || h.Size != int64(e.Bytes) {
@@ -427,7 +461,7 @@ func executeKind(bundle, revision, output string, pack bool, kind string) error 
 		return err
 	}
 	files["publication-manifest.json"] = append(raw, '\n')
-	if err = checkArchive(files["evidence.tar.gz"], m.Raw); err != nil {
+	if err = checkArchiveBudget(files["evidence.tar.gz"], m.Raw, archiveBudget(kind)); err != nil {
 		return err
 	}
 	if pack {
@@ -514,6 +548,9 @@ func executeKind(bundle, revision, output string, pack bool, kind string) error 
 	}
 	if kind == "retained-completeness" {
 		value["schema"] = "gooo/finite-completeness-publication-verification/v1"
+	}
+	if kind == "native-budget-main" {
+		value["schema"] = "gooo/native-budget-publication-verification/v1"
 	}
 	if output == "" {
 		return errors.New("verification output required")
