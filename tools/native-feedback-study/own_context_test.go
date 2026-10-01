@@ -2,6 +2,9 @@ package main
 
 import (
 	"context"
+	"encoding/json"
+	"os"
+	"path/filepath"
 	"testing"
 	"time"
 
@@ -43,5 +46,51 @@ func TestOwnNativeContextMatrixAndAttemptArithmetic(t *testing.T) {
 	}
 	if finite != 120 || predictions != 57 {
 		t.Fatal("preregistered denominator changed")
+	}
+}
+
+func TestOwnNativeContextComparisonRetainsActualsAndIgnoresTiming(t *testing.T) {
+	t.Chdir("../..")
+	root := "runs/own-model-native-context-feature-20261001"
+	rows, err := ownContextRows()
+	if err != nil {
+		t.Fatal(err)
+	}
+	dir := t.TempDir()
+	for _, row := range rows {
+		for _, arm := range []string{"fp32", "ptq_ternary", "qat_ternary", "offline"} {
+			for _, suffix := range []string{".json", "-execution.json"} {
+				name := row.ID + "-" + arm + suffix
+				raw, err := os.ReadFile(filepath.Join(root, name))
+				if err != nil {
+					t.Fatal(err)
+				}
+				if err = os.WriteFile(filepath.Join(dir, name), raw, 0600); err != nil {
+					t.Fatal(err)
+				}
+			}
+		}
+	}
+	name := filepath.Join(dir, "en-sparse-fp32.json")
+	raw, _ := os.ReadFile(name)
+	var value nativeResult
+	if err = json.Unmarshal(raw, &value); err != nil {
+		t.Fatal(err)
+	}
+	value.Report.Paths.Search.Selection.Receipts[0].PredictNS++
+	raw, _ = json.Marshal(value)
+	if err = os.WriteFile(name, raw, 0600); err != nil {
+		t.Fatal(err)
+	}
+	if _, err = compareOwnNativeContext(root, dir); err != nil {
+		t.Fatal("timing altered semantic comparison", err)
+	}
+	value.Report.Paths.Cases[0].Actual++
+	raw, _ = json.Marshal(value)
+	if err = os.WriteFile(name, raw, 0600); err != nil {
+		t.Fatal(err)
+	}
+	if _, err = compareOwnNativeContext(root, dir); err == nil {
+		t.Fatal("changed actual accepted")
 	}
 }
