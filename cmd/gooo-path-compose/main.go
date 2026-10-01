@@ -23,9 +23,13 @@ func run(args []string, output io.Writer) error {
 	seed := flags.String("seed", "", "optional reproducible probability sampling seed")
 	testsPath := flags.String("tests", "", "optional bounded finite TDD test document")
 	maxAttempts := flags.Int("max-attempts", 16, "TDD candidate budget, 1..64")
+	stepAttempts := flags.Int("step-attempts", 0, "optional 1..64 new candidates per incremental JSON-lines result")
 	timeout := flags.Duration("timeout", 2*time.Second, "TDD deadline, 1ms..30s")
 	if err := flags.Parse(args); err != nil || flags.NArg() != 0 || *planPath == "" {
 		return errors.New("supply --plan and optional --model/--seed/--tests")
+	}
+	if *stepAttempts < 0 || *stepAttempts > 64 || (*stepAttempts != 0 && *testsPath == "") {
+		return errors.New("incremental step requires finite tests and a budget of 1..64")
 	}
 	info, err := os.Lstat(*planPath)
 	if err != nil || !info.Mode().IsRegular() || info.Size() <= 0 || info.Size() > 128<<10 {
@@ -39,7 +43,8 @@ func run(args []string, output io.Writer) error {
 	if err := strictjson.Decode(raw, &plan); err != nil {
 		return errors.New("path plan JSON is invalid")
 	}
-	if _, err := pathplan.Validate(plan); err != nil {
+	prepared, err := pathplan.Prepare(plan)
+	if err != nil {
 		return fmt.Errorf("path plan: %w", err)
 	}
 	var tests []pathplan.TestCase
@@ -74,6 +79,9 @@ func run(args []string, output io.Writer) error {
 	if *testsPath != "" {
 		ctx, cancel := context.WithTimeout(context.Background(), *timeout)
 		defer cancel()
+		if *stepAttempts != 0 {
+			return composeSession(ctx, prepared, model, tests, *maxAttempts, *stepAttempts, *seed, output)
+		}
 		result, program, err := pathplan.Search(ctx, plan, model, tests, *maxAttempts, *seed)
 		if err != nil {
 			return err
