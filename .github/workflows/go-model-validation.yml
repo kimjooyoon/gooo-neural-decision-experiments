@@ -87,6 +87,9 @@ jobs:
           go run ./tools/package-path-model --prepared-native --output "$RUNNER_TEMP/path-model-prepared-bundle"
           cmp publication/hf-typed-path-v1-prepared-native/publication-manifest.json "$RUNNER_TEMP/path-model-prepared-bundle/publication-manifest.json"
           go run ./tools/package-path-model --mode verify --bundle "$RUNNER_TEMP/path-model-prepared-bundle" --output "$RUNNER_TEMP/path-model-prepared-verification.json"
+          go run ./tools/package-path-model --incremental-native --output "$RUNNER_TEMP/path-model-incremental-bundle"
+          cmp publication/hf-typed-path-v1-incremental-native/publication-manifest.json "$RUNNER_TEMP/path-model-incremental-bundle/publication-manifest.json"
+          go run ./tools/package-path-model --mode verify --bundle "$RUNNER_TEMP/path-model-incremental-bundle" --output "$RUNNER_TEMP/path-model-incremental-verification.json"
       - uses: actions/upload-artifact@v7
         with:
           name: go-model-validation

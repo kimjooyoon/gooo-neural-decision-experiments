@@ -1,0 +1,49 @@
+{
+  "schema": "gooo/incremental-validation-notes/v1",
+  "scope": "Keep failed authoring and validation attempts separate from the completed 288-call measurement. Synthetic unit fixture predictions are excluded from measured model calls.",
+  "research_runner_authoring_failure": {
+    "observed": "undefined pathplan.DecodeDocument",
+    "cause": "The native SDK has a document decoder but the research internal package does not.",
+    "repair": "Use an explicit document envelope and strict decoder, then prepare its typed plan.",
+    "model_calls_before_repair": 0
+  },
+  "native_partial_cli_fixture_authoring": {
+    "observed": "Initial draft used compact expected:24 text against a pretty-printed fixture.",
+    "repair": "Match expected: 24 before the test run; the executed test observes PARTIAL and 6/7.",
+    "failed_native_test_runs_from_this_draft": 0
+  },
+  "native_first_ci_failure": {
+    "head": "f6323846f18602c2cf3cef5a40692340cae9fe3d",
+    "run_id": 36797800264,
+    "failed_check": "gofmt",
+    "failed_substep": "Require Go modernizers and module graph at a fixed point",
+    "actual_cause": "go mod tidy removes two obsolete v0.2.1-experimental go.sum lines left by SDK upgrade.",
+    "earlier_incorrect_local_diagnosis": "System Go 1.26 formatter lists an unchanged existing test; exact Go 1.27.1 formatter lists no paths. That file was not the CI failure.",
+    "repair_head": "4ca583b11749445d083cf763983b9a19ef6a833f",
+    "repair_scope": "Only the two obsolete checksums; measured feature implementation and SDK weights unchanged.",
+    "stale_failed_run_cancelled": true,
+    "scope": "Feature measurements remain source-bound to the first head. This failed run cannot authorize merge; the repaired head must pass all six checks.",
+    "cancellation_detail": "The stale workflow completed as cancelled before an explicit cancellation request; the request returned Cannot cancel a workflow run that is completed."
+  },
+  "local_native_validation": {
+    "focused_unit": "PASS",
+    "focused_race": "PASS",
+    "whole_repository_vet": "PASS",
+    "billing_conformance": "PASS",
+    "go_fix_diff": "empty",
+    "exact_go_1_27_1_format_paths": 0,
+    "full_darwin_suite": "FAIL in four unchanged areas: function-extractor namespace replacement, callback-preview symlink diagnostic, meta-execution duplicate/digest diagnostics, source-splitter baseline indicators. Not a claim of proven baseline causation."
+  },
+  "publication_validation": {
+    "fixed_225_file_local_bundle": "PASS",
+    "incremental_unit_seconds": 2.283,
+    "incremental_race_seconds": 37.461,
+    "inputs_held_unchanged_during_validation": true,
+    "additional_model_predictions": 0,
+    "optimizer_steps": 0,
+    "research_all_package_unit_tests": "PASS",
+    "research_whole_repository_vet": "PASS",
+    "exact_go_1_27_1_source_format": "PASS for cmd/internal/tools/decision, the CI source scope",
+    "whole_tree_format_attempt": "Lists frozen historical generated replay artifacts; they are preserved unchanged and excluded by existing source CI scope"
+  }
+}

@@ -1,5 +1,23 @@
 # Gooo neural decision experiments
 
+## Continued partial construction
+
+Korean/English Gooo intentions can now rank bounded structural paths once and
+continue finite construction in batches. First-shot accuracy is not the goal:
+partial results, failed cases, type rejections, unattempted paths and cost remain
+inspectable. Models are optional; the disconnected order is deterministic.
+
+[Session API and limits](docs/incremental-typed-paths.md),
+[actual 288-call native study](runs/incremental-native-20261001/), and
+[cost summary](runs/incremental-native-20261001/summary.json) show 32 same-result
+pairs, 1,152→144 model judgments, and 6,340→1,268 candidate attempts. Sixteen
+inconsistent contracts retain six of seven satisfied cases. This compares eight
+restart requests with one continued request on one compound intention; it is
+not new training, general language accuracy, or 32 independent experiment ideas.
+The optional native flag is `--path-step-attempts 8`, backed by public Go SDK
+`v0.2.2-experimental`. [HF edition and scope](docs/hf-typed-path-v1-incremental.md)
+preserve previous weights and publications.
+
 Public experimental Gooo-specific natural-language to typed IR decisions.
 Runtime, orchestration, data generation and compiler bridges are written in Go.
 Python is used for offline PyTorch/MPS training and checkpoint export. The

@@ -27,6 +27,7 @@ const schema = "gooo/public-typed-path-allowlist/v1"
 const reviewedSchema = "gooo/public-typed-path-allowlist/v2"
 const directSchema = "gooo/public-typed-path-allowlist/v3"
 const preparedSchema = "gooo/public-typed-path-allowlist/v4"
+const incrementalSchema = "gooo/public-typed-path-allowlist/v5"
 
 var privateText = regexp.MustCompile(`(?:hf_|ghp_|github_pat_|sk-)[A-Za-z0-9_-]{20,}|/Users/|/private/var/|Bearer\s+[A-Za-z0-9]`)
 
@@ -135,6 +136,10 @@ func assemblePublication(output string, reviewed, direct, mainPromotion bool) er
 	return assembleEdition(output, reviewed, direct, mainPromotion, false)
 }
 func assembleEdition(output string, reviewed, direct, mainPromotion, prepared bool) error {
+	return assembleIncrementalEdition(output, reviewed, direct, mainPromotion, prepared, false)
+}
+func assembleIncrementalEdition(output string, reviewed, direct, mainPromotion, prepared, incremental bool) error {
+	prepared = prepared || incremental
 	mainPromotion = mainPromotion || prepared
 	direct = direct || mainPromotion
 	reviewed = reviewed || direct
@@ -154,6 +159,12 @@ func assembleEdition(output string, reviewed, direct, mainPromotion, prepared bo
 	if prepared {
 		value.Schema, files = preparedSchema, preparedSources()
 		if err := auditPreparedRepository(); err != nil {
+			return err
+		}
+	}
+	if incremental {
+		value.Schema, files = incrementalSchema, incrementalSources()
+		if err := auditIncrementalDirectory(incrementalRun, conditionalCohort, incrementalRun+"/captures"); err != nil {
 			return err
 		}
 	}
@@ -193,6 +204,13 @@ func assembleEdition(output string, reviewed, direct, mainPromotion, prepared bo
 			note, err := read("docs/hf-typed-path-v1-prepared-native.md")
 			if err != nil || privateText.Match(note) {
 				return errors.New("invalid or private prepared-native text")
+			}
+			raw = append(append(raw, '\n'), note...)
+		}
+		if incremental && name == "README.md" {
+			note, err := read("docs/hf-typed-path-v1-incremental.md")
+			if err != nil || privateText.Match(note) {
+				return errors.New("invalid or private incremental text")
 			}
 			raw = append(append(raw, '\n'), note...)
 		}
@@ -261,7 +279,11 @@ func local(root string) ([]artifact, string, error) {
 	if value.Schema == preparedSchema {
 		expected = preparedSources()
 	}
-	if value.Schema != schema && value.Schema != reviewedSchema && value.Schema != directSchema && value.Schema != preparedSchema || !value.TextScanned || value.BinaryProvenance == "" || len(value.Files) != len(expected) {
+	if value.Schema == incrementalSchema {
+		expected = incrementalSources()
+	}
+	validSchema := value.Schema == schema || value.Schema == reviewedSchema || value.Schema == directSchema || value.Schema == preparedSchema || value.Schema == incrementalSchema
+	if !validSchema || !value.TextScanned || value.BinaryProvenance == "" || len(value.Files) != len(expected) {
 		return nil, "", errors.New("invalid fixed publication manifest")
 	}
 	seen := map[string]bool{}
@@ -306,8 +328,13 @@ func local(root string) ([]artifact, string, error) {
 	if err != nil {
 		return nil, "", err
 	}
-	if value.Schema == preparedSchema {
+	if value.Schema == preparedSchema || value.Schema == incrementalSchema {
 		if err := auditPreparedDirectory(filepath.Join(root, "native-prepared"), filepath.Join(root, "conditional-cohort"), ""); err != nil {
+			return nil, "", err
+		}
+	}
+	if value.Schema == incrementalSchema {
+		if err := auditIncrementalDirectory(filepath.Join(root, "native-incremental"), filepath.Join(root, "conditional-cohort"), ""); err != nil {
 			return nil, "", err
 		}
 	}
@@ -426,12 +453,13 @@ func main() {
 	direct := flag.Bool("native-direct", false, "include fresh native structural inference and exact Go observations")
 	mainPromotion := flag.Bool("main-promotion", false, "append verified native source main availability")
 	prepared := flag.Bool("prepared-native", false, "include paired prepared native evidence and fixed bilingual cohort")
+	incremental := flag.Bool("incremental-native", false, "include continued finite search and repeated-restart costs")
 	flag.Parse()
 	var err error
 	if *output == "" || flag.NArg() != 0 {
 		err = errors.New("fresh output required")
 	} else if *mode == "assemble" {
-		err = assembleEdition(*output, *reviewed, *direct, *mainPromotion, *prepared)
+		err = assembleIncrementalEdition(*output, *reviewed, *direct, *mainPromotion, *prepared, *incremental)
 	} else if *mode == "verify" {
 		err = verify(*bundle, *revision, *output)
 	} else {
