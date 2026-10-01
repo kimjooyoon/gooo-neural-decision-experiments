@@ -25,6 +25,9 @@ utilization and new training were not measured.
 The [public HF native evidence appendix](https://huggingface.co/asketeddy/gooo-typed-path-tiny-v1/tree/dc87b6c8f6784accd60bd93535c14e2d0b20f470/research/native-feedback-integration-20261001)
 is anonymously digest-verified; the earlier nine weight and metadata files,
 model card and previous evidence appendix remain unchanged.
+The [next study design](docs/continued-judgment-next-study.md) specifies source
+and intention-family splits, retained partial outcomes and resource denominators
+for future feedback training; it does not claim a newly trained model.
 
 The [actual feedback pilot](docs/feedback-path-pilot-results.md) made 246 small-model
 predictions, including 102 reconsideration predictions, and 32 native generations.
