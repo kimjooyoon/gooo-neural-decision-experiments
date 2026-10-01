@@ -424,6 +424,23 @@ func main() {
 	nativeRevision := flag.String("native-revision", "", "clean binary source SHA")
 	familyCIStatus := flag.String("family-ci-status", "PASS", "caller family-study CI context: PASS, FAIL or UNKNOWN")
 	flag.Parse()
+	if *mode == "unfixed-study" || *mode == "unfixed-audit" {
+		var err error
+		if *mode == "unfixed-study" {
+			err = runUnfixed(*goBinary, *output, *revision)
+		} else {
+			var result map[string]any
+			result, err = auditUnfixed(*output, *revision)
+			if err == nil {
+				err = save(*auditOutput, result)
+			}
+		}
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "unfixed:", err)
+			os.Exit(1)
+		}
+		return
+	}
 	if *mode == "compound-audit" {
 		value, err := auditCompound(*output)
 		if err == nil {
