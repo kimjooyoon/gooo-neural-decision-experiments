@@ -289,7 +289,8 @@ func run(native, goBinary, output, revision string) error {
 					value.ID = language + "-" + contract + "-" + arm + "-" + strconv.FormatBool(feedback)
 					value.Arm, value.Language, value.Contract = arm, language, contract
 					fixture := filepath.Join(output, "captures", value.ID+".gooo.fixture")
-					text := "package pathstudy\nnamespace pathstudy\nentity Integer id \"pathstudy://entity/integer\"\nactivity ConditionalAssign(Integer) -> Integer computes " + strconv.Quote(body.GoooSource()) + "\n"
+					// GoooSource is already a complete typed module, not a body fragment.
+					text := body.GoooSource()
 					if err = os.WriteFile(fixture, []byte(text), 0644); err != nil {
 						return err
 					}

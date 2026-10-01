@@ -1,0 +1,26 @@
+{
+  "schema": "gooo/feedback-pilot-authoring-observations/v1",
+  "revision_preflight": {
+    "result": "REJECTED",
+    "cause": "The invocation supplied a wrong runner revision; the source identity check stopped before model loading, predictions, native calls or output creation.",
+    "local_model_predictions": 0,
+    "native_calls": 0
+  },
+  "initial_study": {
+    "source": "ccb1470210f0972477ab6fe3bbe4969136fa4c91",
+    "path": "runs/feedback-path-pilot-20261001",
+    "result": "FAILED_FIRST_NATIVE_GENERATION",
+    "local_model_predictions": 0,
+    "native_calls": 1,
+    "generated_go_executions": 0,
+    "cause": "The runner incorrectly wrapped Program.GoooSource, which is a complete Gooo module, inside another computes body. The compiler rejected the nested package declaration.",
+    "compiler_boundary_weakened": false,
+    "preexecution_and_raw_failure_preserved": true,
+    "repair": "Pass the complete GoooSource bytes directly. Use a new output directory and a new committed runner revision for the corrected study."
+  },
+  "other_authoring_notes": [
+    "An initial proof-download command used a nonexistent private parent; mkdir failed before any download and the existing private evidence root was then located.",
+    "A combined documentation patch used a mismatched heading and was rejected atomically; no runtime execution or source change occurred from that patch."
+  ],
+  "scope": "Runner authoring and source-binding failures; not Laya accuracy, new independent experiments or additional primary successful study observations."
+}
