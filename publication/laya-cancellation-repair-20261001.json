@@ -1,0 +1,40 @@
+{
+  "schema": "gooo/laya-connector-cancellation-repair/v1",
+  "observed_ci": {
+    "repository": "kimjooyoon/gooo-neural-decision-experiments",
+    "source": "675fc2a2c366cab63bbb84e78b20ff96eb5c5b39",
+    "run_id": 36800294856,
+    "job": "runtime-and-artifacts",
+    "test": "TestChooseLayaCancellationIsNotRetriedAndLeavesOnePartialExchange",
+    "result": "FAIL",
+    "actual_requests": 1,
+    "incorrect_exchange_status": "completed_validated",
+    "incorrect_return_error": "nil",
+    "cause": "A fully buffered response can complete despite parent context cancellation. The connector did not check cancellation after reading or before committing the choice."
+  },
+  "implementation_repair": {
+    "scope": "Research Go HTTP connector; independent of native typed-path model sessions and their frozen measurements.",
+    "nil_context": "rejected",
+    "total_request_deadline_seconds": 8,
+    "cancellation_checks": ["before each request", "after bounded response read and capture", "before validated choice commit", "before successful return"],
+    "retries": 0,
+    "partial_response_bytes": "retained when received",
+    "previous_completed_choices": "retained",
+    "unresolved_choice": "declared fallback retained"
+  },
+  "local_validation": {
+    "race_repeats_per_test": 100,
+    "tests": ["TestChooseLayaCancellationIsNotRetriedAndLeavesOnePartialExchange", "TestChooseLayaPreCancelledLeavesFallbackWithoutProviderCall"],
+    "repeated_race_tests": "PASS",
+    "repeated_race_test_seconds": 1.710,
+    "whole_bodydecision_race": "PASS",
+    "whole_bodydecision_race_seconds": 1.336,
+    "vet": "PASS",
+    "mock_requests_expected_in_repeated_active_cancellation_test": 100,
+    "mock_requests_expected_in_repeated_precancel_test": 0,
+    "pretrained_laya_model_calls": 0,
+    "optimizer_steps": 0,
+    "synthetic_test_authoring_error": "The first new assertion omitted the errors import; compile failed before any test execution. Import added and assertions strengthened before these successful runs."
+  },
+  "measurement_scope": "Primary native study remains 288 calls and 1,296 fresh small-model predictions. These mock loopback HTTP tests are not live Laya latency, language quality, new independent experiment ideas or additional primary inference measurements. Arbitrary output-writer deadlock freedom is not claimed."
+}

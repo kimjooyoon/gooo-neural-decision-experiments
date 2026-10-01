@@ -33,6 +33,11 @@ type Exchange struct {
 // Requests contain only synthetic hole text and the declared operation choices.
 // No retries are performed; unresolved calls return partial capture evidence.
 func ChooseLaya(ctx context.Context, plan bodyplan.Plan, endpoint string) (Selection, []Exchange, error) {
+	if ctx == nil {
+		return Selection{}, nil, errors.New("Laya request requires a context")
+	}
+	ctx, cancel := context.WithTimeout(ctx, 8*time.Second)
+	defer cancel()
 	choices, err := Validate(plan)
 	if err != nil {
 		return Selection{}, nil, err
@@ -62,6 +67,9 @@ func ChooseLaya(ctx context.Context, plan bodyplan.Plan, endpoint string) (Selec
 	for _, expr := range plan.Expressions {
 		if expr.Kind != "hole" {
 			continue
+		}
+		if err := ctx.Err(); err != nil {
+			return result, exchanges, err
 		}
 		criteria := make(map[string]string, len(expr.Allowed))
 		for _, operation := range expr.Allowed {
@@ -94,6 +102,11 @@ func ChooseLaya(ctx context.Context, plan bodyplan.Plan, endpoint string) (Selec
 		closeErr := response.Body.Close()
 		capture.WallNS = time.Since(started).Nanoseconds()
 		capture.Response = append([]byte(nil), raw...)
+		// A fully buffered response can win the transport's cancellation race.
+		// Keep its bytes as partial evidence without committing a validated choice.
+		if err := ctx.Err(); err != nil {
+			return result, exchanges, err
+		}
 		if readErr != nil || closeErr != nil || len(raw) > 65536 || response.StatusCode != http.StatusOK {
 			return result, exchanges, errors.New("Laya response failed or exceeded 65536 bytes")
 		}
@@ -129,11 +142,17 @@ func ChooseLaya(ctx context.Context, plan bodyplan.Plan, endpoint string) (Selec
 		if len(answer.Probabilities) != len(expr.Allowed) {
 			return result, exchanges, errors.New("unexpected Laya probability labels")
 		}
+		if err := ctx.Err(); err != nil {
+			return result, exchanges, err
+		}
 		result.Choices[expr.HoleID] = answer.Choice
 		result.Holes = append(result.Holes, receipt)
 		capture.Status = "completed_validated"
 	}
 	if _, err := bodyplan.Compile(plan, result.Choices); err != nil {
+		return result, exchanges, err
+	}
+	if err := ctx.Err(); err != nil {
 		return result, exchanges, err
 	}
 	return result, exchanges, nil

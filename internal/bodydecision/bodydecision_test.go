@@ -7,6 +7,7 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"math"
@@ -472,11 +473,32 @@ func TestChooseLayaCancellationIsNotRetriedAndLeavesOnePartialExchange(t *testin
 	}
 	select {
 	case result := <-resultCh:
-		if result.err == nil || requests.Load() != 1 || result.selection.ProviderCalls != 1 || len(result.exchanges) != 1 || result.exchanges[0].Status == "completed_validated" {
+		if !errors.Is(result.err, context.Canceled) || requests.Load() != 1 || result.selection.ProviderCalls != 1 ||
+			len(result.exchanges) != 1 || result.exchanges[0].Status == "completed_validated" ||
+			len(result.selection.Holes) != 0 || result.selection.Choices["op"] != "subtract" {
 			t.Fatalf("canceled call was retried or falsely completed: requests=%d result=%+v", requests.Load(), result)
 		}
 	case <-time.After(2 * time.Second):
 		t.Fatal("canceled provider call did not settle")
+	}
+}
+
+func TestChooseLayaPreCancelledLeavesFallbackWithoutProviderCall(t *testing.T) {
+	plan := intHolePlan([]string{"add", "subtract", "multiply"}, "subtract", "pre-cancelled request")
+	var requests atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		requests.Add(1)
+		writer.WriteHeader(http.StatusInternalServerError)
+	}))
+	defer server.Close()
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+	selection, exchanges, err := ChooseLaya(ctx, plan, server.URL+"/v1/systemone")
+	if !errors.Is(err, context.Canceled) || requests.Load() != 0 || selection.ProviderCalls != 0 || len(exchanges) != 0 || selection.Choices["op"] != "subtract" {
+		t.Fatalf("pre-cancelled call lost its fallback or made a request: %+v %v", selection, err)
+	}
+	if _, _, err := ChooseLaya(nil, plan, server.URL+"/v1/systemone"); err == nil {
+		t.Fatal("nil context was accepted")
 	}
 }
 
