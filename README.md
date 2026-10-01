@@ -23,8 +23,11 @@ continues the same 64 candidates, retaining 6/7 completeness in both languages.
 One deduplicated generated Go execution agrees with native and typed values.
 The [public HF repair appendix](https://huggingface.co/asketeddy/gooo-typed-path-tiny-v1/tree/15efbf6c49e15b59ac4de36c185df01bc723c4e3/research/continued-judgment-20261001)
 adds synthetic evidence without changing weights. The native SDK upgrade is
-[compiler PR 1120](https://github.com/kimjooyoon/meta-ontology-go/pull/1120);
-feature measurements remain separate from its merge and deployment status.
+merged to dev in [compiler PR 1120](https://github.com/kimjooyoon/meta-ontology-go/pull/1120),
+with [verified six-check evidence](publication/context-decline-dev-20261001.json).
+[Main promotion PR 1121](https://github.com/kimjooyoon/meta-ontology-go/pull/1121)
+is pending its source-bound CI; feature measurements remain separate from
+deployed-main observations.
 
 The [actual native integration study](docs/native-feedback-results.md) measured
 28 native generations and 246 local predictions with three existing models.
