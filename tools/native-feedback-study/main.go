@@ -414,7 +414,7 @@ func run(binary, nativeRoot, output, revision, nativeRevision string) error {
 	return nil
 }
 func main() {
-	mode := flag.String("mode", "study", "study, execute or audit")
+	mode := flag.String("mode", "study", "study, execute, audit, input-bound or continued-bound")
 	goBinary := flag.String("go-bin", "", "Go 1.27.1 executable for execute mode")
 	auditOutput := flag.String("audit-output", "", "audit receipt output; defaults to study directory")
 	binary := flag.String("native", "", "native binary")
@@ -423,6 +423,13 @@ func main() {
 	revision := flag.String("source-revision", "", "committed runner SHA")
 	nativeRevision := flag.String("native-revision", "", "clean binary source SHA")
 	flag.Parse()
+	if *mode == "continued-bound" {
+		if err := probeContinuedBound(*binary, *goBinary, *output, *revision, *nativeRevision); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+		return
+	}
 	if *mode == "input-bound" {
 		if err := probeInputBound(*binary, *root, *output, *revision, *nativeRevision); err != nil {
 			fmt.Fprintln(os.Stderr, err)
