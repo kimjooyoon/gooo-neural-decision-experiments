@@ -6,6 +6,7 @@ import (
 	"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/jointcompositionstudy"
 	"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/jointdecision"
 	"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/pathplan"
+	"math"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -118,5 +119,18 @@ func TestFrozenSelectionOrder(t *testing.T) {
 	chosen, err := choose(scores, pins)
 	if err != nil || chosen != "joint-qat_ternary" {
 		t.Fatal("frozen call tie break", chosen, err)
+	}
+}
+
+func TestDescriptiveDistributionPreservesInputsAndRejectsNonfiniteValues(t *testing.T) {
+	values := []float64{4, 1, 3, 2}
+	d, err := describe(values)
+	if err != nil || d.Mean != 2.5 || d.Median != 2.5 || d.P95 != 4 || d.Maximum != 4 || values[0] != 4 {
+		t.Fatal(d, err, values)
+	}
+	for _, invalid := range [][]float64{nil, {-1}, {math.NaN()}, {math.Inf(1)}} {
+		if _, err = describe(invalid); err == nil {
+			t.Fatal("invalid observations accepted")
+		}
 	}
 }

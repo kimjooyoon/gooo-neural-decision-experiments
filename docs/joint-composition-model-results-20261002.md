@@ -135,12 +135,61 @@ the six existing failures in four filesystem-related packages; canonical Linux
 CI remains authoritative. Initial CI found stale v0.2.11 checksums; the patch
 removes them and repeats the exact-head CI.
 
-Native main promotion and the planned 192-call actual compiled-Go audit are
-pending. Their final evidence must replace this paragraph before public HF
-packaging. Selected/reference duplicate the same calibrated model and must be
-reported as replays. Public packaging retains both frozen documents, all six
-models, raw source/curriculum/SDK/native evidence and six PROV-O chains; the
-publication verifier uses anonymous immutable byte and ZIP CRC/SHA checks.
+Feature PR 1137 and [main promotion PR 1138](https://github.com/kimjooyoon/meta-ontology-go/pull/1138)
+merged after six exact-head checks and independently downloaded/verified v5
+proofs. Adopted main is `363a3d8aa365c35dd634c241248b444de0050973`, tree
+`8253d7f0c93e3380aa5ce54c65418c1b4b385634`, using SDK v0.2.12 and Go 1.27.1.
+A clean binary with that VCS revision generated 192 actual native outputs, with
+470 model predictions. Each output was independently compiled and executed over
+all 16 ordered oracle cases: 192 executions and 3,072 invocations, all passing.
+The native Go auditor rechecks source binding, complete inputs, model pins,
+receipt chains, every candidate's arithmetic and captured actual Go values,
+without new inference or execution. Candidate paths agree with the frozen SDK.
+
+The native subset is configuration 40 only: 48 function views and 24 language
+pairs per policy. Selected/reference both replay independent FP32; this
+duplication is included in the 192 actual calls, not counted as new intentions.
+
+| Native policy | Complete initially | Extra candidates | Actual predictions | Complete after budgets 1/2/3/4 |
+|---|---:|---:|---:|---|
+| selected independent FP32 | 16 | 59 | 187 | 16 / 29 / 40 / 48 |
+| independent FP32 reference | 16 | 59 | 187 | 16 / 29 / 40 / 48 |
+| joint FP32 | 17 | 56 | 96 | 17 / 31 / 40 / 48 |
+| disconnected | 12 | 70 | 0 | 12 / 26 / 36 / 48 |
+
+Joint FP32 uses 48.66% fewer predictions and 5.08% fewer extra candidates in this
+subset. The larger 384-view development comparison has seven more joint extras;
+that disagreement is retained, and does not change the calibration selector.
+
+| Native policy | Median child time | p95 child time | Mean process CPU, one-core normalization | Maximum child RSS |
+|---|---:|---:|---:|---:|
+| selected | 10.834 ms | 13.408 ms | 83.17% | 18,825,216 B |
+| independent reference | 10.895 ms | 12.367 ms | 84.56% | 18,857,984 B |
+| joint | 10.897 ms | 12.942 ms | 84.29% | 18,792,448 B |
+| disconnected | 10.303 ms | 12.415 ms | 82.68% | 18,153,472 B |
+
+These are fixed-order process observations, not causal CPU/RAM increases. They
+include native startup, model loading, source validation and emission; separate
+emitted-Go compilation/execution cost is excluded. Reduced inference calls have
+not produced a measurable median native-child speedup in this capture. Global
+host CPU utilization delta is unmeasured. All original process measurements are
+retained; a Go summary binds them to the audited native report digest.
+
+The [intermediate HF edition](https://huggingface.co/asketeddy/gooo-joint-path-tiny-v1/tree/44bf2bc861f4a90121ac8c5a2932c2b423efa851)
+first published the SDK phase and six models. All 28 payloads plus its manifest
+passed anonymous immutable byte verification. Its explicit native-pending
+statement is historical and retained. The complete edition retains both frozen
+documents, all six models, raw source/curriculum/SDK/native evidence, process
+metrics and six PROV-O chains. The verifier checks anonymous immutable bytes,
+regular archive paths, CRC/SHA and bounded expansion. One exact already-public
+collector source digest contains the privacy-detector definition itself; only
+that static line in that unchanged file is exempt from matching its own regex.
+Modified detector source and all raw data continue to fail on matching paths or
+credentials. Tests cover this bound.
+
+Archive source files are committed publication-producer snapshots. Individual
+preexecution records retain each original run revision in public Git history;
+native execution core and frozen model/runtime inputs remain digest-bound.
 
 ## Next own-model direction
 

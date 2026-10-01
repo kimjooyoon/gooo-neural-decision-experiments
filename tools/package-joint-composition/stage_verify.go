@@ -15,7 +15,7 @@ import (
 
 func stagePaths() map[string]bool {
 	paths := publicPaths()
-	for _, name := range []string{"native-report.json", "native-preexecution.json", "native-independent-audit.json", "raw-evidence.zip"} {
+	for _, name := range []string{"native-report.json", "native-preexecution.json", "native-independent-audit.json", "native-process-metrics.json", "raw-evidence.zip"} {
 		delete(paths, name)
 	}
 	for _, arm := range []string{"independent", "joint"} {

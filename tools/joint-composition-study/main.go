@@ -257,6 +257,8 @@ func main() {
 		err = runNative(*curriculum, *models, *frozen, *output, *revision, *binary, *goBinary)
 	} else if *mode == "native-audit" && *frozen != "" && *native != "" {
 		err = auditNative(*curriculum, *models, *frozen, *native, *output)
+	} else if *mode == "native-metrics" && *native != "" {
+		err = summarizeNativeMetrics(*native, *output)
 	} else {
 		err = errors.New("complete mode-specific study arguments required")
 	}

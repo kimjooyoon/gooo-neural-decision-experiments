@@ -10,7 +10,7 @@ import (
 )
 
 func TestPublicPayloadCountAndZipDigestVerification(t *testing.T) {
-	if len(publicPaths()) != 38 {
+	if len(publicPaths()) != 39 {
 		t.Fatal(len(publicPaths()))
 	}
 	dir := t.TempDir()
@@ -31,7 +31,7 @@ func TestPublicPayloadCountAndZipDigestVerification(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if total, err := verifyArchive(raw, entries); err != nil || total != int64(478*len("synthetic evidence\n")) {
+	if total, err := verifyArchive(raw, entries); err != nil || total != int64(479*len("synthetic evidence\n")) {
 		t.Fatal(total, err)
 	}
 	entries[0].SHA = "wrong"
@@ -58,7 +58,7 @@ func TestPublicPayloadCountAndZipDigestVerification(t *testing.T) {
 
 func TestFixedRawArchiveAllowlist(t *testing.T) {
 	members := rawMembers("sdk", "native")
-	if len(members) != 478 {
+	if len(members) != 479 {
 		t.Fatal(len(members))
 	}
 	seen := map[string]bool{}

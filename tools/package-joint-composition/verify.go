@@ -42,7 +42,7 @@ func publicPaths() map[string]bool {
 	for _, name := range []string{"README.md", "LICENSE", "protocol.md", "results.md", "training-report.json", "training-preexecution.json", "study-report.json", "study-preexecution.json", "calibration-selection.json", "independent-audit.json", "native-report.json", "native-preexecution.json", "curriculum-manifest.json", "curriculum-audit.json", "raw-evidence.zip"} {
 		result[name] = true
 	}
-	for _, name := range []string{"prefixture-amendment.md", "native-independent-audit.json", "sdk-source-provenance.json"} {
+	for _, name := range []string{"prefixture-amendment.md", "native-independent-audit.json", "sdk-source-provenance.json", "native-process-metrics.json"} {
 		result[name] = true
 	}
 	for _, arm := range []string{"independent", "joint"} {
@@ -64,7 +64,7 @@ func verifyArchive(raw []byte, members []artifact) (int64, error) {
 	for _, m := range rawMembers("", "") {
 		allow[m.Public] = true
 	}
-	if len(members) != 478 || len(z.File) != 478 || len(allow) != 478 {
+	if len(members) != 479 || len(z.File) != 479 || len(allow) != 479 {
 		return 0, errors.New("fixed archive count differs")
 	}
 	expected := map[string]artifact{}

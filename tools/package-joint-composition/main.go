@@ -182,7 +182,7 @@ func rawMembers(study, native string) []member {
 	for _, name := range []string{"fixture.go", "natural.go", "oracle.go", "fixture_test.go"} {
 		result = append(result, member{"source/internal/jointcompositionstudy/" + name, "internal/jointcompositionstudy/" + name})
 	}
-	for _, name := range []string{"main.go", "evaluation.go", "models.go", "native.go", "audit.go", "native_audit.go", "native_audit_test.go", "main_test.go", "process_unix.go", "process_other.go", "process_unix_test.go"} {
+	for _, name := range []string{"main.go", "evaluation.go", "models.go", "native.go", "audit.go", "native_audit.go", "native_audit_test.go", "metrics.go", "main_test.go", "process_unix.go", "process_other.go", "process_unix_test.go"} {
 		result = append(result, member{"source/tools/joint-composition-study/" + name, "tools/joint-composition-study/" + name})
 	}
 	for _, name := range []string{"manifest.json", "collection-attempt.json", "exports.jsonl", "preexecution.json", "dataset.jsonl", "audit.json"} {
@@ -249,6 +249,7 @@ func packageBundle(models, study, native, output, revision string) error {
 		"study-report.json": filepath.Join(study, "report.json"), "study-preexecution.json": filepath.Join(study, "preexecution.json"), "calibration-selection.json": filepath.Join(study, "selection.json"),
 		"independent-audit.json": filepath.Join(study, "independent-audit.json"), "native-report.json": filepath.Join(native, "report.json"), "native-preexecution.json": filepath.Join(native, "preexecution.json"),
 		"curriculum-manifest.json": "publication/joint-composition-curriculum-manifest-20261002.json", "curriculum-audit.json": "publication/joint-composition-curriculum-audit-20261002.json", "native-independent-audit.json": filepath.Join(native, "independent-audit.json"), "sdk-source-provenance.json": filepath.Join(sdkRoot, "source-provenance.json")}
+	files["native-process-metrics.json"] = "publication/joint-composition-native-process-metrics-20261002.json"
 	for _, arm := range []string{"independent", "joint"} {
 		name := arm + "/go-parity.json"
 		files[name] = filepath.Join(models, name)
