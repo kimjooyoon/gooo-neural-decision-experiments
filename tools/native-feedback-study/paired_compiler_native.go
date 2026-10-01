@@ -156,7 +156,7 @@ func runPairedNative(binary, goBinary, curriculum, models, selectionPath, output
 		if err = save(filepath.Join(workspace, "plan.json"), doc); err != nil {
 			return err
 		}
-		docRaw, err := read(filepath.Join(workspace, "plan.json"))
+		docRaw, err := json.Marshal(doc)
 		if err != nil {
 			return err
 		}
@@ -234,11 +234,10 @@ func auditPairedNative(curriculum, models, selectionPath, output, native string)
 		if err != nil {
 			return err
 		}
-		docRaw, err := json.MarshalIndent(doc, "", "  ")
+		docRaw, err := json.Marshal(doc)
 		if err != nil {
 			return err
 		}
-		docRaw = append(docRaw, '\n')
 		for _, arm := range pairedNativeArms {
 			cell := report.Cells[index]
 			index++
