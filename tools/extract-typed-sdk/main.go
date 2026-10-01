@@ -32,7 +32,9 @@ func inventory() map[string]string {
 	return map[string]string{
 		"model.go": "internal/decision/model.go", "bridge.go": "internal/decision/bridge.go", "ir.go": "internal/decision/ir.go", "LICENSE": "LICENSE",
 		"model_test.go": "internal/decision/model_test.go", "ir_test.go": "internal/decision/ir_test.go", "path_model_test.go": "internal/decision/path_model_test.go", "path_features_test.go": "internal/decision/path_features_test.go",
-		"bodyplan/bodyplan.go": "internal/bodyplan/bodyplan.go", "bodyplan/bodyplan_test.go": "internal/bodyplan/bodyplan_test.go",
+		"split_features.go": "internal/decision/split_features.go", "split_features_test.go": "internal/decision/split_features_test.go",
+		"testdata/split-context-features-parity.json": "studies/split-context-features-v2/parity.json",
+		"bodyplan/bodyplan.go":                        "internal/bodyplan/bodyplan.go", "bodyplan/bodyplan_test.go": "internal/bodyplan/bodyplan_test.go",
 		"pathplan/pathplan.go": "internal/pathplan/pathplan.go", "pathplan/search.go": "internal/pathplan/search.go", "pathplan/pathplan_test.go": "internal/pathplan/pathplan_test.go", "pathplan/search_test.go": "internal/pathplan/search_test.go",
 		"pathplan/prepared.go": "internal/pathplan/prepared.go", "pathplan/prepared_test.go": "internal/pathplan/prepared_test.go",
 		"pathplan/diagnosis.go": "internal/pathplan/diagnosis.go", "pathplan/diagnosis_test.go": "internal/pathplan/diagnosis_test.go",
@@ -50,7 +52,7 @@ func run(output string) error {
 	if err != nil {
 		return err
 	}
-	paths := []string{"diff", "--quiet", "HEAD", "--", "internal/decision", "internal/bodyplan", "internal/pathplan", "internal/strictjson", "LICENSE"}
+	paths := []string{"diff", "--quiet", "HEAD", "--", "internal/decision", "internal/bodyplan", "internal/pathplan", "internal/strictjson", "studies/split-context-features-v2", "LICENSE"}
 	if err := exec.Command("git", paths...).Run(); err != nil {
 		return errors.New("origin source must be committed before extraction")
 	}

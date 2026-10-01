@@ -201,9 +201,15 @@ func summarize(pairs []bilingualstudy.Pair, model *decision.Model) (map[string]a
 	return result, observations, nil
 }
 
-func run(models, out string) error {
+func run(models, out, armNames string) error {
 	if models == "" || out == "" {
 		return errors.New("trained model root and fresh output directory required")
+	}
+	trainedArms := [2]string{"control", "paired"}
+	if armNames == "v1,v2" {
+		trainedArms = [2]string{"v1", "v2"}
+	} else if armNames != "control,paired" {
+		return errors.New("explicit control/paired or v1/v2 study arms required")
 	}
 	if _, err := os.Lstat(out); !os.IsNotExist(err) {
 		return errors.New("existing capture cannot be overwritten")
@@ -238,7 +244,7 @@ func run(models, out string) error {
 		return err
 	}
 	cells, hashes := map[string]any{}, map[string]string{}
-	for _, arm := range []string{"parent", "control", "paired", "offline"} {
+	for _, arm := range []string{"parent", trainedArms[0], trainedArms[1], "offline"} {
 		variants := []string{"fp32", "ptq_ternary", "qat_ternary"}
 		if arm == "offline" {
 			variants = []string{"deterministic"}
@@ -280,12 +286,13 @@ func run(models, out string) error {
 func main() {
 	models := flag.String("models", "", "fresh training result root")
 	out := flag.String("out", "", "fresh capture directory")
+	arms := flag.String("arms", "control,paired", "control,paired or v1,v2 comparison")
 	flag.Parse()
 	if flag.NArg() != 0 {
 		fmt.Fprintln(os.Stderr, "unexpected positional arguments")
 		os.Exit(2)
 	}
-	if err := run(*models, *out); err != nil {
+	if err := run(*models, *out, *arms); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
