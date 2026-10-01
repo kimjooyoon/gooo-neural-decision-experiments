@@ -46,6 +46,13 @@ anonymously at the immutable revision; the [public-byte receipt](publication/fee
 is separate from inference and training. [Observed continuation curves](docs/feedback-continuation-curves.md)
 track completeness at candidate batch boundaries rather than only the final outcome.
 
+The [five-family native study](docs/native-feedback-families-study.md) now adds
+1,080 actual native calls and twenty actual generated Go programs. Sparse tests
+expose remaining behavior even when every selected finite case passes. All 480
+two-option feedback pairs preserve outcomes while spending 244 extra predictions;
+research now records a zero-call skip for a sole remaining declared path. SDK and
+native deployment of this optimization are separate from the frozen measurements.
+
 The [actual native integration study](docs/native-feedback-results.md) measured
 28 native generations and 246 local predictions with three existing models.
 All 12 model pairs emitted identical Go and finite completeness. Native process

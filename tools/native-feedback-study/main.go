@@ -444,10 +444,12 @@ func main() {
 		}
 		return
 	}
-	if *mode == "continued-audit" || *mode == "trained-audit" {
+	if *mode == "continued-audit" || *mode == "trained-audit" || *mode == "family-audit" {
 		var value map[string]any
 		var err error
-		if *mode == "trained-audit" {
+		if *mode == "family-audit" {
+			value, err = auditFamily(*output)
+		} else if *mode == "trained-audit" {
 			value, err = auditTrainedDogfood(*output)
 		} else {
 			value, err = auditContinuedBound(*output)

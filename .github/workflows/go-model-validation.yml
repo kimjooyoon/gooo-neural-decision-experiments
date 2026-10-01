@@ -38,6 +38,11 @@ jobs:
           go run ./studies/body-plan-v1 "$RUNNER_TEMP/body-plan-cohort"
           cmp studies/body-plan-v1/cohort.jsonl "$RUNNER_TEMP/body-plan-cohort/cohort.jsonl"
           cmp studies/body-plan-v1/manifest.json "$RUNNER_TEMP/body-plan-cohort/manifest.json"
+      - name: Reproduce five-family native continuation cohort
+        run: |
+          go run ./tools/native-feedback-study --mode family-cohort --out "$RUNNER_TEMP/native-family-cohort"
+          cmp studies/feedback-family-v1/cohort.jsonl "$RUNNER_TEMP/native-family-cohort/cohort.jsonl"
+          cmp studies/feedback-family-v1/manifest.json "$RUNNER_TEMP/native-family-cohort/manifest.json"
       - name: Reproduce finite feedback targets with preserved ambiguity
         run: |
           go run ./cmd/feedback-curriculum --out "$RUNNER_TEMP/feedback-path-curriculum"
@@ -147,6 +152,14 @@ jobs:
         run: |
           go run ./tools/continuation-metrics --output "$RUNNER_TEMP/feedback-continuation-curves.json"
           cmp publication/feedback-continuation-curves-20261001.json "$RUNNER_TEMP/feedback-continuation-curves.json"
+      - name: Audit captured five-family native generation and independent Go
+        run: |
+          go run ./tools/native-feedback-study --mode family-audit --out runs/feedback-family-pilot-20261001 \
+            --audit-output "$RUNNER_TEMP/family-pilot-audit.json"
+          cmp runs/feedback-family-pilot-20261001/audit.json "$RUNNER_TEMP/family-pilot-audit.json"
+          go run ./tools/native-feedback-study --mode family-audit --out runs/feedback-family-matrix-20261001 \
+            --audit-output "$RUNNER_TEMP/family-matrix-audit.json"
+          cmp runs/feedback-family-matrix-20261001/audit.json "$RUNNER_TEMP/family-matrix-audit.json"
       - uses: actions/upload-artifact@v7
         with:
           name: go-model-validation
@@ -175,6 +188,8 @@ jobs:
             ${{ runner.temp }}/decline-main-audit.json
             ${{ runner.temp }}/feedback-model-verification.json
             ${{ runner.temp }}/feedback-continuation-curves.json
+            ${{ runner.temp }}/family-pilot-audit.json
+            ${{ runner.temp }}/family-matrix-audit.json
           if-no-files-found: error
 
   compiler-model-dogfood:
