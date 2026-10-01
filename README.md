@@ -1,5 +1,16 @@
 # Gooo neural decision experiments
 
+## Own source-aware small model
+
+The [source ABI and fresh curriculum preparation](docs/semantic-source-v3-preparation-results-20261002.md)
+connects our optional small model directly to typed Gooo source in protected
+native main. Six fresh two-choice compositions provide 9,216 audited decision
+rows across v2/v3 and Korean/English. Both source and curriculum packages are
+public and anonymously byte-verified; the first capture rejection is retained.
+Preparation adds zero optimizer updates or weights. The frozen next training
+stage measures completeness and continuation cost, retaining source compression
+conflicts and finite target ties.
+
 ## Continued partial construction
 
 The [opt-in varying-coordinate feedback study](docs/unfixed-feedback-study.md)
