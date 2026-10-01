@@ -114,6 +114,9 @@ func names() ([]string, error) {
 	return namesKind("")
 }
 func namesKind(kind string) ([]string, error) {
+	if kind == "own-model-native-context-feature" {
+		return ownNativeContextNames()
+	}
 	if kind == "own-model-sdk-context" {
 		return ownContextNames()
 	}
@@ -270,6 +273,11 @@ func buildKind(kind string) (manifest, map[string][]byte, error) {
 		m.Prefix = "research/own-model-sdk-context-20261001/"
 		m.Scope = "Own tiny split-v2 models in published Go SDK 0.2.9: sixteen real SDK child calls, twelve predictions, twenty-four selected finite cases and thirty attempted case evaluations. Eight full-contract bodies complete with three added candidates; three sparse bodies disagree with the intended subtraction. One reused intention, no new training. Context facts differ from training text. Original-file binding and native main adoption are pending; native/emitted-Go calls are zero. Core weights/card and earlier appendices unchanged. Packaging and independent Go arithmetic verification make no new model/process calls."
 	}
+	if kind == "own-model-native-context-feature" {
+		m.Schema = "gooo/own-model-native-context-publication/v1"
+		m.Prefix = "research/own-model-native-context-feature-20261001/"
+		m.Scope = "Preregistered clean native feature source with SDK 0.2.9 and independently initialized own split-v2 FP32/PTQ/QAT models. 32 actual compiler calls, 57 initial predictions, 32 separately compiled emitted-Go processes and 120 function invocations. Selected repeated finite cases 116/120; three sparse choices disagree with intended subtraction. Three oversized representations make zero model/feedback calls and continue deterministic partial assembly. Three reused intentions, zero new independent intentions. 455 candidates and 2999 attempted case evaluations are separate from selected cases. Main replay is a separate phase. Earlier weights/card and regression appendices remain unchanged. Packaging/audit makes no new model, compiler or execution calls; no training, upstream Laya, default promotion, host utilization or causal speedup claim."
+	}
 	n, err := namesKind(kind)
 	if err != nil {
 		return m, nil, err
@@ -375,6 +383,16 @@ func buildKind(kind string) (manifest, map[string][]byte, error) {
 	if kind == "own-model-sdk-context" {
 		files["README.md"] = []byte("# Own-model Gooo typed-context SDK dogfood\n\n" + m.Scope + "\n\nThe deterministic archive contains 25 allowlisted documents, SDK release evidence, preregistration and raw captures. Public experimental weights are in the separate split-context-gooo-judgment-20261001 appendix. See docs/own-model-sdk-context-results.md for scope and negative observations.\n")
 		for _, name := range []string{"docs/own-model-sdk-context-preregistration.md", "docs/own-model-sdk-context-results.md"} {
+			raw, err := read(name)
+			if err != nil {
+				return m, nil, err
+			}
+			files[name] = raw
+		}
+	}
+	if kind == "own-model-native-context-feature" {
+		files["README.md"] = []byte("# Own small models linked to Gooo compiler facts\n\n" + m.Scope + "\n\nThe deterministic archive preserves 110 allowlisted inputs, receipts, resource sidecars and actual emitted-Go values. See per-entry hashes in publication-manifest.json and methods/negative results in docs/own-model-native-context-results.md. Experimental weights are in the separate split-context-gooo-judgment-20261001 appendix.\n")
+		for _, name := range []string{"docs/own-model-native-context-preregistration.md", "docs/own-model-native-context-results.md"} {
 			raw, err := read(name)
 			if err != nil {
 				return m, nil, err

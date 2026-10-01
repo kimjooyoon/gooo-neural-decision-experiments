@@ -580,3 +580,44 @@ jobs:
           name: native-body-plan-evaluation
           path: ${{ runner.temp }}/body-plan-native-study
           if-no-files-found: error
+
+  own-model-native-context:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: 1.27.1
+          cache: false
+      - uses: actions/checkout@v7
+        with:
+          repository: kimjooyoon/meta-ontology-go
+          ref: 052c250208e38f33a65242e38b042aab80cf85b7
+          path: .own-native-context
+          persist-credentials: false
+      - name: Build pinned source-bound Gooo compiler
+        run: |
+          (cd .own-native-context && go test -race ./internal/bodycodegen && go build -trimpath -o "$RUNNER_TEMP/gooo-own-native-context" ./cmd/gooo)
+      - name: Audit frozen local observations without inference
+        run: |
+          go run ./tools/native-feedback-study --mode own-native-context-audit \
+            --out runs/own-model-native-context-feature-20261001 \
+            --source-revision a60b5b802e0f2251b262c7a31cc7ebe6751a4464 \
+            --native-revision 052c250208e38f33a65242e38b042aab80cf85b7 \
+            --audit-output "$RUNNER_TEMP/own-native-context-audit.json"
+          cmp runs/own-model-native-context-feature-20261001/audit.json "$RUNNER_TEMP/own-native-context-audit.json"
+          go run ./tools/package-family-evidence --kind own-model-native-context-feature --pack --bundle "$RUNNER_TEMP/own-native-context-bundle"
+          cmp publication/hf-own-model-native-context-feature-20261001/publication-manifest.json "$RUNNER_TEMP/own-native-context-bundle/publication-manifest.json"
+          go run ./tools/package-family-evidence --kind own-model-native-context-feature --bundle "$RUNNER_TEMP/own-native-context-bundle" --output "$RUNNER_TEMP/own-native-context-verification.json"
+      - name: Run fresh native judgments and independently execute emitted Go
+        run: |
+          go run ./tools/native-feedback-study --mode own-native-context \
+            --native "$RUNNER_TEMP/gooo-own-native-context" --go-bin "$(command -v go)" \
+            --source-revision "$GITHUB_SHA" --native-revision 052c250208e38f33a65242e38b042aab80cf85b7 \
+            --out runs/own-model-native-context-ci
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: own-model-native-context
+          path: runs/own-model-native-context-ci

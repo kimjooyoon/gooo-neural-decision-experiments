@@ -136,3 +136,33 @@ func TestOwnContextRejectsForgedArithmetic(t *testing.T) {
 		t.Fatal("forged arithmetic accepted or failed a different check", err)
 	}
 }
+
+func TestOwnNativeContextRejectsChangedCapture(t *testing.T) {
+	t.Chdir("../..")
+	names, err := ownNativeContextNames()
+	if err != nil || len(names) != 110 {
+		t.Fatal("fixed native context inventory differs", err)
+	}
+	root := t.TempDir()
+	for _, name := range names {
+		raw, err := os.ReadFile(name)
+		if err != nil {
+			t.Fatal(err)
+		}
+		target := filepath.Join(root, name)
+		if err = os.MkdirAll(filepath.Dir(target), 0700); err != nil {
+			t.Fatal(err)
+		}
+		if err = os.WriteFile(target, raw, 0600); err != nil {
+			t.Fatal(err)
+		}
+	}
+	t.Chdir(root)
+	capture := "runs/own-model-native-context-feature-20261001/en-sparse-fp32.json"
+	if err = os.WriteFile(capture, []byte(`{"forged":true}`), 0600); err != nil {
+		t.Fatal(err)
+	}
+	if _, err = ownNativeContextNames(); err == nil {
+		t.Fatal("changed native capture accepted")
+	}
+}
