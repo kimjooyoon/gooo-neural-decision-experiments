@@ -105,3 +105,14 @@ Native main remains SDK 2.5; this release adds an explicit SDK API and measured
 development evidence. Compiler adoption needs a source-bound integration of the
 new opt-in method. No general ordering equivalence or first-shot accuracy is
 inferred from this small reused cohort.
+
+## Native integration adapter
+
+`SearchFeedbackBatchesUnfixed` now shares the SDK's existing bounded batch loop,
+recoverable context-decline handling and interrupted-prediction observation.
+The only branch chooses `ReconsiderUnfixed` rather than `Reconsider`. This avoids
+duplicating the state machine in the compiler. A synthetic equal-logit fixture
+checks identical four-mask candidate sequence and partial body, with six legacy
+versus five opt-in predictions, constant-coordinate and sole-path receipts.
+The earlier 576-session captures and published SDK 2.6 remain frozen; compiler
+deployment and actual new native measurements will be recorded separately.
