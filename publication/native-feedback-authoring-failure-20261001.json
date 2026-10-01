@@ -1,0 +1,13 @@
+{
+  "schema": "gooo/native-feedback-authoring-failure/v1",
+  "runner_revision": "f5099b98afc2354bf636ae66795d665819d706fe",
+  "native_revision": "7430d23583223d59def01d4cff772dbab7e8bdab",
+  "preserved_directory": "runs/native-feedback-integration-20261001",
+  "native_calls": 1,
+  "model_predictions": 0,
+  "generated_go_executions": 0,
+  "decision": "FAIL_CLOSED",
+  "reason": "The study document struct omitted the required outer schema field when reserializing the authoritative native fixture. The compiler rejected the envelope before model loading or candidate evaluation.",
+  "repair": "Retain and validate the native outer schema in the study adapter, add a serialization regression, commit the corrected runner, and use a fresh output directory. Compiler validation and existing evidence remain unchanged.",
+  "primary_study_inclusion": false
+}

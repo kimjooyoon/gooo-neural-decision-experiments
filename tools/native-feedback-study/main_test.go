@@ -2,12 +2,24 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"strings"
 	"testing"
 	"time"
 
 	"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/pathplan"
 )
+
+func TestDocumentEnvelopeRetainsNativeSchema(t *testing.T) {
+	var d document
+	if err := json.Unmarshal([]byte(`{"schema":"gooo/body-codegen-typed-path-plan/v1","max_attempts":64}`), &d); err != nil {
+		t.Fatal(err)
+	}
+	raw, err := json.Marshal(d)
+	if err != nil || !strings.Contains(string(raw), `"schema":"gooo/body-codegen-typed-path-plan/v1"`) {
+		t.Fatal("study lost the compiler document schema")
+	}
+}
 
 func inspectionFixture() nativeResult {
 	var value nativeResult

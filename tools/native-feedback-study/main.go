@@ -29,9 +29,10 @@ var modelPins = map[string]string{
 }
 
 type document struct {
-	Plan  pathplan.Plan       `json:"path_plan"`
-	Cases []pathplan.TestCase `json:"test_cases"`
-	Max   int                 `json:"max_attempts"`
+	Schema string              `json:"schema"`
+	Plan   pathplan.Plan       `json:"path_plan"`
+	Cases  []pathplan.TestCase `json:"test_cases"`
+	Max    int                 `json:"max_attempts"`
 }
 type nativeResult struct {
 	Source string `json:"source"`
@@ -290,7 +291,8 @@ func run(binary, nativeRoot, output, revision, nativeRevision string) error {
 			return err
 		}
 		var d document
-		if err = json.Unmarshal(raw, &d); err != nil || len(d.Cases) != 7 || len(d.Plan.Decisions) != 6 || d.Max != 64 {
+		if err = json.Unmarshal(raw, &d); err != nil || d.Schema != "gooo/body-codegen-typed-path-plan/v1" ||
+			len(d.Cases) != 7 || len(d.Plan.Decisions) != 6 || d.Max != 64 {
 			return errors.New("fixed native fixture required")
 		}
 		documents[lang] = d
