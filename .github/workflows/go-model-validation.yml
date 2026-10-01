@@ -404,6 +404,56 @@ jobs:
             ${{ runner.temp }}/compound-main-verification.json
           if-no-files-found: error
 
+  own-model-sdk-context:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GOTOOLCHAIN: local
+      GOWORK: 'off'
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.27.1'
+          cache: false
+      - uses: actions/checkout@v7
+        with:
+          repository: kimjooyoon/gooo-decision-runtime
+          ref: 2a730c83f1a43f303fe526801890571cc87e9fcb
+          path: .own-model-sdk
+          persist-credentials: false
+      - name: Build pinned Go context example and check its contracts
+        run: |
+          (cd .own-model-sdk && go test -race ./... && go build -trimpath -o "$RUNNER_TEMP/gooo-sdk-path" ./examples/gooo-path)
+      - name: Execute explicit own models and disconnected typed bodies
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/own-model-sdk-context"
+          for task_language in en ko; do
+            for task_contract in sparse full; do
+              for task_variant in fp32 ptq_ternary qat_ternary offline; do
+                task_args=()
+                task_calls=0
+                if [ "$task_variant" != offline ]; then
+                  task_args=(--model "runs/split-context-judgment-mps-20261001/v2/models/$task_variant/model.json")
+                  task_calls=1
+                fi
+                task_capture="$RUNNER_TEMP/own-model-sdk-context/$task_language-$task_contract-$task_variant.json"
+                "$RUNNER_TEMP/gooo-sdk-path" --plan "studies/own-model-sdk-context-v1/$task_language-$task_contract.json" "${task_args[@]}" > "$task_capture"
+                jq -e --argjson calls "$task_calls" '.search.selection.local_model_predictions==$calls and .native_compiler_calls==0 and .emitted_go_processes==0 and .search.selected_training_passed==.search.training_cases' "$task_capture"
+                if [ "$task_contract" = full ]; then
+                  jq -e '.gooo_body=="return (input - 2)" and .search.training_cases==2' "$task_capture"
+                fi
+              done
+            done
+          done
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: own-model-sdk-context
+          path: ${{ runner.temp }}/own-model-sdk-context
+          if-no-files-found: error
+
   compiler-model-dogfood:
     runs-on: ubuntu-latest
     timeout-minutes: 15

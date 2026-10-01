@@ -1,0 +1,62 @@
+{
+  "schema": "gooo/body-codegen-typed-path-plan/v1",
+  "path_plan": {
+    "schema": "gooo/typed-body-path-plan/v1",
+    "base": {
+      "schema": "gooo/typed-body-plan/v1",
+      "id": "path-diagnosis://body",
+      "name": "Probe",
+      "result_type": "Int",
+      "expressions": [
+        {
+          "kind": "input",
+          "name": "input"
+        },
+        {
+          "kind": "int",
+          "int": 2
+        },
+        {
+          "kind": "binary",
+          "operation": "subtract",
+          "left": 0,
+          "right": 1
+        }
+      ],
+      "statements": [
+        {
+          "kind": "return",
+          "expr": 2
+        }
+      ],
+      "root": [
+        0
+      ]
+    },
+    "decisions": [
+      {
+        "id": "operands",
+        "kind": "operand_order",
+        "target": 2,
+        "intent": "Subtract two from the input.",
+        "options": [
+          {
+            "label": "layout_forward"
+          },
+          {
+            "label": "layout_reverse",
+            "reverse": true
+          }
+        ],
+        "fallback": "layout_forward"
+      }
+    ]
+  },
+  "test_cases": [
+    {
+      "input": 2,
+      "expected": 0
+    }
+  ],
+  "max_attempts": 1
+}
