@@ -92,17 +92,23 @@ func namesKind(kind string) ([]string, error) {
 		}
 		var report struct {
 			Observations []struct {
-				ID string `json:"id"`
+				ID      string `json:"id"`
+				Capture string `json:"capture_sha256"`
 			} `json:"observations"`
 		}
 		if err = json.Unmarshal(raw, &report); err != nil {
 			return nil, err
 		}
 		for _, o := range report.Observations {
-			if !idRE.MatchString(o.ID) {
+			if !idRE.MatchString(o.ID) || !shaRE.MatchString(o.Capture) {
 				return nil, errors.New("unsafe capture name")
 			}
-			names = append(names, root+"/captures/"+o.ID+".json")
+			path := root + "/captures/" + o.ID + ".json"
+			data, err := read(path)
+			if err != nil || hash(data) != o.Capture {
+				return nil, errors.New("capture bytes differ from frozen native report")
+			}
+			names = append(names, path)
 		}
 		raw, err = read(root + "/audit.json")
 		if err != nil {
