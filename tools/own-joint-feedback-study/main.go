@@ -30,8 +30,15 @@ func main() {
 	models := flag.String("models", "", "nine committed own student models")
 	output := flag.String("output", "", "fresh retained SDK study directory")
 	revision := flag.String("source-revision", "", "clean exact Go study source")
+	audit := flag.String("audit-report", "", "fresh zero-prediction audit of retained SDK study")
 	flag.Parse()
-	if err := study(*dataset, *models, *output, *revision); err != nil {
+	var err error
+	if *audit != "" {
+		err = auditStudy(*dataset, *models, *output, *audit)
+	} else {
+		err = study(*dataset, *models, *output, *revision)
+	}
+	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
