@@ -69,10 +69,42 @@ but runtime tensors decode to 12,496 int8 bytes plus scales. Request workspace
 is 2,160 bytes. Five trits per byte is 1.6 stored bits per ternary weight,
 separate from the theoretical log2(3) and total process RAM.
 
-## Next execution evidence
+## Actual adopted-main execution
 
-The preregistration requires 240 actual adopted-main Gooo generations and
-independently compiled Go executions, with 3,840 ordered invocations. SDK
-evidence above does not fulfill that native execution requirement. Native
-results and immutable public HF raw evidence will be recorded after collection
-and independent audit. See the frozen protocol and public JSON summaries.
+Adopted compiler main `363a3d8aa365c35dd634c241248b444de0050973` with SDK
+v0.2.12 and Go 1.27.1 performed 240 actual Gooo generations. Every emitted Go
+program was independently compiled and executed: 240 executions and 3,840
+ordered invocations all matched the ordinary int64 oracle. These generations
+made 473 actual model predictions. A separate zero-inference audit reconstructed
+all source/context/model bindings, candidate paths, feedback, execution values
+and process metrics. Codegen and Go-run process measurements are recorded
+separately; Go-run includes compilation and execution.
+
+The fixed configuration-40 subset has 48 function views per policy:
+
+| Policy | Initially complete | Extra candidates | Actual predictions |
+| --- | ---: | ---: | ---: |
+| Disconnected | 12/48 | 70 | 0 |
+| Calibration-selected v1 independent | 16/48 | 54 | 181 |
+| Uniform initial FP32 | 16/48 | 57 | 99 |
+| Passing-set initial FP32 | 16/48 | 57 | 98 |
+| Passing-set actual-feedback FP32 | 16/48 | 53 | 95 |
+
+This subset supports an additional-candidate improvement, with equal first
+candidate completeness. It is not a new blind corpus or proof of a general
+compiler wall-time improvement. The selected old model is retained according
+to the preregistered calibration rule; no development-based default promotion
+was performed.
+
+The first native attempt retained five generation captures and four actual Go
+execution records before an auditor rejected the disconnected plan hash.
+The disconnected compiler correctly retains original source intents, whereas
+model-connected input is encoded. The auditor now verifies each against its
+actual source plan; an added regression test rejects swapping those plans.
+The completed 240-generation run is a separate preserved attempt. No generated
+function failure was hidden by discarding the first attempt.
+
+The Go publication tool exports the complete fixed synthetic archive, nine
+models and PROV-O lineage. The immutable HF revision and anonymous-byte
+verification are recorded separately after publication. See the frozen
+protocol and public JSON summaries for measured denominators.
