@@ -1,5 +1,71 @@
 # Gooo neural decision experiments
 
+We are developing small local models that help **Gooo assemble programs from
+declared choices**. The compiler provides the plan and checks the result; the
+model suggests which permitted construction to try next. Failed examples become
+context for another bounded attempt. This repository holds the experiments,
+training tools and original evidence behind that process.
+
+## Start here — 2026-10-03
+
+- [Language and compiler](https://github.com/kimjooyoon/meta-ontology-go): source,
+  semantic IR, typed body generation, native execution and completeness receipts.
+- [Project direction, 한국어](https://github.com/kimjooyoon/meta-ontology-go/blob/dev/docs/language-direction.ko.md):
+  the workshop metaphor, current capabilities, intended differences and next work.
+- [Go inference runtime](https://github.com/kimjooyoon/gooo-decision-runtime):
+  fixed tensor arrays, caller workspaces, path ranking and finite feedback search.
+- [Current Hugging Face model](https://huggingface.co/asketeddy/gooo-shared-judgment-tiny-v1):
+  independently initialized shared judges, FP32/PTQ/QAT weights and evidence.
+- [Current model card source](publication/shared-judgment-model-card-20261003.md):
+  model usage, full comparison table, lineage and research acknowledgments.
+
+The shared judge has **2,072 trainable parameters** and reuses a small local
+network across three decisions. Gooo supplies eight complete candidate paths.
+The research asks whether this division of work can reduce search cost while
+preserving source meaning and making incomplete behavior easy to inspect.
+
+### What has improved, and what needs work
+
+| Question | Latest observation | Next measurement |
+| --- | --- | --- |
+| Does sharing help finite path selection? | First-choice complete views rose 95→113 out of 512; ranked extra attempts fell 1,572→1,469 | Per-family costs and performance on newly authored tasks |
+| Do Korean/English intentions agree? | Shared FP32 first choices differed in 255/256 paired views | Meaning-preserving representation and paired-language valid-path agreement |
+| Does compact storage preserve behavior? | Exact kernels on 10,739 states; matching behavior in 48 native expanded/compact pairs | Retained serving cost and additional platforms |
+| Can generated code run? | 96 compact-study generations; 2,304 supplied expectations passed across 192 compiled runs | Broader types, boundaries and independently sourced workflows |
+
+Model quality, representation parity, finite execution and resource usage have
+separate denominators. The current development cohort has been observed in
+earlier studies. Whole-domain completeness and bilingual meaning preservation
+remain open research questions. Original failures, slow samples and regressions
+stay available in the dated reports below.
+
+### Research connections
+
+We appreciate [SKETCH](https://people.csail.mit.edu/asolar/papers/asplos06-final.pdf)
+for specification-guided completion, [DreamCoder](https://arxiv.org/abs/2006.08381)
+for neural search and reusable program abstractions,
+[Laya](https://huggingface.co/convaiinnovations/laya) for the structured-decision
+interface used in our early experiments,
+[BitNet b1.58](https://arxiv.org/abs/2402.17764) for the ternary-weight research
+direction, and [W3C PROV-O](https://www.w3.org/TR/prov-o/) for provenance vocabulary.
+Our experiments combine these ideas with Gooo-owned declarations, finite tests,
+deterministic continuation and small Go inference kernels.
+
+## Evidence log
+
+The following sections preserve individual experiments and release histories.
+Their measurements belong to the named datasets, model files and source revisions.
+
+### Compiler observation deltas
+
+The [actual comparator dogfood](publication/completeness-delta-dogfood-20261003/README.md)
+uses the published compact FP32 judge for one fresh generation, three predictions
+and two compiled runs, matching 24 supplied expectations. The new compiler
+comparison identifies two UNKNOWN-to-observed transitions, eight new axes and
+the preserved permission frontier. All original receipts and three deterministic
+comparison outputs are included. This integration sample has its own scope,
+separate from the quality and timing studies below.
+
 ## Compact models in actual Gooo codegen
 
 [The complete native appendix](publication/compact-shared-native-20261003/README.md)
@@ -59,8 +125,9 @@ original matrix scales, and preserves 24-term float accumulation order. Runtime
 receipts identify the actual compact artifact. Seeds are still bound to artifact
 hashes: repeated use of one artifact is reproducible, while a matching seed
 across different representations need not select the same mask. Native compiler
-adoption and paired source-to-runtime measurements remain a separate follow-up.
-The prior quality regressions and original expanded models remain available.
+adoption and paired source-to-runtime measurements are now recorded in the
+compact native section above. The original expanded models and quality regressions
+remain available.
 
 ## Shared local Gooo judge — fresh model comparison
 
@@ -80,8 +147,8 @@ development confidence and some families regress. All negative variants remain.
 The [public evidence](publication/shared-three-20261003/manifest.json) binds 1,116
 members, including all journals and 2,304/2,304 passing native expectations.
 CI verifies every archived byte and independently replays the six Go models.
-Runtime memory remains the expanded ABI; fewer training parameters are not a
-runtime memory reduction. [Storage amendment](docs/shared-three-storage-amendment-20261003.md)
+This training study measured the expanded ABI. The later compact study above
+records the reduced resident tensors. [Storage amendment](docs/shared-three-storage-amendment-20261003.md)
 preserves the original zero-update failure and all older evidence.
 
 ## Three-choice Gooo construction — fresh students and actual Go kernels

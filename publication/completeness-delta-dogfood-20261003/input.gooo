@@ -1,0 +1,4 @@
+package threecomposition
+namespace threecomposition
+entity Integer id "threecomposition://entity/integer"
+activity ChoosePath(Integer) -> Integer computes "let localA20 = (input + 1)\nlet localB20 = (input * 3)\nif (2 \u003c= input) {\n\tlocalB20 = ((localA20 * 3) - localB20)\n} else {\n\tlocalB20 = ((localA20 + localB20) + 1)\n}\nreturn ((localA20 + localB20) + input)"
