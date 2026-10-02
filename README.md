@@ -25,6 +25,11 @@ contains nine models, PROV-O lineage, frozen protocols and 614 raw evidence
 members. [Anonymous publication verification](publication/own-joint-feedback-public-verification-20261002.json)
 checks all 48 payloads against the pinned local manifest. The v2 CI job audits
 published evidence and executes new SDK sessions and native generations.
+[The recorded source CI](https://github.com/kimjooyoon/gooo-neural-decision-experiments/actions/runs/36952987501)
+passes all ten jobs. Its [permanent raw CI appendix](https://huggingface.co/asketeddy/gooo-joint-feedback-tiny-v2/tree/60b28e80057dbe7f376e936487a9fe0db9b46683/research/ci-own-feedback-v2-36952987501)
+preserves 519 raw records and 15 reports, with
+[anonymous Go verification](publication/own-joint-feedback-ci-public-verification-20261002.json)
+of all 19 published files. CI replays do not count as newly authored intentions.
 
 ## Own joint Gooo model v1 — preceding baseline
 
