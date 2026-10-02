@@ -2,7 +2,18 @@
 
 **Reviewed:** 2026-09-30
 
-## Recommendation
+## Progress since this design — 2026-10-03
+
+The proposal below describes the initial operator-classification experiment.
+Development has since reached source-derived features, joint path choices and
+2,072-parameter shared judges. SDK v0.2.15 supports full-input V4 features and
+explicit arithmetic; the compiler currently uses v0.2.14 with V3 models.
+The [current overview](../README.md),
+[language direction](https://github.com/kimjooyoon/meta-ontology-go/blob/dev/docs/language-direction.ko.md)
+and [public model](https://huggingface.co/asketeddy/gooo-shared-judgment-tiny-v1)
+connect the original rationale to current results and remaining work.
+
+## Original recommendation
 
 Keep the deployable model as the small, independently initialized classifier in
 this repository. It chooses among eight typed binary operations; Go then builds

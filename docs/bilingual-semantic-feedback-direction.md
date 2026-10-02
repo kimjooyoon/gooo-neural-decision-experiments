@@ -1,14 +1,21 @@
 # Bilingual Gooo semantic feedback direction
 
-The user's latest direction prioritizes Gooo and Korean/English judgment,
-incremental compiler dogfood and continuous public evidence. A high first-choice
-score is not the primary acceptance requirement. Work is performed directly by
-root, without delegated agents.
+Gooo development combines Korean/English intent judgments, small local models
+and repeated use of the compiler on its own research tasks. Progress is measured
+through declared behavior completed, attempts spent and observations that remain
+unresolved. Public records connect each model change to those measurements.
+
+The [current overview](../README.md) links the completed studies. SDK v0.2.15
+now carries V4 full-input features and explicit arithmetic; the compiler uses
+the earlier v0.2.14/V3 integration while native V4 execution is prepared.
+See the [language guide](https://github.com/kimjooyoon/meta-ontology-go/blob/dev/docs/language-direction.ko.md)
+and [model card](https://huggingface.co/asketeddy/gooo-shared-judgment-tiny-v1)
+for compatible files, measured scope and the research behind this direction.
 
 ## Current working loop
 
 1. The compiler supplies a typed structural arena and closed alternatives.
-2. Our small model reads only the bilingual intent/context and ranks eligible paths.
+2. Our small model reads source-derived context and bilingual intent, then ranks eligible paths.
 3. Authored finite tests evaluate candidates within a deadline and work budget.
 4. Accepted typed paths render Gooo and pass through actual native codegen.
 5. Exact emitted Go is executed against independent arithmetic cases.
@@ -16,8 +23,8 @@ root, without delegated agents.
 
 With no model, the same loop uses deterministic declared order. Confidence,
 finite case success and unattempted alternatives remain separate observations.
-No human reviewer/Guardian is required by this experiment. Existing compiler
-machine checks and type/scope correctness still supply execution constraints.
+Compiler machine checks, type/scope correctness and source-bound observations
+supply the execution constraints and evidence for each change.
 
 ## Next iterations
 

@@ -10,8 +10,12 @@
 전체 입력을 유지한 네 학습 조건의 [초기 결과](full-input-judgment-initial-results-20261003.md)는
 12개 FP32/PTQ/QAT 모델과 함께 공개됐습니다. 기존 개발 과제에서 FP32 첫 경로
 충족 수는 113→368/512, 추가 시도는 1,469→186이었습니다. 연산 순서의 특징
-충돌, 양자화 손실, [환경별 후보 순위 차이](full-input-numerical-portability-followup-20261003.md)가
-다음 과제입니다. 새 V4 계약은 연구 실행기에서 평가 중이며 컴파일러 반영은 남아 있습니다.
+충돌과 양자화 손실은 후속 과제입니다. 발견했던
+[환경별 후보 순위 차이](full-input-numerical-portability-followup-20261003.md)는
+[명시적 반올림 규칙](full-input-separate-arithmetic-results-20261003.md)으로 대조했고,
+새 V4 계약을 포함한 SDK v0.2.15를 공개했습니다.
+[SDK 재실행 기록](../publication/full-input-sdk-replay-20261003/README.md)은 플랫폼별
+18,432개 입력·36,864회 판단의 일치를 보여줍니다. 실제 컴파일러 연결은 다음 단계입니다.
 
 ## 10월 2일의 기준
 

@@ -6,9 +6,11 @@ The dated plan below records the starting hypotheses. Joint path judgment,
 shared 2,072-parameter models and compact Go SDK v0.2.14 integration have since
 been implemented. The [current overview](../README.md) links each completed study.
 The [full-input comparison](full-input-judgment-initial-results-20261003.md)
-publishes all twelve exports from four freshly trained judges. The next work is
-the [numerical portability follow-up](full-input-numerical-portability-followup-20261003.md),
-remaining form/split evaluations and native adoption of the new V4 contract.
+publishes all twelve exports from four freshly trained judges. The
+[explicit arithmetic follow-up](full-input-separate-arithmetic-results-20261003.md)
+reproduces all intermediate values and rankings across the paired platforms.
+SDK v0.2.15 is published with [complete replay reports](../publication/full-input-sdk-replay-20261003/README.md).
+Next work covers remaining form/split evaluations and native V4 adoption.
 Order-sensitive features, newly authored tasks and reusable constructions remain
 language research priorities.
 
