@@ -106,6 +106,11 @@ evidence. CI independently reconstructs all 640 pairs without new operational
 calls. The [native domain-completeness delta](publication/own-three-choice-native-domain-completeness-delta-20261002.json)
 records completed finite generation/reverse execution, preserved bilingual
 negatives and the still-unknown compiler declaration/receipt-schema binding.
+The [public native HF appendix](https://huggingface.co/asketeddy/gooo-three-choice-feedback-tiny-v1/tree/3151265f75aad40f6ce9f89a904bd34acdbade2c/research/native-execution-20261002)
+preserves the full native raw archive and model-quality negatives. Its
+[anonymous byte receipt](publication/own-three-choice-native-execution-hf-byte-verification-20261002.json)
+matches all seven files and 7,600,065 public bytes at that immutable revision;
+existing model weights remain unchanged.
 
 ## Own feedback Gooo model v2 — preceding two-choice experiment
 
