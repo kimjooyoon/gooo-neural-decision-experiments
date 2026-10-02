@@ -24,12 +24,25 @@ network across three decisions. Gooo supplies eight complete candidate paths.
 The research asks whether this division of work can reduce search cost while
 preserving source meaning and making incomplete behavior easy to inspect.
 
+### Latest diagnosis: input phrasing changes the chosen path
+
+The [bilingual wrapper audit](docs/bilingual-wrapper-audit-results-20261003.md)
+holds six published models, Gooo sources and finite targets fixed while varying
+five authored input forms. It made **92,160 real Go predictions**; an independent
+reader replayed every prediction with zero numerical difference locally and
+recomputed all 30 condition summaries. Shared FP32 completes 113/512 original
+development views and 480/512 after removing the known curriculum prefix.
+The full text of both forms remains in the evidence. This is a format-sensitivity
+diagnosis; the published original-input quality measurement stays 113/512.
+Next training will retain complete caller text and compare phrasing diversity
+and positional features. [Closed evidence bundle](publication/bilingual-wrapper-audit-20261003/README.md).
+
 ### What has improved, and what needs work
 
 | Question | Latest observation | Next measurement |
 | --- | --- | --- |
 | Does sharing help finite path selection? | First-choice complete views rose 95→113 out of 512; ranked extra attempts fell 1,572→1,469 | Per-family costs and performance on newly authored tasks |
-| Do Korean/English intentions agree? | Shared FP32 first choices differed in 255/256 paired views | Meaning-preserving representation and paired-language valid-path agreement |
+| Do Korean/English intentions agree? | Original shared FP32 choices differed in 255/256 pairs; the controlled bare-instruction form differed in 32/256 | Full-input robustness, valid-path agreement and the effects of phrasing/position |
 | Does compact storage preserve behavior? | Exact kernels on 10,739 states; matching behavior in 48 native expanded/compact pairs | Retained serving cost and additional platforms |
 | Can generated code run? | 96 compact-study generations; 2,304 supplied expectations passed across 192 compiled runs | Broader types, boundaries and independently sourced workflows |
 

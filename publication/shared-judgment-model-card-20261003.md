@@ -121,6 +121,40 @@ The next representation experiments will measure both language consistency and
 membership in the valid-path set. Full-budget success here depends on the
 authored finite search space containing a passing alternative.
 
+## Input sensitivity diagnosis
+
+A subsequent fixed-weight study varies five authored instruction forms while
+keeping the original Gooo source, eight paths and finite expectations constant.
+The collector made **92,160 actual Go predictions** across all 3,072 corpus views
+and six exports. An independent reader replayed all 92,160 predictions with zero
+numerical difference locally and recomputed every condition's finite and bilingual
+summary. These replay calls are recorded separately from collection.
+
+For shared FP32, the 512 development views give:
+
+| Complete input form | First-choice complete /512 | Extra ranked attempts | EN/KO disagreements /256 |
+| --- | ---: | ---: | ---: |
+| Original development prefix | 113 | 1,469 | 255 |
+| Bare authored instruction | 480 | 38 | 32 |
+| Calibration prefix | 92 | 1,372 | 250 |
+| Development phrase as suffix | 233 | 662 | 180 |
+
+The bare form matches the format of the original training instructions. Its
+result describes a controlled intervention on an already observed cohort;
+original-input quality remains 113/512. Production Gooo keeps the complete caller
+text. The next comparison will vary training phrasing and positional features
+while preserving full input and source binding.
+
+The source v3 intent encoder uses four relative-position buckets for byte
+fragments. Added prefixes alter the fragments, their buckets and normalization.
+The study identifies sensitivity to this combined change; further experiments
+will separate those factors. All six models, all forms and regressions are in
+[the report](https://github.com/kimjooyoon/gooo-neural-decision-experiments/blob/main/docs/bilingual-wrapper-audit-results-20261003.md)
+and the Hub appendix `research/bilingual-wrapper-20261003/`. Its 30-member archive
+includes every full constructed input and prediction, the exact source dataset,
+six small existing models and the independent reader. The appendix adds zero
+training updates. The model weights at their existing paths remain unchanged.
+
 ## Actual Gooo generation and execution
 
 The latest compact study used 16 bilingual views, three model variants and two
