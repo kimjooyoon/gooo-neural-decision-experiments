@@ -22,6 +22,9 @@ student/native measurements and public weight verification as separate phases.
 The [native corpus audit](publication/own-three-choice-curriculum-audit-20261002.json)
 now verifies all 3,072 actual exports, 9,216 complete individual inputs and
 43,440,202 journal bytes. The first failed attempt remains retained.
+The [teacher collection design](docs/own-three-choice-teacher-collection-design-20261002.md)
+adds Go collection, complete runtime-shaped student contexts and an offline
+frontier/oracle/provenance audit before teacher collection begins.
 Teacher observation, training and trained native measurement have not started;
 no default model is promoted.
 The existing nine v2 models below remain the latest trained edition.
