@@ -77,6 +77,14 @@ mask differences and actual output differences are counted separately. Tail
 collection measured 11.662 s, 137.55% of one CPU core and 297.7 MiB lifetime RSS,
 including original audit and planning. Full native validation is still pending;
 finite eight-mask completeness does not establish general-language judgment.
+The [public missing-only appendix](https://huggingface.co/asketeddy/gooo-three-choice-feedback-tiny-v1/tree/0bc97aeb97c1d38b6f860f8f3ef88f05a981084c/research/sdk-storage-tail-20261002)
+retains the full tail and negative bilingual findings with the existing model
+weights unchanged. [Anonymous byte verification](publication/own-three-choice-sdk-storage-tail-hf-byte-verification-20261002.json)
+matches all seven uploaded files at that immutable revision.
+The [domain completeness receipt](publication/own-three-choice-domain-completeness-receipt-20261002.json)
+records declaration, generation, reverse observation, use-case, boundary and
+provenance evidence separately. It preserves unknown compiler-schema binding
+and pending native execution; no single universal success score is asserted.
 
 ## Own feedback Gooo model v2 — preceding two-choice experiment
 
