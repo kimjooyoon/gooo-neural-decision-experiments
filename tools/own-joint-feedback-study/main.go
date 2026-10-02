@@ -31,13 +31,15 @@ func main() {
 	output := flag.String("output", "", "fresh retained SDK study directory")
 	revision := flag.String("source-revision", "", "clean exact Go study source")
 	audit := flag.String("audit-report", "", "fresh zero-prediction audit of retained SDK study")
-	mode := flag.String("mode", "sdk", "sdk or native")
+	mode := flag.String("mode", "sdk", "sdk, native or native-metrics")
 	sdk := flag.String("sdk-study", "", "frozen all-policy SDK study for native comparison")
 	native := flag.String("native", "", "clean adopted-main Gooo executable")
 	goBinary := flag.String("go-bin", "", "exact Go 1.27.1 execution compiler")
 	flag.Parse()
 	var err error
-	if *mode == "native" {
+	if *mode == "native-metrics" {
+		err = nativeProcessSummary(*dataset, *models, *sdk, *output, *audit)
+	} else if *mode == "native" {
 		err = nativeStudy(*dataset, *models, *sdk, *output, *revision, *native, *goBinary, *audit)
 	} else if *mode != "sdk" {
 		err = errors.New("unknown study mode")

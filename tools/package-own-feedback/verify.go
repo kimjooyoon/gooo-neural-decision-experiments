@@ -43,9 +43,13 @@ func requiredFiles() map[string]bool {
 	}
 	return r
 }
-func verify(dir, out string) error {
+func verify(dir, out, manifestSHA, evidence string) error {
 	if _, e := os.Stat(out); !os.IsNotExist(e) {
 		return errors.New("fresh verification output required")
+	}
+	manifestPin, err := pinManifest(dir, manifestSHA)
+	if err != nil {
+		return err
 	}
 	var m manifest
 	if e := read(filepath.Join(dir, "publication-manifest.json"), &m); e != nil {
@@ -140,7 +144,12 @@ func verify(dir, out string) error {
 			return errors.New("archive expanded byte cap exceeded")
 		}
 	}
-	return save(out, map[string]any{"schema": "gooo/own-joint-feedback-publication-verification/v2", "status": "PASS", "public_payloads": len(m.Files), "raw_archive_members": len(z.File), "expanded_archive_bytes": total, "model_exports": 9, "optimizer_updates": 3600, "recorded_native_generations": 240, "recorded_go_executions": 240, "recorded_ordered_invocations": 3840, "new_model_predictions": 0, "new_native_calls": 0, "private_paths_and_credentials_absent_from_payload_text": true})
+	if evidence != "" {
+		if err = extractEvidence(z.File, expected, evidence); err != nil {
+			return err
+		}
+	}
+	return save(out, map[string]any{"schema": "gooo/own-joint-feedback-publication-verification/v2", "status": "PASS", "manifest_sha256": manifestPin, "independent_manifest_pin_supplied": manifestSHA != "", "raw_evidence_extracted": evidence != "", "public_payloads": len(m.Files), "raw_archive_members": len(z.File), "expanded_archive_bytes": total, "model_exports": 9, "optimizer_updates": 3600, "recorded_native_generations": 240, "recorded_go_executions": 240, "recorded_ordered_invocations": 3840, "new_model_predictions": 0, "new_native_calls": 0, "private_paths_and_credentials_absent_from_payload_text": true})
 }
 func get(client *http.Client, url, dest string, cap int64) error {
 	request, e := http.NewRequest(http.MethodGet, url, nil)
@@ -176,7 +185,7 @@ func get(client *http.Client, url, dest string, cap int64) error {
 	}
 	return nil
 }
-func fetch(revision, dir, out string) error {
+func fetch(revision, dir, out, manifestSHA, evidence string) error {
 	if !regexp.MustCompile(`^[0-9a-f]{40}$`).MatchString(revision) {
 		return errors.New("immutable public commit required")
 	}
@@ -189,6 +198,9 @@ func fetch(revision, dir, out string) error {
 	client := &http.Client{Timeout: 60 * time.Second}
 	prefix := "https://huggingface.co/" + repository + "/resolve/" + revision + "/"
 	if e := get(client, prefix+"publication-manifest.json", filepath.Join(dir, "publication-manifest.json"), 1<<20); e != nil {
+		return e
+	}
+	if _, e := pinManifest(dir, manifestSHA); e != nil {
 		return e
 	}
 	var m manifest
@@ -209,7 +221,7 @@ func fetch(revision, dir, out string) error {
 			return e
 		}
 	}
-	if e := verify(dir, out); e != nil {
+	if e := verify(dir, out, manifestSHA, evidence); e != nil {
 		return e
 	}
 	return nil

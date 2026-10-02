@@ -10,6 +10,127 @@ permissions:
   contents: read
 
 jobs:
+  own-joint-feedback-v2-native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GOTOOLCHAIN: local
+      GOWORK: "off"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.27.1'
+          cache: false
+      - name: Fetch pinned public v2 bytes and stream verified raw evidence
+        run: |
+          go run ./tools/package-own-feedback --mode fetch \
+            --public-revision b4e9a3e50b50e893abc52a36f49eacf032aded50 \
+            --manifest-sha256 e6eb1babcd94ccd1a75fea5d76069a5dc0bbb368f57318cc4a2608019b4a16a5 \
+            --bundle "$RUNNER_TEMP/feedback-public" \
+            --evidence "$RUNNER_TEMP/feedback-frozen-evidence" \
+            --output "$RUNNER_TEMP/feedback-public-verification.json"
+          cmp docs/own-joint-completeness-feedback-preregistration-20261002.md "$RUNNER_TEMP/feedback-public/protocol.md"
+          cmp models/own-joint-feedback-v2/report.json "$RUNNER_TEMP/feedback-public/training-report.json"
+          cmp models/own-joint-feedback-v2/preexecution.json "$RUNNER_TEMP/feedback-public/training-preexecution.json"
+          mkdir "$RUNNER_TEMP/feedback-public-models"
+          cp "$RUNNER_TEMP/feedback-public/training-report.json" "$RUNNER_TEMP/feedback-public-models/report.json"
+          cp "$RUNNER_TEMP/feedback-public/training-preexecution.json" "$RUNNER_TEMP/feedback-public-models/preexecution.json"
+          for arm in uniform-initial set-initial set-feedback; do
+            cp -R "$RUNNER_TEMP/feedback-public/$arm" "$RUNNER_TEMP/feedback-public-models/$arm"
+            for variant in fp32 ptq_ternary qat_ternary; do
+              for file in model.json weights.bin; do
+                cmp "models/own-joint-feedback-v2/$arm/models/$variant/$file" "$RUNNER_TEMP/feedback-public-models/$arm/models/$variant/$file"
+              done
+            done
+          done
+          for arm in joint independent; do
+            for file in model.json weights.bin; do
+              cmp "models/joint-composition-v1/$arm/models/fp32/$file" "$RUNNER_TEMP/feedback-frozen-evidence/reference-models/$arm/$file"
+            done
+          done
+      - name: Audit retained teacher, all-policy SDK and compiled native records without inference
+        run: |
+          go run ./tools/joint-composition-curriculum \
+            --audit "$RUNNER_TEMP/feedback-frozen-evidence/original-curriculum" \
+            --audit-report "$RUNNER_TEMP/feedback-source-curriculum-audit.json"
+          go run ./tools/collect-own-joint-feedback \
+            --dataset "$RUNNER_TEMP/feedback-frozen-evidence/original-curriculum/dataset.jsonl" \
+            --output "$RUNNER_TEMP/feedback-frozen-evidence/teacher" \
+            --audit-report "$RUNNER_TEMP/feedback-teacher-audit.json"
+          go run ./tools/own-joint-feedback-study \
+            --dataset "$RUNNER_TEMP/feedback-frozen-evidence/original-curriculum/dataset.jsonl" \
+            --models "$RUNNER_TEMP/feedback-public-models" \
+            --output "$RUNNER_TEMP/feedback-frozen-evidence/sdk" \
+            --audit-report "$RUNNER_TEMP/feedback-sdk-frozen-audit.json"
+          go run ./tools/own-joint-feedback-study --mode native \
+            --dataset "$RUNNER_TEMP/feedback-frozen-evidence/original-curriculum/dataset.jsonl" \
+            --models "$RUNNER_TEMP/feedback-public-models" \
+            --sdk-study "$RUNNER_TEMP/feedback-frozen-evidence/sdk" \
+            --output "$RUNNER_TEMP/feedback-frozen-evidence/native" \
+            --audit-report "$RUNNER_TEMP/feedback-native-frozen-audit.json"
+          go run ./tools/own-joint-feedback-study --mode native-metrics \
+            --dataset "$RUNNER_TEMP/feedback-frozen-evidence/original-curriculum/dataset.jsonl" \
+            --models "$RUNNER_TEMP/feedback-public-models" \
+            --sdk-study "$RUNNER_TEMP/feedback-frozen-evidence/sdk" \
+            --output "$RUNNER_TEMP/feedback-frozen-evidence/native" \
+            --audit-report "$RUNNER_TEMP/feedback-native-frozen-process-summary.json"
+          cmp publication/own-joint-feedback-native-process-metrics-20261002.json "$RUNNER_TEMP/feedback-native-frozen-process-summary.json"
+      - name: Execute new Go parity probes and 9216 SDK sessions using public models
+        run: |
+          go run ./tools/audit-own-joint-feedback-models \
+            --models "$RUNNER_TEMP/feedback-public-models" \
+            --curriculum "$RUNNER_TEMP/feedback-frozen-evidence/teacher" \
+            --source-revision "$GITHUB_SHA" --output "$RUNNER_TEMP/feedback-new-go-model-audit.json"
+          go run ./tools/own-joint-feedback-study \
+            --dataset "$RUNNER_TEMP/feedback-frozen-evidence/original-curriculum/dataset.jsonl" \
+            --models "$RUNNER_TEMP/feedback-public-models" \
+            --source-revision "$GITHUB_SHA" --output "$RUNNER_TEMP/feedback-sdk-new"
+          go run ./tools/own-joint-feedback-study \
+            --dataset "$RUNNER_TEMP/feedback-frozen-evidence/original-curriculum/dataset.jsonl" \
+            --models "$RUNNER_TEMP/feedback-public-models" \
+            --output "$RUNNER_TEMP/feedback-sdk-new" \
+            --audit-report "$RUNNER_TEMP/feedback-sdk-new/independent-audit-strengthened.json"
+      - name: Build the exact adopted compiler main
+        run: |
+          git clone --no-checkout https://github.com/kimjooyoon/meta-ontology-go.git "$RUNNER_TEMP/feedback-native-source"
+          git -C "$RUNNER_TEMP/feedback-native-source" checkout --detach 363a3d8aa365c35dd634c241248b444de0050973
+          cd "$RUNNER_TEMP/feedback-native-source"
+          go build -trimpath -o "$RUNNER_TEMP/gooo-feedback" ./cmd/gooo
+          go build -trimpath -o "$RUNNER_TEMP/gooo-body-worker" ./cmd/gooo-body-worker
+      - name: Execute 240 new Gooo generations and 3840 independent Go invocations
+        run: |
+          go run ./tools/own-joint-feedback-study --mode native \
+            --dataset "$RUNNER_TEMP/feedback-frozen-evidence/original-curriculum/dataset.jsonl" \
+            --models "$RUNNER_TEMP/feedback-public-models" \
+            --sdk-study "$RUNNER_TEMP/feedback-sdk-new" --output "$RUNNER_TEMP/feedback-native-new" \
+            --source-revision "$GITHUB_SHA" --native "$RUNNER_TEMP/gooo-feedback" --go-bin "$(command -v go)"
+          go run ./tools/own-joint-feedback-study --mode native \
+            --dataset "$RUNNER_TEMP/feedback-frozen-evidence/original-curriculum/dataset.jsonl" \
+            --models "$RUNNER_TEMP/feedback-public-models" \
+            --sdk-study "$RUNNER_TEMP/feedback-sdk-new" --output "$RUNNER_TEMP/feedback-native-new" \
+            --audit-report "$RUNNER_TEMP/feedback-native-new/independent-audit.json"
+          go run ./tools/own-joint-feedback-study --mode native-metrics \
+            --dataset "$RUNNER_TEMP/feedback-frozen-evidence/original-curriculum/dataset.jsonl" \
+            --models "$RUNNER_TEMP/feedback-public-models" \
+            --sdk-study "$RUNNER_TEMP/feedback-sdk-new" --output "$RUNNER_TEMP/feedback-native-new" \
+            --audit-report "$RUNNER_TEMP/feedback-native-new/process-summary.json"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: own-joint-feedback-v2-native
+          retention-days: 7
+          path: |
+            ${{ runner.temp }}/feedback-native-new
+            ${{ runner.temp }}/feedback-sdk-new
+            ${{ runner.temp }}/feedback-public-verification.json
+            ${{ runner.temp }}/feedback-source-curriculum-audit.json
+            ${{ runner.temp }}/feedback-teacher-audit.json
+            ${{ runner.temp }}/feedback-sdk-frozen-audit.json
+            ${{ runner.temp }}/feedback-native-frozen-audit.json
+            ${{ runner.temp }}/feedback-native-frozen-process-summary.json
+            ${{ runner.temp }}/feedback-new-go-model-audit.json
+
   joint-own-model-native:
     runs-on: ubuntu-latest
     timeout-minutes: 15

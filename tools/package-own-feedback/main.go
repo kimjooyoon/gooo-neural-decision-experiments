@@ -327,15 +327,17 @@ func main() {
 	revision := flag.String("source-revision", "", "committed publisher")
 	bundle := flag.String("bundle", "", "local frozen bundle")
 	publicRevision := flag.String("public-revision", "", "immutable public Hub commit")
+	manifestSHA := flag.String("manifest-sha256", "", "optional independently pinned manifest SHA-256")
+	evidence := flag.String("evidence", "", "fresh directory for verified bounded raw evidence")
 	flag.Parse()
 	var e error
 	switch *mode {
 	case "package":
 		e = packageBundle(*out, *revision)
 	case "verify":
-		e = verify(*bundle, *out)
+		e = verify(*bundle, *out, *manifestSHA, *evidence)
 	case "fetch":
-		e = fetch(*publicRevision, *bundle, *out)
+		e = fetch(*publicRevision, *bundle, *out, *manifestSHA, *evidence)
 	default:
 		e = errors.New("unknown publication mode")
 	}

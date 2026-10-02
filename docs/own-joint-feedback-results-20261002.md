@@ -105,7 +105,39 @@ actual source plan; an added regression test rejects swapping those plans.
 The completed 240-generation run is a separate preserved attempt. No generated
 function failure was hidden by discarding the first attempt.
 
-The Go publication tool exports the complete fixed synthetic archive, nine
-models and PROV-O lineage. The immutable HF revision and anonymous-byte
-verification are recorded separately after publication. See the frozen
-protocol and public JSON summaries for measured denominators.
+## Observed complete-process cost
+
+The matched feedback FP32 policy's 48 codegen children have a median wall time
+of 10.792 ms, nearest-rank p95 of 12.644 ms, median measured child peak RSS of
+17.55 MiB and summed CPU time / summed wall time of 83.41% of one core.
+The uniform-initial control's median codegen time is 10.744 ms. The feedback
+policy's compiled-Go execution median is 441.409 ms, including compilation.
+The 10.8 us warmed model kernel and lower candidate count therefore do not
+establish a whole-compiler speedup. Fixed policy order, caching and an already
+observed corpus further limit interpretation. Child RSS is not simultaneous
+process-tree RAM; this study did not measure a causal change in host CPU load.
+
+The public process JSON can be reconstructed with the Go study's
+`--mode native-metrics`, using the same `--dataset`, `--models`, `--sdk-study`
+and retained native directory in `--output`, with a fresh summary path in
+`--audit-report`. This first performs the zero-inference native audit, then
+summarizes 240 generation and 240 compilation/execution child records.
+
+## Public evidence and continuous execution
+
+The [public own-model repository](https://huggingface.co/asketeddy/gooo-joint-feedback-tiny-v2)
+contains nine models, PROV-O lineage and the complete fixed synthetic archive.
+The clarified immutable revision is `b4e9a3e50b50e893abc52a36f49eacf032aded50`;
+manifest SHA-256 is `e6eb1babcd94ccd1a75fea5d76069a5dc0bbb368f57318cc4a2608019b4a16a5`.
+Anonymous retrieval verified all 48 public payloads and 614 raw archive members
+(472,824,755 expanded bytes) against the local publication. This verifies
+published bytes; it performs no additional inference or optimization.
+
+The `own-joint-feedback-v2-native` CI job independently pins both public Hub
+revision and manifest, streams the bounded archive into an ephemeral evidence
+directory, audits original teacher/SDK/native records, executes fresh Go parity
+probes and 9,216 SDK sessions, then builds exact adopted compiler main
+`363a3d8aa365c35dd634c241248b444de0050973` for 240 new code generations and 3,840
+actual emitted-Go invocations. Current CI outcomes are saved separately from
+the original study and do not increase authored-intention counts. Artifact
+retention is seven days; public frozen evidence remains reproducible.

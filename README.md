@@ -1,6 +1,32 @@
 # Gooo neural decision experiments
 
-## Own joint Gooo model — latest experiment
+## Own feedback Gooo model v2 — latest experiment
+
+[Nine fresh own models and actual failure feedback](docs/own-joint-feedback-results-20261002.md)
+compare uniform initial learning, passing-set initial learning and passing-set
+learning from observed teacher failures. All share a fresh initial state; 3,600
+actual MPS updates produce FP32/PTQ/QAT variants. These small Gooo structural
+judgment models use no inherited Laya or other pretrained weights.
+
+The feedback FP32 arm reduces additional candidates 488→432 (-11.48%) against
+its matched uniform control in 384 development views. Native main then generates
+240 actual Gooo bodies, independently executes 240 emitted Go programs and
+passes all 3,840 ordered finite checks. Native extra candidates decline 57→53
+in the matched 48-view subset. Four-candidate completion includes deterministic
+enumeration; it is not universal semantic accuracy. Calibration still selects
+the frozen v1 independent model, and quantization regressions remain retained.
+
+Warm prediction is about 10.8 µs with zero heap allocations. Feedback-policy
+codegen median is 10.792 ms and measured child peak RSS median is 17.55 MiB.
+Lower candidate counts have not established a compiler wall-time speedup.
+
+The [public immutable v2 edition](https://huggingface.co/asketeddy/gooo-joint-feedback-tiny-v2/tree/b4e9a3e50b50e893abc52a36f49eacf032aded50)
+contains nine models, PROV-O lineage, frozen protocols and 614 raw evidence
+members. [Anonymous publication verification](publication/own-joint-feedback-public-verification-20261002.json)
+checks all 48 payloads against the pinned local manifest. The v2 CI job audits
+published evidence and executes new SDK sessions and native generations.
+
+## Own joint Gooo model v1 — preceding baseline
 
 [Six fresh own models and direct Gooo execution](docs/joint-composition-model-results-20261002.md)
 now compare independent choices with one joint four-mask prediction. There are
