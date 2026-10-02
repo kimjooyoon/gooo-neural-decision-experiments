@@ -1,0 +1,53 @@
+{
+  "schema": "gooo/tiny-shared-three-choice-path-model/v1",
+  "feature_version": "triple_semantic_context_bag_v4_joint_v1",
+  "variant": "qat_ternary",
+  "feature_dim": 768,
+  "hidden_dim": 8,
+  "max_bytes": 1600,
+  "labels": [
+    "mask_0",
+    "mask_1",
+    "mask_2",
+    "mask_3",
+    "mask_4",
+    "mask_5",
+    "mask_6",
+    "mask_7"
+  ],
+  "temperature": 0.5,
+  "weights_file": "weights.bin",
+  "weights_sha256": "c445e452bfa0e1452dfb4345a4ec9cd833460589423b641e8f554a72eb444fd6",
+  "tensors": [
+    {
+      "name": "w1",
+      "count": 2048,
+      "rows": 8,
+      "cols": 256,
+      "encoding": "ternary_base3_5",
+      "offset": 0,
+      "bytes": 410,
+      "scale": 0.1281784325838089
+    },
+    {
+      "name": "b1",
+      "count": 8,
+      "rows": 1,
+      "cols": 8,
+      "encoding": "float32_le",
+      "offset": 410,
+      "bytes": 32,
+      "scale": 1
+    },
+    {
+      "name": "w2",
+      "count": 16,
+      "rows": 2,
+      "cols": 8,
+      "encoding": "ternary_base3_5",
+      "offset": 442,
+      "bytes": 4,
+      "scale": 1.5822972059249878
+    }
+  ]
+}

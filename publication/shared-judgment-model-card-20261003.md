@@ -43,10 +43,45 @@ Gooo 선언을 설계도, 작은 모델을 조립 순서를 고르는 장치로 
 목표는 적은 메모리로 의도와 생성 경로를 연결하고, 완전성을 여러 항목으로
 관찰하며 다음 작업을 이어갈 수 있게 하는 것입니다.
 
-최근에는 문장 앞의 도입 표현만 달라도 선택이 크게 달라지는 문제를 확인했습니다.
-기존 입력의 첫 경로 충족률은 113/512이고, 지정한 표현을 제거한 실험 조건에서는
-480/512였습니다. 아래 표들은 이 조건들을 구분합니다. 다음 연구에서는 전체
-입력을 유지하면서 표현 변화와 한·영 의도에 대한 일관성을 개선하려 합니다.
+문장 앞의 도입 표현에 민감한 문제를 확인한 뒤, 전체 입력을 유지하는 네 가지
+새 모델을 학습했습니다. 기존 개발 입력에서 FP32의 첫 경로 충족 수는 대조군
+113/512, 문장 조각의 빈도를 쓰는 조건에서 368/512였습니다. 표현을 다양하게
+학습한 조건과 삼진 양자화에서는 후퇴한 결과도 있었습니다. 새 결과는 아래
+연구 부록에 있으며, 기존 모델의 코드 생성·실행 관측은 해당 실험별로 남아 있습니다.
+
+## New full-input research exports — 2026-10-03
+
+The [full-input appendix](research/full-input-initial-20261003/README.md) contains
+four freshly initialized shared judges, each exported as FP32, PTQ and QAT in
+expanded and compact layouts. Complete source-derived input and Korean/English
+instructions are retained. The comparison changes position-based features versus
+global fragment counts, and original versus varied training wording.
+
+| FP32 arm | Original first-path complete /512 | Extra ranked attempts | Both KO/EN valid /256 |
+| --- | ---: | ---: | ---: |
+| positioned-original | 113 | 1,469 | 1 |
+| positioned-varied | 266 | 528 | 75 |
+| bag-original | 368 | 186 | 180 |
+| bag-varied | 320 | 326 | 132 |
+
+Bag-original FP32 reaches 358/512 and 368/512 on the two preregistered new wording
+forms. Bag-varied falls to 173/512 on the new suffix. Bag-original PTQ and QAT
+reach 94/512 and 287/512 on original inputs. Its global fragment representation
+also maps two distinct operation orders to equal features; the appendix retains
+that explicit counterexample. These are previously observed authored source tasks.
+
+The Go audit reconciled all 6,400 MPS updates and made 25,824 real predictions
+across export parity, compact parity, calibration and three development forms.
+All twelve exports and complete raw evidence are public. Optimization took
+42.18 seconds; average process CPU was 49.83% of one core and peak RSS was
+1,809,678,336 bytes. CPU usage describes the optimizer process. Model inference
+and native generation need separate measurements for these new artifacts.
+
+V4 compact artifacts use `triple_semantic_context_bag_v4_joint_v1` and the
+[research Go runtime](https://github.com/kimjooyoon/gooo-neural-decision-experiments/commit/d23bd7e9e9fa3f197ffb5ee8d10872ad982e29ca).
+Publishing the matching SDK extraction, completing the remaining split/form
+comparisons and observing actual native compiler execution are subsequent steps.
+The existing native measurements below belong to their pinned earlier models.
 
 ## How the model is used
 

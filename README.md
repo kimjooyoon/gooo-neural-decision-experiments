@@ -24,7 +24,26 @@ network across three decisions. Gooo supplies eight complete candidate paths.
 The research asks whether this division of work can reduce search cost while
 preserving source meaning and making incomplete behavior easy to inspect.
 
-### Latest diagnosis: input phrasing changes the chosen path
+### Latest training: keep the complete instruction
+
+The [four-arm full-input comparison](docs/full-input-judgment-initial-results-20261003.md)
+completed **6,400 local MPS updates** and retained all twelve FP32/PTQ/QAT exports.
+On the original 512 development inputs, first-path finite completeness was
+113 for positioned-original FP32, 266 for positioned-varied, 368 for
+bag-original and 320 for bag-varied. Bag-original reduced extra ranked attempts
+from 1,469 to 186. Its representation also aliases a documented operation-order
+counterexample. Wording augmentation and ternary conversion have mixed results;
+the complete tables retain these regressions.
+
+Go independently reconciled every update, replayed 624 export vectors and 624
+compact equivalents, and made 6,144 calibration plus 18,432 development
+predictions. Training took 42.18 seconds, averaging 49.83% of one CPU core with
+1.81 GB process peak RSS. The [complete public evidence](publication/full-input-initial-study-20261003/README.md)
+contains all prepared features, full texts, models, optimizer journals and first
+Go observations. Further wording/split comparisons and native adoption remain
+the next steps in the same protocol. The cohort has been observed before.
+
+### Motivating diagnosis: input phrasing changes the chosen path
 
 The [bilingual wrapper audit](docs/bilingual-wrapper-audit-results-20261003.md)
 holds six published models, Gooo sources and finite targets fixed while varying
@@ -34,18 +53,18 @@ recomputed all 30 condition summaries. Shared FP32 completes 113/512 original
 development views and 480/512 after removing the known curriculum prefix.
 The full text of both forms remains in the evidence. This is a format-sensitivity
 diagnosis; the published original-input quality measurement stays 113/512.
-Next training will retain complete caller text and compare phrasing diversity
-and positional features. [Closed evidence bundle](publication/bilingual-wrapper-audit-20261003/README.md).
+The full-input comparison above follows this diagnosis.
+[Closed diagnostic evidence bundle](publication/bilingual-wrapper-audit-20261003/README.md).
 
-The [next comparison protocol](docs/full-input-judgment-preregistration-20261003.md)
-now freezes four freshly initialized 2,072-parameter judges: positioned or
+The [comparison protocol](docs/full-input-judgment-preregistration-20261003.md)
+froze four freshly initialized 2,072-parameter judges: positioned or
 whole-text fragment features, each trained with original or varied wording.
 Go reconstructs complete inputs and rejected forms, and independently replays
 their features and weights before local MPS optimization. The plan fixes 6,400
 optimizer updates and retains all twelve FP32/PTQ/QAT exports. A negative control
 shows how fragment counts can alias two different operation orders; it remains
-part of the evidence even if average quality improves. This protocol/source
-publication precedes the new training and makes no new quality claim.
+part of the evidence even if average quality improves. The protocol/source
+publication preceded optimization; the new observations are linked above.
 
 [Independent Linux replay](https://github.com/kimjooyoon/gooo-neural-decision-experiments/actions/runs/37049184049)
 reproduced all 92,160 selected paths and all 30 condition summaries within the
