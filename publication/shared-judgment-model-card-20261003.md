@@ -29,6 +29,24 @@ attempt. A receipt connects the original intention to the choices and result.
 | Training, raw evidence and comparisons | [gooo-neural-decision-experiments](https://github.com/kimjooyoon/gooo-neural-decision-experiments) |
 | Project direction in Korean | [언어·모델·실험 안내](https://github.com/kimjooyoon/meta-ontology-go/blob/dev/docs/language-direction.ko.md) |
 
+## 한국어 요약
+
+Gooo 선언을 설계도, 작은 모델을 조립 순서를 고르는 장치로 생각하면 됩니다.
+현재 모델은 세 가지 이진 판단으로 이루어진 여덟 경로에 순위를 매깁니다.
+컴파일러는 조건식·할당·분기 등을 조립하고, 실패한 입출력 예시를 다음 시도의
+문맥으로 전달합니다. 생성된 Go의 빌드·실행 결과와 남은 의문도 기록합니다.
+
+개발은 Laya의 구조화된 선택 실험에서 출발해, Gooo 자료로 새로 학습한
+2,072개 파라미터 모델과 Go 실행기로 이어졌습니다. 현재 공개물에는 FP32와
+삼진 가중치, 학습 기록, 실제 코드 생성·실행 관측이 함께 들어 있습니다.
+목표는 적은 메모리로 의도와 생성 경로를 연결하고, 완전성을 여러 항목으로
+관찰하며 다음 작업을 이어갈 수 있게 하는 것입니다.
+
+최근에는 문장 앞의 도입 표현만 달라도 선택이 크게 달라지는 문제를 확인했습니다.
+기존 입력의 첫 경로 충족률은 113/512이고, 지정한 표현을 제거한 실험 조건에서는
+480/512였습니다. 아래 표들은 이 조건들을 구분합니다. 다음 연구에서는 전체
+입력을 유지하면서 표현 변화와 한·영 의도에 대한 일관성을 개선하려 합니다.
+
 ## How the model is used
 
 The compiler derives context from an original Gooo body, its declared typed
@@ -129,6 +147,11 @@ The collector made **92,160 actual Go predictions** across all 3,072 corpus view
 and six exports. An independent reader replayed all 92,160 predictions with zero
 numerical difference locally and recomputed every condition's finite and bilingual
 summary. These replay calls are recorded separately from collection.
+
+The [Linux CI replay](https://github.com/kimjooyoon/gooo-neural-decision-experiments/actions/runs/37049184049)
+also reproduced all chosen masks and 30 condition summaries. Its largest
+floating-point difference was 0.000001430511474609375, within the declared
+0.00001 tolerance. The run's 13 jobs completed successfully.
 
 For shared FP32, the 512 development views give:
 

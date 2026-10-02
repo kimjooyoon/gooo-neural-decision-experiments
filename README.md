@@ -37,6 +37,11 @@ diagnosis; the published original-input quality measurement stays 113/512.
 Next training will retain complete caller text and compare phrasing diversity
 and positional features. [Closed evidence bundle](publication/bilingual-wrapper-audit-20261003/README.md).
 
+[Independent Linux replay](https://github.com/kimjooyoon/gooo-neural-decision-experiments/actions/runs/37049184049)
+reproduced all 92,160 selected paths and all 30 condition summaries within the
+declared numerical tolerance. The same run's 13 CI jobs passed. This replay has
+its own prediction count, separate from the original collection.
+
 ### What has improved, and what needs work
 
 | Question | Latest observation | Next measurement |
