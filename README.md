@@ -788,6 +788,17 @@ contains six experimental exports and selected evidence. Anonymous immutable
 byte verification passes for all 33 appendix files and 25 selected core files.
 The existing core weights and card remain unchanged.
 
+## Native runtime and source-linked completeness
+
+The [native runtime study](docs/native-runtime-receipt-20261002.md) records 32
+actual own-model/disconnected Gooo generations and 64 compiled executions.
+All 768 finite expectations match, including 256 inputs absent from the current
+selection suites. The new compiler runtime producer preserves parent bytes and
+connects actual execution back to original Gooo identity through its common
+receipt. Codegen median is 35.396 ms with the own model and 30.541 ms disconnected;
+the build/process boundary dominates native observation cost. Raw captures,
+failure history and remaining unknowns are retained in the public HF appendix.
+
 ## Separate structure and bilingual intent inputs
 
 The [fixed-channel study](docs/split-context-judgment-results.md) publishes a
