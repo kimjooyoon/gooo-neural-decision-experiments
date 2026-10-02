@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"errors"
-	"reflect"
 	"strings"
 
 	"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/decision"
@@ -103,14 +102,20 @@ func inspect(raw []byte, doc document, source []byte) (export, string, error) {
 		!value.Binding.Equivalent || value.Binding.Semantic == "" || value.Context.Semantic != value.Binding.Semantic ||
 		value.Context.Schema != "gooo/compiler-typed-path-context/v3" || value.Context.Status != "ENCODED" ||
 		value.Context.Feature != decision.SemanticContextIntentFeatureVersion || value.Context.Metadata != "" ||
-		value.Context.Original != prepared.PlanSHA256() || len(value.Inputs) != 3 ||
-		!reflect.DeepEqual(value.Inputs, value.Context.Inputs) || value.Predictions == nil || *value.Predictions != 0 ||
+		value.Context.Original != prepared.PlanSHA256() || len(value.Inputs) != 3 || len(value.Context.Inputs) != 3 ||
+		value.Predictions == nil || *value.Predictions != 0 ||
 		value.Tests == nil || *value.Tests != 0 || value.Writes == nil || *value.Writes != 0 ||
 		value.Emission == nil || *value.Emission {
 		return value, "", errors.New("complete source-bound zero-prediction native export differs")
 	}
 	var parts [3]string
 	for coordinate, in := range value.Inputs {
+		// The context receipt binds hashes and length; only the export carries text.
+		contextInput := in
+		contextInput.Text = ""
+		if value.Context.Inputs[coordinate] != contextInput {
+			return value, "", errors.New("context/export identity or text boundary differs")
+		}
 		choice := doc.Plan.Decisions[coordinate]
 		_, natural, found := strings.Cut(choice.Intent, "intent: ")
 		fields, err := prepared.SourceFeatures(choice.ID)

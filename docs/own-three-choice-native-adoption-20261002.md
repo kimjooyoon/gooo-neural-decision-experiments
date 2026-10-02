@@ -40,3 +40,15 @@ raw journals at 768 MiB, retains failed prefixes, and never loads a model.
 Its audit reconstructs all fixtures/oracles and reconciles the captured input
 bytes/hashes without making new native calls. Actual collection has not yet run
 at this source publication boundary.
+
+## First actual collection correction
+
+The first actual attempt makes one successful zero-prediction native export,
+then the collector rejects it before creating a dataset view. Context receipts
+contain hashes/lengths while the complete export additionally contains text;
+the initial collector incorrectly compares the entire two structs for equality.
+The repair checks all metadata fields and validates complete text separately.
+The exact captured native output now passes a permanent race-tested regression.
+The original 10,055-byte failed prefix and [negative receipt](../publication/own-three-choice-first-collection-negative-20261002.json)
+remain. Native source, protocol, authored families, cases and targets are unchanged.
+No teacher observations or optimizer updates occur in this failed attempt.

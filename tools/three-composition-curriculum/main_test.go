@@ -45,6 +45,7 @@ func exportedFixture(t *testing.T, family string) (document, []byte, export) {
 		in := input{choice.ID, text, "sha256:" + hash([]byte(text)), "sha256:" + hash([]byte(natural)),
 			"sha256:" + hash([]byte(choice.Intent)), "sha256:" + hash(fields[:]), len(text), true}
 		value.Inputs = append(value.Inputs, in)
+		in.Text = ""
 		value.Context.Inputs = append(value.Context.Inputs, in)
 	}
 	return doc, source, value
@@ -62,6 +63,7 @@ func TestCompleteExportsAndNegativeInputIdentity(t *testing.T) {
 		for _, mutate := range []func(*export){
 			func(v *export) { v.Inputs = v.Inputs[:2]; v.Context.Inputs = v.Context.Inputs[:2] },
 			func(v *export) { v.Inputs[2].Text += "x" },
+			func(v *export) { v.Context.Inputs[2].Text = "unexpected" },
 			func(v *export) { v.Tests = nil },
 			func(v *export) { v.Binding.Equivalent = false },
 			func(v *export) { v.Context.Metadata = strings.Repeat("a", 64) },
@@ -81,6 +83,21 @@ func TestCompleteExportsAndNegativeInputIdentity(t *testing.T) {
 		if _, _, err := inspect([]byte(duplicate), doc, source); err == nil {
 			t.Fatal("duplicate JSON accepted")
 		}
+	}
+}
+
+func TestFirstActualNativeExportRegression(t *testing.T) {
+	doc, source, _, err := fixture("chained_operands", 0, 0, "en")
+	if err != nil {
+		t.Fatal(err)
+	}
+	raw, err := os.ReadFile("testdata/first-native-export.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	value, text, err := inspect(raw, doc, source)
+	if err != nil || text == "" || len(value.Inputs) != 3 || *value.Predictions != 0 {
+		t.Fatal("actual native export regression", err)
 	}
 }
 
