@@ -30,7 +30,11 @@ type entry struct {
 func hash(raw []byte) string { sum := sha256.Sum256(raw); return hex.EncodeToString(sum[:]) }
 func inventory() map[string]string {
 	return map[string]string{
-		"jointdecision/shared_model.go": "internal/jointdecision/shared_model.go", "jointdecision/shared_load.go": "internal/jointdecision/shared_load.go",
+		"semantic_bag_features.go": "internal/decision/semantic_bag_features.go", "semantic_bag_features_test.go": "internal/decision/semantic_bag_features_test.go",
+		"jointdecision/three_bag_input.go": "internal/jointdecision/three_bag_input.go", "jointdecision/three_bag_test.go": "internal/jointdecision/three_bag_test.go",
+		"jointdecision/three_separate.go": "internal/jointdecision/three_separate.go", "jointdecision/three_separate_test.go": "internal/jointdecision/three_separate_test.go",
+		"pathplan/three_arithmetic_test.go": "internal/pathplan/three_arithmetic_test.go",
+		"jointdecision/shared_model.go":     "internal/jointdecision/shared_model.go", "jointdecision/shared_load.go": "internal/jointdecision/shared_load.go",
 		"jointdecision/shared_compact.go": "internal/jointdecision/shared_compact.go", "jointdecision/shared_test.go": "internal/jointdecision/shared_test.go",
 		"pathplan/shared_three_test.go": "internal/pathplan/shared_three_test.go",
 		"jointdecision/three_input.go":  "internal/jointdecision/three_input.go", "jointdecision/three_model.go": "internal/jointdecision/three_model.go",
