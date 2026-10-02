@@ -39,6 +39,10 @@ kernel probes. The complete 642-member compressed training evidence preserves
 all features, update/epoch receipts and negative variants. Full SDK/native
 behavior and calibration policy selection remain pending; no new default is
 promoted by the training/kernel phase.
+The [public three-choice model edition](https://huggingface.co/asketeddy/gooo-three-choice-feedback-tiny-v1/tree/a7a9170370da3e183c1831ae4442e88870ea3a0d)
+now retains all nine models and both complete raw-evidence bundles.
+[Anonymous byte verification](publication/own-three-choice-hf-byte-verification-20261002.json)
+confirms all 35 uploaded files at that immutable public revision.
 
 ## Own feedback Gooo model v2 — preceding two-choice experiment
 

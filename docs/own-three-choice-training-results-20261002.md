@@ -67,6 +67,16 @@ Every decoded member has already passed SHA-256, ZIP CRC, mode, inventory and
 privacy checks. The earlier source/teacher bundle separately retains every
 original native export and failed-prefix observation.
 
+All nine models, both full evidence bundles and source/result/provenance files
+are now public on [Hugging Face](https://huggingface.co/asketeddy/gooo-three-choice-feedback-tiny-v1/tree/a7a9170370da3e183c1831ae4442e88870ea3a0d).
+The [anonymous byte receipt](../publication/own-three-choice-hf-byte-verification-20261002.json)
+verifies all 35 uploaded files, 29,870,909 bytes, without credentials, at that
+single immutable public commit. A separate local decoded-bundle replay again
+passed all nine Go models with 18,450 newly counted parity/warm/allocation calls;
+it performs no optimizer update or new native generation. Its timing is a
+separate observation from the original measurements above. The verified expanded
+duplicate (46,201,328 bytes) was then removed; original evidence remains.
+
 Next work preserves the full original protocol: 11,264 SDK sessions, calibration
 policy selection, 640 actual Gooo generations and independent Go compilations,
 and continued public byte verification. No language-completeness or native
