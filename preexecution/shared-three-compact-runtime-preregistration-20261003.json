@@ -1,0 +1,63 @@
+{
+  "schema": "gooo/shared-three-compact-runtime-preregistration/v1",
+  "date": "2026-10-03",
+  "scope": "Lossless storage and Go inference for the already published fresh shared-local Gooo three-choice models; no optimization updates or new quality selection.",
+  "source_revision": "43bb7b92ff7b55385d45b2e16e4844a47a8eaae5",
+  "models": {
+    "directory": "runs/own-three-shared-judgment-mps-v2-20261003/shared-local/models",
+    "variants": [
+      "fp32",
+      "ptq_ternary",
+      "qat_ternary"
+    ],
+    "public_repo": "asketeddy/gooo-shared-judgment-tiny-v1",
+    "public_revision": "9ce1d57a0688c0e07dd0007bd7af558a5642cf4e"
+  },
+  "abi": {
+    "schema": "gooo/tiny-shared-three-choice-path-model/v1",
+    "feature_dim": 768,
+    "feature_version": "triple_semantic_context_v3_joint_v1",
+    "max_bytes": 1600,
+    "hidden_per_part": 8,
+    "parts": 3,
+    "mask_count": 8,
+    "tensors": [
+      "w1:8x256",
+      "b1:1x8",
+      "w2:2x8"
+    ],
+    "workspace_bytes": 3200,
+    "expected_fp32_weight_bytes": 8288,
+    "expected_ternary_weight_bytes": 446,
+    "expected_ternary_resident_tensor_bytes": 2096,
+    "separate_ternary_scale_bytes": 8
+  },
+  "invariants": [
+    "No re-quantization: loaded matrix scales, temperature and all retained float bits remain identical.",
+    "Reject untied input/output matrices, nonzero off-block values, and noncanonical nonpositive-zero removed slots.",
+    "Retain each complete input and the same 24-term output accumulation order.",
+    "All 10739 frozen initial/feedback states times three variants: bitwise equal features, hidden values, logits, probabilities and argmax; report any failure without replacing or trimming cases.",
+    "Separate valid warmed allocation probes and fixed interleaved latency measurements; hardware/sample conditions must accompany results.",
+    "Artifact hashes truthfully identify compact bytes. Existing seed identity semantics remain; cross-format seeded choices are not required equal. Repeated same compact artifact and seed must remain reproducible.",
+    "Unsupported input, missing model, full-input bounds, cancellation, concurrent immutable model use and feedback repinning remain enforced.",
+    "Quality results are the prior observed development cohort, not a new holdout or a model accuracy improvement."
+  ],
+  "planned_native_followup": {
+    "variants": 3,
+    "representations": 2,
+    "views": 16,
+    "generations": 96,
+    "mode": "Unseeded codegen immediately followed by native body execution, pair retained expanded/compact variants, record exact compiler and SDK revisions; no barrier before all codegen completes."
+  },
+  "storage": {
+    "directory_prefix": "runs/compact-shared-",
+    "new_raw_cap_bytes": 33554432,
+    "min_free_bytes": 4294967296,
+    "preserve": [
+      "Original training/checkpoints and every previous experiment evidence directory",
+      "Existing public reports including regressions"
+    ],
+    "no_duplicate_frozen_dataset": true
+  },
+  "publication": "Commit Go source/protocol and bounded evidence to public GitHub, then append model artifacts and measured results to the existing public HF model; never publish private paths, credentials or environment dumps."
+}
