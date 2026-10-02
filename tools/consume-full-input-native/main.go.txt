@@ -1,0 +1,300 @@
+// Copy this file into the exact compiler checkout as a temporary main package,
+// run it with the capture directory and compiler revision, then remove the copy.
+// It consumes original observations and never invokes a model or generated code.
+package main
+
+import (
+	"bytes"
+	"crypto/sha256"
+	"encoding/json"
+	"fmt"
+	"os"
+	"path/filepath"
+	"sort"
+	"strings"
+
+	"github.com/kimjooyoon/gooo-decision-runtime/pathplan"
+	"github.com/kimjooyoon/meta-ontology-go/internal/bodyexecution"
+	"github.com/kimjooyoon/meta-ontology-go/internal/completeness"
+)
+
+func must(e error) {
+	if e != nil {
+		panic(e)
+	}
+}
+func read(p string) []byte { b, e := os.ReadFile(p); must(e); return b }
+func sha(b []byte) string  { return fmt.Sprintf("sha256:%x", sha256.Sum256(b)) }
+func integer(v any) int    { n, e := v.(json.Number).Int64(); must(e); return int(n) }
+func encoded(v any) []byte { b, e := json.Marshal(v); must(e); return b }
+
+type binding struct {
+	Metadata   string `json:"metadata_sha256"`
+	Weights    string `json:"weights_sha256"`
+	Schema     string `json:"schema"`
+	Feature    string `json:"feature_version"`
+	Arithmetic string `json:"arithmetic_version"`
+}
+
+func identity(r *pathplan.ThreeReceipt, p binding) {
+	if r == nil || r.Schema != p.Schema || r.Feature != p.Feature || r.Arithmetic != p.Arithmetic || !r.PredictionValid || r.Input == "" || r.InputSHA != strings.TrimPrefix(sha([]byte(r.Input)), "sha256:") {
+		panic("prediction identity/input differs")
+	}
+}
+func chains(progress []pathplan.SessionProgress, feedback []pathplan.FeedbackReceipt, pin binding, offline bool) int {
+	if len(progress) < 2 {
+		panic("missing progress")
+	}
+	previous := ""
+	observed := map[string]pathplan.SessionProgress{}
+	for i, p := range progress {
+		original := p.SHA
+		p.SHA = ""
+		if original != strings.TrimPrefix(sha(encoded(p)), "sha256:") || p.Sequence != i+1 || p.PreviousSHA != previous || !p.Selection.ExternalCallsKnown || p.Selection.ExternalCalls != 0 || p.Selection.SeedSHA256 != "" {
+			panic("progress chain/boundary differs")
+		}
+		if offline {
+			if p.Selection.ModelCalls != 0 || p.Selection.Three != nil || p.Selection.MetadataSHA256 != "" || p.Selection.WeightsSHA256 != "" {
+				panic("offline prediction")
+			}
+		} else {
+			if p.Selection.MetadataSHA256 != pin.Metadata || p.Selection.WeightsSHA256 != pin.Weights {
+				panic("progress model differs")
+			}
+			identity(p.Selection.Three, pin)
+		}
+		observed[original] = p
+		previous = original
+	}
+	previous = ""
+	calls := 1
+	if offline {
+		calls = 0
+		if len(feedback) != 0 {
+			panic("offline feedback")
+		}
+	}
+	for i, f := range feedback {
+		original := f.SHA
+		f.SHA = ""
+		parent, ok := observed[f.FromProgressSHA]
+		calls += f.ModelCalls
+		if original != strings.TrimPrefix(sha(encoded(f)), "sha256:") || f.Round != i+1 || f.PreviousSHA != previous || !ok || parent.CaseSHA != f.CaseSHA || parent.Selection.PlanSHA256 != f.PlanSHA || parent.Attempted != f.Attempted || f.MetadataSHA != pin.Metadata || f.WeightsSHA != pin.Weights || f.CumulativeCalls != calls || f.CIIsAuthority {
+			panic("feedback chain/accounting differs")
+		}
+		if f.Three != nil {
+			identity(f.Three, pin)
+		}
+		previous = original
+	}
+	last := progress[len(progress)-1]
+	if last.LatestFeedbackSHA != previous || last.FeedbackRounds != len(feedback) || last.Selection.ModelCalls != calls {
+		panic("terminal chain differs")
+	}
+	return calls
+}
+func process(p bodyexecution.ProcessObservation) {
+	if !p.Started || !p.Completed || p.ExitCode == nil || *p.ExitCode != 0 || p.PeakRSSBytes == nil || p.WallNS <= 0 || p.TimedOut || p.Canceled || p.OutputTruncated || p.DiagnosticsBytes != 0 {
+		panic("native process observation incomplete")
+	}
+}
+func main() {
+	if len(os.Args) != 3 {
+		panic("capture directory and compiler revision required")
+	}
+	root, revision := os.Args[1], os.Args[2]
+	var pre struct {
+		Compiler  string             `json:"compiler_source_sha"`
+		Collector string             `json:"collector_source_sha"`
+		Consumer  string             `json:"consumer_sha256"`
+		Models    map[string]binding `json:"models"`
+		Protocol  string             `json:"protocol_sha256"`
+		Manifest  string             `json:"reference_manifest_sha256"`
+	}
+	must(json.Unmarshal(read(filepath.Join(root, "preexecution.json")), &pre))
+	if len(revision) != 40 || pre.Compiler != revision || len(pre.Collector) != 40 || len(pre.Models) != 24 || pre.Protocol != "95cecea073effa783183803812ce5ae61f62f904beb1ca40ab01b741413431d6" || pre.Manifest != "ce4ad854c0d7fcb3e7fa049658f40ea4b0393a9bff39a2ef21f64d83f221bc3a" {
+		panic("registered source/model pins differ")
+	}
+	paths, e := filepath.Glob(filepath.Join(root, "*", "runtime.json"))
+	must(e)
+	if len(paths) != 400 {
+		panic("expected 400 runtime receipts")
+	}
+	calls, cases, passed, disjoint, runs, progressCount, feedbackCount := 0, 0, 0, 0, 0, 0, 0
+	frontiers := map[string]int{}
+	resources := map[string]map[string][]float64{}
+	finite := map[string][2]int{}
+	for _, path := range paths {
+		dir := filepath.Dir(path)
+		raw := read(path)
+		generation := read(filepath.Join(dir, "generation.json"))
+		var w struct {
+			Observation bodyexecution.Observation `json:"observation"`
+			Parent      []byte                    `json:"parent_receipt_bytes"`
+			Receipt     json.RawMessage           `json:"completeness_receipt"`
+		}
+		must(json.Unmarshal(raw, &w))
+		r, e := completeness.Decode(w.Receipt)
+		must(e)
+		parent, e := completeness.Decode(w.Parent)
+		must(e)
+		native, p, e := bodyexecution.DecodeGeneration(generation)
+		must(e)
+		o := w.Observation
+		if !bytes.Equal(p, w.Parent) || o.ParentReceiptSHA256 != sha(p) || r.Scope["parent_receipt_sha256"] != sha(p) || r.Scope["runtime_observation_sha256"] != sha(encoded(o)) || r.ProfileID != "gooo/typed-path-runtime-v1" || parent.FirstUnresolved == nil || parent.FirstUnresolved.ID != "execution_boundary" || r.FirstUnresolved == nil || r.FirstUnresolved.ID != "permission_boundary" || o.ProducerSourceSHA != revision || o.CompilerSourceSHA != revision || native.Report.CompilerSourceSHA != revision || o.OriginalSourceSHA256 != sha(read(filepath.Join(dir, "input.gooo"))) || o.GeneratedSHA256 != sha([]byte(native.Source)) || !bytes.Equal([]byte(native.Source), read(filepath.Join(dir, "generated.go"))) || o.ActivityID != native.Report.ActivityID || o.Stage != "COMPLETE" || len(o.Runs) != 2 {
+			panic("source/parent/runtime binding differs")
+		}
+		scope := r.Scope["runtime_scope"].(map[string]any)
+		if integer(scope["local_model_predictions"]) != 0 || integer(scope["external_provider_calls"]) != 0 {
+			panic("runtime provider call")
+		}
+		axes := map[string]completeness.CompletenessDimension{}
+		for _, d := range r.Dimensions {
+			axes[d.ID] = d
+		}
+		for _, d := range parent.Dimensions {
+			if d.ID == "execution_boundary" || d.ID == "reverse_observation_coverage" {
+				continue
+			}
+			if !bytes.Equal(encoded(d), encoded(axes[d.ID])) {
+				panic("unrelated parent axis changed")
+			}
+		}
+		for _, id := range []string{"runtime_source_replay", "runtime_build", "execution_boundary", "runtime_deterministic_replay", "reverse_observation_coverage"} {
+			if axes[id].Status != "PASS" {
+				panic("actual observed axis incomplete")
+			}
+		}
+		suite, e := bodyexecution.DecodeCases(read(filepath.Join(dir, "runtime-cases.json")))
+		must(e)
+		if len(o.Cases) != 24 || len(suite) != 24 || o.RuntimeSuiteSHA256 != sha(encoded(suite)) || o.SelectionDisjointInputs != 8 {
+			panic("suite denominator/binding differs")
+		}
+		thisPassed := 0
+		for i, c := range o.Cases {
+			if c.Input != suite[i].Input || c.Expected != suite[i].Expected || c.Passed != (c.Actual == c.Expected) {
+				panic("ordered oracle differs")
+			}
+			if c.Passed {
+				thisPassed++
+			}
+		}
+		want := "PROGRESS"
+		if thisPassed == 24 {
+			want = "PASS"
+		}
+		if axes["runtime_finite_accuracy"].Numerator != thisPassed || axes["runtime_finite_accuracy"].Denominator != 24 || axes["runtime_finite_accuracy"].Status != want || axes["reverse_observation_coverage"].Numerator != 24 || axes["runtime_selection_disjointness"].Numerator != 8 {
+			panic("finite count differs")
+		}
+		var row struct {
+			Mode       string `json:"mode"`
+			Calls      int    `json:"model_calls"`
+			Generation string `json:"generation_sha256"`
+			Runtime    string `json:"runtime_sha256"`
+			Cost       struct {
+				WallNS      int64  `json:"wall_ns"`
+				UserNS      int64  `json:"user_ns"`
+				SystemNS    int64  `json:"system_ns"`
+				RSS         int64  `json:"peak_rss_bytes"`
+				Exit        *int   `json:"exit_code"`
+				TimedOut    bool   `json:"timed_out"`
+				Diagnostics []byte `json:"stderr_bytes"`
+			} `json:"codegen_cost"`
+		}
+		must(json.Unmarshal(read(filepath.Join(dir, "observation.json")), &row))
+		if row.Generation != sha(generation) || row.Runtime != sha(raw) || row.Cost.Exit == nil || *row.Cost.Exit != 0 || row.Cost.TimedOut || len(row.Cost.Diagnostics) != 0 || row.Cost.WallNS <= 0 || row.Cost.RSS <= 0 {
+			panic("original process/receipt binding differs")
+		}
+		pin, known := pre.Models[row.Mode]
+		offline := row.Mode == "offline"
+		if !known && !offline {
+			panic("unknown mode")
+		}
+		pathReport := native.Report.BodyPaths
+		if !offline {
+			c := pathReport.ModelContext
+			if c == nil || c.Status != "ENCODED" || c.FeatureVersion != pin.Feature || c.ArithmeticVersion != pin.Arithmetic || c.MetadataSHA != pin.Metadata {
+				panic("context identity differs")
+			}
+		}
+		n := chains(pathReport.Progress, pathReport.Feedback, pin, offline)
+		if pathReport.Search.Selection.ModelCalls != n || row.Calls != n {
+			panic("model accounting differs")
+		}
+		calls += n
+		cases += 24
+		passed += thisPassed
+		disjoint += 8
+		frontiers[r.FirstUnresolved.ID]++
+		progressCount += len(pathReport.Progress)
+		feedbackCount += len(pathReport.Feedback)
+		f := finite[row.Mode]
+		f[0] += thisPassed
+		f[1] += 24
+		finite[row.Mode] = f
+		sample := resources[row.Mode]
+		if sample == nil {
+			sample = map[string][]float64{}
+			resources[row.Mode] = sample
+		}
+		add := func(k string, v float64) { sample[k] = append(sample[k], v) }
+		add("codegen_ms", float64(row.Cost.WallNS)/1e6)
+		add("codegen_rss_mib", float64(row.Cost.RSS)/(1<<20))
+		add("codegen_cpu_percent_one_core", 100*float64(row.Cost.UserNS+row.Cost.SystemNS)/float64(row.Cost.WallNS))
+		add("model_load_ms", pathReport.Timing.ModelLoadMS)
+		if !offline {
+			add("model_prediction_ms", float64(pathReport.Search.Selection.Three.PredictNS)/1e6)
+		}
+		for _, f := range pathReport.Feedback {
+			if f.ModelCalls > 0 {
+				if f.Three == nil {
+					panic("missing prediction timing")
+				}
+				add("model_prediction_ms", float64(f.Three.PredictNS)/1e6)
+			}
+		}
+		add("runtime_pipeline_ms", float64(o.ElapsedNS)/1e6)
+		process(o.Build)
+		add("build_ms", float64(o.Build.WallNS)/1e6)
+		add("build_cpu_ms", float64(o.Build.UserNS+o.Build.SystemNS)/1e6)
+		add("build_rss_mib", float64(*o.Build.PeakRSSBytes)/(1<<20))
+		for _, run := range o.Runs {
+			process(run)
+			runs++
+			add("compiled_run_ms", float64(run.WallNS)/1e6)
+			add("compiled_run_cpu_ms", float64(run.UserNS+run.SystemNS)/1e6)
+			add("compiled_run_rss_mib", float64(*run.PeakRSSBytes)/(1<<20))
+		}
+	}
+	if len(resources) != 25 || cases != 9600 || disjoint != 3200 || runs != 800 {
+		panic("actual denominators differ")
+	}
+	summary := map[string]any{}
+	for mode, samples := range resources {
+		if len(samples["codegen_ms"]) != 16 {
+			panic("mode denominator differs")
+		}
+		m := map[string]any{}
+		for name, v := range samples {
+			sort.Float64s(v)
+			n := len(v)
+			m[name+"_samples"] = n
+			m[name+"_median"] = (v[(n-1)/2] + v[n/2]) / 2
+			m[name+"_nearest_rank_p95"] = v[(95*n+99)/100-1]
+			m[name+"_max"] = v[n-1]
+		}
+		summary[mode] = m
+	}
+	var report struct {
+		Predictions int  `json:"actual_model_predictions"`
+		Outputs     int  `json:"ordered_compiled_outputs"`
+		Updates     int  `json:"optimizer_updates"`
+		Promoted    bool `json:"default_model_promoted"`
+	}
+	must(json.Unmarshal(read(filepath.Join(root, "report.json")), &report))
+	if report.Predictions != calls || report.Outputs != 2*cases || report.Updates != 0 || report.Promoted {
+		panic("collector totals differ")
+	}
+	out := map[string]any{"schema": "gooo/full-input-native-independent-consumption/v1", "status": "PASS", "compiler_source_sha": revision, "collector_source_sha": pre.Collector, "consumer_sha256": pre.Consumer, "receipts": len(paths), "compiled_runs": runs, "finite_expectations": cases, "finite_passed": passed, "finite_by_mode": finite, "selection_disjoint_expectations": disjoint, "model_predictions": calls, "runtime_model_predictions": 0, "external_provider_calls": 0, "first_unresolved_counts": frontiers, "resources": summary, "verified_session_progress_records": progressCount, "verified_feedback_records": feedbackCount, "receipt_declaration": completeness.ContractBinding(), "optimizer_updates": 0, "default_model_promoted": false, "scope": "Known authored bilingual tasks; finite expectations and source bindings. Additional inputs are disjoint from selection cases. Full-domain meaning and training generalization remain unobserved.", "timing_conditions": "Local darwin/arm64 Go 1.27.1; fresh compiler process per generation; alternating layouts; ordinary warmed Go cache; no concurrent local source builds. Model prediction excludes loading, startup and native build. CPU percentages use one process/core and do not measure a change in host utilization. Compiled-run RSS belongs to the generated program."}
+	must(json.NewEncoder(os.Stdout).Encode(out))
+}
