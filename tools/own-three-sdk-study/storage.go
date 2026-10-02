@@ -17,6 +17,17 @@ const receiptReserve = 2 << 20
 type storage struct {
 	Used  int64
 	Prior int64
+	// Zero keeps the original preregistered cap. Only the separately pinned
+	// storage continuation supplies a larger cap and a disk-space check.
+	Cap      int64
+	FreePath string
+}
+
+func (s *storage) limit() int64 {
+	if s.Cap != 0 {
+		return s.Cap
+	}
+	return threestudent.RawCap
 }
 
 func inventory() (map[string]threestudent.Pin, int64, error) {
@@ -55,13 +66,25 @@ func inventory() (map[string]threestudent.Pin, int64, error) {
 	return all, used, nil
 }
 func (s *storage) beforeCall() error {
-	if s.Used+receiptReserve+lineCap > threestudent.RawCap {
+	if s.Used+receiptReserve+lineCap > s.limit() {
+		if s.Cap != 0 {
+			return errors.New("separate continuation raw cap: stop before another session; completed prefix retained")
+		}
 		return errors.New("whole-study 768 MiB raw cap: stop before another session; completed prefix retained")
+	}
+	if s.FreePath != "" {
+		available, err := freeBytes(s.FreePath)
+		if err != nil {
+			return err
+		}
+		if available < 4<<30 {
+			return errors.New("continuation requires at least four GiB available disk; stop before another session")
+		}
 	}
 	return nil
 }
 func (s *storage) write(f *os.File, raw []byte, reserve int64) error {
-	if s.Used+int64(len(raw))+reserve > threestudent.RawCap {
+	if s.Used+int64(len(raw))+reserve > s.limit() {
 		return errors.New("whole-study raw cap reached; earlier complete bytes retained")
 	}
 	n, err := f.Write(raw)

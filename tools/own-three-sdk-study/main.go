@@ -71,9 +71,17 @@ func main() {
 	output := flag.String("output", "", "fresh ignored own-three SDK phase directory")
 	revision := flag.String("source-revision", "", "exact clean public study source")
 	audit := flag.String("audit-report", "", "zero-prediction independent replay receipt")
+	prefix := flag.String("prefix", "", "immutable cap-stopped original phase for separate storage continuation")
+	combined := flag.String("combined-audit-report", "", "zero-prediction combined original/tail audit receipt")
 	flag.Parse()
 	var err error
-	if *audit != "" {
+	if *combined != "" && *prefix != "" && *audit == "" {
+		err = auditContinuation(*dataset, *models, *prefix, *output, *combined)
+	} else if *prefix != "" && *audit == "" && *combined == "" {
+		err = continueStudy(*dataset, *models, *prefix, *output, *revision)
+	} else if *combined != "" || (*prefix != "" && *audit != "") {
+		err = errors.New("continuation collection and combined/original audit modes must be separate")
+	} else if *audit != "" {
 		err = auditStudy(*dataset, *models, *output, *audit)
 	} else {
 		err = study(*dataset, *models, *output, *revision)
