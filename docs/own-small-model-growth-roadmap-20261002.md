@@ -1,5 +1,19 @@
 # Continue growing our own Gooo decision model
 
+## Progress since this plan — 2026-10-03
+
+The dated plan below records the starting hypotheses. Joint path judgment,
+shared 2,072-parameter models and compact Go SDK v0.2.14 integration have since
+been implemented. The [current overview](../README.md) links each completed study.
+The [full-input comparison](full-input-judgment-initial-results-20261003.md)
+publishes all twelve exports from four freshly trained judges. The next work is
+the [numerical portability follow-up](full-input-numerical-portability-followup-20261003.md),
+remaining form/split evaluations and native adoption of the new V4 contract.
+Order-sensitive features, newly authored tasks and reusable constructions remain
+language research priorities.
+
+## Starting point recorded on 2026-10-02
+
 The completed source-v3 composition study is immutable evidence. Its data,
 checkpoints, selector, negative comparisons and raw capture errors are retained.
 The next work uses new frozen studies; it does not tune against the existing

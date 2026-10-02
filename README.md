@@ -81,10 +81,10 @@ its own prediction count, separate from the original collection.
 
 | Question | Latest observation | Next measurement |
 | --- | --- | --- |
-| Does sharing help finite path selection? | First-choice complete views rose 95→113 out of 512; ranked extra attempts fell 1,572→1,469 | Per-family costs and performance on newly authored tasks |
-| Do Korean/English intentions agree? | Original shared FP32 choices differed in 255/256 pairs; the controlled bare-instruction form differed in 32/256 | Full-input robustness, valid-path agreement and the effects of phrasing/position |
-| Does compact storage preserve behavior? | Exact kernels on 10,739 states; matching behavior in 48 native expanded/compact pairs | Retained serving cost and additional platforms |
-| Can generated code run? | 96 compact-study generations; 2,304 supplied expectations passed across 192 compiled runs | Broader types, boundaries and independently sourced workflows |
+| Does the new representation help path selection? | Original-input FP32 completion rose 113→368 out of 512; extra ranked attempts fell 1,469→186 | Remaining forms/splits, new tasks and the retained operation-order alias |
+| Do Korean/English intentions lead to valid behavior? | Bag-original FP32 chose valid paths in both languages for 180/256 pairs; 68 pairs chose the same wrong path | Both-valid agreement across wording, task families and newly authored intentions |
+| Does compact storage preserve behavior? | Earlier models matched on 10,739 states and 48 native pairs; all twelve new exports passed local expanded/compact vector parity | Complete rankings across architectures; 272 Linux/arm64 differences remain |
+| Can generated code run? | Earlier V3 compact models passed 2,304 supplied expectations across 192 compiled runs | V4 SDK extraction and native adoption, then broader types and workflows |
 
 Model quality, representation parity, finite execution and resource usage have
 separate denominators. The current development cohort has been observed in
@@ -92,10 +92,32 @@ earlier studies. Whole-domain completeness and bilingual meaning preservation
 remain open research questions. Original failures, slow samples and regressions
 stay available in the dated reports below.
 
+### How this should develop the language
+
+Gooo's declarations are the assembly plan; a tiny judge helps choose parts within
+that plan. The language work is to express more useful plans and preserve their
+meaning through generation, feedback and reuse. Conditions, assignments,
+references and ordered branches provide the current starting point. Larger typed
+constructions, natural-language discovery of plans, and reusable learned
+abstractions form the next research direction.
+
+We track progress as declared behavior completed, extra construction attempts,
+source/result traceability, unresolved obligations, latency and memory. A first
+path is complete here when all 16 supplied expectations pass; partial coverage
+and later completion remain separate measurements. Public evidence currently
+compares Gooo variants on authored tasks. Comparisons with other language systems
+need a shared task set, tool budget and definition of completion.
+
+For actual compiler use, select the pinned V3 compact bundle described in the
+[integration guide](https://github.com/kimjooyoon/meta-ontology-go/blob/main/docs/three-choice-path-model.md).
+The V4 full-input models currently use this repository's research runtime.
+
 ### Research connections
 
 We appreciate [SKETCH](https://people.csail.mit.edu/asolar/papers/asplos06-final.pdf)
-for specification-guided completion, [DreamCoder](https://arxiv.org/abs/2006.08381)
+for specification-guided completion,
+[DeepCoder](https://arxiv.org/abs/1611.01989) for learned guidance of program search,
+[DreamCoder](https://arxiv.org/abs/2006.08381)
 for neural search and reusable program abstractions,
 [Laya](https://huggingface.co/convaiinnovations/laya) for the structured-decision
 interface used in our early experiments,

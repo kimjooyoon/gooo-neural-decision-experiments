@@ -49,6 +49,24 @@ Gooo 선언을 설계도, 작은 모델을 조립 순서를 고르는 장치로 
 학습한 조건과 삼진 양자화에서는 후퇴한 결과도 있었습니다. 새 결과는 아래
 연구 부록에 있으며, 기존 모델의 코드 생성·실행 관측은 해당 실험별로 남아 있습니다.
 
+새 모델을 arm64와 Linux에서 대조한 결과, 첫 선택은 같았고 후순위까지 포함한
+272개 후보 순위에 차이가 있었습니다. 계산 규칙을 명시하는 작업과 새 V4 모델의
+SDK·컴파일러 반영이 다음 단계입니다. 현재 사용 가능한 V3 모델 경로는 아래
+사용 예시에 고정된 리비전으로 안내합니다.
+
+## What we want this to contribute
+
+The language carries the plan, and the model supplies small local judgments.
+Our aim is to make intent, construction and observed behavior travel together
+as a program evolves. We measure complete finite behavior, partial coverage,
+extra attempts, unresolved obligations, time and memory. These measurements
+help decide which language features and model changes to develop next.
+
+For the latest study, a first path is complete when it satisfies all 16 supplied
+examples for that input. A result of 368/512 therefore describes that specific
+authored task collection. Larger programs, broader types and reusable learned
+constructions are the next language questions.
+
 ## New full-input research exports — 2026-10-03
 
 The [full-input appendix](research/full-input-initial-20261003/README.md) contains
@@ -108,13 +126,15 @@ The current artifacts target authored Integer → Integer tasks. Broader source
 discovery, larger programs, reusable abstractions and Korean/English meaning
 alignment are active development areas.
 
-## Architecture, training and files
+## Original V3 architecture, training and compatible files
 
 The shared model reuses a **256 → 8 → 2** local network over three ordered
 decisions: **2,072 trainable parameters**. The dense control has 18,656.
 Both were freshly initialized using the same Go initializer recipe and trained
 on Gooo-derived data. Each arm completed 800 FP32 and 800 QAT updates on local
 MPS, totaling **3,200 optimizer updates**. PTQ exports come from the FP32 models.
+That total belongs to the original shared/dense comparison. The later four-arm
+full-input study above adds 6,400 updates and twelve exports in its own appendix.
 
 The data contains 1,024 training, 256 calibration and 256 development program
 groups. The development set has 512 Korean/English views and had been observed
@@ -129,6 +149,8 @@ feedback rows. Quality numbers below describe this known development cohort.
 | `evidence.zip`, `go-audit.json`, `manifest.json` | Original training and native study evidence | Go audit tools in the research repository |
 | `research/compact-runtime-20261003/` | Exact representation parity and kernel measurements | SDK v0.2.14-experimental |
 | `research/compact-native-20261003/` | Actual paired Gooo generation and compiled execution | Compiler and independent receipt reader |
+| `research/full-input-initial-20261003/` | Four-arm study: full inputs, twelve exports and original observations | Research runtime; V4 SDK/compiler adoption pending |
+| `research/full-input-platform-20261003/` | Retained Linux replay and complete ranking diagnosis | Offline Go diagnostic reader |
 
 Compact files use `gooo/tiny-shared-three-choice-path-model/v1` metadata and
 three tensors: 8×256 input weights, eight biases and 2×8 output weights.
@@ -178,7 +200,7 @@ extra attempts. The full per-family counts remain in `go-audit.json`.
 
 Paired-language disagreement remains **255/256** for shared FP32. Agreement also
 needs a correctness check: dense PTQ gives the same wrong mask on 180 pairs.
-The next representation experiments will measure both language consistency and
+The subsequent full-input study above measures both language consistency and
 membership in the valid-path set. Full-budget success here depends on the
 authored finite search space containing a passing alternative.
 
@@ -208,8 +230,8 @@ For shared FP32, the 512 development views give:
 The bare form matches the format of the original training instructions. Its
 result describes a controlled intervention on an already observed cohort;
 original-input quality remains 113/512. Production Gooo keeps the complete caller
-text. The next comparison will vary training phrasing and positional features
-while preserving full input and source binding.
+text. The completed initial full-input comparison above varies training phrasing
+and positional features while preserving full input and source binding.
 
 The source v3 intent encoder uses four relative-position buckets for byte
 fragments. Added prefixes alter the fragments, their buckets and normalization.
@@ -288,8 +310,10 @@ Compact native collector: `7e9be4489d15663cbac8f3e71bc02d2e4649dfe5`.
 Immutable compact model edition: `985999a89caba6a31cc7147f66ba29a5ce76a1d9`.
 Immutable native appendix edition: `37db3a1f8a06669081a370ee1e7b23a64cbc00fb`.
 
-Next work prioritizes Korean/English intent alignment, more expressive Gooo
-construction, per-axis before/after observations, and measured serving costs.
+Next work starts with the observed numerical portability issue and the remaining
+full-input evaluations, followed by measured SDK/compiler adoption. Korean/English
+intent alignment, more expressive Gooo construction, per-axis before/after
+observations and serving costs guide the wider development.
 Repeated successful structures may later become reusable language abstractions.
 The dated research protocols define each experiment's budgets and acceptance
 criteria; the compiler retains deterministic continuation between model versions.
@@ -302,6 +326,9 @@ criteria; the compiler retains deterministic continuation between model versions
 - **Ellis et al., DreamCoder (2020/2021):** neural program search and learned
   reusable abstractions inform the longer-term language/model direction.
   [Paper](https://arxiv.org/abs/2006.08381).
+- **Balog et al., DeepCoder (2016/2017):** learned program properties guide
+  synthesis search. It informs our question of how much a small judgment can
+  reduce construction attempts. [Paper](https://arxiv.org/abs/1611.01989).
 - **Laya / ConvAI Innovations:** its structured decision interface was used in
   our early Gooo experiments. The present weights use fresh initialization and
   Gooo-specific training. [Project](https://huggingface.co/convaiinnovations/laya).
