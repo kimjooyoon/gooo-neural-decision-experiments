@@ -65,7 +65,8 @@ zero heap objects. The feedback FP32 warm probe took approximately 10.8 us.
 This kernel timing does not establish compiler wall-time improvement.
 
 FP32 weight storage is 49,648 bytes. Ternary packed weights occupy 2,590 bytes
-but runtime tensors decode to 12,496 int8 bytes plus scales. Request workspace
+but runtime tensor storage is 12,496 bytes: 12,384 int8 matrix bytes and 112
+FP32 bias bytes, plus 8 bytes for matrix scales. Request workspace
 is 2,160 bytes. Five trits per byte is 1.6 stored bits per ternary weight,
 separate from the theoretical log2(3) and total process RAM.
 

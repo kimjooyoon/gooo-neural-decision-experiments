@@ -35,7 +35,8 @@ Runtime, orchestration, tests, audits and publication packaging are Go 1.27.1.
 Python is used only for offline MPS optimization/export. Each valid Go kernel
 call allocates zero heap objects with a caller-owned 2,160-byte workspace.
 FP32 weights occupy 49,648 bytes. Five-trit packed weights occupy 2,590 bytes;
-runtime tensors decode to 12,496 int8 bytes plus scales. This is 1.6 stored bits
+runtime tensors use 12,384 int8 matrix bytes and 112 FP32 bias bytes, plus
+8 matrix-scale bytes. This is 1.6 stored bits
 per trit weight, separate from total process RAM and theoretical log2(3).
 
 Load an arm's models/fp32/model.json with the public gooo-decision-runtime
