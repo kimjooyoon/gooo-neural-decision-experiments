@@ -1,5 +1,40 @@
 # Gooo neural decision experiments
 
+## Shared judge in compact Go storage
+
+The [preregistered representation study](preexecution/shared-three-compact-runtime-preregistration-20261003.json)
+now exports an explicit shared-weight ABI for the existing own models. No new
+optimizer updates or quality selection were performed. All 10,739 frozen
+initial/feedback inputs match bit-for-bit for all three variants: 64,434 actual
+parity predictions, including features, hidden values, logits, probabilities and
+selected mask. The complete [comparison ledger](publication/compact-shared-runtime-20261003/comparisons.jsonl.gz)
+is compressed losslessly; the [manifest](publication/compact-shared-runtime-20261003/manifest.json)
+pins every public file and its decoded ledger. CI reconstructs the original
+source/teacher data and repeats every actual kernel comparison.
+
+| Variant | Expanded → compact weight bytes | Expanded → compact resident tensors | Expanded → compact median kernel time |
+| --- | ---: | ---: | ---: |
+| FP32 | 74,624 → 8,288 | 74,624 → 8,288 | 40.833 → 24.458 µs |
+| PTQ ternary | 3,854 → 446 | 18,752 → 2,096 | 40.333 → 25.125 µs |
+| QAT ternary | 3,854 → 446 | 18,752 → 2,096 | 47.292 → 27.667 µs |
+
+Ternary models additionally retain eight scale bytes. The per-caller workspace
+remains 3,200 bytes; all valid warmed kernels allocate zero heap objects. Timing
+uses 2,000 interleaved observations per representation/variant on local arm64,
+Go 1.27.1, and includes feature projection. It excludes loading and native
+codegen. The full auditor took 13.833 seconds and averaged 112.74% of one CPU
+core including dataset reconstruction and hashing; its 185,712,640-byte peak
+RSS describes the auditor, not the small inference model. See the
+[full scoped report](publication/compact-shared-runtime-20261003/report.json).
+
+The converter verifies every shared copy and removed positive zero, keeps the
+original matrix scales, and preserves 24-term float accumulation order. Runtime
+receipts identify the actual compact artifact. Seeds are still bound to artifact
+hashes: repeated use of one artifact is reproducible, while a matching seed
+across different representations need not select the same mask. Native compiler
+adoption and paired source-to-runtime measurements remain a separate follow-up.
+The prior quality regressions and original expanded models remain available.
+
 ## Shared local Gooo judge — fresh model comparison
 
 [Public own models on Hugging Face](https://huggingface.co/asketeddy/gooo-shared-judgment-tiny-v1/tree/9ce1d57a0688c0e07dd0007bd7af558a5642cf4e)
