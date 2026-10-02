@@ -73,9 +73,14 @@ func main() {
 	audit := flag.String("audit-report", "", "zero-prediction independent replay receipt")
 	prefix := flag.String("prefix", "", "immutable cap-stopped original phase for separate storage continuation")
 	combined := flag.String("combined-audit-report", "", "zero-prediction combined original/tail audit receipt")
+	bilingual := flag.String("bilingual-report", "", "post-hoc first-output equivalence diagnostic; no model calls or selector changes")
 	flag.Parse()
 	var err error
-	if *combined != "" && *prefix != "" && *audit == "" {
+	if *bilingual != "" && *prefix != "" && *audit == "" && *combined == "" {
+		err = bilingualAudit(*dataset, *models, *prefix, *output, *bilingual)
+	} else if *bilingual != "" {
+		err = errors.New("bilingual diagnostic requires separate prefix/tail audit mode")
+	} else if *combined != "" && *prefix != "" && *audit == "" {
 		err = auditContinuation(*dataset, *models, *prefix, *output, *combined)
 	} else if *prefix != "" && *audit == "" && *combined == "" {
 		err = continueStudy(*dataset, *models, *prefix, *output, *revision)

@@ -27,8 +27,8 @@ now retains 4,096 sessions, 37,394 real own-model predictions, 13,233 candidate
 evaluations and 7,667 unique failure-conditioned train states. Its separate
 offline audit reconstructs all outputs, seeded frontiers and complete contexts.
 SDK session median/p95 are 0.229/0.577 ms, including search and evaluations.
-Full three-choice SDK comparison and native behavior measurement remain pending;
-the calibration selector below is now complete. No default model is promoted.
+The three-choice SDK comparison below is complete after a separate storage
+continuation; native behavior measurement remains pending. No default model is promoted.
 Full source/teacher raw evidence is packaged with
 closed SHA/CRC/privacy checks and retains the first failed native-export prefix.
 The existing v2 models below retain their completed SDK/native study.
@@ -37,8 +37,9 @@ The [new matched training](docs/own-three-choice-training-results-20261002.md)
 completed 4,800 local MPS updates from one fresh Go initializer and preserved all
 nine FP/PTQ/QAT exports. All nine passed actual Go numerical parity and zero-heap
 kernel probes. The complete 642-member compressed training evidence preserves
-all features, update/epoch receipts and negative variants. Full SDK/native
-behavior remains pending; no new default is promoted by the training/kernel phase.
+all features, update/epoch receipts and negative variants. Full SDK
+behavior is reported separately below; native measurement remains pending and no
+new default is promoted by the training/kernel phase.
 The [public three-choice model edition](https://huggingface.co/asketeddy/gooo-three-choice-feedback-tiny-v1/tree/a7a9170370da3e183c1831ae4442e88870ea3a0d)
 now retains all nine models and both complete raw-evidence bundles.
 [Anonymous byte verification](publication/own-three-choice-hf-byte-verification-20261002.json)
@@ -50,8 +51,8 @@ ordered values. All eleven calibration policies completed before a saved selecto
 chose `set-feedback/fp32`: 6.11% fewer extra candidates and 66.09% fewer predictions
 than the frozen independent reference. The original 768 MiB raw cap then stopped
 collection with six complete development cells and a partial seventh. All original
-bytes remain retained; the full 11,264-session comparison and dependent native
-execution are incomplete. Paired-language initial mask disagreement is 256/256,
+bytes remain retained; at that stop the full 11,264-session comparison and dependent
+native execution were incomplete. Paired-language initial mask disagreement is 256/256,
 so bilingual invariant judgment is not established. Prefix CPU/RSS are unavailable;
 future failed attempts now retain terminal resource counters as well.
 The [public stopped-prefix appendix](https://huggingface.co/asketeddy/gooo-three-choice-feedback-tiny-v1/tree/ba1f540ee5bf75fceab53d1446b9385c793a4396/research/sdk-prefix-20261002)
@@ -62,6 +63,20 @@ model tensors remain unchanged. The separate
 [storage continuation plan](docs/own-three-choice-sdk-storage-continuation-preregistration-20261002.md)
 fixes the exact 2,485 missing identities, preserves the original resource failure,
 and requires complete combined audit before any dependent native execution.
+
+The [actual missing-only continuation](docs/own-three-choice-sdk-storage-tail-results-20261002.md)
+ran 2,485 additional development sessions with unchanged models and no original
+operational reruns. The [combined independent audit](publication/own-three-choice-sdk-combined-audit-20261002.json)
+now proves 11,264 unique sessions, 42,530 actual predictions and 658,992 ordered
+values across all 22 complete cells. Selected FP32 uses 65.19% fewer development
+model calls than the reference; first-candidate completion and median time do not
+improve. PTQ/QAT add search work. The separate
+[bilingual functional diagnosis](publication/own-three-choice-sdk-bilingual-functional-audit-20261002.json)
+finds different initial outputs in all 256 selected-model development pairs;
+mask differences and actual output differences are counted separately. Tail
+collection measured 11.662 s, 137.55% of one CPU core and 297.7 MiB lifetime RSS,
+including original audit and planning. Full native validation is still pending;
+finite eight-mask completeness does not establish general-language judgment.
 
 ## Own feedback Gooo model v2 — preceding two-choice experiment
 

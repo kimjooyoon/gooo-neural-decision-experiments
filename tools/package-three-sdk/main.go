@@ -56,6 +56,20 @@ func main() {
 	receipt := flag.String("receipt", "", "fresh anonymous byte receipt")
 	destination := flag.String("destination", "", "optional fresh byte-verified evidence expansion")
 	flag.Parse()
+	if strings.HasPrefix(*mode, "tail-") {
+		if *bundle == "publication/own-three-choice-sdk-prefix-20261002.zip" {
+			*bundle = "publication/own-three-choice-sdk-storage-tail-20261002.zip"
+		}
+		if *index == "publication/own-three-choice-sdk-prefix-bundle-20261002.json" {
+			*index = "publication/own-three-choice-sdk-storage-tail-bundle-20261002.json"
+		}
+		if *audit == "publication/own-three-choice-sdk-prefix-audit-20261002.json" {
+			*audit = "publication/own-three-choice-sdk-combined-audit-20261002.json"
+		}
+		if *stage == "publication/hf-own-three-sdk-prefix-20261002" {
+			*stage = "publication/hf-own-three-sdk-storage-tail-20261002"
+		}
+	}
 	var err error
 	switch *mode {
 	case "pack":
@@ -69,6 +83,17 @@ func main() {
 		err = stageHF(*bundle, *index, *audit, *stage)
 	case "verify-hf":
 		err = verifyHF(*stage, *revision, *receipt)
+	case "tail-pack":
+		err = packTail(*bundle, *index, *audit)
+	case "tail-verify":
+		err = verifyWith(*bundle, *index, validateTail)
+		if err == nil && *destination != "" {
+			err = expandWith(*bundle, *index, *destination, validateTail)
+		}
+	case "tail-stage-hf":
+		err = stageTailHF(*bundle, *index, *audit, *stage)
+	case "tail-verify-hf":
+		err = verifyHFAppendix(*stage, *revision, *receipt, tailRemotePrefix, "gooo/own-three-sdk-tail-hf-appendix/v1", "gooo/own-three-sdk-tail-hf-byte-verification/v1")
 	default:
 		err = errors.New("unknown prefix publication mode")
 	}
@@ -259,11 +284,14 @@ func (c *counted) Read(p []byte) (int, error) {
 	return n, err
 }
 func verify(bundle, index string) error {
+	return verifyWith(bundle, index, validate)
+}
+func verifyWith(bundle, index string, validator func(manifest) error) error {
 	var m manifest
 	if err := read(index, &m); err != nil {
 		return err
 	}
-	if err := validate(m); err != nil {
+	if err := validator(m); err != nil {
 		return err
 	}
 	p, err := threestudent.FilePin(bundle)
@@ -314,6 +342,9 @@ func verify(bundle, index string) error {
 // expand runs only after full streaming privacy/SHA/CRC verification. The
 // immutable closed manifest prevents traversal or unknown archive members.
 func expand(bundle, index, destination string) error {
+	return expandWith(bundle, index, destination, validate)
+}
+func expandWith(bundle, index, destination string, validator func(manifest) error) error {
 	if _, err := os.Lstat(destination); !os.IsNotExist(err) {
 		return errors.New("fresh evidence expansion required")
 	}
@@ -321,7 +352,7 @@ func expand(bundle, index, destination string) error {
 	if err := read(index, &m); err != nil {
 		return err
 	}
-	if err := validate(m); err != nil {
+	if err := validator(m); err != nil {
 		return err
 	}
 	z, err := zip.OpenReader(bundle)

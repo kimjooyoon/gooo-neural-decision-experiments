@@ -28,14 +28,17 @@ func stageHF(bundle, index, audit, directory string) error {
 	if err := verify(bundle, index); err != nil {
 		return err
 	}
+	all := map[string]string{"bundle.zip": bundle, "manifest.json": index, "audit.json": audit, "results.md": "docs/own-three-choice-sdk-prefix-results-20261002.md", "protocol.md": threefeedbackProtocol(), "design.md": "docs/own-three-choice-sdk-design-20261002.md"}
+	m := appendix{Schema: "gooo/own-three-sdk-prefix-hf-appendix/v1", Repository: repository, Prefix: remotePrefix, Base: baseHF, Scope: "Appendix only: exact cap-stopped SDK prefix, unchanged nine own models and frozen reference at the existing immutable base. No weight replacement, complete-comparison claim or compiler promotion."}
+	return stageAppendix(directory, all, m)
+}
+func stageAppendix(directory string, all map[string]string, m appendix) error {
 	if _, err := os.Lstat(directory); !os.IsNotExist(err) {
 		return errors.New("fresh closed HF appendix stage required")
 	}
 	if err := os.Mkdir(directory, 0755); err != nil {
 		return err
 	}
-	all := map[string]string{"bundle.zip": bundle, "manifest.json": index, "audit.json": audit, "results.md": "docs/own-three-choice-sdk-prefix-results-20261002.md", "protocol.md": threefeedbackProtocol(), "design.md": "docs/own-three-choice-sdk-design-20261002.md"}
-	m := appendix{Schema: "gooo/own-three-sdk-prefix-hf-appendix/v1", Repository: repository, Prefix: remotePrefix, Base: baseHF, Scope: "Appendix only: exact cap-stopped SDK prefix, unchanged nine own models and frozen reference at the existing immutable base. No weight replacement, complete-comparison claim or compiler promotion."}
 	names := []string{"audit.json", "bundle.zip", "design.md", "manifest.json", "protocol.md", "results.md"}
 	for _, name := range names {
 		in, err := os.Open(all[name])
@@ -95,6 +98,9 @@ func publicGet(c *http.Client, address string) (*http.Response, error) {
 	return response, nil
 }
 func verifyHF(directory, revision, output string) error {
+	return verifyHFAppendix(directory, revision, output, remotePrefix, "gooo/own-three-sdk-prefix-hf-appendix/v1", "gooo/own-three-sdk-prefix-hf-byte-verification/v1")
+}
+func verifyHFAppendix(directory, revision, output, prefix, schema, receiptSchema string) error {
 	if len(revision) != 40 || strings.Trim(revision, "0123456789abcdef") != "" {
 		return errors.New("exact immutable HF revision required")
 	}
@@ -102,7 +108,7 @@ func verifyHF(directory, revision, output string) error {
 	if err := read(filepath.Join(directory, "publication-manifest.json"), &m); err != nil {
 		return err
 	}
-	if m.Schema != "gooo/own-three-sdk-prefix-hf-appendix/v1" || m.Repository != repository || m.Prefix != remotePrefix || m.Base != baseHF || len(m.Files) != 6 {
+	if m.Schema != schema || m.Repository != repository || m.Prefix != prefix || m.Base != baseHF || len(m.Files) != 6 {
 		return errors.New("closed staged appendix differs")
 	}
 	self, err := threestudent.FilePin(filepath.Join(directory, "publication-manifest.json"))
@@ -141,11 +147,11 @@ func verifyHF(directory, revision, output string) error {
 	}
 	allowed := map[string]bool{}
 	for _, f := range files {
-		allowed[remotePrefix+"/"+f.Name] = true
+		allowed[prefix+"/"+f.Name] = true
 	}
 	count := 0
 	for _, f := range info.Siblings {
-		if strings.HasPrefix(f.Name, remotePrefix+"/") {
+		if strings.HasPrefix(f.Name, prefix+"/") {
 			if !allowed[f.Name] {
 				return errors.New("unknown remote appendix member")
 			}
@@ -161,7 +167,7 @@ func verifyHF(directory, revision, output string) error {
 		if err != nil || local != f.Pin || filepath.Base(f.Name) != f.Name || f.Pin.Bytes > 64<<20 {
 			return errors.New("closed local appendix bytes changed")
 		}
-		r, err := publicGet(c, "https://huggingface.co/"+repository+"/resolve/"+revision+"/"+remotePrefix+"/"+f.Name)
+		r, err := publicGet(c, "https://huggingface.co/"+repository+"/resolve/"+revision+"/"+prefix+"/"+f.Name)
 		if err != nil {
 			return err
 		}
@@ -174,7 +180,7 @@ func verifyHF(directory, revision, output string) error {
 		}
 		total += n
 	}
-	return save(output, map[string]any{"schema": "gooo/own-three-sdk-prefix-hf-byte-verification/v1", "status": "PASS", "repository": repository, "revision": revision, "remote_prefix": remotePrefix, "unchanged_model_base_revision": baseHF, "public": true, "authenticated_requests": 0, "actual_files_verified": 7, "actual_bytes_verified": total, "new_model_predictions": 0, "new_optimizer_updates": 0, "native_calls": 0, "scope": "All seven exact appended public files downloaded anonymously at the immutable revision and matched byte-for-byte. Original model/source/training artifacts retain their previously verified immutable base; no full SDK or native completion claim."})
+	return save(output, map[string]any{"schema": receiptSchema, "status": "PASS", "repository": repository, "revision": revision, "remote_prefix": prefix, "unchanged_model_base_revision": baseHF, "public": true, "authenticated_requests": 0, "actual_files_verified": 7, "actual_bytes_verified": total, "new_model_predictions": 0, "new_optimizer_updates": 0, "native_calls": 0, "scope": "All seven exact appended public files downloaded anonymously at the immutable revision and matched byte-for-byte. Original model/source/training artifacts retain their previously verified immutable base. Byte verification does not execute a model or establish native/compiler completion."})
 }
 func readJSON(raw []byte, value any) error {
 	if err := publicJSON(raw); err != nil {

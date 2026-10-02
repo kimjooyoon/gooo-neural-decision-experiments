@@ -59,11 +59,17 @@ func privacy(r io.Reader, name string) error {
 		}
 		return s.Err()
 	}
-	raw, err := io.ReadAll(io.LimitReader(r, 1<<20+1))
+	limit := int64(1 << 20)
+	// The exact frozen list of 2,485 missing identities is metadata, not a
+	// session capture. Preserve it whole under a separate explicit 4-MiB bound.
+	if name == tailPhase+"/preexecution.json" {
+		limit = 4 << 20
+	}
+	raw, err := io.ReadAll(io.LimitReader(r, limit+1))
 	if err != nil {
 		return err
 	}
-	if len(raw) > 1<<20 {
+	if int64(len(raw)) > limit {
 		return errors.New("bounded public metadata required")
 	}
 	if strings.HasSuffix(name, ".json") {

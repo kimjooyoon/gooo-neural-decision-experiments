@@ -108,6 +108,32 @@ jobs:
           name: three-choice-sdk-original-prefix-independent-audit
           path: ${{ runner.temp }}/three-choice-sdk-prefix-audit.json
           if-no-files-found: error
+      - name: Reconcile exact missing SDK tail and bilingual functional outputs without inference
+        run: |
+          go run ./tools/package-three-sdk --mode tail-verify \
+            --destination "$RUNNER_TEMP/three-choice-sdk-tail"
+          mv "$RUNNER_TEMP/three-choice-sdk-prefix/own-three-sdk-study-20261002" "$RUNNER_TEMP/three-choice-training/own-three-sdk-study-20261002"
+          go run ./tools/own-three-sdk-study \
+            --dataset "$RUNNER_TEMP/three-choice-training/own-three-composition-curriculum-fixed-20261002/dataset.jsonl" \
+            --models models/own-three-feedback-v1 \
+            --prefix "$RUNNER_TEMP/three-choice-training/own-three-sdk-study-20261002" \
+            --output "$RUNNER_TEMP/three-choice-sdk-tail/own-three-sdk-storage-tail-20261002" \
+            --combined-audit-report "$RUNNER_TEMP/three-choice-sdk-combined-audit.json"
+          cmp publication/own-three-choice-sdk-combined-audit-20261002.json "$RUNNER_TEMP/three-choice-sdk-combined-audit.json"
+          go run ./tools/own-three-sdk-study \
+            --dataset "$RUNNER_TEMP/three-choice-training/own-three-composition-curriculum-fixed-20261002/dataset.jsonl" \
+            --models models/own-three-feedback-v1 \
+            --prefix "$RUNNER_TEMP/three-choice-training/own-three-sdk-study-20261002" \
+            --output "$RUNNER_TEMP/three-choice-sdk-tail/own-three-sdk-storage-tail-20261002" \
+            --bilingual-report "$RUNNER_TEMP/three-choice-sdk-bilingual-audit.json"
+          cmp publication/own-three-choice-sdk-bilingual-functional-audit-20261002.json "$RUNNER_TEMP/three-choice-sdk-bilingual-audit.json"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: three-choice-sdk-combined-and-bilingual-independent-audits
+          path: |
+            ${{ runner.temp }}/three-choice-sdk-combined-audit.json
+            ${{ runner.temp }}/three-choice-sdk-bilingual-audit.json
+          if-no-files-found: error
   own-joint-feedback-v2-native:
     runs-on: ubuntu-latest
     timeout-minutes: 15

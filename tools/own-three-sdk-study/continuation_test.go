@@ -196,3 +196,27 @@ func TestSeparateStorageCapLeavesOriginalCapAndTerminalReserveIntact(t *testing.
 		t.Fatal("failed call wrote bytes or terminal record lost")
 	}
 }
+
+func TestBilingualDiagnosticsDistinguishMasksFromActualFunctionOutputs(t *testing.T) {
+	en := firstOutput{Mask: 0, Complete: true}
+	ko := firstOutput{Mask: 1, Complete: true}
+	c := bilingualCounts{}
+	if err := c.add(en, ko); err != nil {
+		t.Fatal(err)
+	}
+	if c.MaskDiff != 1 || c.OutputDiff != 0 || c.SameOutputDifferentMask != 1 || c.BothComplete != 1 {
+		t.Fatal("mask difference substituted for functional difference")
+	}
+	ko.Actual[3] = 1
+	ko.Complete = false
+	if err := c.add(en, ko); err != nil {
+		t.Fatal(err)
+	}
+	if c.OutputDiff != 1 || c.DifferentCases != 1 || c.OneComplete != 1 || c.Pairs != 2 || c.Cases != 32 {
+		t.Fatal("actual output/complete-case diagnostic lost")
+	}
+	ko.Expected[0] = 1
+	if err := c.add(en, ko); err == nil {
+		t.Fatal("different authored bilingual contracts accepted")
+	}
+}

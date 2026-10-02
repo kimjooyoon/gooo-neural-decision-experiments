@@ -1,0 +1,77 @@
+{
+  "@context": {
+    "prov": "http://www.w3.org/ns/prov#",
+    "gooo": "https://github.com/kimjooyoon/gooo-neural-decision-experiments#"
+  },
+  "@graph": [
+    {
+      "@id": "gooo:three-choice-original-sdk-prefix",
+      "@type": "prov:Entity",
+      "gooo:status": "FAILED_PREFIX_RETAINED",
+      "gooo:sourceRevision": "b8c515fcd5a5e623aae5fd3b93c3b8f69f9f4608",
+      "gooo:sessions": 8779,
+      "gooo:rawCapBytes": 805306368,
+      "gooo:publicEvidence": "https://huggingface.co/asketeddy/gooo-three-choice-feedback-tiny-v1/tree/ba1f540ee5bf75fceab53d1446b9385c793a4396/research/sdk-prefix-20261002"
+    },
+    {
+      "@id": "gooo:three-choice-storage-amendment",
+      "@type": "prov:Entity",
+      "gooo:sha256": "b127f62dc5c45694afc9703be713bd9db834bee0699f1c31614e62729a721e10",
+      "gooo:rawCapBytes": 2147483648,
+      "gooo:postObservationResourceAmendment": true
+    },
+    {
+      "@id": "gooo:unchanged-three-choice-models",
+      "@type": "prov:Entity",
+      "gooo:publicBaseRevision": "a7a9170370da3e183c1831ae4442e88870ea3a0d",
+      "gooo:newOptimizerUpdates": 0,
+      "gooo:modelVariants": 9
+    },
+    {
+      "@id": "gooo:go-three-choice-missing-only-runner",
+      "@type": "prov:SoftwareAgent",
+      "gooo:sourceRevision": "59f921c520d369d58800ea5c9505f4ff60f1b307",
+      "gooo:toolchain": "go1.27.1"
+    },
+    {
+      "@id": "gooo:three-choice-missing-only-sdk-activity",
+      "@type": "prov:Activity",
+      "prov:wasAssociatedWith": { "@id": "gooo:go-three-choice-missing-only-runner" },
+      "prov:used": [
+        { "@id": "gooo:three-choice-original-sdk-prefix" },
+        { "@id": "gooo:three-choice-storage-amendment" },
+        { "@id": "gooo:unchanged-three-choice-models" }
+      ],
+      "gooo:actualTailSessions": 2485,
+      "gooo:actualTailPredictions": 9142,
+      "gooo:repeatedOriginalOperationalSessions": 0,
+      "gooo:tailWallNs": 11662273750,
+      "gooo:tailCpuNs": 16041812000,
+      "gooo:lifetimePeakRssBytes": 312197120,
+      "gooo:nativeCalls": 0
+    },
+    {
+      "@id": "gooo:three-choice-full-combined-sdk-evidence",
+      "@type": "prov:Entity",
+      "prov:wasGeneratedBy": { "@id": "gooo:three-choice-missing-only-sdk-activity" },
+      "gooo:status": "PASS_WITH_SEPARATE_STORAGE_AMENDMENT",
+      "gooo:uniqueSessions": 11264,
+      "gooo:actualRecordedPredictions": 42530,
+      "gooo:independentlyVerifiedOrderedValues": 658992,
+      "gooo:zeroPredictionAudit": true,
+      "gooo:defaultModelPromoted": false,
+      "gooo:nativeValidationComplete": false
+    },
+    {
+      "@id": "gooo:three-choice-bilingual-functional-diagnostic",
+      "@type": "prov:Entity",
+      "prov:wasDerivedFrom": { "@id": "gooo:three-choice-full-combined-sdk-evidence" },
+      "gooo:postHocDiagnostic": true,
+      "gooo:bilingualPairs": 5632,
+      "gooo:orderedCasePairs": 90112,
+      "gooo:selectedDevelopmentOutputDisagreements": 256,
+      "gooo:selectedDevelopmentPairDenominator": 256,
+      "gooo:selectorChanged": false
+    }
+  ]
+}
