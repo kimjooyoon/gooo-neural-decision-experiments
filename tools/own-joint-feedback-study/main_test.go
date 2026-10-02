@@ -75,6 +75,11 @@ func testView(t *testing.T) jointcohort.View {
 	if e != nil {
 		t.Fatal(e)
 	}
+	body, e := json.Marshal(original.Fallback().GoooBody())
+	if e != nil {
+		t.Fatal(e)
+	}
+	originalSource := []byte("package freshcomposition\nnamespace freshcomposition\nentity Integer id \"freshcomposition://entity/integer\"\nactivity ChoosePath(Integer) -> Integer computes " + string(body) + "\n")
 	for i, c := range p.Decisions {
 		fields, e := original.SourceFeatures(c.ID)
 		if e != nil {
@@ -102,7 +107,7 @@ func testView(t *testing.T) jointcohort.View {
 	if e != nil {
 		t.Fatal(e)
 	}
-	return jointcohort.View{ID: "fixture/en", Group: "fixture", Family: "schedule_operand", Config: 0, Goal: 1, Language: "en", SourceSHA: jointcohort.SHA([]byte("unit fixture")), JointInput: text, Prepared: prepared, Cases: cases, Target: target}
+	return jointcohort.View{ID: "fixture/en", Group: "fixture", Family: "schedule_operand", Config: 0, Goal: 1, Language: "en", SourceSHA: jointcohort.SHA(originalSource), JointInput: text, Prepared: prepared, Cases: cases, Target: target}
 }
 func TestActualOfflineAndReferenceReceiptAudits(t *testing.T) {
 	v := testView(t)
