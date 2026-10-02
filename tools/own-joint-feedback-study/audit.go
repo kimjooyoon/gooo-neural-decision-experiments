@@ -189,6 +189,14 @@ func verifyObservation(v jointcohort.View, c jointfeedback.Capture, m *model) er
 }
 
 func verifyReferenceLinks(v jointcohort.View, c jointfeedback.Capture, m *model) error {
+	parts, err := jointParts(v)
+	if err != nil {
+		return err
+	}
+	return verifyReferenceLinksForInputs(v, c, m, parts)
+}
+
+func verifyReferenceLinksForInputs(v jointcohort.View, c jointfeedback.Capture, m *model, parts [2]string) error {
 	if err := verifyReferenceProgress(v, c, m); err != nil {
 		return err
 	}
@@ -211,10 +219,6 @@ func verifyReferenceLinks(v jointcohort.View, c jointfeedback.Capture, m *model)
 	previous, calls := "", c.Progress[0].Selection.ModelCalls
 	if m == nil && calls != 0 || m != nil && calls != 2 {
 		return errors.New("reference initial actual calls differ")
-	}
-	parts, err := jointParts(v)
-	if err != nil {
-		return err
 	}
 	plan, err := jointcompositionstudy.Fixture(v.Family, v.Config, v.Goal, v.Language)
 	if err != nil {

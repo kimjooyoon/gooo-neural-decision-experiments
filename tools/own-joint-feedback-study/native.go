@@ -135,6 +135,22 @@ func inspectNative(raw []byte, v jointcohort.View, doc document, source []byte, 
 		}
 	}
 	c := jointfeedback.Capture{Schema: "gooo/own-joint-feedback-student-capture/v2", ViewID: v.ID, SourceSHA: v.SourceSHA, JointSHA: jointcohort.SHA([]byte(v.JointInput)), Rotation: -1, WallNS: wall, Search: p.Search, Progress: p.Progress, Feedback: p.Feedback}
+	if m == nil {
+		original, err := pathplan.Prepare(doc.Plan)
+		if err != nil {
+			return n, c, err
+		}
+		if c.Search.Selection.PlanSHA256 != original.PlanSHA256() || c.Search.Selection.MetadataSHA256 != "" || c.Search.Selection.WeightsSHA256 != "" || len(c.Feedback) != 0 {
+			return n, c, errors.New("disconnected original plan or zero-call binding differs")
+		}
+		if err = jointfeedback.VerifyFiniteAttempts(v, c.Search); err != nil {
+			return n, c, err
+		}
+		auditView := v
+		auditView.Prepared = original
+		parts := [2]string{doc.Plan.Decisions[0].Intent, doc.Plan.Decisions[1].Intent}
+		return n, c, verifyReferenceLinksForInputs(auditView, c, nil, parts)
+	}
 	return n, c, verifyObservation(v, c, m)
 }
 func validMetrics(m metrics) bool {
