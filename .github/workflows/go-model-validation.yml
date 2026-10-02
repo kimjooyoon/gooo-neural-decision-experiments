@@ -93,6 +93,14 @@ jobs:
             --teacher-curriculum "$RUNNER_TEMP/three-choice-training/own-three-teacher-curriculum-20261002" \
             --output "$RUNNER_TEMP/shared-three-model-audit.json" \
             --source-revision "$GITHUB_SHA"
+      - name: Compare compact shared kernels against every frozen source state
+        run: |
+          go run ./tools/compact-shared-three \
+            --models "$RUNNER_TEMP/shared-three/training/shared-local/models" \
+            --dataset "$RUNNER_TEMP/three-choice-training/own-three-composition-curriculum-fixed-20261002/dataset.jsonl" \
+            --teacher-curriculum "$RUNNER_TEMP/three-choice-training/own-three-teacher-curriculum-20261002" \
+            --output "$RUNNER_TEMP/compact-shared-ci" \
+            --source-revision "$GITHUB_SHA"
       - uses: actions/upload-artifact@v7
         with:
           name: three-choice-source-teacher-independent-audits
@@ -103,6 +111,8 @@ jobs:
             ${{ runner.temp }}/three-choice-published-input-audit.json
             ${{ runner.temp }}/three-choice-model-audit.json
             ${{ runner.temp }}/shared-three-model-audit.json
+            ${{ runner.temp }}/compact-shared-ci/report.json
+            ${{ runner.temp }}/compact-shared-ci/comparisons.jsonl
           if-no-files-found: error
       - name: Verify and independently audit the original cap-stopped SDK prefix
         run: |

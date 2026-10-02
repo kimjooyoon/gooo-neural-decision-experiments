@@ -30,7 +30,10 @@ type entry struct {
 func hash(raw []byte) string { sum := sha256.Sum256(raw); return hex.EncodeToString(sum[:]) }
 func inventory() map[string]string {
 	return map[string]string{
-		"jointdecision/three_input.go": "internal/jointdecision/three_input.go", "jointdecision/three_model.go": "internal/jointdecision/three_model.go",
+		"jointdecision/shared_model.go": "internal/jointdecision/shared_model.go", "jointdecision/shared_load.go": "internal/jointdecision/shared_load.go",
+		"jointdecision/shared_compact.go": "internal/jointdecision/shared_compact.go", "jointdecision/shared_test.go": "internal/jointdecision/shared_test.go",
+		"pathplan/shared_three_test.go": "internal/pathplan/shared_three_test.go",
+		"jointdecision/three_input.go":  "internal/jointdecision/three_input.go", "jointdecision/three_model.go": "internal/jointdecision/three_model.go",
 		"jointdecision/three_test.go": "internal/jointdecision/three_test.go", "jointdecision/three_arithmetic_test.go": "internal/jointdecision/three_arithmetic_test.go",
 		"pathplan/three.go": "internal/pathplan/three.go", "pathplan/three_feedback.go": "internal/pathplan/three_feedback.go", "pathplan/three_batches.go": "internal/pathplan/three_batches.go",
 		"pathplan/three_test.go": "internal/pathplan/three_test.go", "pathplan/three_bounds_test.go": "internal/pathplan/three_bounds_test.go",
