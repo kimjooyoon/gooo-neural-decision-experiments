@@ -16,7 +16,8 @@ tags:
 Updated 2026-10-03. This model ranks **eight permitted Gooo body paths** built
 from three binary decisions. The project explores a language and a small model
 working together: Gooo provides the construction plan, the model suggests a
-route through it, and the compiler checks and executes the assembled program.
+route through it, and the compiler checks the assembled body and generates Go.
+A Go experiment runner then builds and executes the resulting program.
 
 Like a workshop, the plan describes what the parts mean and how they may fit.
 The model helps choose the next assembly; observed test failures guide another
