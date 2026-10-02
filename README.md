@@ -16,6 +16,9 @@ cache outliers remain in the report. Process CPU medians were 83.7–84.6% of on
 core. The full 684-member evidence archive occupies about 3.04 MB compressed.
 CI verifies the complete inventory and independently consumes the frozen
 runtime receipts against the exact compiler source.
+[Hugging Face native appendix](https://huggingface.co/asketeddy/gooo-shared-judgment-tiny-v1/tree/37db3a1f8a06669081a370ee1e7b23a64cbc00fb/research/compact-native-20261003)
+is public; [anonymous transport verification](publication/compact-shared-native-hf-verification-20261003.json)
+rechecked all eight new/updated files and all 684 archived members.
 
 ## Shared judge in compact Go storage
 
