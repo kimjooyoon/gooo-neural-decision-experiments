@@ -1,6 +1,6 @@
 # Gooo neural decision experiments
 
-## Three-choice Gooo construction — implementation and authored preparation
+## Three-choice Gooo construction — fresh students and actual Go kernels
 
 Released [Go SDK v0.2.13-experimental](https://github.com/kimjooyoon/gooo-decision-runtime/releases/tag/v0.2.13-experimental)
 and [compiler main 774eabb](https://github.com/kimjooyoon/meta-ontology-go/commit/774eabb226f88a317c523ce4efa24a08032066a9)
@@ -27,12 +27,20 @@ now retains 4,096 sessions, 37,394 real own-model predictions, 13,233 candidate
 evaluations and 7,667 unique failure-conditioned train states. Its separate
 offline audit reconstructs all outputs, seeded frontiers and complete contexts.
 SDK session median/p95 are 0.229/0.577 ms, including search and evaluations.
-New three-choice student training and trained native measurement remain pending;
+Full three-choice student SDK and native behavior measurement remain pending;
 no default model is promoted. Full source/teacher raw evidence is packaged with
 closed SHA/CRC/privacy checks and retains the first failed native-export prefix.
-The existing nine v2 models below remain the latest trained edition.
+The existing v2 models below retain their completed SDK/native study.
 
-## Own feedback Gooo model v2 — latest experiment
+The [new matched training](docs/own-three-choice-training-results-20261002.md)
+completed 4,800 local MPS updates from one fresh Go initializer and preserved all
+nine FP/PTQ/QAT exports. All nine passed actual Go numerical parity and zero-heap
+kernel probes. The complete 642-member compressed training evidence preserves
+all features, update/epoch receipts and negative variants. Full SDK/native
+behavior and calibration policy selection remain pending; no new default is
+promoted by the training/kernel phase.
+
+## Own feedback Gooo model v2 — preceding two-choice experiment
 
 [Nine fresh own models and actual failure feedback](docs/own-joint-feedback-results-20261002.md)
 compare uniform initial learning, passing-set initial learning and passing-set

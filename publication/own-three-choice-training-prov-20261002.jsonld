@@ -1,0 +1,239 @@
+{
+  "@context": {
+    "gooo": "https://github.com/kimjooyoon/gooo-neural-decision-experiments/terms/",
+    "prov": "http://www.w3.org/ns/prov#",
+    "prov:used": {
+      "@type": "@id"
+    },
+    "prov:wasAssociatedWith": {
+      "@type": "@id"
+    },
+    "prov:wasGeneratedBy": {
+      "@type": "@id"
+    }
+  },
+  "@graph": [
+    {
+      "@id": "#go",
+      "@type": "prov:SoftwareAgent",
+      "gooo:runtime": "Go 1.27.1"
+    },
+    {
+      "@id": "#mps-optimizer",
+      "@type": "prov:SoftwareAgent",
+      "gooo:runtime": "Offline local Torch MPS; optimization/export only"
+    },
+    {
+      "@id": "#native-source",
+      "@type": "prov:Entity",
+      "gooo:sha256": "9a887dc09caf2f2b2b947641509328a2ee6f25dcefb6b52efe178fe8aff4fb3a"
+    },
+    {
+      "@id": "#actual-teacher-states",
+      "@type": "prov:Entity",
+      "gooo:actual_sessions": 4096,
+      "gooo:actual_teacher_predictions": 37394,
+      "gooo:initialization_use": false,
+      "gooo:sha256": "38930441c45ec03336a66c670028208e525131f385699140d793da96cbf4028b"
+    },
+    {
+      "@id": "#fresh-initializer",
+      "@type": "prov:Entity",
+      "gooo:inherited_model_weights": false,
+      "gooo:seed": 20261031,
+      "gooo:sha256": "fa8af3f51b719cd11b99cd4ff7f89f64582695dc89ead5c2e09701c187a6267f"
+    },
+    {
+      "@id": "#feature-preparation",
+      "@type": "prov:Activity",
+      "gooo:new_predictions": 0,
+      "gooo:source_revision": "e0b256a9e561260672c5956834a9da10a39d11a0",
+      "prov:used": [
+        "#native-source",
+        "#actual-teacher-states"
+      ],
+      "prov:wasAssociatedWith": "#go"
+    },
+    {
+      "@id": "#prepared-features",
+      "@type": "prov:Entity",
+      "gooo:sha256": "4143e4f57936427faeee5b46b91374511efdf20dec5c4c15f70fd9af6d893167",
+      "prov:wasGeneratedBy": "#feature-preparation"
+    },
+    {
+      "@id": "#recorded-training",
+      "@type": "prov:Entity",
+      "gooo:actual_updates": 4800,
+      "gooo:sha256": "3e7f5585e43dcf54b03aa22bf4d58187c6e265e5550a657993f927ebf06c0f50"
+    },
+    {
+      "@id": "#go-kernel-audit",
+      "@type": "prov:Activity",
+      "gooo:actual_parity_predictions": 432,
+      "gooo:actual_warm_allocation_predictions": 18018,
+      "gooo:new_optimizer_updates": 0,
+      "gooo:source_revision": "08e15cfa03d82a02a35081fc0fe504d508a55690",
+      "prov:wasAssociatedWith": "#go"
+    },
+    {
+      "@id": "#uniform-initial-fp",
+      "@type": "prov:Activity",
+      "gooo:actual_updates": 800,
+      "gooo:calibration_only_selection": true,
+      "prov:used": [
+        "#prepared-features",
+        "#fresh-initializer"
+      ],
+      "prov:wasAssociatedWith": "#mps-optimizer"
+    },
+    {
+      "@id": "#uniform-initial-qat",
+      "@type": "prov:Activity",
+      "gooo:actual_updates": 800,
+      "gooo:calibration_only_selection": true,
+      "prov:used": [
+        "#prepared-features",
+        "#uniform-initial-fp32"
+      ],
+      "prov:wasAssociatedWith": "#mps-optimizer"
+    },
+    {
+      "@id": "#uniform-initial-ptq",
+      "@type": "prov:Activity",
+      "gooo:actual_updates": 0,
+      "gooo:calibration_only_selection": true,
+      "prov:used": "#uniform-initial-fp32"
+    },
+    {
+      "@id": "#uniform-initial-fp32",
+      "@type": "prov:Entity",
+      "gooo:metadata_sha256": "e13b822a4680407e2ad1a44b4fa44eff040e454b8daa1943b5e58685818dbbe4",
+      "gooo:retained_if_negative": true,
+      "gooo:weights_sha256": "5d3b54e1f71d887bfe93f62145aafa05b052cbc3a14a6bce07d12fbb71e309cd",
+      "prov:wasGeneratedBy": "#uniform-initial-fp"
+    },
+    {
+      "@id": "#uniform-initial-ptq_ternary",
+      "@type": "prov:Entity",
+      "gooo:metadata_sha256": "8397a0461d3334fdba1b0171a56ec77a75364aed8bf1d32998e638d057dd9df0",
+      "gooo:retained_if_negative": true,
+      "gooo:weights_sha256": "0f1fe11db1c091e0b81c410dbac722695a0862f8354e5a432866195eb886c56c",
+      "prov:wasGeneratedBy": "#uniform-initial-ptq"
+    },
+    {
+      "@id": "#uniform-initial-qat_ternary",
+      "@type": "prov:Entity",
+      "gooo:metadata_sha256": "e71f63f480a9348a93c0152e12390b99f8031d38018d98ea0cd62ef457a0a488",
+      "gooo:retained_if_negative": true,
+      "gooo:weights_sha256": "e2a1700f6f330d007bd864dd2e9c030ea498aca317924bdc1585c5039c8f9db2",
+      "prov:wasGeneratedBy": "#uniform-initial-qat"
+    },
+    {
+      "@id": "#set-initial-fp",
+      "@type": "prov:Activity",
+      "gooo:actual_updates": 800,
+      "gooo:calibration_only_selection": true,
+      "prov:used": [
+        "#prepared-features",
+        "#fresh-initializer"
+      ],
+      "prov:wasAssociatedWith": "#mps-optimizer"
+    },
+    {
+      "@id": "#set-initial-qat",
+      "@type": "prov:Activity",
+      "gooo:actual_updates": 800,
+      "gooo:calibration_only_selection": true,
+      "prov:used": [
+        "#prepared-features",
+        "#set-initial-fp32"
+      ],
+      "prov:wasAssociatedWith": "#mps-optimizer"
+    },
+    {
+      "@id": "#set-initial-ptq",
+      "@type": "prov:Activity",
+      "gooo:actual_updates": 0,
+      "gooo:calibration_only_selection": true,
+      "prov:used": "#set-initial-fp32"
+    },
+    {
+      "@id": "#set-initial-fp32",
+      "@type": "prov:Entity",
+      "gooo:metadata_sha256": "bebe64d3894b208ef19c237d5477dc9877255d18dcd7f2d05f549202cf33df9d",
+      "gooo:retained_if_negative": true,
+      "gooo:weights_sha256": "b3824bf3b99e919b9e732c1f3d8ec711a8d1061e2006eac8132e33ab71dbab7e",
+      "prov:wasGeneratedBy": "#set-initial-fp"
+    },
+    {
+      "@id": "#set-initial-ptq_ternary",
+      "@type": "prov:Entity",
+      "gooo:metadata_sha256": "91cb81b22d2b7f6abb0699f503d9cb083b9510466e23bd6325c0e9e219195271",
+      "gooo:retained_if_negative": true,
+      "gooo:weights_sha256": "1ef066573c928362db83e201f2d209c9b4d9efde23bc8928a309ca1bfe79a014",
+      "prov:wasGeneratedBy": "#set-initial-ptq"
+    },
+    {
+      "@id": "#set-initial-qat_ternary",
+      "@type": "prov:Entity",
+      "gooo:metadata_sha256": "8c870f7485b8d62def15224d34fd1e1bc289de10d60f98ee3e2d0b409b33ea2d",
+      "gooo:retained_if_negative": true,
+      "gooo:weights_sha256": "151f44b47313506f53b3897f33d8d879754a661b0ab2e766fb5f33ec3baeaf61",
+      "prov:wasGeneratedBy": "#set-initial-qat"
+    },
+    {
+      "@id": "#set-feedback-fp",
+      "@type": "prov:Activity",
+      "gooo:actual_updates": 800,
+      "gooo:calibration_only_selection": true,
+      "prov:used": [
+        "#prepared-features",
+        "#fresh-initializer"
+      ],
+      "prov:wasAssociatedWith": "#mps-optimizer"
+    },
+    {
+      "@id": "#set-feedback-qat",
+      "@type": "prov:Activity",
+      "gooo:actual_updates": 800,
+      "gooo:calibration_only_selection": true,
+      "prov:used": [
+        "#prepared-features",
+        "#set-feedback-fp32"
+      ],
+      "prov:wasAssociatedWith": "#mps-optimizer"
+    },
+    {
+      "@id": "#set-feedback-ptq",
+      "@type": "prov:Activity",
+      "gooo:actual_updates": 0,
+      "gooo:calibration_only_selection": true,
+      "prov:used": "#set-feedback-fp32"
+    },
+    {
+      "@id": "#set-feedback-fp32",
+      "@type": "prov:Entity",
+      "gooo:metadata_sha256": "e9d7f4770d4d8402c64eea116028e6d6c049b1522f50f399c05f2c3571932a3b",
+      "gooo:retained_if_negative": true,
+      "gooo:weights_sha256": "f5af1e35288cbad938d8416dd51873d83dff369a0e0c6e7e16f6e1f75b7f429b",
+      "prov:wasGeneratedBy": "#set-feedback-fp"
+    },
+    {
+      "@id": "#set-feedback-ptq_ternary",
+      "@type": "prov:Entity",
+      "gooo:metadata_sha256": "2bc62124e2ca72e2effe1e770842b7137f8968e2cd1238f139b7d1d503beb1bc",
+      "gooo:retained_if_negative": true,
+      "gooo:weights_sha256": "942e11299fecb9f2c399024375ac5d7aa114df2e3d2070a625872d391542b82d",
+      "prov:wasGeneratedBy": "#set-feedback-ptq"
+    },
+    {
+      "@id": "#set-feedback-qat_ternary",
+      "@type": "prov:Entity",
+      "gooo:metadata_sha256": "fc5446ea7ca31ba2eb4ff29957cec5614df9820cfd110bc1f51a79f996325c43",
+      "gooo:retained_if_negative": true,
+      "gooo:weights_sha256": "2d75a95d03f060177c1f8feff7fde582b4dc70cd3000074a51b27afbc74b3e3a",
+      "prov:wasGeneratedBy": "#set-feedback-qat"
+    }
+  ],
+  "gooo:scope": "Separate immutable source, actual own-teacher observation, new independent initialization, balanced feature preparation, matched MPS optimization, all nine negative/positive exports and actual Go inference. No new full SDK/native study or default promotion is claimed."
+}

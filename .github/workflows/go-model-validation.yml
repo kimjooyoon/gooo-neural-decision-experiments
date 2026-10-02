@@ -59,6 +59,27 @@ jobs:
             --output runs/own-three-training-inputs-ci \
             --verify-report "$RUNNER_TEMP/three-choice-training-input-audit.json" \
             --source-revision "$GITHUB_SHA"
+      - name: Verify every trained model, prepared feature and optimizer receipt
+        run: |
+          go run ./tools/package-three-training --mode verify \
+            --bundle publication/own-three-choice-training-20261002.zip \
+            --manifest publication/own-three-choice-training-bundle-20261002.json \
+            --destination "$RUNNER_TEMP/three-choice-training"
+          mv runs/own-three-composition-curriculum-20261002 "$RUNNER_TEMP/three-choice-training/"
+          mv runs/own-three-composition-curriculum-fixed-20261002 "$RUNNER_TEMP/three-choice-training/"
+          mv runs/own-three-teacher-curriculum-20261002 "$RUNNER_TEMP/three-choice-training/"
+          go run ./tools/prepare-own-three-training \
+            --dataset "$RUNNER_TEMP/three-choice-training/own-three-composition-curriculum-fixed-20261002/dataset.jsonl" \
+            --teacher-curriculum "$RUNNER_TEMP/three-choice-training/own-three-teacher-curriculum-20261002" \
+            --output "$RUNNER_TEMP/three-choice-training/own-three-training-inputs-20261002" \
+            --verify-report "$RUNNER_TEMP/three-choice-published-input-audit.json" \
+            --source-revision "$GITHUB_SHA"
+          go run ./tools/audit-own-three-models \
+            --models "$RUNNER_TEMP/three-choice-training/own-three-training-mps-20261002" \
+            --dataset "$RUNNER_TEMP/three-choice-training/own-three-composition-curriculum-fixed-20261002/dataset.jsonl" \
+            --teacher-curriculum "$RUNNER_TEMP/three-choice-training/own-three-teacher-curriculum-20261002" \
+            --output "$RUNNER_TEMP/three-choice-model-audit.json" \
+            --source-revision "$GITHUB_SHA"
       - uses: actions/upload-artifact@v7
         with:
           name: three-choice-source-teacher-independent-audits
@@ -66,6 +87,8 @@ jobs:
             ${{ runner.temp }}/three-choice-source-audit.json
             ${{ runner.temp }}/three-choice-teacher-audit.json
             ${{ runner.temp }}/three-choice-training-input-audit.json
+            ${{ runner.temp }}/three-choice-published-input-audit.json
+            ${{ runner.temp }}/three-choice-model-audit.json
           if-no-files-found: error
   own-joint-feedback-v2-native:
     runs-on: ubuntu-latest

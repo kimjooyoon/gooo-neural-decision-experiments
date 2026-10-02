@@ -2,8 +2,10 @@
 
 Source/collector revision: `65313ae54b50aeb6203aa8c91cb48fc6cdfd68ac`.
 The preregistration and native corpus freeze remain unchanged. Collection and
-the separate zero-inference audit are complete; no new three-choice student
-has been trained, tested on development or promoted.
+the separate zero-inference audit were complete at this collection phase; no
+new three-choice student had then been trained, tested on development or promoted.
+The later [matched training and Go kernels](own-three-choice-training-results-20261002.md)
+now have separate evidence, while full SDK/native behavior remains pending.
 
 ## Actual measured work
 
