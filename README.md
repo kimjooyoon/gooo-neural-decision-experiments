@@ -22,11 +22,14 @@ student/native measurements and public weight verification as separate phases.
 The [native corpus audit](publication/own-three-choice-curriculum-audit-20261002.json)
 now verifies all 3,072 actual exports, 9,216 complete individual inputs and
 43,440,202 journal bytes. The first failed attempt remains retained.
-The [teacher collection design](docs/own-three-choice-teacher-collection-design-20261002.md)
-adds Go collection, complete runtime-shaped student contexts and an offline
-frontier/oracle/provenance audit before teacher collection begins.
-Teacher observation, training and trained native measurement have not started;
-no default model is promoted.
+The [actual teacher collection](docs/own-three-choice-teacher-results-20261002.md)
+now retains 4,096 sessions, 37,394 real own-model predictions, 13,233 candidate
+evaluations and 7,667 unique failure-conditioned train states. Its separate
+offline audit reconstructs all outputs, seeded frontiers and complete contexts.
+SDK session median/p95 are 0.229/0.577 ms, including search and evaluations.
+New three-choice student training and trained native measurement remain pending;
+no default model is promoted. Full source/teacher raw evidence is packaged with
+closed SHA/CRC/privacy checks and retains the first failed native-export prefix.
 The existing nine v2 models below remain the latest trained edition.
 
 ## Own feedback Gooo model v2 — latest experiment

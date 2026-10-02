@@ -1,0 +1,53 @@
+{
+  "schema": "gooo/own-three-choice-teacher-collection/v1",
+  "status": "COMPLETE_PENDING_INDEPENDENT_AUDIT",
+  "actual_teacher": {
+    "actual_sdk_sessions": 4096,
+    "actual_teacher_predictions": 37394,
+    "initial_teacher_predictions": 12288,
+    "feedback_teacher_predictions": 25106,
+    "actual_candidate_attempts": 13233,
+    "actual_ordered_evaluator_invocations": 211728,
+    "teacher_zero_call_context_declines": 0,
+    "derived_complete_student_context_declines": 0,
+    "sole_remaining_zero_call_feedback": 225,
+    "committed_fixed_coordinates_skipped": 1630,
+    "complete_sessions": 4096,
+    "complete_sessions_by_budgets_1_to_8": [
+      987,
+      1921,
+      2543,
+      3104,
+      3452,
+      3657,
+      3871,
+      4096
+    ]
+  },
+  "initial_state_views": 3072,
+  "unique_train_continuation_states": 7667,
+  "student_state_rows": 10739,
+  "raw_files": {
+    "states.jsonl": {
+      "sha256": "38930441c45ec03336a66c670028208e525131f385699140d793da96cbf4028b",
+      "bytes": 19345322,
+      "lines": 10739
+    },
+    "teacher-sessions.jsonl": {
+      "sha256": "3acc9f3f42756f03b630635fa74997b711ae84808a063be40d0c8009b2c1637c",
+      "bytes": 232385208,
+      "lines": 4096
+    }
+  },
+  "preexecution_sha256": "2e74b1d0c6bd7084cbe902bff94d7865ff25ba587b6e89fb42a4a0de3d1cb1f8",
+  "prior_phase_evidence_bytes": 43455025,
+  "new_raw_journal_bytes": 251730530,
+  "sdk_teacher_session_median_ns": 228541,
+  "sdk_teacher_session_p95_ns": 577041,
+  "collection_state_serialization_and_immediate_audit_wall_ns": 10136737792,
+  "collection_state_serialization_and_immediate_audit_cpu_ns": 11057508000,
+  "collection_cpu_percent_one_core": 109.0834963564578,
+  "process_lifetime_peak_rss_bytes": 182550528,
+  "go_heap_allocated_bytes_after_collection": 126086184,
+  "scope": "Actual SDK teacher inference, retained candidate evaluations and source-preserving student context projections. Session latency includes SDK ranking/search/evaluator/hash work, not standalone neural-kernel latency. CPU is normalized to one core for collection/state serialization/immediate audit; process lifetime RSS includes data reconstruction and cannot be equated to model tensor RAM. No three-choice student training or actual native generation has occurred."
+}

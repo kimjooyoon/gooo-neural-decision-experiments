@@ -1,0 +1,64 @@
+{
+  "@context": {
+    "prov": "http://www.w3.org/ns/prov#",
+    "gooo": "https://github.com/kimjooyoon/gooo-neural-decision-experiments#"
+  },
+  "@graph": [
+    {
+      "@id": "urn:sha256:9a887dc09caf2f2b2b947641509328a2ee6f25dcefb6b52efe178fe8aff4fb3a",
+      "@type": "prov:Entity",
+      "gooo:role": "frozen native source-bound three-choice curriculum",
+      "gooo:functionViews": 3072,
+      "gooo:completeIndividualInputs": 9216,
+      "gooo:nativeMainRevision": "774eabb226f88a317c523ce4efa24a08032066a9",
+      "gooo:freezeRevision": "99a83c96c6c68ae629957773ef526fcc4089e99d"
+    },
+    {
+      "@id": "urn:sha256:30367ac83e9d1129ea48dd1e108a3e25d6ed083c1782486cf99dcdbb8b78f6c4",
+      "@type": "prov:Entity",
+      "gooo:role": "frozen own v1 independent FP32 teacher weights",
+      "gooo:metadataSHA256": "bb8e6fb5d9d0b4d660ac862f8c0e6d0cbe91748cf78b491ea46b031dee1d25e8",
+      "gooo:studentInitializationUse": false
+    },
+    {
+      "@id": "gooo:three-choice-teacher-collection-20261002",
+      "@type": "prov:Activity",
+      "prov:used": [
+        {"@id": "urn:sha256:9a887dc09caf2f2b2b947641509328a2ee6f25dcefb6b52efe178fe8aff4fb3a"},
+        {"@id": "urn:sha256:30367ac83e9d1129ea48dd1e108a3e25d6ed083c1782486cf99dcdbb8b78f6c4"}
+      ],
+      "gooo:sourceRevision": "65313ae54b50aeb6203aa8c91cb48fc6cdfd68ac",
+      "gooo:goVersion": "go1.27.1",
+      "gooo:actualSessions": 4096,
+      "gooo:actualPredictions": 37394,
+      "gooo:actualCandidateAttempts": 13233,
+      "gooo:actualOrderedInterpreterInvocations": 211728,
+      "gooo:ciHintSupplied": false,
+      "gooo:studentOptimizerUpdates": 0,
+      "gooo:newNativeGenerationCalls": 0
+    },
+    {
+      "@id": "urn:sha256:3acc9f3f42756f03b630635fa74997b711ae84808a063be40d0c8009b2c1637c",
+      "@type": "prov:Entity",
+      "prov:wasGeneratedBy": {"@id": "gooo:three-choice-teacher-collection-20261002"},
+      "gooo:role": "complete actual teacher captures and reconstructed contexts"
+    },
+    {
+      "@id": "urn:sha256:38930441c45ec03336a66c670028208e525131f385699140d793da96cbf4028b",
+      "@type": "prov:Entity",
+      "prov:wasDerivedFrom": {"@id": "urn:sha256:3acc9f3f42756f03b630635fa74997b711ae84808a063be40d0c8009b2c1637c"},
+      "gooo:role": "source-preserving student supervision states",
+      "gooo:initialViewsAllSplits": 3072,
+      "gooo:uniqueActualFailureContinuationsTrainOnly": 7667,
+      "gooo:studentStateRows": 10739,
+      "gooo:derivedStudentPredictions": 0
+    },
+    {
+      "@id": "urn:sha256:dc1bc90a5468b2f45a4e32501f0814a73ee2be7de56481c1edea3b7d414bfc6a",
+      "@type": "prov:Entity",
+      "gooo:role": "independent zero-inference source/oracle/frontier/state audit",
+      "gooo:status": "PASS",
+      "gooo:scope": "Finite authored source and captured distributions; no new model prediction, student optimization, native compiled-Go execution or general language completeness claim."
+    }
+  ]
+}
