@@ -1,5 +1,21 @@
 # Gooo neural decision experiments
 
+## Shared local Gooo judge — fresh model comparison
+
+[Full results and limitations](docs/shared-three-judgment-results-20261003.md):
+3,200 actual MPS updates, six exports, 288 Go parity checks, 3,072 development
+predictions, and 96 immediate Gooo generation/runtime pairs. Shared FP32 raises
+initial finite completeness from 95/512 to 113/512 and reduces static ranked
+extra attempts from 1,572 to 1,469. Bilingual disagreement remains 255/256;
+development confidence and some families regress. All negative variants remain.
+
+The [public evidence](publication/shared-three-20261003/manifest.json) binds 1,116
+members, including all journals and 2,304/2,304 passing native expectations.
+CI verifies every archived byte and independently replays the six Go models.
+Runtime memory remains the expanded ABI; fewer training parameters are not a
+runtime memory reduction. [Storage amendment](docs/shared-three-storage-amendment-20261003.md)
+preserves the original zero-update failure and all older evidence.
+
 ## Three-choice Gooo construction — fresh students and actual Go kernels
 
 Released [Go SDK v0.2.13-experimental](https://github.com/kimjooyoon/gooo-decision-runtime/releases/tag/v0.2.13-experimental)

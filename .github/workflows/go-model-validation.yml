@@ -80,6 +80,19 @@ jobs:
             --teacher-curriculum "$RUNNER_TEMP/three-choice-training/own-three-teacher-curriculum-20261002" \
             --output "$RUNNER_TEMP/three-choice-model-audit.json" \
             --source-revision "$GITHUB_SHA"
+      - name: Verify all shared-judge bytes and replay six actual Go kernels
+        run: |
+          go run ./tools/package-shared-three --mode verify-bundle \
+            --output publication/shared-three-20261003
+          unzip -q publication/shared-three-20261003/evidence.zip -d "$RUNNER_TEMP/shared-three"
+          cp -R "$RUNNER_TEMP/shared-three/models/dense" "$RUNNER_TEMP/shared-three/training/dense/models"
+          cp -R "$RUNNER_TEMP/shared-three/models/shared-local" "$RUNNER_TEMP/shared-three/training/shared-local/models"
+          go run ./tools/audit-own-three-models --shared-experiment \
+            --models "$RUNNER_TEMP/shared-three/training" \
+            --dataset "$RUNNER_TEMP/three-choice-training/own-three-composition-curriculum-fixed-20261002/dataset.jsonl" \
+            --teacher-curriculum "$RUNNER_TEMP/three-choice-training/own-three-teacher-curriculum-20261002" \
+            --output "$RUNNER_TEMP/shared-three-model-audit.json" \
+            --source-revision "$GITHUB_SHA"
       - uses: actions/upload-artifact@v7
         with:
           name: three-choice-source-teacher-independent-audits
@@ -89,6 +102,7 @@ jobs:
             ${{ runner.temp }}/three-choice-training-input-audit.json
             ${{ runner.temp }}/three-choice-published-input-audit.json
             ${{ runner.temp }}/three-choice-model-audit.json
+            ${{ runner.temp }}/shared-three-model-audit.json
           if-no-files-found: error
       - name: Verify and independently audit the original cap-stopped SDK prefix
         run: |
