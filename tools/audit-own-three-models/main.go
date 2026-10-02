@@ -69,8 +69,13 @@ func main() {
 	teacher := flag.String("teacher-curriculum", "", "frozen actual teacher states")
 	output := flag.String("output", "", "fresh audit output")
 	revision := flag.String("source-revision", "", "clean exact Go audit source")
+	shared := flag.Bool("shared-experiment", false, "audit the fixed dense/shared-local experiment")
 	flag.Parse()
-	if err := audit(*models, *dataset, *teacher, *output, *revision); err != nil {
+	auditor := audit
+	if *shared {
+		auditor = auditShared
+	}
+	if err := auditor(*models, *dataset, *teacher, *output, *revision); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
