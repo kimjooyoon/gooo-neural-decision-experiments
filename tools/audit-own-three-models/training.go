@@ -83,6 +83,10 @@ func verifyStage(directory, arm, stage string, r stageReport) error {
 	if arm == "set-feedback" || arm == "dense" || arm == "shared-local" {
 		rows = 9715
 	}
+	return verifyStageRows(directory, arm, stage, r, rows)
+}
+
+func verifyStageRows(directory, arm, stage string, r stageReport, rows int) error {
 	if r.Steps != 800 || r.Epochs != 100 || r.Groups != 1024 || r.Rows != rows || len(r.History) != 100 || len(r.InitialSHA) != 64 || len(r.SelectedSHA) != 64 || !validTemperature(r.Temperature) || !finite(r.NLL) || r.Wall <= 0 || !finite(r.Wall) || r.CPU < 0 || !finite(r.CPU) || math.Abs(r.CPUPercent-r.CPU/r.Wall*100) > 1e-9 || r.RSS <= 0 || r.MPS <= 0 || r.Driver < r.MPS {
 		return errors.New("stage counts/cost scopes differ")
 	}
