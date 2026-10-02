@@ -11,6 +11,9 @@ import (
 const compactNativeSchema = "gooo/compact-shared-native-public-evidence/v1"
 
 func standaloneFile(name, schema string) bool {
+	if schema == wrapperSchema {
+		return name == "README.md" || name == "LICENSE" || name == "raw/report.json" || name == "process-metrics.json"
+	}
 	return strings.HasPrefix(name, "models/") || name == "README.md" || name == "LICENSE" ||
 		name == "training/go-audit.json" || name == "native/independent-consumption.json" ||
 		(schema == compactNativeSchema && (name == "native/paired-report.json" || name == "native/preexecution.json"))

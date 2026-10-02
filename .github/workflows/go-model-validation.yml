@@ -10,6 +10,35 @@ permissions:
   contents: read
 
 jobs:
+  bilingual-wrapper-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GOTOOLCHAIN: local
+      GOWORK: "off"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.27.1'
+          cache: false
+      - name: Verify the complete bounded wrapper archive
+        run: |
+          go run ./tools/package-shared-three --mode verify-bundle \
+            --output publication/bilingual-wrapper-audit-20261003
+          unzip -q publication/bilingual-wrapper-audit-20261003/evidence.zip \
+            -d "$RUNNER_TEMP/bilingual-wrapper"
+          cmp tools/verify-wrapper-audit/main.go "$RUNNER_TEMP/bilingual-wrapper/source/verifier/main.go"
+      - name: Independently replay every full input and model prediction
+        run: |
+          go run ./tools/verify-wrapper-audit \
+            --bundle "$RUNNER_TEMP/bilingual-wrapper" \
+            --output "$RUNNER_TEMP/bilingual-wrapper-verification.json"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: bilingual-wrapper-independent-replay
+          path: ${{ runner.temp }}/bilingual-wrapper-verification.json
+          if-no-files-found: error
   compact-native-receipt-consumption:
     runs-on: ubuntu-latest
     timeout-minutes: 10

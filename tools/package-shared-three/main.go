@@ -44,9 +44,12 @@ func must(err error) {
 	}
 }
 func read(path string) []byte {
+	return readBounded(path, 8<<20)
+}
+func readBounded(path string, limit int64) []byte {
 	s, err := os.Lstat(path)
 	must(err)
-	if !s.Mode().IsRegular() || s.Size() > 8<<20 {
+	if !s.Mode().IsRegular() || s.Size() > limit {
 		panic("bounded regular publication file required")
 	}
 	b, err := os.ReadFile(path)
@@ -184,8 +187,12 @@ func packInventory(all map[string]string, out, schema, scope string, capBytes in
 	must(err)
 	z := zip.NewWriter(f)
 	for _, name := range names {
-		raw := read(all[name])
-		privacy(name, raw)
+		limit := int64(8 << 20)
+		if schema == wrapperSchema {
+			limit = 32 << 20
+		}
+		raw := readBounded(all[name], limit)
+		publicationPrivacy(name, raw, schema)
 		m.Bytes += len(raw)
 		if m.Bytes > capBytes {
 			panic("public decoded cap")
@@ -218,10 +225,13 @@ func packInventory(all map[string]string, out, schema, scope string, capBytes in
 func verify(root string, standalone bool) {
 	var m manifest
 	must(json.Unmarshal(read(filepath.Join(root, "manifest.json")), &m))
-	wantCount, capBytes := 1116, 64<<20
+	wantCount, capBytes, memberCap := 1116, 64<<20, 8<<20
 	var expected map[string]string
 	if m.Schema == compactNativeSchema {
 		wantCount, capBytes, expected = 684, 32<<20, compactFiles("")
+	} else if m.Schema == wrapperSchema {
+		expected = wrapperFiles("", "", "", "")
+		wantCount, capBytes, memberCap = len(expected), 96<<20, 32<<20
 	} else if m.Schema != "gooo/shared-three-public-evidence/v1" {
 		panic("unknown evidence schema")
 	}
@@ -251,7 +261,7 @@ func verify(root string, standalone bool) {
 				panic("unexpected compact inventory member")
 			}
 		}
-		if f.Name != pin.Name || int(f.UncompressedSize64) != pin.Bytes || pin.Bytes > 8<<20 || filepath.IsAbs(pin.Name) || strings.Contains(pin.Name, "..") || (i > 0 && m.Files[i-1].Name >= pin.Name) {
+		if f.Name != pin.Name || int(f.UncompressedSize64) != pin.Bytes || pin.Bytes > memberCap || filepath.IsAbs(pin.Name) || strings.Contains(pin.Name, "..") || (i > 0 && m.Files[i-1].Name >= pin.Name) {
 			panic("closed archive member identity")
 		}
 		in, err := f.Open()
@@ -262,7 +272,7 @@ func verify(root string, standalone bool) {
 		if len(b) != pin.Bytes || threecohort.SHA(b) != pin.SHA {
 			panic("member SHA/size/CRC mismatch")
 		}
-		privacy(pin.Name, b)
+		publicationPrivacy(pin.Name, b, m.Schema)
 		total += len(b)
 		if standalone && standaloneFile(pin.Name, m.Schema) {
 			if !bytes.Equal(read(filepath.Join(root, pin.Name)), b) {
@@ -276,9 +286,12 @@ func verify(root string, standalone bool) {
 	fmt.Printf("PASS: %d members, %d decoded bytes, %d ZIP bytes\n", len(m.Files), total, len(raw))
 }
 func main() {
-	mode := flag.String("mode", "verify", "pack, pack-compact-native, verify, or verify-bundle")
+	mode := flag.String("mode", "verify", "pack, pack-compact-native, pack-wrappers, verify, or verify-bundle")
 	training := flag.String("training", "", "training capture")
 	native := flag.String("native", "", "native capture")
+	dataset := flag.String("dataset", "", "frozen wrapper-audit dataset")
+	dense := flag.String("dense-models", "", "wrapper-audit dense models")
+	shared := flag.String("shared-models", "", "wrapper-audit compact shared models")
 	out := flag.String("output", "", "fresh stage or existing stage for verify")
 	flag.Parse()
 	if *out == "" {
@@ -289,6 +302,8 @@ func main() {
 		pack(*training, *native, *out)
 	case "pack-compact-native":
 		packCompact(*native, *out)
+	case "pack-wrappers":
+		packWrappers(*native, *dataset, *dense, *shared, *out)
 	case "verify":
 		verify(*out, true)
 	case "verify-bundle":
