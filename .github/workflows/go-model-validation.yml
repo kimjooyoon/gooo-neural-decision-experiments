@@ -90,6 +90,24 @@ jobs:
             ${{ runner.temp }}/three-choice-published-input-audit.json
             ${{ runner.temp }}/three-choice-model-audit.json
           if-no-files-found: error
+      - name: Verify and independently audit the original cap-stopped SDK prefix
+        run: |
+          go run ./tools/package-three-sdk --mode verify \
+            --bundle publication/own-three-choice-sdk-prefix-20261002.zip \
+            --manifest publication/own-three-choice-sdk-prefix-bundle-20261002.json \
+            --destination "$RUNNER_TEMP/three-choice-sdk-prefix"
+          cmp "$RUNNER_TEMP/three-choice-sdk-prefix/dataset.jsonl" "$RUNNER_TEMP/three-choice-training/own-three-composition-curriculum-fixed-20261002/dataset.jsonl"
+          go run ./tools/own-three-sdk-study \
+            --dataset "$RUNNER_TEMP/three-choice-training/own-three-composition-curriculum-fixed-20261002/dataset.jsonl" \
+            --models models/own-three-feedback-v1 \
+            --output "$RUNNER_TEMP/three-choice-sdk-prefix/own-three-sdk-study-20261002" \
+            --audit-report "$RUNNER_TEMP/three-choice-sdk-prefix-audit.json"
+          cmp publication/own-three-choice-sdk-prefix-audit-20261002.json "$RUNNER_TEMP/three-choice-sdk-prefix-audit.json"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: three-choice-sdk-original-prefix-independent-audit
+          path: ${{ runner.temp }}/three-choice-sdk-prefix-audit.json
+          if-no-files-found: error
   own-joint-feedback-v2-native:
     runs-on: ubuntu-latest
     timeout-minutes: 15

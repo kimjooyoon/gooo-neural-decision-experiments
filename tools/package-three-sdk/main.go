@@ -54,6 +54,7 @@ func main() {
 	stage := flag.String("stage", "publication/hf-own-three-sdk-prefix-20261002", "fresh seven-file HF appendix")
 	revision := flag.String("revision", "", "immutable public HF appendix commit")
 	receipt := flag.String("receipt", "", "fresh anonymous byte receipt")
+	destination := flag.String("destination", "", "optional fresh byte-verified evidence expansion")
 	flag.Parse()
 	var err error
 	switch *mode {
@@ -61,6 +62,9 @@ func main() {
 		err = pack(*bundle, *index, *audit)
 	case "verify":
 		err = verify(*bundle, *index)
+		if err == nil && *destination != "" {
+			err = expand(*bundle, *index, *destination)
+		}
 	case "stage-hf":
 		err = stageHF(*bundle, *index, *audit, *stage)
 	case "verify-hf":
@@ -304,5 +308,61 @@ func verify(bundle, index string) error {
 		}
 	}
 	fmt.Printf("PASS: all %d complete original decoded files, %d bytes; ZIP %d bytes; private-text and SHA/CRC checks; zero new model calls\n", len(m.Files), m.Bytes, m.Archive.Bytes)
+	return nil
+}
+
+// expand runs only after full streaming privacy/SHA/CRC verification. The
+// immutable closed manifest prevents traversal or unknown archive members.
+func expand(bundle, index, destination string) error {
+	if _, err := os.Lstat(destination); !os.IsNotExist(err) {
+		return errors.New("fresh evidence expansion required")
+	}
+	var m manifest
+	if err := read(index, &m); err != nil {
+		return err
+	}
+	if err := validate(m); err != nil {
+		return err
+	}
+	z, err := zip.OpenReader(bundle)
+	if err != nil {
+		return err
+	}
+	defer z.Close()
+	if len(z.File) != len(m.Files) {
+		return errors.New("closed expansion inventory differs")
+	}
+	if err = os.MkdirAll(destination, 0755); err != nil {
+		return err
+	}
+	for i, entry := range z.File {
+		if entry.Name != m.Files[i].Name || entry.Mode() != 0644 || entry.UncompressedSize64 != uint64(m.Files[i].Pin.Bytes) {
+			return errors.New("closed expanded member identity differs")
+		}
+		name := filepath.Join(destination, filepath.FromSlash(entry.Name))
+		if err = os.MkdirAll(filepath.Dir(name), 0755); err != nil {
+			return err
+		}
+		in, err := entry.Open()
+		if err != nil {
+			return err
+		}
+		out, err := os.OpenFile(name, os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0644)
+		if err != nil {
+			in.Close()
+			return err
+		}
+		var buffer [32768]byte
+		n, copyErr := io.CopyBuffer(out, io.LimitReader(in, m.Files[i].Pin.Bytes+1), buffer[:])
+		in.Close()
+		out.Close()
+		if copyErr != nil || n != m.Files[i].Pin.Bytes {
+			return errors.New("complete expanded byte count differs")
+		}
+		p, err := threestudent.FilePin(name)
+		if err != nil || p != m.Files[i].Pin {
+			return errors.New("expanded original bytes differ")
+		}
+	}
 	return nil
 }

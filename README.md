@@ -54,6 +54,14 @@ bytes remain retained; the full 11,264-session comparison and dependent native
 execution are incomplete. Paired-language initial mask disagreement is 256/256,
 so bilingual invariant judgment is not established. Prefix CPU/RSS are unavailable;
 future failed attempts now retain terminal resource counters as well.
+The [public stopped-prefix appendix](https://huggingface.co/asketeddy/gooo-three-choice-feedback-tiny-v1/tree/ba1f540ee5bf75fceab53d1446b9385c793a4396/research/sdk-prefix-20261002)
+preserves all 25 original evidence members in a complete byte-verified ZIP.
+[Anonymous appendix verification](publication/own-three-choice-sdk-prefix-hf-byte-verification-20261002.json)
+checks all seven uploaded files at its immutable HF revision. The original
+model tensors remain unchanged. The separate
+[storage continuation plan](docs/own-three-choice-sdk-storage-continuation-preregistration-20261002.md)
+fixes the exact 2,485 missing identities, preserves the original resource failure,
+and requires complete combined audit before any dependent native execution.
 
 ## Own feedback Gooo model v2 — preceding two-choice experiment
 
