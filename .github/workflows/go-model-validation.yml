@@ -134,6 +134,24 @@ jobs:
             ${{ runner.temp }}/three-choice-sdk-combined-audit.json
             ${{ runner.temp }}/three-choice-sdk-bilingual-audit.json
           if-no-files-found: error
+      - name: Verify and reconstruct every actual native generation and compiled Go output
+        run: |
+          go run ./tools/package-three-sdk --mode native-verify \
+            --destination "$RUNNER_TEMP/three-choice-native"
+          mv "$RUNNER_TEMP/three-choice-sdk-tail/own-three-sdk-storage-tail-20261002" "$RUNNER_TEMP/three-choice-training/own-three-sdk-storage-tail-20261002"
+          go run ./tools/own-three-sdk-study \
+            --dataset "$RUNNER_TEMP/three-choice-training/own-three-composition-curriculum-fixed-20261002/dataset.jsonl" \
+            --models models/own-three-feedback-v1 \
+            --prefix "$RUNNER_TEMP/three-choice-training/own-three-sdk-study-20261002" \
+            --sdk-tail "$RUNNER_TEMP/three-choice-training/own-three-sdk-storage-tail-20261002" \
+            --output "$RUNNER_TEMP/three-choice-native/own-three-native-execution-20261002" \
+            --native-audit-report "$RUNNER_TEMP/three-choice-native-independent-audit.json"
+          cmp publication/own-three-choice-native-execution-audit-20261002.json "$RUNNER_TEMP/three-choice-native-independent-audit.json"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: three-choice-native-generation-and-compiled-output-independent-audit
+          path: ${{ runner.temp }}/three-choice-native-independent-audit.json
+          if-no-files-found: error
   own-joint-feedback-v2-native:
     runs-on: ubuntu-latest
     timeout-minutes: 15

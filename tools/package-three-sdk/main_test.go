@@ -3,7 +3,46 @@ package main
 import (
 	"strings"
 	"testing"
+
+	"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/threefeedback"
+	"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/threestudent"
 )
+
+func TestClosedActualNativeManifestPreservesOriginalFullDenominator(t *testing.T) {
+	m := manifest{Schema: "gooo/own-three-native-public-bundle/v1", Status: "PASS", Producer: nativeProducer, NativeRevision: nativeMain, NativeCalls: 640, GoCalls: 640, Invocations: 10240, Predictions: nativePredictions, Values: 10240, ModelsRevision: baseHF, Protocol: threefeedback.ProtocolSHA, Archive: threestudent.Pin{SHA: strings.Repeat("a", 64), Bytes: 1}}
+	for _, name := range nativeNames() {
+		sha := strings.Repeat("a", 64)
+		if name == "protocol.md" {
+			sha = threefeedback.ProtocolSHA
+		}
+		if name == "amendment.md" {
+			sha = tailAmendmentSHA
+		}
+		m.Files = append(m.Files, member{name, threestudent.Pin{SHA: sha, Bytes: 1}})
+		m.Bytes++
+	}
+	if len(m.Files) != 1290 || validateNative(m) != nil {
+		t.Fatal("complete original native closed manifest required")
+	}
+	for _, mutate := range []func(*manifest){
+		func(m *manifest) { m.NativeCalls-- },
+		func(m *manifest) { m.GoCalls-- },
+		func(m *manifest) { m.Invocations-- },
+		func(m *manifest) { m.Sessions = 640 },
+		func(m *manifest) { m.Predictions-- },
+		func(m *manifest) { m.Status = "PREFIX_VERIFIED_INCOMPLETE" },
+		func(m *manifest) { m.Files = m.Files[:len(m.Files)-1] },
+	} {
+		changed := m
+		mutate(&changed)
+		if validateNative(changed) == nil {
+			t.Fatal("incomplete or reclassified native execution accepted")
+		}
+	}
+	if validate(m) == nil || validateTail(m) == nil {
+		t.Fatal("native phase substituted for immutable SDK prefix/tail")
+	}
+}
 
 func TestDecodedPrivacyAndClosedPrefixManifest(t *testing.T) {
 	for _, text := range []string{`{"text":"\u002fUsers\u002fprivate"}`, `{"text":"github_pat_sensitive"}`, `{"text":"synthetic","text":"duplicate"}`} {

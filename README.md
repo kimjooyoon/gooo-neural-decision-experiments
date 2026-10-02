@@ -28,7 +28,7 @@ evaluations and 7,667 unique failure-conditioned train states. Its separate
 offline audit reconstructs all outputs, seeded frontiers and complete contexts.
 SDK session median/p95 are 0.229/0.577 ms, including search and evaluations.
 The three-choice SDK comparison below is complete after a separate storage
-continuation; native behavior measurement remains pending. No default model is promoted.
+continuation; the original native phase is now completed below. No default model is promoted.
 Full source/teacher raw evidence is packaged with
 closed SHA/CRC/privacy checks and retains the first failed native-export prefix.
 The existing v2 models below retain their completed SDK/native study.
@@ -38,7 +38,7 @@ completed 4,800 local MPS updates from one fresh Go initializer and preserved al
 nine FP/PTQ/QAT exports. All nine passed actual Go numerical parity and zero-heap
 kernel probes. The complete 642-member compressed training evidence preserves
 all features, update/epoch receipts and negative variants. Full SDK
-behavior is reported separately below; native measurement remains pending and no
+behavior and actual native measurements are reported separately below; no
 new default is promoted by the training/kernel phase.
 The [public three-choice model edition](https://huggingface.co/asketeddy/gooo-three-choice-feedback-tiny-v1/tree/a7a9170370da3e183c1831ae4442e88870ea3a0d)
 now retains all nine models and both complete raw-evidence bundles.
@@ -75,7 +75,7 @@ improve. PTQ/QAT add search work. The separate
 finds different initial outputs in all 256 selected-model development pairs;
 mask differences and actual output differences are counted separately. Tail
 collection measured 11.662 s, 137.55% of one CPU core and 297.7 MiB lifetime RSS,
-including original audit and planning. Full native validation is still pending;
+including original audit and planning. Native validation was pending at the SDK boundary;
 finite eight-mask completeness does not establish general-language judgment.
 The [public missing-only appendix](https://huggingface.co/asketeddy/gooo-three-choice-feedback-tiny-v1/tree/0bc97aeb97c1d38b6f860f8f3ef88f05a981084c/research/sdk-storage-tail-20261002)
 retains the full tail and negative bilingual findings with the existing model
@@ -83,8 +83,29 @@ weights unchanged. [Anonymous byte verification](publication/own-three-choice-sd
 matches all seven uploaded files at that immutable revision.
 The [domain completeness receipt](publication/own-three-choice-domain-completeness-receipt-20261002.json)
 records declaration, generation, reverse observation, use-case, boundary and
-provenance evidence separately. It preserves unknown compiler-schema binding
-and pending native execution; no single universal success score is asserted.
+provenance evidence separately. That historical receipt preserves unknown
+compiler-schema binding and native execution pending at that point.
+
+The [actual native phase](docs/own-three-choice-native-execution-results-20261002.md)
+now completes 640 real Gooo generations, 640 Go compile-and-run invocations and
+10,240 ordered outputs with 1,760 actual model predictions. The
+[zero-call independent audit](publication/own-three-choice-native-execution-audit-20261002.json)
+binds every original input, source, typed path, SDK observation and generated-Go
+output. Selected extra candidates fall 402→301 against disconnected enumeration
+(-25.12%); four-candidate finite completion rises 56.25%→76.56%. First-candidate
+completion remains weak, and selected initial outputs disagree in all 64/64
+Korean/English pairs. Full-budget TDD completes every finite contract.
+
+Selected codegen median is 12.922 ms, with internal native work at 2.322 ms,
+recorded prediction mean 26.743 µs and median codegen child RSS 18.81 MiB.
+Go compilation/run median is 443.224 ms. Disconnected model-load/context work
+and predictions are zero. No total compiler speedup or host-utilization increase
+is asserted. The [closed public raw bundle](publication/own-three-choice-native-execution-bundle-20261002.json)
+preserves all 1,284 original raw files and supplementary audit/protocol/PROV-O
+evidence. CI independently reconstructs all 640 pairs without new operational
+calls. The [native domain-completeness delta](publication/own-three-choice-native-domain-completeness-delta-20261002.json)
+records completed finite generation/reverse execution, preserved bilingual
+negatives and the still-unknown compiler declaration/receipt-schema binding.
 
 ## Own feedback Gooo model v2 — preceding two-choice experiment
 

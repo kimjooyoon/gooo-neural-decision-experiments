@@ -30,6 +30,9 @@ func tailNames() []string {
 	return names
 }
 func validateTail(m manifest) error {
+	if m.NativeRevision != "" || m.NativeCalls != 0 || m.GoCalls != 0 || m.Invocations != 0 {
+		return errors.New("original SDK tail cannot claim native execution")
+	}
 	if m.Schema != "gooo/own-three-sdk-tail-public-bundle/v1" || m.Status != "PASS_WITH_SEPARATE_STORAGE_AMENDMENT" || m.Producer != tailProducer || m.Sessions != 2485 || m.Predictions != 9142 || m.Values != 148736 || m.ModelsRevision != baseHF || m.Protocol != threefeedback.ProtocolSHA || len(m.Files) != 14 || m.Bytes > 256<<20 || m.Archive.Bytes > 64<<20 {
 		return errors.New("closed actual storage tail manifest differs")
 	}

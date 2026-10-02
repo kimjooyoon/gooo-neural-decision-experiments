@@ -1,0 +1,83 @@
+{
+  "@context": {
+    "prov": "http://www.w3.org/ns/prov#",
+    "gooo": "https://github.com/kimjooyoon/gooo-neural-decision-experiments#"
+  },
+  "@graph": [
+    {
+      "@id": "gooo:three-choice-frozen-authored-curriculum",
+      "@type": "prov:Entity",
+      "gooo:sha256": "9a887dc09caf2f2b2b947641509328a2ee6f25dcefb6b52efe178fe8aff4fb3a",
+      "gooo:nativeConfiguration": 20,
+      "gooo:nativeOrderedViews": 128,
+      "gooo:casesPerView": 16
+    },
+    {
+      "@id": "gooo:three-choice-complete-sdk-prerequisite",
+      "@type": "prov:Entity",
+      "gooo:uniqueSessions": 11264,
+      "gooo:status": "PASS_WITH_SEPARATE_STORAGE_AMENDMENT",
+      "gooo:originalFailurePreserved": true,
+      "gooo:publicEvidence": "https://huggingface.co/asketeddy/gooo-three-choice-feedback-tiny-v1/tree/0bc97aeb97c1d38b6f860f8f3ef88f05a981084c/research/sdk-storage-tail-20261002"
+    },
+    {
+      "@id": "gooo:unchanged-three-choice-native-models",
+      "@type": "prov:Entity",
+      "gooo:immutableModelsRevision": "a7a9170370da3e183c1831ae4442e88870ea3a0d",
+      "gooo:newOptimizerUpdates": 0,
+      "gooo:calibrationSelectedCandidate": "set-feedback/fp32"
+    },
+    {
+      "@id": "gooo:three-choice-native-runner",
+      "@type": "prov:SoftwareAgent",
+      "gooo:sourceRevision": "7184fe01327f491aad98027d97fc973e2f0ae645",
+      "gooo:nativeMainRevision": "774eabb226f88a317c523ce4efa24a08032066a9",
+      "gooo:sdk": "v0.2.13-experimental",
+      "gooo:go": "go1.27.1"
+    },
+    {
+      "@id": "gooo:three-choice-native-generation-execution",
+      "@type": "prov:Activity",
+      "prov:wasAssociatedWith": {"@id": "gooo:three-choice-native-runner"},
+      "prov:used": [
+        {"@id": "gooo:three-choice-frozen-authored-curriculum"},
+        {"@id": "gooo:three-choice-complete-sdk-prerequisite"},
+        {"@id": "gooo:unchanged-three-choice-native-models"}
+      ],
+      "gooo:actualNativeGenerations": 640,
+      "gooo:actualCompiledGoExecutions": 640,
+      "gooo:actualOrderedOutputs": 10240,
+      "gooo:actualModelPredictions": 1760,
+      "gooo:newOptimizerUpdates": 0,
+      "gooo:collectorWallNs": 331996478750,
+      "gooo:collectorOwnCpuNs": 40630430000,
+      "gooo:collectorLifetimePeakRssBytes": 192544768,
+      "gooo:rawNativePhaseBytes": 43696881
+    },
+    {
+      "@id": "gooo:three-choice-native-independent-evidence",
+      "@type": "prov:Entity",
+      "prov:wasGeneratedBy": {"@id": "gooo:three-choice-native-generation-execution"},
+      "gooo:evidence": "publication/own-three-choice-native-execution-audit-20261002.json",
+      "gooo:status": "PASS",
+      "gooo:replayNewNativeCalls": 0,
+      "gooo:replayNewGoCalls": 0,
+      "gooo:replayNewModelPredictions": 0,
+      "gooo:wholeRetainedRawBytes": 990581179,
+      "gooo:amendedRawCapBytes": 2147483648,
+      "gooo:defaultModelPromoted": false
+    },
+    {
+      "@id": "gooo:three-choice-native-negative-bilingual-observation",
+      "@type": "prov:Entity",
+      "prov:wasDerivedFrom": {"@id": "gooo:three-choice-native-independent-evidence"},
+      "gooo:selectedInitialOutputDisagreementPairs": 64,
+      "gooo:selectedPairDenominator": 64,
+      "gooo:selectedDifferentOrderedCaseValues": 963,
+      "gooo:orderedCasePairDenominator": 1024,
+      "gooo:selectorChanged": false,
+      "gooo:developmentRetraining": false,
+      "gooo:generalNaturalLanguageCapabilityClaimed": false
+    }
+  ]
+}

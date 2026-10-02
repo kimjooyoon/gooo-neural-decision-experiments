@@ -44,6 +44,10 @@ type manifest struct {
 	ModelsRevision string           `json:"existing_hf_models_revision"`
 	Protocol       string           `json:"protocol_sha256"`
 	Scope          string           `json:"scope"`
+	NativeRevision string           `json:"native_revision,omitempty"`
+	NativeCalls    int              `json:"actual_native_generations,omitempty"`
+	GoCalls        int              `json:"actual_compiled_go_executions,omitempty"`
+	Invocations    int              `json:"actual_ordered_function_invocations,omitempty"`
 }
 
 func main() {
@@ -56,6 +60,20 @@ func main() {
 	receipt := flag.String("receipt", "", "fresh anonymous byte receipt")
 	destination := flag.String("destination", "", "optional fresh byte-verified evidence expansion")
 	flag.Parse()
+	if strings.HasPrefix(*mode, "native-") {
+		if *bundle == "publication/own-three-choice-sdk-prefix-20261002.zip" {
+			*bundle = "publication/own-three-choice-native-execution-20261002.zip"
+		}
+		if *index == "publication/own-three-choice-sdk-prefix-bundle-20261002.json" {
+			*index = "publication/own-three-choice-native-execution-bundle-20261002.json"
+		}
+		if *audit == "publication/own-three-choice-sdk-prefix-audit-20261002.json" {
+			*audit = "publication/own-three-choice-native-execution-audit-20261002.json"
+		}
+		if *stage == "publication/hf-own-three-sdk-prefix-20261002" {
+			*stage = "publication/hf-own-three-native-execution-20261002"
+		}
+	}
 	if strings.HasPrefix(*mode, "tail-") {
 		if *bundle == "publication/own-three-choice-sdk-prefix-20261002.zip" {
 			*bundle = "publication/own-three-choice-sdk-storage-tail-20261002.zip"
@@ -94,6 +112,17 @@ func main() {
 		err = stageTailHF(*bundle, *index, *audit, *stage)
 	case "tail-verify-hf":
 		err = verifyHFAppendix(*stage, *revision, *receipt, tailRemotePrefix, "gooo/own-three-sdk-tail-hf-appendix/v1", "gooo/own-three-sdk-tail-hf-byte-verification/v1")
+	case "native-pack":
+		err = packNative(*bundle, *index, *audit)
+	case "native-verify":
+		err = verifyWith(*bundle, *index, validateNative)
+		if err == nil && *destination != "" {
+			err = expandWith(*bundle, *index, *destination, validateNative)
+		}
+	case "native-stage-hf":
+		err = stageNativeHF(*bundle, *index, *audit, *stage)
+	case "native-verify-hf":
+		err = verifyHFAppendix(*stage, *revision, *receipt, nativeRemotePrefix, "gooo/own-three-native-hf-appendix/v1", "gooo/own-three-native-hf-byte-verification/v1")
 	default:
 		err = errors.New("unknown prefix publication mode")
 	}
@@ -255,6 +284,9 @@ func pack(bundle, index, audit string) error {
 	return verify(bundle, index)
 }
 func validate(m manifest) error {
+	if m.NativeRevision != "" || m.NativeCalls != 0 || m.GoCalls != 0 || m.Invocations != 0 {
+		return errors.New("original SDK prefix cannot claim native execution")
+	}
 	if m.Schema != "gooo/own-three-sdk-prefix-public-bundle/v1" || m.Status != "PREFIX_VERIFIED_INCOMPLETE" || m.Producer != producer || m.Sessions != 8779 || m.Predictions != 33388 || m.Values != 510256 || m.ModelsRevision != baseHF || m.Protocol != threefeedback.ProtocolSHA || len(m.Files) != 25 || m.Bytes > 768<<20 || m.Archive.Bytes > 64<<20 {
 		return errors.New("closed original prefix manifest differs")
 	}
