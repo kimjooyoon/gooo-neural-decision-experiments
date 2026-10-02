@@ -3,7 +3,10 @@
 Status: the original platform difference is retained below. The subsequent
 [explicit-arithmetic comparison](full-input-separate-arithmetic-results-20261003.md)
 passes all 18,432 paired rows, including complete rankings and intermediate
-arrays. SDK/native adoption remains next. Optimizer updates for both follow-ups: zero.
+arrays. SDK v0.2.15 now reproduces those observations on both platforms;
+[the complete SDK reports](../publication/full-input-sdk-replay-20261003/README.md)
+record 36,864 calls per platform. Native compiler adoption remains next.
+Optimizer updates for both follow-ups and the SDK replay: zero.
 
 The original full-input model comparison is retained in
 [the initial report](full-input-judgment-initial-results-20261003.md). Its Linux

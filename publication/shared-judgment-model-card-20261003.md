@@ -52,8 +52,10 @@ Gooo 선언을 설계도, 작은 모델을 조립 순서를 고르는 장치로 
 새 모델을 arm64와 Linux에서 대조한 결과, 첫 선택은 같았고 후순위까지 포함한
 272개 후보 순위에 차이가 있었습니다. 이후 반올림 시점을 명시한 규칙으로
 147,456회 호출을 대조했고, 18,432개 입력 쌍의 계산값과 전체 순위가 모두
-일치했습니다. SDK·컴파일러 반영이 다음 단계입니다. 현재 사용 가능한 V3 모델
-경로는 아래 사용 예시에 고정된 리비전으로 안내합니다.
+일치했습니다. 새 계약은 SDK v0.2.15로 공개했고, 로컬과 Linux에서 각각
+18,432개 입력·36,864회 판단으로 연구 결과를 재현했습니다. 컴파일러는 현재
+SDK v0.2.14를 사용합니다. 실제 Gooo 생성·실행 연결이 다음 단계이며, 현재
+컴파일러에 쓸 V3 모델은 아래 사용 예시에 고정된 리비전으로 안내합니다.
 
 ## What we want this to contribute
 
@@ -67,6 +69,27 @@ For the latest study, a first path is complete when it satisfies all 16 supplied
 examples for that input. A result of 368/512 therefore describes that specific
 authored task collection. Larger programs, broader types and reusable learned
 constructions are the next language questions.
+
+Model probabilities describe which permitted path the judge favors. Finite
+coverage counts the supplied examples that pass. An unresolved observation
+stays `UNKNOWN` in its own receipt dimension. Keeping these meanings visible
+helps the system identify the next useful experiment.
+
+## Choose an entry point
+
+| What you want to do | Compatible starting point |
+| --- | --- |
+| Generate with the current Gooo compiler | Pinned compact V3 bundle in the usage example below; compiler SDK v0.2.14 |
+| Explore the new V3/V4 arithmetic contract in Go | [SDK v0.2.15](https://github.com/kimjooyoon/gooo-decision-runtime/releases/tag/v0.2.15-experimental) and [explicit-arithmetic models](research/full-input-separate-20261003/README.md) |
+| Follow the current language work | [Language guide](https://github.com/kimjooyoon/meta-ontology-go/blob/dev/docs/language-direction.ko.md), [experiment repository](https://github.com/kimjooyoon/gooo-neural-decision-experiments) and the dated appendices here |
+
+SDK release source `59c8d342da4475506b90954469aa201f85cadeb3` passed complete
+replay on darwin/arm64 and linux/amd64: each made 36,864 predictions over 18,432
+frozen inputs, matching intermediate values, probabilities and full rankings.
+[Both original SDK reports](research/full-input-sdk-20261003/README.md) and
+[Linux CI](https://github.com/kimjooyoon/gooo-decision-runtime/actions/runs/37070241916)
+are public. This stage performed zero training updates. Actual native V4
+generation and execution are the next integration step.
 
 ## New full-input research exports — 2026-10-03
 
@@ -98,8 +121,8 @@ and native generation need separate measurements for these new artifacts.
 
 V4 compact artifacts use `triple_semantic_context_bag_v4_joint_v1` and the
 [research Go runtime](https://github.com/kimjooyoon/gooo-neural-decision-experiments/commit/d23bd7e9e9fa3f197ffb5ee8d10872ad982e29ca).
-Publishing the matching SDK extraction, completing the remaining split/form
-comparisons and observing actual native compiler execution are subsequent steps.
+The matching SDK v0.2.15 is published with complete numerical replay. Remaining
+split/form comparisons and actual native compiler execution are subsequent steps.
 The existing native measurements below belong to their pinned earlier models.
 
 The subsequent [Linux comparison](research/full-input-platform-20261003/README.md)
@@ -113,7 +136,7 @@ probability bits and complete rankings under `float32_separate_v1`. Original
 first-path completeness and extra ranked attempts stay unchanged; partial
 coverage shifts in both directions compared with legacy arm64 arithmetic.
 Converted metadata and complete four-lane journals are public in that appendix.
-SDK and native compiler adoption remain the next runtime work.
+The SDK replay reproduces these observations; native compiler adoption follows.
 
 ## How the model is used
 
@@ -156,8 +179,10 @@ feedback rows. Quality numbers below describe this known development cohort.
 | `evidence.zip`, `go-audit.json`, `manifest.json` | Original training and native study evidence | Go audit tools in the research repository |
 | `research/compact-runtime-20261003/` | Exact representation parity and kernel measurements | SDK v0.2.14-experimental |
 | `research/compact-native-20261003/` | Actual paired Gooo generation and compiled execution | Compiler and independent receipt reader |
-| `research/full-input-initial-20261003/` | Four-arm study: full inputs, twelve exports and original observations | Research runtime; V4 SDK/compiler adoption pending |
+| `research/full-input-initial-20261003/` | Four-arm study: full inputs, twelve exports and original observations | Research runtime and SDK v0.2.15; native V4 adoption pending |
 | `research/full-input-platform-20261003/` | Retained Linux replay and complete ranking diagnosis | Offline Go diagnostic reader |
+| `research/full-input-separate-20261003/` | Explicit arithmetic, paired observations and converted metadata | Research runtime and SDK v0.2.15 |
+| `research/full-input-sdk-20261003/` | Complete local/Linux SDK replay reports | SDK release source `59c8d34` |
 
 Compact files use `gooo/tiny-shared-three-choice-path-model/v1` metadata and
 three tensors: 8×256 input weights, eight biases and 2×8 output weights.
@@ -317,8 +342,8 @@ Compact native collector: `7e9be4489d15663cbac8f3e71bc02d2e4649dfe5`.
 Immutable compact model edition: `985999a89caba6a31cc7147f66ba29a5ce76a1d9`.
 Immutable native appendix edition: `37db3a1f8a06669081a370ee1e7b23a64cbc00fb`.
 
-Next work starts with the observed numerical portability issue and the remaining
-full-input evaluations, followed by measured SDK/compiler adoption. Korean/English
+Next work connects the published SDK to native generation and execution while
+continuing full-input evaluations and operation-order representation work. Korean/English
 intent alignment, more expressive Gooo construction, per-axis before/after
 observations and serving costs guide the wider development.
 Repeated successful structures may later become reusable language abstractions.

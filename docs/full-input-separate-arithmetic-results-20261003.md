@@ -90,9 +90,12 @@ intermediate arrays. The packer scans decoded text for private paths and tokens.
 
 Use the matching research runtime and
 `models/compact/<arm>/<variant>/model.json` from this appendix to select the new
-contract. Expanded artifacts live under `models/expanded/`. The published SDK
-v0.2.14 and native compiler still use their earlier V3 contract. Their adoption
-work must carry this identity through actual generated-Go execution.
+contract. Expanded artifacts live under `models/expanded/`.
+[SDK v0.2.15](https://github.com/kimjooyoon/gooo-decision-runtime/releases/tag/v0.2.15-experimental)
+now supports these contracts; its [complete replay reports](../publication/full-input-sdk-replay-20261003/README.md)
+record exact agreement on both platforms. The native compiler currently uses
+SDK v0.2.14 and its earlier V3 contract. Its next integration stage carries
+feature/arithmetic identity through actual generated-Go execution.
 
 The original legacy CI comparator remains exact and continues to report its
 known platform failure. The new arithmetic has its own paired acceptance check.

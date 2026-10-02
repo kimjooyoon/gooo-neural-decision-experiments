@@ -113,8 +113,10 @@ the source representation or a richer intent representation.
 
 No new Gooo native generation is counted in this initial audit. Existing native
 execution evidence belongs to the earlier model editions. V4 loading is present
-in the research runtime; publishing the SDK extraction and measuring actual
-compiler generation/execution are subsequent protocol steps.
+in the research runtime and the subsequently published SDK v0.2.15.
+[The SDK replay](../publication/full-input-sdk-replay-20261003/README.md) verifies
+all frozen inputs on arm64 and Linux. Actual compiler generation/execution with
+the new contracts remains a subsequent protocol step.
 
 ## Resource observations
 

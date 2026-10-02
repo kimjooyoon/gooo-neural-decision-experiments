@@ -50,7 +50,22 @@ curves. The [explicit-arithmetic follow-up](docs/full-input-separate-arithmetic-
 now pairs 147,456 actual predictions with unchanged weights: all 18,432 input
 pairs match exactly in intermediate values, scores and candidate order under the
 new rule. First-path completion and extra attempts stay unchanged. The original
-failure remains reproducible; SDK/native adoption is the next runtime step.
+failure remains reproducible. The matching SDK is now published; native compiler
+adoption is the next runtime step.
+
+### From research code to the public Go SDK
+
+[SDK v0.2.15-experimental](https://github.com/kimjooyoon/gooo-decision-runtime/releases/tag/v0.2.15-experimental)
+adds V4 input features and explicit arithmetic. At its release source `59c8d34`,
+local arm64 and Linux CI each processed 18,432 complete inputs with 36,864 actual
+predictions. Both matched the frozen intermediate values, probabilities and
+full candidate rankings. [Complete SDK reports](publication/full-input-sdk-replay-20261003/README.md)
+retain the two observations and their source/artifact identities.
+
+The current compiler uses SDK v0.2.14 and the earlier V3 bundle. The
+[registered next stage](docs/full-input-sdk-native-protocol-20261003.md) plans
+400 generations and 800 compiled executions with the new contracts. Those are
+planned counts; the completed SDK replay above measures numerical transfer.
 
 ### Motivating diagnosis: input phrasing changes the chosen path
 
@@ -86,8 +101,8 @@ its own prediction count, separate from the original collection.
 | --- | --- | --- |
 | Does the new representation help path selection? | Original-input FP32 completion rose 113→368 out of 512; extra ranked attempts fell 1,469→186 | Remaining forms/splits, new tasks and the retained operation-order alias |
 | Do Korean/English intentions lead to valid behavior? | Bag-original FP32 chose valid paths in both languages for 180/256 pairs; 68 pairs chose the same wrong path | Both-valid agreement across wording, task families and newly authored intentions |
-| Does compact storage preserve behavior? | Expanded/compact lanes and all 18,432 cross-platform rankings match under explicit arithmetic; legacy rules retain 272 ranking differences | SDK/native adoption and broader inputs under the versioned rule |
-| Can generated code run? | Earlier V3 compact models passed 2,304 supplied expectations across 192 compiled runs | V4 SDK extraction and native adoption, then broader types and workflows |
+| Does compact storage preserve behavior? | Expanded/compact lanes and all 18,432 cross-platform rankings match under explicit arithmetic; SDK replay also passes | Native adoption and broader inputs under the versioned rule |
+| Can generated code run? | Earlier V3 compact models passed 2,304 supplied expectations across 192 compiled runs | Native V4 adoption, then broader types and workflows |
 
 Model quality, representation parity, finite execution and resource usage have
 separate denominators. The current development cohort has been observed in
@@ -113,7 +128,7 @@ need a shared task set, tool budget and definition of completion.
 
 For actual compiler use, select the pinned V3 compact bundle described in the
 [integration guide](https://github.com/kimjooyoon/meta-ontology-go/blob/main/docs/three-choice-path-model.md).
-The V4 full-input models currently use this repository's research runtime.
+The V4 full-input models run in this repository's research runtime and SDK v0.2.15.
 
 ### Research connections
 
