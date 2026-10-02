@@ -112,6 +112,17 @@ preserves the full native raw archive and model-quality negatives. Its
 matches all seven files and 7,600,065 public bytes at that immutable revision;
 existing model weights remain unchanged.
 
+### Shared Gooo receipt compatibility follow-up
+
+The [typed-path common receipt observation](docs/typed-path-common-receipt-20261002.md)
+uses the own model in 32 actual generations and compiled runs on existing frozen
+Korean/English inputs. All 512 ordered outputs match, with 64 local predictions
+and zero external calls. The new compiler binds path/source/test/control identity
+and finite functional scores into the common Gooo-declared receipt, retaining
+unresolved runtime and full-domain claims. Model codegen median is 31.040 ms with
+19.500 MiB median peak RSS; weights are unchanged and this is not a new model
+quality or speedup claim. Full raw evidence is public on Hugging Face.
+
 ## Own feedback Gooo model v2 — preceding two-choice experiment
 
 [Nine fresh own models and actual failure feedback](docs/own-joint-feedback-results-20261002.md)
