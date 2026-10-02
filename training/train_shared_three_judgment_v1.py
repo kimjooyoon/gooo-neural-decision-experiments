@@ -9,10 +9,13 @@ from types import SimpleNamespace
 import torch
 from torch import nn
 import train_own_three_feedback_v1 as base
+from shared_evidence_v1 import Evidence
 
 core = base.core
 Dense = core.Model
 PROTOCOL = "docs/shared-three-judgment-preregistration-20261002.md"
+AMENDMENT = "docs/shared-three-storage-amendment-20261003.md"
+STORAGE = "preexecution/shared-three-storage-preflight-20261003.json"
 ARMS = ("dense", "shared-local")
 
 
@@ -73,6 +76,7 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--source-revision", required=True)
     parser.add_argument("--protocol-sha256", required=True)
+    parser.add_argument("--amendment-sha256", required=True)
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=root, text=True).strip()
@@ -80,6 +84,8 @@ def main():
                  "clean exact published optimizer source")
     protocol_sha = core.sha((root / PROTOCOL).read_bytes())
     core.require(protocol_sha == args.protocol_sha256, "published protocol hash")
+    amendment_sha = core.sha((root / AMENDMENT).read_bytes())
+    core.require(amendment_sha == args.amendment_sha256, "published pre-optimizer storage amendment")
     core.require(torch.backends.mps.is_available() and not args.output.exists(), "fresh local MPS output")
     core.require(args.output.resolve().parent == root / "runs" and args.output.name.startswith("own-three-"), "bounded study phase")
     core.FEATURES, core.HIDDEN, core.LIMIT, core.LABELS = 768, 24, 1600, [f"mask_{i}" for i in range(8)]
@@ -89,17 +95,20 @@ def main():
     shared = shared_initial(initial)
     data = {split: base.arrays(rows, x, split, "set-feedback") for split in ("train", "calibration")}
     sources = {name: core.sha((root / "training" / name).read_bytes()) for name in
-               ("train_shared_three_judgment_v1.py", "train_own_three_feedback_v1.py", "train_pilot_v2.py")}
-    prior_bytes = base.retained_bytes(root)
-    base.save(args.output / "preexecution.json", {
+               ("train_shared_three_judgment_v1.py", "shared_evidence_v1.py", "train_own_three_feedback_v1.py", "train_pilot_v2.py")}
+    evidence = Evidence(root, args.output, base.read_json(root / STORAGE))
+    evidence.save(args.output / "preexecution.json", {
         "schema": "gooo/shared-three-judgment-training/v1", "source_revision": head,
         "protocol_sha256": protocol_sha, "sources_sha256": sources, "arms": ARMS,
+        "storage_amendment_sha256": amendment_sha,
+        "storage_preflight_sha256": core.sha((root / STORAGE).read_bytes()),
         "prepared_manifest_sha256": core.sha((args.prepared / "manifest.json").read_bytes()),
         "preparation_audit_sha256": core.sha(args.preparation_audit.read_bytes()),
         "initial_state_sha256": {"dense": base.state_sha(initial), "shared-local": base.state_sha(shared)},
         "trainable_parameters": {"dense": 18656, "shared-local": 2072},
         "expanded_parameters": 18656, "planned_optimizer_steps": 3200, "device": "mps",
-        "torch": torch.__version__, "prior_raw_bytes": prior_bytes, "new_raw_cap_bytes": 64 << 20,
+        "torch": torch.__version__, "prior_raw_bytes": evidence.legacy, "new_raw_cap_bytes": evidence.cap,
+        "amended_whole_cap_bytes": evidence.whole_cap,
         "gpu_utilization_measured": False, "default_model_promoted": False,
         "scope": "Existing frozen source/teacher feature bank; no new intentions or untouched holdout; own fresh Go initialization."}, root)
     reports, exports, updates = {}, {}, 0
@@ -107,34 +116,40 @@ def main():
         for arm in ARMS:
             core.Model = Dense if arm == "dense" else SharedLocal
             seed = initial if arm == "dense" else shared
-            fp, fp_report = base.fit(copy.deepcopy(seed), data, arm, False, args.output / arm, root)
-            updates += fp_report["optimizer_steps"]
-            qat, qat_report = base.fit(copy.deepcopy(fp.state_dict()), data, arm, True, args.output / arm, root)
-            updates += qat_report["optimizer_steps"]
+            with evidence.writers():
+                fp, fp_report = base.fit(copy.deepcopy(seed), data, arm, False, args.output / arm, root)
+                updates += fp_report["optimizer_steps"]
+                qat, qat_report = base.fit(copy.deepcopy(fp.state_dict()), data, arm, True, args.output / arm, root)
+                updates += qat_report["optimizer_steps"]
             reports[arm], exports[arm], parity = {"fp32": fp_report, "qat_ternary": qat_report}, {}, []
             for variant, model, temperature in (("fp32", fp, fp_report["selected_temperature"]),
                                                 ("ptq_ternary", fp, None),
                                                 ("qat_ternary", qat, qat_report["selected_temperature"])):
+                evidence.reserve(74624 + (64 << 10))
                 pin, records = base.export(model, variant, args.output / arm / "models" / variant,
                                            data["calibration"], parity_inputs, x, temperature)
+                evidence.reconcile()
                 exports[arm][variant] = pin
                 parity.extend(records)
-            base.save_jsonl(args.output / arm / "go-parity.jsonl", parity, root)
-            base.save(args.output / arm / "training-report.json", reports[arm], root)
-            core.require(base.retained_bytes(root)-prior_bytes <= 64 << 20, "new evidence cap; preserve prefix")
+            evidence.save_jsonl(args.output / arm / "go-parity.jsonl", parity, root)
+            evidence.save(args.output / arm / "training-report.json", reports[arm], root)
+            evidence.reconcile()
             print(json.dumps({"completed_arm": arm, "actual_optimizer_updates": updates}), flush=True)
-        core.require(updates == 3200, "all fixed optimizer steps")
-        base.save(args.output / "report.json", {"schema": "gooo/shared-three-judgment-training-result/v1",
+        core.require(updates == evidence.actual_updates == 3200, "all fixed optimizer steps")
+        evidence.save(args.output / "report.json", {"schema": "gooo/shared-three-judgment-training-result/v1",
                   "status": "TRAINED_AND_EXPORTED", "optimizer_steps": updates,
                   "preexecution_sha256": core.sha((args.output / "preexecution.json").read_bytes()),
                   "training": reports, "exports": exports, "default_model_promoted": False,
                   "scope": "Six fresh FP32/PTQ/QAT exports; Go numerical/topology/behavior/native audits remain required."}, root)
     except BaseException as error:
-        base.save(args.output / "failure.json", {"status": "FAILED_PREFIX_RETAINED", "error_type": type(error).__name__,
+        evidence.reconcile()
+        evidence.save(args.output / "failure.json", {"status": "FAILED_PREFIX_RETAINED", "error_type": type(error).__name__,
+                  "actual_optimizer_updates": evidence.actual_updates,
                   "completed_stage_optimizer_updates": updates, "scope": "Actual per-update/epoch journals retained; no restart."}, root)
         raise
     finally:
         core.Model = Dense
+        evidence.reconcile()
 
 
 if __name__ == "__main__":
