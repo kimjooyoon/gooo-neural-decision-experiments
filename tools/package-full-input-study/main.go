@@ -45,6 +45,8 @@ func main() {
 	switch *mode {
 	case "package":
 		err = pack(*output)
+	case "package-platform":
+		err = packPlatform(*output)
 	case "verify":
 		err = verify(*output)
 	default:
@@ -57,6 +59,70 @@ func main() {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
+}
+
+func packPlatform(output string) error {
+	if _, err := os.Lstat(output); !os.IsNotExist(err) {
+		return errors.New("fresh platform publication required")
+	}
+	root := "runs/own-three-full-input-linux-initial-20261003"
+	files, err := tree(root)
+	if err != nil {
+		return err
+	}
+	m := manifest{Schema: "gooo/full-input-platform-publication/v1", Files: map[string]threestudent.Pin{}, Archives: map[string]map[string]threestudent.Pin{"evidence.zip": {}}, Scope: "Complete retained Linux initial audit plus comparison and offline diagnosis; exact outcome comparator remains a failure pending numerical-contract repair."}
+	for name, path := range files {
+		if err = privacy(path); err != nil {
+			return err
+		}
+		pin, e := threestudent.FilePin(path)
+		if e != nil {
+			return e
+		}
+		m.Archives["evidence.zip"][name] = pin
+		m.Decoded += pin.Bytes
+	}
+	if m.Decoded > 16<<20 || len(files) > 100 {
+		return errors.New("bounded platform evidence required")
+	}
+	if err = os.Mkdir(output, 0755); err != nil {
+		return err
+	}
+	if err = archive(filepath.Join(output, "evidence.zip"), files, m.Archives["evidence.zip"]); err != nil {
+		return err
+	}
+	for name, path := range map[string]string{"diagnosis.json": root + "/diagnosis.json", "linux-report.json": root + "/report.json"} {
+		raw, e := os.ReadFile(path)
+		if e != nil {
+			return e
+		}
+		if err = os.WriteFile(filepath.Join(output, name), raw, 0644); err != nil {
+			return err
+		}
+	}
+	readme := []byte("# Full-input numerical portability observations\n\nThe 18,432 complete arm64/Linux development row pairs retained identical first selected masks and 272 different full candidate orders. Numerical/export checks passed; the exact partial-completion comparison failed. This bundle retains the complete Linux audit, all changed-row identities and both ranked orders, and the failed comparison.\n\n[Diagnosis and planned arithmetic repair](https://github.com/kimjooyoon/gooo-neural-decision-experiments/blob/main/docs/full-input-numerical-portability-followup-20261003.md).\n\nThe diagnostic reader makes zero model predictions and zero optimizer updates. The recorded Linux audit has its own prediction count.\n")
+	if err = os.WriteFile(filepath.Join(output, "README.md"), readme, 0644); err != nil {
+		return err
+	}
+	public, e := tree(output)
+	if e != nil {
+		return e
+	}
+	for name, path := range public {
+		pin, e := threestudent.FilePin(path)
+		if e != nil {
+			return e
+		}
+		m.Files[name] = pin
+	}
+	raw, e := json.MarshalIndent(m, "", "  ")
+	if e != nil {
+		return e
+	}
+	if err = os.WriteFile(filepath.Join(output, "manifest.json"), append(raw, '\n'), 0644); err != nil {
+		return err
+	}
+	return verify(output)
 }
 
 func compareAudit(expected, actual string) error {
@@ -419,7 +485,8 @@ func verify(output string) error {
 	if err = threecohort.Decode(raw, &m); err != nil {
 		return err
 	}
-	if m.Schema != "gooo/full-input-initial-publication/v1" || len(m.Archives) != 4 || m.Decoded <= 0 || m.Decoded > 768<<20 {
+	validSchema := m.Schema == "gooo/full-input-initial-publication/v1" && len(m.Archives) == 4 || m.Schema == "gooo/full-input-platform-publication/v1" && len(m.Archives) == 1
+	if !validSchema || m.Decoded <= 0 || m.Decoded > 768<<20 {
 		return errors.New("closed archive contract required")
 	}
 	var expectedBytes int64

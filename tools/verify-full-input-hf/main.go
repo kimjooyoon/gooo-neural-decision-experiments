@@ -65,6 +65,29 @@ func verify(revision, output string) error {
 		}
 		files[remote] = pin
 	}
+	const platformBundle = "publication/full-input-platform-diagnosis-20261003"
+	const platformAppendix = "research/full-input-platform-20261003/"
+	platformRaw, err := os.ReadFile(platformBundle + "/manifest.json")
+	if err != nil {
+		return err
+	}
+	var platform struct {
+		Files map[string]threestudent.Pin `json:"files"`
+	}
+	if err = json.Unmarshal(platformRaw, &platform); err != nil || len(platform.Files) != 4 {
+		return errors.New("complete platform manifest required")
+	}
+	for name, pin := range platform.Files {
+		if !filepath.IsLocal(name) || strings.Contains(name, "\\") {
+			return errors.New("local platform member required")
+		}
+		files[platformAppendix+name] = pin
+	}
+	platformPin, err := threestudent.FilePin(platformBundle + "/manifest.json")
+	if err != nil {
+		return err
+	}
+	files[platformAppendix+"manifest.json"] = platformPin
 	client := &http.Client{Timeout: 120 * time.Second}
 	metadata, err := client.Get("https://huggingface.co/api/models/" + repo + "/revision/" + revision)
 	if err != nil {
@@ -109,7 +132,7 @@ func verify(revision, output string) error {
 	value := map[string]any{"schema": "gooo/full-input-hf-transport/v1", "status": "PASS", "repository": repo,
 		"revision": revision, "private": false, "anonymous": true, "public_files_verified": len(files),
 		"downloaded_bytes": total, "wall_seconds": time.Since(started).Seconds(), "files": files,
-		"local_bundle_manifest_sha256": threecohort.SHA(raw), "verifier_source_sha256": source.SHA,
+		"local_bundle_manifest_sha256": threecohort.SHA(raw), "local_platform_manifest_sha256": threecohort.SHA(platformRaw), "verifier_source_sha256": source.SHA,
 		"go_version": runtime.Version(), "new_optimizer_updates": 0, "new_model_predictions": 0,
 		"scope": "Anonymous immutable downloads match the closed local bundle and current card byte-for-byte. No duplicate download cache retained."}
 	encoded, err := json.MarshalIndent(value, "", "  ")

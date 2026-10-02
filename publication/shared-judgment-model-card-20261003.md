@@ -83,6 +83,13 @@ Publishing the matching SDK extraction, completing the remaining split/form
 comparisons and observing actual native compiler execution are subsequent steps.
 The existing native measurements below belong to their pinned earlier models.
 
+The subsequent [Linux comparison](research/full-input-platform-20261003/README.md)
+retained the same first selected mask on all 18,432 development rows, with 272
+different complete candidate orders. Small score deltas changed partial-completion
+curves, so the exact cross-platform comparison failed. Its complete observations
+are public; an explicit arithmetic contract and paired validation are the next
+runtime work.
+
 ## How the model is used
 
 The compiler derives context from an original Gooo body, its declared typed

@@ -43,6 +43,12 @@ contains all prepared features, full texts, models, optimizer journals and first
 Go observations. Further wording/split comparisons and native adoption remain
 the next steps in the same protocol. The cohort has been observed before.
 
+[Linux portability follow-up](docs/full-input-numerical-portability-followup-20261003.md):
+all 18,432 first selected masks match arm64, while 272 full candidate rankings
+differ under small score deltas. The exact comparison failed on partial-completion
+curves. Complete Linux records are retained; the numerical-contract repair is
+the next runtime task.
+
 ### Motivating diagnosis: input phrasing changes the chosen path
 
 The [bilingual wrapper audit](docs/bilingual-wrapper-audit-results-20261003.md)
