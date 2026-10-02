@@ -74,9 +74,20 @@ func main() {
 	prefix := flag.String("prefix", "", "immutable cap-stopped original phase for separate storage continuation")
 	combined := flag.String("combined-audit-report", "", "zero-prediction combined original/tail audit receipt")
 	bilingual := flag.String("bilingual-report", "", "post-hoc first-output equivalence diagnostic; no model calls or selector changes")
+	native := flag.Bool("native", false, "actual pinned Gooo generation and compiled Go execution")
+	nativeAudit := flag.String("native-audit-report", "", "zero-call source/native/SDK/compiled-output replay receipt")
+	nativeBinary := flag.String("native-binary", "", "clean adopted Gooo executable with sibling body worker")
+	goBinary := flag.String("go-binary", "", "exact Go 1.27.1 execution compiler")
+	sdkTail := flag.String("sdk-tail", "", "complete immutable missing-only SDK tail")
 	flag.Parse()
 	var err error
-	if *bilingual != "" && *prefix != "" && *audit == "" && *combined == "" {
+	if *native || *nativeAudit != "" {
+		if *prefix == "" || *sdkTail == "" || *audit != "" || *combined != "" || *bilingual != "" || (*native && *nativeAudit != "") {
+			err = errors.New("native collection and independent audit require separate original/tail modes")
+		} else {
+			err = nativeStudy(*dataset, *models, *prefix, *sdkTail, *output, *revision, *nativeBinary, *goBinary, *nativeAudit)
+		}
+	} else if *bilingual != "" && *prefix != "" && *audit == "" && *combined == "" {
 		err = bilingualAudit(*dataset, *models, *prefix, *output, *bilingual)
 	} else if *bilingual != "" {
 		err = errors.New("bilingual diagnostic requires separate prefix/tail audit mode")

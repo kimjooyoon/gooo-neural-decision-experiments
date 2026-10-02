@@ -102,12 +102,15 @@ func (s *storage) save(name string, v any) error {
 	if err != nil {
 		return err
 	}
+	return s.saveBytes(name, append(raw, '\n'))
+}
+func (s *storage) saveBytes(name string, raw []byte) error {
 	f, err := os.OpenFile(name, os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0644)
 	if err != nil {
 		return err
 	}
 	defer f.Close()
-	if err = s.write(f, append(raw, '\n'), 0); err != nil {
+	if err = s.write(f, raw, 0); err != nil {
 		return err
 	}
 	return f.Sync()
