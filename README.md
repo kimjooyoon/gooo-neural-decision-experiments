@@ -1,5 +1,27 @@
 # Gooo neural decision experiments
 
+## Three-choice Gooo construction — implementation and authored preparation
+
+Released [Go SDK v0.2.13-experimental](https://github.com/kimjooyoon/gooo-decision-runtime/releases/tag/v0.2.13-experimental)
+and [compiler main 774eabb](https://github.com/kimjooyoon/meta-ontology-go/commit/774eabb226f88a317c523ce4efa24a08032066a9)
+add a separate source-bound 768/24/8 model interface for ranking eight complete
+three-choice bodies. Actual failed-case feedback can rerank the remaining masks;
+disconnected, unsupported or oversized inputs continue deterministically with
+zero prediction calls. [Native adoption evidence](docs/own-three-choice-native-adoption-20261002.md)
+records the three successful exact-source CI runs and clean executable builds.
+[Implementation evidence](docs/own-three-choice-sdk-abi-20261002.md)
+uses controlled weights and does not claim trained quality.
+
+The [new authored fixtures](docs/own-three-choice-authored-fixtures-20261002.md)
+cover eight combinations of conditions, assignments, references, nested branches
+and execution order. 3,072 Korean/English views retain all passing-mask ties;
+393,216 typed/oracle comparisons and separate compiled-Go execution pass locally.
+The [frozen study](docs/own-three-choice-completeness-preregistration-20261002.md)
+keeps actual native corpus export/freeze, teacher observation, fresh training,
+student/native measurements and public weight verification as separate phases.
+Those phases have not yet run for this three-choice cohort; no default model
+is promoted. The existing nine v2 models below remain the latest trained edition.
+
 ## Own feedback Gooo model v2 — latest experiment
 
 [Nine fresh own models and actual failure feedback](docs/own-joint-feedback-results-20261002.md)

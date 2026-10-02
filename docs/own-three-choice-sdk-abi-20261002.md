@@ -55,3 +55,6 @@ This phase uses controlled test weights. It does not establish trained model
 quality, natural-language completeness, native deployment or time savings.
 The declared curriculum, actual frozen-teacher collection, fresh optimization,
 student/native study and public model byte verification remain separate work.
+
+The subsequent [native adoption phase](own-three-choice-native-adoption-20261002.md)
+is now verified on compiler main, separately from these SDK-only measurements.
