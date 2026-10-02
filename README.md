@@ -8,6 +8,8 @@ training tools and original evidence behind that process.
 
 ## Start here — 2026-10-03
 
+- [Gooo Wiki, 한국어](https://github.com/kimjooyoon/meta-ontology-go/wiki):
+  an introduction, language/model walkthrough, metric definitions and research connections.
 - [Language and compiler](https://github.com/kimjooyoon/meta-ontology-go): source,
   semantic IR, typed body generation, native execution and completeness receipts.
 - [Project direction, 한국어](https://github.com/kimjooyoon/meta-ontology-go/blob/dev/docs/language-direction.ko.md):
@@ -40,8 +42,10 @@ compact equivalents, and made 6,144 calibration plus 18,432 development
 predictions. Training took 42.18 seconds, averaging 49.83% of one CPU core with
 1.81 GB process peak RSS. The [complete public evidence](publication/full-input-initial-study-20261003/README.md)
 contains all prepared features, full texts, models, optimizer journals and first
-Go observations. Further wording/split comparisons and native adoption remain
-the next steps in the same protocol. The cohort has been observed before.
+Go observations. The SDK replay and native observation below have since completed.
+The remaining wording/split comparisons have a
+[published protocol](docs/full-input-all-forms-protocol-20261003.md); its planned
+calls are separate from completed observations. The cohort has been observed before.
 
 [Linux portability follow-up](docs/full-input-numerical-portability-followup-20261003.md):
 all 18,432 first selected masks match arm64, while 272 full candidate rankings
@@ -50,8 +54,8 @@ curves. The [explicit-arithmetic follow-up](docs/full-input-separate-arithmetic-
 now pairs 147,456 actual predictions with unchanged weights: all 18,432 input
 pairs match exactly in intermediate values, scores and candidate order under the
 new rule. First-path completion and extra attempts stay unchanged. The original
-failure remains reproducible. The matching SDK is now published; native compiler
-adoption is the next runtime step.
+failure remains reproducible. The matching SDK is published and the native stage
+below has completed generation and execution observations.
 
 ### From research code to the public Go SDK
 
@@ -80,9 +84,10 @@ search cost and process latency each retain their own measurement.
 [Complete results and resource scope](docs/full-input-native-results-20261003.md)
 and [all original evidence](publication/full-input-native-20261003/README.md).
 
-The measured compiler source is `e461c1d`, using SDK v0.2.15. Ordinary compiler
-adoption is tracked in [PR 1158](https://github.com/kimjooyoon/meta-ontology-go/pull/1158)
-and its dev/main promotion. This observation made zero training updates and
+The measured compiler source is `e461c1d`, using SDK v0.2.15. The integration merged
+to dev as `75b2b7d` in [PR 1158](https://github.com/kimjooyoon/meta-ontology-go/pull/1158).
+Main promotion is tracked in [PR 1159](https://github.com/kimjooyoon/meta-ontology-go/pull/1159).
+This observation made zero training updates and
 kept the existing model default. All 400 receipts retain `permission_boundary`
 as their first unresolved dimension.
 

@@ -25,6 +25,7 @@ attempt. A receipt connects the original intention to the choices and result.
 
 | Component | Public home |
 | --- | --- |
+| Introductory Wiki in Korean | [Gooo: language, models, metrics and research](https://github.com/kimjooyoon/meta-ontology-go/wiki) |
 | Gooo language, compiler and execution | [meta-ontology-go](https://github.com/kimjooyoon/meta-ontology-go) |
 | Go inference and typed search | [gooo-decision-runtime](https://github.com/kimjooyoon/gooo-decision-runtime) |
 | Training, raw evidence and comparisons | [gooo-neural-decision-experiments](https://github.com/kimjooyoon/gooo-neural-decision-experiments) |
@@ -82,7 +83,7 @@ helps the system identify the next useful experiment.
 | --- | --- |
 | Generate with SDK v0.2.14 or later | Pinned compact V3 bundle in the usage example below |
 | Explore the new V3/V4 arithmetic contract in Go | [SDK v0.2.15](https://github.com/kimjooyoon/gooo-decision-runtime/releases/tag/v0.2.15-experimental) and [explicit-arithmetic models](research/full-input-separate-20261003/README.md) |
-| Generate with the new V4 contract | Compiler source `e461c1d` and [integration PR 1158](https://github.com/kimjooyoon/meta-ontology-go/pull/1158); [native evidence](research/full-input-native-20261003/README.md) |
+| Generate with the new V4 contract | Integration merged to dev `75b2b7d` in [PR 1158](https://github.com/kimjooyoon/meta-ontology-go/pull/1158); [main promotion PR 1159](https://github.com/kimjooyoon/meta-ontology-go/pull/1159); [native evidence](research/full-input-native-20261003/README.md) |
 | Follow the current language work | [Language guide](https://github.com/kimjooyoon/meta-ontology-go/blob/dev/docs/language-direction.ko.md), [experiment repository](https://github.com/kimjooyoon/gooo-neural-decision-experiments) and the dated appendices here |
 
 SDK release source `59c8d342da4475506b90954469aa201f85cadeb3` passed complete
@@ -113,7 +114,7 @@ This task size shows reduced search attempts and similar process latency.
 retain the timing conditions and known-task scope. All 400 receipts keep
 `permission_boundary` unresolved. The observation used compiler `e461c1d` and
 SDK v0.2.15, with zero training updates and no new default checkpoint. Compiler
-promotion status is tracked in PR 1158 above.
+integration merged to dev in PR 1158; main promotion is tracked in PR 1159 above.
 
 ## New full-input research exports — 2026-10-03
 
@@ -161,7 +162,8 @@ probability bits and complete rankings under `float32_separate_v1`. Original
 first-path completeness and extra ranked attempts stay unchanged; partial
 coverage shifts in both directions compared with legacy arm64 arithmetic.
 Converted metadata and complete four-lane journals are public in that appendix.
-The SDK replay reproduces these observations; native compiler adoption follows.
+The SDK replay reproduces these observations. The native stage above subsequently
+completed generation and execution with this arithmetic contract.
 
 ## How the model is used
 
