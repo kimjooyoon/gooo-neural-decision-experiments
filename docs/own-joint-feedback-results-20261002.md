@@ -141,3 +141,24 @@ probes and 9,216 SDK sessions, then builds exact adopted compiler main
 actual emitted-Go invocations. Current CI outcomes are saved separately from
 the original study and do not increase authored-intention counts. Artifact
 retention is seven days; public frozen evidence remains reproducible.
+
+[Source CI run 36952987501](https://github.com/kimjooyoon/gooo-neural-decision-experiments/actions/runs/36952987501)
+passed all ten jobs at `c0a179dde93122faf449f6e42dbfdabce92cafb0`. Its new
+v2 execution made 18,450 kernel probe predictions, 18,510 predictions in
+9,216 SDK sessions, and 473 predictions in 240 native generations. All 240
+new emitted Go programs compiled and all 3,840 ordered invocations passed.
+These are repeated observations of the frozen cohort, not new authored
+intentions or optimization updates. The 15,146,280-byte raw Actions archive has
+519 fixed members and SHA-256
+`0c5366fe90751d758e5608073ebbdcc4b61dc26eb2575213b6b83215e237e6ff`.
+The Go CI publisher scans all raw text and preserves this archive for public
+publication separately from the original model edition.
+
+Linux CI records feedback codegen median 9.585 ms and measured child maximum
+RSS median 112.36 MiB. These are not a controlled comparison with macOS.
+Linux resource accounting survives `exec`, so pre-exec inherited memory is
+one possible contributor to lifetime peak RSS; this study did not measure
+substage RSS and does not establish that explanation for each sample.
+Peak RSS cannot be substituted for steady-state model tensor memory.
+See the [Linux getrusage documentation](https://man7.org/linux/man-pages/man2/getrusage.2.html)
+and [fork documentation](https://man7.org/linux/man-pages/man2/fork.2.html).

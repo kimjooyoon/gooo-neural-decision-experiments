@@ -14,6 +14,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"reflect"
 	"regexp"
 	"strings"
 
@@ -271,6 +272,77 @@ func save(p string, v any) error {
 	}
 	return os.WriteFile(p, append(b, '\n'), 0644)
 }
+func readReport(p string) ([]byte, error) {
+	s, e := os.Lstat(p)
+	if e != nil || !s.Mode().IsRegular() || s.Size() > 1<<20 {
+		return nil, errors.New("bounded regular report required")
+	}
+	return os.ReadFile(p)
+}
+
+// Verify the anonymously retrieved bytes against the pinned Actions artifact,
+// the independent manifest pin and every copied report's raw ZIP member.
+func verify(bundle, output, pin string) error {
+	if !regexp.MustCompile(`^[0-9a-f]{64}$`).MatchString(pin) || output == "" {
+		return errors.New("exact manifest pin and fresh verification output required")
+	}
+	if _, e := os.Stat(output); !os.IsNotExist(e) {
+		return errors.New("fresh verification output required")
+	}
+	raw, e := readReport(filepath.Join(bundle, "appendix-manifest.json"))
+	if e != nil {
+		return e
+	}
+	h := sha256.Sum256(raw)
+	if hex.EncodeToString(h[:]) != pin {
+		return errors.New("independent appendix manifest pin differs")
+	}
+	var m struct {
+		Schema    string
+		Status    string
+		Head      string  `json:"ci_head"`
+		Run       int64   `json:"ci_run"`
+		Artifact  int64   `json:"artifact_id"`
+		SHA       string  `json:"artifact_sha256"`
+		Publisher string  `json:"publisher_revision"`
+		Members   []entry `json:"archive_members"`
+		Scanned   bool    `json:"private_text_scanned"`
+	}
+	if e = rawJSON(raw, &m); e != nil {
+		return e
+	}
+	if m.Schema != "gooo/own-joint-feedback-ci-appendix/v2" || m.Status != "PASS" || m.Head != ciHead || m.Run != runID || m.Artifact != artifactID || m.SHA != artifactSHA || !m.Scanned || !regexp.MustCompile(`^[0-9a-f]{40}$`).MatchString(m.Publisher) {
+		return errors.New("CI appendix tuple differs")
+	}
+	entries, reports, e := inspectArchive(filepath.Join(bundle, "actions-artifact.zip"))
+	if e != nil {
+		return e
+	}
+	if !reflect.DeepEqual(entries, m.Members) {
+		return errors.New("CI appendix member hashes differ")
+	}
+	if e = validateRecords(reports); e != nil {
+		return e
+	}
+	for p, expected := range reports {
+		actual, e := readReport(filepath.Join(bundle, p))
+		if e != nil || string(actual) != string(expected) {
+			return errors.New("CI appendix report differs from raw artifact")
+		}
+	}
+	raw, e = readReport(filepath.Join(bundle, "run-metadata.json"))
+	if e != nil {
+		return e
+	}
+	if e = validateRun(raw); e != nil {
+		return e
+	}
+	raw, e = readReport(filepath.Join(bundle, "README.md"))
+	if e != nil || privateText.Match(raw) {
+		return errors.New("private or invalid appendix README")
+	}
+	return save(output, map[string]any{"schema": "gooo/own-joint-feedback-ci-appendix-verification/v2", "status": "PASS", "ci_head": ciHead, "ci_run": runID, "artifact_sha256": artifactSHA, "manifest_sha256": pin, "raw_archive_members": len(entries), "public_reports_verified_against_raw_members": len(reports), "successful_ci_jobs": 10, "new_model_predictions": 0, "new_native_calls": 0})
+}
 func run(artifact, metadata, out, revision string) error {
 	head, e := exec.Command("git", "rev-parse", "HEAD").Output()
 	if e != nil || len(revision) != 40 || strings.TrimSpace(string(head)) != revision {
@@ -287,7 +359,7 @@ func run(artifact, metadata, out, revision string) error {
 	if e = validateRecords(reports); e != nil {
 		return e
 	}
-	raw, e := os.ReadFile(metadata)
+	raw, e := readReport(metadata)
 	if e != nil {
 		return e
 	}
@@ -337,12 +409,24 @@ func run(artifact, metadata, out, revision string) error {
 }
 
 func main() {
+	mode := flag.String("mode", "package", "package or verify")
+	bundle := flag.String("bundle", "", "local or anonymous CI appendix")
+	pin := flag.String("manifest-sha256", "", "independently pinned CI appendix manifest")
 	artifact := flag.String("artifact", "", "pinned raw Actions ZIP")
 	metadata := flag.String("run-metadata", "", "exact completed run JSON")
 	out := flag.String("output", "", "fresh ignored publication directory")
 	revision := flag.String("source-revision", "", "exact clean publisher revision")
 	flag.Parse()
-	if e := run(*artifact, *metadata, *out, *revision); e != nil {
+	var e error
+	switch *mode {
+	case "package":
+		e = run(*artifact, *metadata, *out, *revision)
+	case "verify":
+		e = verify(*bundle, *out, *pin)
+	default:
+		e = errors.New("unknown CI publication mode")
+	}
+	if e != nil {
 		fmt.Fprintln(os.Stderr, e)
 		os.Exit(1)
 	}
