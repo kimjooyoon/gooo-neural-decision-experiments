@@ -42,12 +42,30 @@ jobs:
             --audit-report "$RUNNER_TEMP/three-choice-teacher-audit.json"
           cmp publication/own-three-choice-curriculum-audit-20261002.json "$RUNNER_TEMP/three-choice-source-audit.json"
           cmp publication/own-three-choice-teacher-audit-20261002.json "$RUNNER_TEMP/three-choice-teacher-audit.json"
+      - name: Recompute balanced optimizer inputs and a new common initializer in Go
+        run: |
+          mkdir -p runs
+          mv "$RUNNER_TEMP/three-choice-frozen/own-three-composition-curriculum-20261002" runs/
+          mv "$RUNNER_TEMP/three-choice-frozen/own-three-composition-curriculum-fixed-20261002" runs/
+          mv "$RUNNER_TEMP/three-choice-frozen/own-three-teacher-curriculum-20261002" runs/
+          go run ./tools/prepare-own-three-training \
+            --dataset runs/own-three-composition-curriculum-fixed-20261002/dataset.jsonl \
+            --teacher-curriculum runs/own-three-teacher-curriculum-20261002 \
+            --output runs/own-three-training-inputs-ci \
+            --source-revision "$GITHUB_SHA"
+          go run ./tools/prepare-own-three-training \
+            --dataset runs/own-three-composition-curriculum-fixed-20261002/dataset.jsonl \
+            --teacher-curriculum runs/own-three-teacher-curriculum-20261002 \
+            --output runs/own-three-training-inputs-ci \
+            --verify-report "$RUNNER_TEMP/three-choice-training-input-audit.json" \
+            --source-revision "$GITHUB_SHA"
       - uses: actions/upload-artifact@v7
         with:
           name: three-choice-source-teacher-independent-audits
           path: |
             ${{ runner.temp }}/three-choice-source-audit.json
             ${{ runner.temp }}/three-choice-teacher-audit.json
+            ${{ runner.temp }}/three-choice-training-input-audit.json
           if-no-files-found: error
   own-joint-feedback-v2-native:
     runs-on: ubuntu-latest
