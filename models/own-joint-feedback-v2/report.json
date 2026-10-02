@@ -1,0 +1,3765 @@
+{
+  "default_model_promoted": false,
+  "exports": {
+    "set-feedback": {
+      "fp32": {
+        "metadata_sha256": "9087980e8b1f6bae377e0f79e80b50053081f816aeade819fd9cb701c19dd410",
+        "packed_weights_bytes": 49648,
+        "weights_sha256": "696169e12816125932b6669d37936041665529e4612c64d4291d3774c4547c06"
+      },
+      "ptq_ternary": {
+        "metadata_sha256": "0c207d825de24d11e08c3101752c984abff9bdc8d14fde4931a46cb9d1ce6098",
+        "packed_weights_bytes": 2590,
+        "weights_sha256": "e5aa6a4abb432080a5705269076fe09fedec7ee9f9d8be81c44c5749b263d1a0"
+      },
+      "qat_ternary": {
+        "metadata_sha256": "776dc24c7512686d50cfe91d0cc05afc91bab3210cc39292018bc25c14ef27e2",
+        "packed_weights_bytes": 2590,
+        "weights_sha256": "b29b54f2d6fada76c5545408eba3bf2bec18a83a064c167f13472d161821e118"
+      }
+    },
+    "set-initial": {
+      "fp32": {
+        "metadata_sha256": "b83890277e38267023037986df50c05ce0847be80ac280e2eb3a53387fbc84dc",
+        "packed_weights_bytes": 49648,
+        "weights_sha256": "5d4c20903de7fa7d2f1b38fc4feee235b509ccd35ad0aa897e90e1ecb9aaa69a"
+      },
+      "ptq_ternary": {
+        "metadata_sha256": "f7e065443ac09e6572611a54c687c2de7d997e0ceb579e6dd6aa75d6115140ed",
+        "packed_weights_bytes": 2590,
+        "weights_sha256": "d4c21318fd3ecc7e40b49f48b03a2992925ea59b814d2b810ede8c5d03d2b075"
+      },
+      "qat_ternary": {
+        "metadata_sha256": "6ebccf1b91465f1a474fe1bd19d75e4073445570d2cabb7ff517cdf04bc64b33",
+        "packed_weights_bytes": 2590,
+        "weights_sha256": "ad083765f198e169401850460d668e47afbf692d12ea3ae01b2c24aa4b7d9f0d"
+      }
+    },
+    "uniform-initial": {
+      "fp32": {
+        "metadata_sha256": "b666b36c5f4c278790a10bd88d1e50934287869d88c5609402cea0c5fd29646e",
+        "packed_weights_bytes": 49648,
+        "weights_sha256": "10adc28867254cd61c9497514ebe2a68e24dc41237d558de560bb9deda7e4ff2"
+      },
+      "ptq_ternary": {
+        "metadata_sha256": "09e2b612488464d9d91e673819ea3a66e843571fe548eed68c6ad35e5f690533",
+        "packed_weights_bytes": 2590,
+        "weights_sha256": "d66d31a48de191dc69e2f640f0b8e3a8645249b63fc4ac74db36c22633e1214e"
+      },
+      "qat_ternary": {
+        "metadata_sha256": "ed135cd359dee1f536f975f86916b7499d6223ba177b3adf209dbb77aa88cf9b",
+        "packed_weights_bytes": 2590,
+        "weights_sha256": "260ef9fb151cc9e1a8db3b0d9947426ad5415099f19a5fd340ed051337429c49"
+      }
+    }
+  },
+  "optimizer_steps": 3600,
+  "preexecution_sha256": "a29058c500ea7fafacfa1a4f19b4e4aecc6665408cef4c5d0a800d6160df1060",
+  "schema": "gooo/own-joint-feedback-training-report/v2",
+  "scope": "Matched initial objectives and a separate observed-failure curriculum arm. Same source-v3 ABI and fresh shared own random initialization. Nine exports preserved; student Go completeness and native compiled execution remain separate stages.",
+  "status": "TRAINED_AND_EXPORTED",
+  "training": {
+    "set-feedback": {
+      "fp32": {
+        "epochs": 100,
+        "history": [
+          {
+            "calibration_passing_set_nll": 1.257336139678955,
+            "calibration_uniform_target_cross_entropy": 1.3874988555908203,
+            "epoch": 1,
+            "train_objective": 1.272274871667226
+          },
+          {
+            "calibration_passing_set_nll": 1.256513198216756,
+            "calibration_uniform_target_cross_entropy": 1.386601448059082,
+            "epoch": 2,
+            "train_objective": 1.2699137330055237
+          },
+          {
+            "calibration_passing_set_nll": 1.2558828989664714,
+            "calibration_uniform_target_cross_entropy": 1.3859567642211914,
+            "epoch": 3,
+            "train_objective": 1.2684696714083354
+          },
+          {
+            "calibration_passing_set_nll": 1.2553924719492595,
+            "calibration_uniform_target_cross_entropy": 1.3854214350382488,
+            "epoch": 4,
+            "train_objective": 1.26641047000885
+          },
+          {
+            "calibration_passing_set_nll": 1.2549166679382324,
+            "calibration_uniform_target_cross_entropy": 1.3849444389343262,
+            "epoch": 5,
+            "train_objective": 1.264607270558675
+          },
+          {
+            "calibration_passing_set_nll": 1.2542893886566162,
+            "calibration_uniform_target_cross_entropy": 1.3842945098876953,
+            "epoch": 6,
+            "train_objective": 1.2627774675687153
+          },
+          {
+            "calibration_passing_set_nll": 1.2538460890452068,
+            "calibration_uniform_target_cross_entropy": 1.383866786956787,
+            "epoch": 7,
+            "train_objective": 1.260432203610738
+          },
+          {
+            "calibration_passing_set_nll": 1.253421703974406,
+            "calibration_uniform_target_cross_entropy": 1.3834714889526367,
+            "epoch": 8,
+            "train_objective": 1.2583073178927104
+          },
+          {
+            "calibration_passing_set_nll": 1.2526382605234783,
+            "calibration_uniform_target_cross_entropy": 1.3826713562011719,
+            "epoch": 9,
+            "train_objective": 1.255439817905426
+          },
+          {
+            "calibration_passing_set_nll": 1.2519330183664958,
+            "calibration_uniform_target_cross_entropy": 1.381990114847819,
+            "epoch": 10,
+            "train_objective": 1.2525960803031921
+          },
+          {
+            "calibration_passing_set_nll": 1.2510724862416585,
+            "calibration_uniform_target_cross_entropy": 1.3811264038085938,
+            "epoch": 11,
+            "train_objective": 1.2492449879646301
+          },
+          {
+            "calibration_passing_set_nll": 1.2503349781036377,
+            "calibration_uniform_target_cross_entropy": 1.3804348309834797,
+            "epoch": 12,
+            "train_objective": 1.245654781659444
+          },
+          {
+            "calibration_passing_set_nll": 1.2492507298787434,
+            "calibration_uniform_target_cross_entropy": 1.3793644905090332,
+            "epoch": 13,
+            "train_objective": 1.2419299284617107
+          },
+          {
+            "calibration_passing_set_nll": 1.2482457955678303,
+            "calibration_uniform_target_cross_entropy": 1.378401756286621,
+            "epoch": 14,
+            "train_objective": 1.2374972105026245
+          },
+          {
+            "calibration_passing_set_nll": 1.2471145788828533,
+            "calibration_uniform_target_cross_entropy": 1.3773218790690105,
+            "epoch": 15,
+            "train_objective": 1.233107328414917
+          },
+          {
+            "calibration_passing_set_nll": 1.2459735075632732,
+            "calibration_uniform_target_cross_entropy": 1.376252015431722,
+            "epoch": 16,
+            "train_objective": 1.2286572853724163
+          },
+          {
+            "calibration_passing_set_nll": 1.2444508870442708,
+            "calibration_uniform_target_cross_entropy": 1.374720573425293,
+            "epoch": 17,
+            "train_objective": 1.2233084440231323
+          },
+          {
+            "calibration_passing_set_nll": 1.2433442274729412,
+            "calibration_uniform_target_cross_entropy": 1.3737497329711914,
+            "epoch": 18,
+            "train_objective": 1.21764075756073
+          },
+          {
+            "calibration_passing_set_nll": 1.241761604944865,
+            "calibration_uniform_target_cross_entropy": 1.3721904754638672,
+            "epoch": 19,
+            "train_objective": 1.2118863463401794
+          },
+          {
+            "calibration_passing_set_nll": 1.2400307655334473,
+            "calibration_uniform_target_cross_entropy": 1.3705005645751953,
+            "epoch": 20,
+            "train_objective": 1.2053526242574055
+          },
+          {
+            "calibration_passing_set_nll": 1.2387808163960774,
+            "calibration_uniform_target_cross_entropy": 1.3694213231404622,
+            "epoch": 21,
+            "train_objective": 1.199085255463918
+          },
+          {
+            "calibration_passing_set_nll": 1.23766032854716,
+            "calibration_uniform_target_cross_entropy": 1.3685320218404133,
+            "epoch": 22,
+            "train_objective": 1.1936666369438171
+          },
+          {
+            "calibration_passing_set_nll": 1.2349976698557537,
+            "calibration_uniform_target_cross_entropy": 1.365761439005534,
+            "epoch": 23,
+            "train_objective": 1.1861249407132466
+          },
+          {
+            "calibration_passing_set_nll": 1.2338628768920898,
+            "calibration_uniform_target_cross_entropy": 1.3649155298868816,
+            "epoch": 24,
+            "train_objective": 1.1792876919110615
+          },
+          {
+            "calibration_passing_set_nll": 1.231736660003662,
+            "calibration_uniform_target_cross_entropy": 1.3629299799601238,
+            "epoch": 25,
+            "train_objective": 1.171402593453725
+          },
+          {
+            "calibration_passing_set_nll": 1.229973316192627,
+            "calibration_uniform_target_cross_entropy": 1.3613219261169434,
+            "epoch": 26,
+            "train_objective": 1.164199709892273
+          },
+          {
+            "calibration_passing_set_nll": 1.2285614013671875,
+            "calibration_uniform_target_cross_entropy": 1.3601476351420085,
+            "epoch": 27,
+            "train_objective": 1.1578532059987385
+          },
+          {
+            "calibration_passing_set_nll": 1.2264933586120605,
+            "calibration_uniform_target_cross_entropy": 1.3583281834920247,
+            "epoch": 28,
+            "train_objective": 1.1506690382957458
+          },
+          {
+            "calibration_passing_set_nll": 1.2254497210184734,
+            "calibration_uniform_target_cross_entropy": 1.3576046625773113,
+            "epoch": 29,
+            "train_objective": 1.1423725088437398
+          },
+          {
+            "calibration_passing_set_nll": 1.2232898076375325,
+            "calibration_uniform_target_cross_entropy": 1.3555566469828289,
+            "epoch": 30,
+            "train_objective": 1.1346657276153564
+          },
+          {
+            "calibration_passing_set_nll": 1.2217562198638916,
+            "calibration_uniform_target_cross_entropy": 1.354416847229004,
+            "epoch": 31,
+            "train_objective": 1.1273169716199238
+          },
+          {
+            "calibration_passing_set_nll": 1.2198646068572998,
+            "calibration_uniform_target_cross_entropy": 1.3527437845865886,
+            "epoch": 32,
+            "train_objective": 1.1203957001368205
+          },
+          {
+            "calibration_passing_set_nll": 1.2187836170196533,
+            "calibration_uniform_target_cross_entropy": 1.3522191047668457,
+            "epoch": 33,
+            "train_objective": 1.1139531930287678
+          },
+          {
+            "calibration_passing_set_nll": 1.2170545260111492,
+            "calibration_uniform_target_cross_entropy": 1.3506488800048828,
+            "epoch": 34,
+            "train_objective": 1.1062341531117756
+          },
+          {
+            "calibration_passing_set_nll": 1.2155656814575195,
+            "calibration_uniform_target_cross_entropy": 1.3494594891866047,
+            "epoch": 35,
+            "train_objective": 1.098899245262146
+          },
+          {
+            "calibration_passing_set_nll": 1.2141249974568684,
+            "calibration_uniform_target_cross_entropy": 1.3484333356221516,
+            "epoch": 36,
+            "train_objective": 1.0918166637420654
+          },
+          {
+            "calibration_passing_set_nll": 1.2130169868469238,
+            "calibration_uniform_target_cross_entropy": 1.3478271166483562,
+            "epoch": 37,
+            "train_objective": 1.085816204547882
+          },
+          {
+            "calibration_passing_set_nll": 1.2119448979695637,
+            "calibration_uniform_target_cross_entropy": 1.347007433573405,
+            "epoch": 38,
+            "train_objective": 1.079972227414449
+          },
+          {
+            "calibration_passing_set_nll": 1.211596965789795,
+            "calibration_uniform_target_cross_entropy": 1.3474233945210774,
+            "epoch": 39,
+            "train_objective": 1.0754586060841878
+          },
+          {
+            "calibration_passing_set_nll": 1.2108501593271892,
+            "calibration_uniform_target_cross_entropy": 1.3468343416849773,
+            "epoch": 40,
+            "train_objective": 1.0659363269805908
+          },
+          {
+            "calibration_passing_set_nll": 1.2093664805094402,
+            "calibration_uniform_target_cross_entropy": 1.3461119333902996,
+            "epoch": 41,
+            "train_objective": 1.0609557231267293
+          },
+          {
+            "calibration_passing_set_nll": 1.2080824375152588,
+            "calibration_uniform_target_cross_entropy": 1.345105806986491,
+            "epoch": 42,
+            "train_objective": 1.0550678571065266
+          },
+          {
+            "calibration_passing_set_nll": 1.207409381866455,
+            "calibration_uniform_target_cross_entropy": 1.3449557622273762,
+            "epoch": 43,
+            "train_objective": 1.0478447079658508
+          },
+          {
+            "calibration_passing_set_nll": 1.2063501675923665,
+            "calibration_uniform_target_cross_entropy": 1.3444396654764812,
+            "epoch": 44,
+            "train_objective": 1.0429333051045735
+          },
+          {
+            "calibration_passing_set_nll": 1.2055530548095703,
+            "calibration_uniform_target_cross_entropy": 1.3442662556966145,
+            "epoch": 45,
+            "train_objective": 1.0374823013941448
+          },
+          {
+            "calibration_passing_set_nll": 1.2053244908650715,
+            "calibration_uniform_target_cross_entropy": 1.3443833986918132,
+            "epoch": 46,
+            "train_objective": 1.0320478479067485
+          },
+          {
+            "calibration_passing_set_nll": 1.204522927602132,
+            "calibration_uniform_target_cross_entropy": 1.3444569905598958,
+            "epoch": 47,
+            "train_objective": 1.0263234277566273
+          },
+          {
+            "calibration_passing_set_nll": 1.203734318415324,
+            "calibration_uniform_target_cross_entropy": 1.344048023223877,
+            "epoch": 48,
+            "train_objective": 1.0213231146335602
+          },
+          {
+            "calibration_passing_set_nll": 1.203513781229655,
+            "calibration_uniform_target_cross_entropy": 1.344283898671468,
+            "epoch": 49,
+            "train_objective": 1.0160454114278157
+          },
+          {
+            "calibration_passing_set_nll": 1.202982981999715,
+            "calibration_uniform_target_cross_entropy": 1.3444945017496746,
+            "epoch": 50,
+            "train_objective": 1.0117692252000172
+          },
+          {
+            "calibration_passing_set_nll": 1.2027353445688884,
+            "calibration_uniform_target_cross_entropy": 1.3446704546610515,
+            "epoch": 51,
+            "train_objective": 1.0066454509894054
+          },
+          {
+            "calibration_passing_set_nll": 1.2024991512298584,
+            "calibration_uniform_target_cross_entropy": 1.345309575398763,
+            "epoch": 52,
+            "train_objective": 1.0020205974578857
+          },
+          {
+            "calibration_passing_set_nll": 1.2027865250905354,
+            "calibration_uniform_target_cross_entropy": 1.3461960156758626,
+            "epoch": 53,
+            "train_objective": 0.9979893962542216
+          },
+          {
+            "calibration_passing_set_nll": 1.202093283335368,
+            "calibration_uniform_target_cross_entropy": 1.3460232416788738,
+            "epoch": 54,
+            "train_objective": 0.9931789934635162
+          },
+          {
+            "calibration_passing_set_nll": 1.2018686930338542,
+            "calibration_uniform_target_cross_entropy": 1.3465534845987956,
+            "epoch": 55,
+            "train_objective": 0.9889099299907684
+          },
+          {
+            "calibration_passing_set_nll": 1.2019267082214355,
+            "calibration_uniform_target_cross_entropy": 1.3471438090006511,
+            "epoch": 56,
+            "train_objective": 0.9839652280012766
+          },
+          {
+            "calibration_passing_set_nll": 1.200851599375407,
+            "calibration_uniform_target_cross_entropy": 1.3467529614766438,
+            "epoch": 57,
+            "train_objective": 0.9810864329338074
+          },
+          {
+            "calibration_passing_set_nll": 1.2017423311869304,
+            "calibration_uniform_target_cross_entropy": 1.3482913970947266,
+            "epoch": 58,
+            "train_objective": 0.9759853084882101
+          },
+          {
+            "calibration_passing_set_nll": 1.2012544473012288,
+            "calibration_uniform_target_cross_entropy": 1.348594029744466,
+            "epoch": 59,
+            "train_objective": 0.9726896286010742
+          },
+          {
+            "calibration_passing_set_nll": 1.2011103630065918,
+            "calibration_uniform_target_cross_entropy": 1.349157492319743,
+            "epoch": 60,
+            "train_objective": 0.9686079223950704
+          },
+          {
+            "calibration_passing_set_nll": 1.2018272876739502,
+            "calibration_uniform_target_cross_entropy": 1.3504239718119304,
+            "epoch": 61,
+            "train_objective": 0.964889665444692
+          },
+          {
+            "calibration_passing_set_nll": 1.2016550699869792,
+            "calibration_uniform_target_cross_entropy": 1.3511085510253906,
+            "epoch": 62,
+            "train_objective": 0.9616613884766897
+          },
+          {
+            "calibration_passing_set_nll": 1.2013389269510906,
+            "calibration_uniform_target_cross_entropy": 1.3513458569844563,
+            "epoch": 63,
+            "train_objective": 0.9567754169305166
+          },
+          {
+            "calibration_passing_set_nll": 1.2012893358866374,
+            "calibration_uniform_target_cross_entropy": 1.3519535064697266,
+            "epoch": 64,
+            "train_objective": 0.9539891382058462
+          },
+          {
+            "calibration_passing_set_nll": 1.2008016109466553,
+            "calibration_uniform_target_cross_entropy": 1.352331320444743,
+            "epoch": 65,
+            "train_objective": 0.949816087881724
+          },
+          {
+            "calibration_passing_set_nll": 1.201955795288086,
+            "calibration_uniform_target_cross_entropy": 1.3538880348205566,
+            "epoch": 66,
+            "train_objective": 0.9466742277145386
+          },
+          {
+            "calibration_passing_set_nll": 1.2016948064168294,
+            "calibration_uniform_target_cross_entropy": 1.3544397354125977,
+            "epoch": 67,
+            "train_objective": 0.9432468414306641
+          },
+          {
+            "calibration_passing_set_nll": 1.2011066277821858,
+            "calibration_uniform_target_cross_entropy": 1.3547452290852864,
+            "epoch": 68,
+            "train_objective": 0.9412126044432322
+          },
+          {
+            "calibration_passing_set_nll": 1.2033778826395671,
+            "calibration_uniform_target_cross_entropy": 1.3574916521708171,
+            "epoch": 69,
+            "train_objective": 0.936315675576528
+          },
+          {
+            "calibration_passing_set_nll": 1.2024324735005696,
+            "calibration_uniform_target_cross_entropy": 1.3575236002604167,
+            "epoch": 70,
+            "train_objective": 0.9339934488137563
+          },
+          {
+            "calibration_passing_set_nll": 1.20421036084493,
+            "calibration_uniform_target_cross_entropy": 1.3598003387451172,
+            "epoch": 71,
+            "train_objective": 0.9308132727940878
+          },
+          {
+            "calibration_passing_set_nll": 1.2021649678548176,
+            "calibration_uniform_target_cross_entropy": 1.3587439854939778,
+            "epoch": 72,
+            "train_objective": 0.9271482427914938
+          },
+          {
+            "calibration_passing_set_nll": 1.2042295932769775,
+            "calibration_uniform_target_cross_entropy": 1.3611993789672852,
+            "epoch": 73,
+            "train_objective": 0.9237874348958334
+          },
+          {
+            "calibration_passing_set_nll": 1.203004280726115,
+            "calibration_uniform_target_cross_entropy": 1.3609860738118489,
+            "epoch": 74,
+            "train_objective": 0.9205233554045359
+          },
+          {
+            "calibration_passing_set_nll": 1.2034239768981934,
+            "calibration_uniform_target_cross_entropy": 1.362105369567871,
+            "epoch": 75,
+            "train_objective": 0.9177294373512268
+          },
+          {
+            "calibration_passing_set_nll": 1.206438938776652,
+            "calibration_uniform_target_cross_entropy": 1.3655479749043782,
+            "epoch": 76,
+            "train_objective": 0.9168770412604014
+          },
+          {
+            "calibration_passing_set_nll": 1.2056596279144287,
+            "calibration_uniform_target_cross_entropy": 1.366177241007487,
+            "epoch": 77,
+            "train_objective": 0.9110009968280792
+          },
+          {
+            "calibration_passing_set_nll": 1.2065917650858562,
+            "calibration_uniform_target_cross_entropy": 1.367323398590088,
+            "epoch": 78,
+            "train_objective": 0.9101597269376119
+          },
+          {
+            "calibration_passing_set_nll": 1.2061179478963215,
+            "calibration_uniform_target_cross_entropy": 1.3677587509155273,
+            "epoch": 79,
+            "train_objective": 0.9065082768599192
+          },
+          {
+            "calibration_passing_set_nll": 1.2051122983296711,
+            "calibration_uniform_target_cross_entropy": 1.3675665855407715,
+            "epoch": 80,
+            "train_objective": 0.9065468609333038
+          },
+          {
+            "calibration_passing_set_nll": 1.2080998420715332,
+            "calibration_uniform_target_cross_entropy": 1.3710370063781738,
+            "epoch": 81,
+            "train_objective": 0.901172270377477
+          },
+          {
+            "calibration_passing_set_nll": 1.206079641977946,
+            "calibration_uniform_target_cross_entropy": 1.3701152801513672,
+            "epoch": 82,
+            "train_objective": 0.8997861246267954
+          },
+          {
+            "calibration_passing_set_nll": 1.2087923685709636,
+            "calibration_uniform_target_cross_entropy": 1.3733328183492024,
+            "epoch": 83,
+            "train_objective": 0.8951420783996582
+          },
+          {
+            "calibration_passing_set_nll": 1.207697073618571,
+            "calibration_uniform_target_cross_entropy": 1.373123327891032,
+            "epoch": 84,
+            "train_objective": 0.8925899565219879
+          },
+          {
+            "calibration_passing_set_nll": 1.2079861958821614,
+            "calibration_uniform_target_cross_entropy": 1.3741509119669597,
+            "epoch": 85,
+            "train_objective": 0.8892577191193899
+          },
+          {
+            "calibration_passing_set_nll": 1.2097255388895671,
+            "calibration_uniform_target_cross_entropy": 1.3766109148661296,
+            "epoch": 86,
+            "train_objective": 0.8867764075597128
+          },
+          {
+            "calibration_passing_set_nll": 1.2102117538452148,
+            "calibration_uniform_target_cross_entropy": 1.3779832522074382,
+            "epoch": 87,
+            "train_objective": 0.8841605186462402
+          },
+          {
+            "calibration_passing_set_nll": 1.2101471424102783,
+            "calibration_uniform_target_cross_entropy": 1.3786837259928386,
+            "epoch": 88,
+            "train_objective": 0.8814303576946259
+          },
+          {
+            "calibration_passing_set_nll": 1.2103091875712078,
+            "calibration_uniform_target_cross_entropy": 1.3796734809875488,
+            "epoch": 89,
+            "train_objective": 0.8792203366756439
+          },
+          {
+            "calibration_passing_set_nll": 1.211361249287923,
+            "calibration_uniform_target_cross_entropy": 1.3815793991088867,
+            "epoch": 90,
+            "train_objective": 0.8773706456025442
+          },
+          {
+            "calibration_passing_set_nll": 1.2112453778584797,
+            "calibration_uniform_target_cross_entropy": 1.3821481068929036,
+            "epoch": 91,
+            "train_objective": 0.8738362491130829
+          },
+          {
+            "calibration_passing_set_nll": 1.2128106753031414,
+            "calibration_uniform_target_cross_entropy": 1.3844958941141765,
+            "epoch": 92,
+            "train_objective": 0.8718356688817342
+          },
+          {
+            "calibration_passing_set_nll": 1.212925910949707,
+            "calibration_uniform_target_cross_entropy": 1.3855234781901042,
+            "epoch": 93,
+            "train_objective": 0.8694607516129812
+          },
+          {
+            "calibration_passing_set_nll": 1.2132811546325684,
+            "calibration_uniform_target_cross_entropy": 1.3867111206054688,
+            "epoch": 94,
+            "train_objective": 0.8671128451824188
+          },
+          {
+            "calibration_passing_set_nll": 1.2149093945821126,
+            "calibration_uniform_target_cross_entropy": 1.3890835444132488,
+            "epoch": 95,
+            "train_objective": 0.8653757870197296
+          },
+          {
+            "calibration_passing_set_nll": 1.215273141860962,
+            "calibration_uniform_target_cross_entropy": 1.3904302914937336,
+            "epoch": 96,
+            "train_objective": 0.8620387117067972
+          },
+          {
+            "calibration_passing_set_nll": 1.2159520785013835,
+            "calibration_uniform_target_cross_entropy": 1.3917358716328938,
+            "epoch": 97,
+            "train_objective": 0.8606913089752197
+          },
+          {
+            "calibration_passing_set_nll": 1.216983477274577,
+            "calibration_uniform_target_cross_entropy": 1.3935200373331706,
+            "epoch": 98,
+            "train_objective": 0.8589982390403748
+          },
+          {
+            "calibration_passing_set_nll": 1.2178371747334797,
+            "calibration_uniform_target_cross_entropy": 1.3951927820841472,
+            "epoch": 99,
+            "train_objective": 0.856173594792684
+          },
+          {
+            "calibration_passing_set_nll": 1.217533032099406,
+            "calibration_uniform_target_cross_entropy": 1.39556884765625,
+            "epoch": 100,
+            "train_objective": 0.8553298513094584
+          }
+        ],
+        "loop_wall_seconds": 2.6478977918159217,
+        "mps_allocated_peak_sampled_bytes": 12919808,
+        "mps_driver_peak_sampled_bytes": 53166080,
+        "optimizer_steps": 600,
+        "process_cpu_percent_one_core_normalization": 39.07073011645616,
+        "process_cpu_seconds_during_loop": 1.034553000000001,
+        "process_lifetime_peak_rss_bytes": 852066304,
+        "selected_epoch": 65,
+        "selection": "calibration passing-set NLL; no development inputs",
+        "training_function_groups": 768,
+        "training_weighted_state_rows": 5695
+      },
+      "qat_ternary": {
+        "epochs": 100,
+        "history": [
+          {
+            "calibration_passing_set_nll": 1.2346542676289876,
+            "calibration_uniform_target_cross_entropy": 1.3666237195332844,
+            "epoch": 1,
+            "train_objective": 1.1709365646044414
+          },
+          {
+            "calibration_passing_set_nll": 1.232411543528239,
+            "calibration_uniform_target_cross_entropy": 1.3639559745788574,
+            "epoch": 2,
+            "train_objective": 1.1685362656911213
+          },
+          {
+            "calibration_passing_set_nll": 1.2318187554677327,
+            "calibration_uniform_target_cross_entropy": 1.3634460767110188,
+            "epoch": 3,
+            "train_objective": 1.163014034430186
+          },
+          {
+            "calibration_passing_set_nll": 1.230327844619751,
+            "calibration_uniform_target_cross_entropy": 1.3616708119710286,
+            "epoch": 4,
+            "train_objective": 1.16063396135966
+          },
+          {
+            "calibration_passing_set_nll": 1.231438159942627,
+            "calibration_uniform_target_cross_entropy": 1.362698237101237,
+            "epoch": 5,
+            "train_objective": 1.1564710140228271
+          },
+          {
+            "calibration_passing_set_nll": 1.2289888858795166,
+            "calibration_uniform_target_cross_entropy": 1.3603636423746746,
+            "epoch": 6,
+            "train_objective": 1.1579928596814473
+          },
+          {
+            "calibration_passing_set_nll": 1.2322408358256023,
+            "calibration_uniform_target_cross_entropy": 1.3636236190795898,
+            "epoch": 7,
+            "train_objective": 1.1546051700909932
+          },
+          {
+            "calibration_passing_set_nll": 1.2292704582214355,
+            "calibration_uniform_target_cross_entropy": 1.3609525362650554,
+            "epoch": 8,
+            "train_objective": 1.1542930603027344
+          },
+          {
+            "calibration_passing_set_nll": 1.2281277974446614,
+            "calibration_uniform_target_cross_entropy": 1.3595085144042969,
+            "epoch": 9,
+            "train_objective": 1.1514099438985188
+          },
+          {
+            "calibration_passing_set_nll": 1.228514830271403,
+            "calibration_uniform_target_cross_entropy": 1.3598912556966145,
+            "epoch": 10,
+            "train_objective": 1.149012823899587
+          },
+          {
+            "calibration_passing_set_nll": 1.2345990339914958,
+            "calibration_uniform_target_cross_entropy": 1.3662292162577312,
+            "epoch": 11,
+            "train_objective": 1.1463996569315593
+          },
+          {
+            "calibration_passing_set_nll": 1.2278331915537517,
+            "calibration_uniform_target_cross_entropy": 1.359437624613444,
+            "epoch": 12,
+            "train_objective": 1.1436845660209656
+          },
+          {
+            "calibration_passing_set_nll": 1.2320430278778076,
+            "calibration_uniform_target_cross_entropy": 1.3638847668965657,
+            "epoch": 13,
+            "train_objective": 1.1431596477826436
+          },
+          {
+            "calibration_passing_set_nll": 1.2269397576649983,
+            "calibration_uniform_target_cross_entropy": 1.3585222562154133,
+            "epoch": 14,
+            "train_objective": 1.1411999861399333
+          },
+          {
+            "calibration_passing_set_nll": 1.2273183663686116,
+            "calibration_uniform_target_cross_entropy": 1.3589932123819988,
+            "epoch": 15,
+            "train_objective": 1.1405075788497925
+          },
+          {
+            "calibration_passing_set_nll": 1.226742188135783,
+            "calibration_uniform_target_cross_entropy": 1.3584753672281902,
+            "epoch": 16,
+            "train_objective": 1.136897047360738
+          },
+          {
+            "calibration_passing_set_nll": 1.2271275520324707,
+            "calibration_uniform_target_cross_entropy": 1.3588501612345378,
+            "epoch": 17,
+            "train_objective": 1.1341183582941692
+          },
+          {
+            "calibration_passing_set_nll": 1.2268099784851074,
+            "calibration_uniform_target_cross_entropy": 1.358620007832845,
+            "epoch": 18,
+            "train_objective": 1.133813242117564
+          },
+          {
+            "calibration_passing_set_nll": 1.2259845733642578,
+            "calibration_uniform_target_cross_entropy": 1.3577988942464192,
+            "epoch": 19,
+            "train_objective": 1.1298337777455647
+          },
+          {
+            "calibration_passing_set_nll": 1.2281041145324707,
+            "calibration_uniform_target_cross_entropy": 1.3600131670633953,
+            "epoch": 20,
+            "train_objective": 1.1259012420972188
+          },
+          {
+            "calibration_passing_set_nll": 1.2274065017700195,
+            "calibration_uniform_target_cross_entropy": 1.35932461420695,
+            "epoch": 21,
+            "train_objective": 1.124958078066508
+          },
+          {
+            "calibration_passing_set_nll": 1.2249433199564617,
+            "calibration_uniform_target_cross_entropy": 1.35709810256958,
+            "epoch": 22,
+            "train_objective": 1.1237089435259502
+          },
+          {
+            "calibration_passing_set_nll": 1.2270641326904297,
+            "calibration_uniform_target_cross_entropy": 1.3590224583943684,
+            "epoch": 23,
+            "train_objective": 1.119066834449768
+          },
+          {
+            "calibration_passing_set_nll": 1.2251795927683513,
+            "calibration_uniform_target_cross_entropy": 1.357163429260254,
+            "epoch": 24,
+            "train_objective": 1.1210439801216125
+          },
+          {
+            "calibration_passing_set_nll": 1.2251442273457844,
+            "calibration_uniform_target_cross_entropy": 1.3574215571085613,
+            "epoch": 25,
+            "train_objective": 1.1138947407404582
+          },
+          {
+            "calibration_passing_set_nll": 1.226075251897176,
+            "calibration_uniform_target_cross_entropy": 1.3583777745564778,
+            "epoch": 26,
+            "train_objective": 1.1111476222674053
+          },
+          {
+            "calibration_passing_set_nll": 1.2232952117919922,
+            "calibration_uniform_target_cross_entropy": 1.3558170000712078,
+            "epoch": 27,
+            "train_objective": 1.108642081419627
+          },
+          {
+            "calibration_passing_set_nll": 1.2255309422810872,
+            "calibration_uniform_target_cross_entropy": 1.3579405148824055,
+            "epoch": 28,
+            "train_objective": 1.1066133379936218
+          },
+          {
+            "calibration_passing_set_nll": 1.2234468460083008,
+            "calibration_uniform_target_cross_entropy": 1.3563822110493977,
+            "epoch": 29,
+            "train_objective": 1.1037753224372864
+          },
+          {
+            "calibration_passing_set_nll": 1.2274504502614338,
+            "calibration_uniform_target_cross_entropy": 1.3601136207580566,
+            "epoch": 30,
+            "train_objective": 1.104718009630839
+          },
+          {
+            "calibration_passing_set_nll": 1.2214577198028564,
+            "calibration_uniform_target_cross_entropy": 1.3539918263753254,
+            "epoch": 31,
+            "train_objective": 1.100389301776886
+          },
+          {
+            "calibration_passing_set_nll": 1.2208459377288818,
+            "calibration_uniform_target_cross_entropy": 1.3535539309183757,
+            "epoch": 32,
+            "train_objective": 1.1004305084546406
+          },
+          {
+            "calibration_passing_set_nll": 1.2211988766988118,
+            "calibration_uniform_target_cross_entropy": 1.3544106483459473,
+            "epoch": 33,
+            "train_objective": 1.0975115696589153
+          },
+          {
+            "calibration_passing_set_nll": 1.2208852767944336,
+            "calibration_uniform_target_cross_entropy": 1.3540293375651042,
+            "epoch": 34,
+            "train_objective": 1.096649428208669
+          },
+          {
+            "calibration_passing_set_nll": 1.2219463189442952,
+            "calibration_uniform_target_cross_entropy": 1.354676882425944,
+            "epoch": 35,
+            "train_objective": 1.0928220947583516
+          },
+          {
+            "calibration_passing_set_nll": 1.2222541173299153,
+            "calibration_uniform_target_cross_entropy": 1.3551745414733887,
+            "epoch": 36,
+            "train_objective": 1.0905425349871318
+          },
+          {
+            "calibration_passing_set_nll": 1.2214738527933757,
+            "calibration_uniform_target_cross_entropy": 1.3553353945414226,
+            "epoch": 37,
+            "train_objective": 1.0892930030822754
+          },
+          {
+            "calibration_passing_set_nll": 1.2226746877034504,
+            "calibration_uniform_target_cross_entropy": 1.356204350789388,
+            "epoch": 38,
+            "train_objective": 1.0855807065963745
+          },
+          {
+            "calibration_passing_set_nll": 1.2205681800842285,
+            "calibration_uniform_target_cross_entropy": 1.354220708211263,
+            "epoch": 39,
+            "train_objective": 1.0868929624557495
+          },
+          {
+            "calibration_passing_set_nll": 1.2307072480519612,
+            "calibration_uniform_target_cross_entropy": 1.3648745218912761,
+            "epoch": 40,
+            "train_objective": 1.084154188632965
+          },
+          {
+            "calibration_passing_set_nll": 1.2224886417388916,
+            "calibration_uniform_target_cross_entropy": 1.3567606608072917,
+            "epoch": 41,
+            "train_objective": 1.0794034600257874
+          },
+          {
+            "calibration_passing_set_nll": 1.222826878229777,
+            "calibration_uniform_target_cross_entropy": 1.3567276000976562,
+            "epoch": 42,
+            "train_objective": 1.0768718123435974
+          },
+          {
+            "calibration_passing_set_nll": 1.2225925127665203,
+            "calibration_uniform_target_cross_entropy": 1.3567558924357097,
+            "epoch": 43,
+            "train_objective": 1.0740800698598225
+          },
+          {
+            "calibration_passing_set_nll": 1.2232890129089355,
+            "calibration_uniform_target_cross_entropy": 1.3579370180765789,
+            "epoch": 44,
+            "train_objective": 1.072473168373108
+          },
+          {
+            "calibration_passing_set_nll": 1.2219468752543132,
+            "calibration_uniform_target_cross_entropy": 1.35723876953125,
+            "epoch": 45,
+            "train_objective": 1.0696930487950642
+          },
+          {
+            "calibration_passing_set_nll": 1.2207028071085613,
+            "calibration_uniform_target_cross_entropy": 1.3557618459065754,
+            "epoch": 46,
+            "train_objective": 1.0680679281552632
+          },
+          {
+            "calibration_passing_set_nll": 1.222245454788208,
+            "calibration_uniform_target_cross_entropy": 1.357139269510905,
+            "epoch": 47,
+            "train_objective": 1.0660125017166138
+          },
+          {
+            "calibration_passing_set_nll": 1.22100830078125,
+            "calibration_uniform_target_cross_entropy": 1.3564236958821614,
+            "epoch": 48,
+            "train_objective": 1.0637713273366292
+          },
+          {
+            "calibration_passing_set_nll": 1.2223490079243977,
+            "calibration_uniform_target_cross_entropy": 1.3578176498413086,
+            "epoch": 49,
+            "train_objective": 1.0615528424580891
+          },
+          {
+            "calibration_passing_set_nll": 1.2224079767862956,
+            "calibration_uniform_target_cross_entropy": 1.3576547304789226,
+            "epoch": 50,
+            "train_objective": 1.060014049212138
+          },
+          {
+            "calibration_passing_set_nll": 1.221060037612915,
+            "calibration_uniform_target_cross_entropy": 1.3567441304524739,
+            "epoch": 51,
+            "train_objective": 1.0578128695487976
+          },
+          {
+            "calibration_passing_set_nll": 1.2207496960957844,
+            "calibration_uniform_target_cross_entropy": 1.3571470578511555,
+            "epoch": 52,
+            "train_objective": 1.0557355284690857
+          },
+          {
+            "calibration_passing_set_nll": 1.222276210784912,
+            "calibration_uniform_target_cross_entropy": 1.358552614847819,
+            "epoch": 53,
+            "train_objective": 1.0538111925125122
+          },
+          {
+            "calibration_passing_set_nll": 1.221556027730306,
+            "calibration_uniform_target_cross_entropy": 1.3578809102376301,
+            "epoch": 54,
+            "train_objective": 1.051890989144643
+          },
+          {
+            "calibration_passing_set_nll": 1.2210016250610352,
+            "calibration_uniform_target_cross_entropy": 1.3579567273457844,
+            "epoch": 55,
+            "train_objective": 1.0501857201258342
+          },
+          {
+            "calibration_passing_set_nll": 1.2210715611775715,
+            "calibration_uniform_target_cross_entropy": 1.3577850659688313,
+            "epoch": 56,
+            "train_objective": 1.047421157360077
+          },
+          {
+            "calibration_passing_set_nll": 1.2207001845041912,
+            "calibration_uniform_target_cross_entropy": 1.3576443990071614,
+            "epoch": 57,
+            "train_objective": 1.0461647709210713
+          },
+          {
+            "calibration_passing_set_nll": 1.2252761522928874,
+            "calibration_uniform_target_cross_entropy": 1.3621479670206706,
+            "epoch": 58,
+            "train_objective": 1.0441542466481526
+          },
+          {
+            "calibration_passing_set_nll": 1.2222952047983806,
+            "calibration_uniform_target_cross_entropy": 1.360097090403239,
+            "epoch": 59,
+            "train_objective": 1.0417816837628682
+          },
+          {
+            "calibration_passing_set_nll": 1.2223881880442302,
+            "calibration_uniform_target_cross_entropy": 1.3604998588562012,
+            "epoch": 60,
+            "train_objective": 1.0394419531027477
+          },
+          {
+            "calibration_passing_set_nll": 1.220301628112793,
+            "calibration_uniform_target_cross_entropy": 1.3582661946614583,
+            "epoch": 61,
+            "train_objective": 1.0387652019659679
+          },
+          {
+            "calibration_passing_set_nll": 1.224807580312093,
+            "calibration_uniform_target_cross_entropy": 1.3628641764322917,
+            "epoch": 62,
+            "train_objective": 1.0362878839174907
+          },
+          {
+            "calibration_passing_set_nll": 1.2230532964070637,
+            "calibration_uniform_target_cross_entropy": 1.3619853655497234,
+            "epoch": 63,
+            "train_objective": 1.033352514108022
+          },
+          {
+            "calibration_passing_set_nll": 1.2239443461100261,
+            "calibration_uniform_target_cross_entropy": 1.3615946769714355,
+            "epoch": 64,
+            "train_objective": 1.0333712498346965
+          },
+          {
+            "calibration_passing_set_nll": 1.2232559521993,
+            "calibration_uniform_target_cross_entropy": 1.3617782592773438,
+            "epoch": 65,
+            "train_objective": 1.031507521867752
+          },
+          {
+            "calibration_passing_set_nll": 1.2228318850199382,
+            "calibration_uniform_target_cross_entropy": 1.361329714457194,
+            "epoch": 66,
+            "train_objective": 1.0278074145317078
+          },
+          {
+            "calibration_passing_set_nll": 1.221776008605957,
+            "calibration_uniform_target_cross_entropy": 1.3602221806844075,
+            "epoch": 67,
+            "train_objective": 1.0264250735441844
+          },
+          {
+            "calibration_passing_set_nll": 1.2202552159627278,
+            "calibration_uniform_target_cross_entropy": 1.3594532012939453,
+            "epoch": 68,
+            "train_objective": 1.024970253308614
+          },
+          {
+            "calibration_passing_set_nll": 1.2220253944396973,
+            "calibration_uniform_target_cross_entropy": 1.360806941986084,
+            "epoch": 69,
+            "train_objective": 1.0227514306704204
+          },
+          {
+            "calibration_passing_set_nll": 1.2221438090006511,
+            "calibration_uniform_target_cross_entropy": 1.3624361356099446,
+            "epoch": 70,
+            "train_objective": 1.0226852496465046
+          },
+          {
+            "calibration_passing_set_nll": 1.222800334294637,
+            "calibration_uniform_target_cross_entropy": 1.3616005579630535,
+            "epoch": 71,
+            "train_objective": 1.0200657149155934
+          },
+          {
+            "calibration_passing_set_nll": 1.2212990919748943,
+            "calibration_uniform_target_cross_entropy": 1.3617370923360188,
+            "epoch": 72,
+            "train_objective": 1.0176305572191875
+          },
+          {
+            "calibration_passing_set_nll": 1.22258456548055,
+            "calibration_uniform_target_cross_entropy": 1.3621759414672852,
+            "epoch": 73,
+            "train_objective": 1.0156866610050201
+          },
+          {
+            "calibration_passing_set_nll": 1.2212037245432537,
+            "calibration_uniform_target_cross_entropy": 1.36260191599528,
+            "epoch": 74,
+            "train_objective": 1.0136821269989014
+          },
+          {
+            "calibration_passing_set_nll": 1.2214531898498535,
+            "calibration_uniform_target_cross_entropy": 1.3624037106831868,
+            "epoch": 75,
+            "train_objective": 1.0118956466515858
+          },
+          {
+            "calibration_passing_set_nll": 1.2237666447957356,
+            "calibration_uniform_target_cross_entropy": 1.3638855616251628,
+            "epoch": 76,
+            "train_objective": 1.0139588216940563
+          },
+          {
+            "calibration_passing_set_nll": 1.2249359289805095,
+            "calibration_uniform_target_cross_entropy": 1.3685518900553386,
+            "epoch": 77,
+            "train_objective": 1.0083087682724
+          },
+          {
+            "calibration_passing_set_nll": 1.2244773705800374,
+            "calibration_uniform_target_cross_entropy": 1.3653459548950195,
+            "epoch": 78,
+            "train_objective": 1.009532908598582
+          },
+          {
+            "calibration_passing_set_nll": 1.2233538627624512,
+            "calibration_uniform_target_cross_entropy": 1.3660688400268555,
+            "epoch": 79,
+            "train_objective": 1.0055717825889587
+          },
+          {
+            "calibration_passing_set_nll": 1.221882661183675,
+            "calibration_uniform_target_cross_entropy": 1.3632739384969075,
+            "epoch": 80,
+            "train_objective": 1.0155639549096425
+          },
+          {
+            "calibration_passing_set_nll": 1.2217330932617188,
+            "calibration_uniform_target_cross_entropy": 1.363546371459961,
+            "epoch": 81,
+            "train_objective": 1.0027384459972382
+          },
+          {
+            "calibration_passing_set_nll": 1.2232702573140461,
+            "calibration_uniform_target_cross_entropy": 1.3668991724650066,
+            "epoch": 82,
+            "train_objective": 1.0018187165260315
+          },
+          {
+            "calibration_passing_set_nll": 1.2274325688680012,
+            "calibration_uniform_target_cross_entropy": 1.3684810002644856,
+            "epoch": 83,
+            "train_objective": 1.014165590206782
+          },
+          {
+            "calibration_passing_set_nll": 1.2218202749888103,
+            "calibration_uniform_target_cross_entropy": 1.3644612630208333,
+            "epoch": 84,
+            "train_objective": 0.9992249310016632
+          },
+          {
+            "calibration_passing_set_nll": 1.2215557893117268,
+            "calibration_uniform_target_cross_entropy": 1.3646103541056316,
+            "epoch": 85,
+            "train_objective": 0.9964044888814291
+          },
+          {
+            "calibration_passing_set_nll": 1.2366091410319011,
+            "calibration_uniform_target_cross_entropy": 1.3850879669189453,
+            "epoch": 86,
+            "train_objective": 1.0056636333465576
+          },
+          {
+            "calibration_passing_set_nll": 1.2234663168589275,
+            "calibration_uniform_target_cross_entropy": 1.365570863087972,
+            "epoch": 87,
+            "train_objective": 0.993603378534317
+          },
+          {
+            "calibration_passing_set_nll": 1.2222777207692463,
+            "calibration_uniform_target_cross_entropy": 1.3645545641581218,
+            "epoch": 88,
+            "train_objective": 0.996883620818456
+          },
+          {
+            "calibration_passing_set_nll": 1.2353464762369792,
+            "calibration_uniform_target_cross_entropy": 1.3850822448730469,
+            "epoch": 89,
+            "train_objective": 0.995802640914917
+          },
+          {
+            "calibration_passing_set_nll": 1.2230441570281982,
+            "calibration_uniform_target_cross_entropy": 1.365801493326823,
+            "epoch": 90,
+            "train_objective": 0.9948219160238901
+          },
+          {
+            "calibration_passing_set_nll": 1.2358898321787517,
+            "calibration_uniform_target_cross_entropy": 1.386048952738444,
+            "epoch": 91,
+            "train_objective": 0.9905515412489573
+          },
+          {
+            "calibration_passing_set_nll": 1.22236434618632,
+            "calibration_uniform_target_cross_entropy": 1.3648937543233235,
+            "epoch": 92,
+            "train_objective": 0.988498330116272
+          },
+          {
+            "calibration_passing_set_nll": 1.2215032577514648,
+            "calibration_uniform_target_cross_entropy": 1.3649431864420574,
+            "epoch": 93,
+            "train_objective": 0.9889270464579264
+          },
+          {
+            "calibration_passing_set_nll": 1.223511536916097,
+            "calibration_uniform_target_cross_entropy": 1.3665266036987305,
+            "epoch": 94,
+            "train_objective": 0.9871816039085388
+          },
+          {
+            "calibration_passing_set_nll": 1.2324317296346028,
+            "calibration_uniform_target_cross_entropy": 1.3818896611531575,
+            "epoch": 95,
+            "train_objective": 0.9871375461419424
+          },
+          {
+            "calibration_passing_set_nll": 1.2309001286824544,
+            "calibration_uniform_target_cross_entropy": 1.379841645558675,
+            "epoch": 96,
+            "train_objective": 0.9795465966065725
+          },
+          {
+            "calibration_passing_set_nll": 1.2210578918457031,
+            "calibration_uniform_target_cross_entropy": 1.3644628524780273,
+            "epoch": 97,
+            "train_objective": 0.9807673295338949
+          },
+          {
+            "calibration_passing_set_nll": 1.2302494843800862,
+            "calibration_uniform_target_cross_entropy": 1.3801374435424805,
+            "epoch": 98,
+            "train_objective": 0.9834131002426147
+          },
+          {
+            "calibration_passing_set_nll": 1.2226618925730388,
+            "calibration_uniform_target_cross_entropy": 1.3662961324055989,
+            "epoch": 99,
+            "train_objective": 0.9778974850972494
+          },
+          {
+            "calibration_passing_set_nll": 1.224361260732015,
+            "calibration_uniform_target_cross_entropy": 1.3689506848653157,
+            "epoch": 100,
+            "train_objective": 0.9838438232739767
+          }
+        ],
+        "loop_wall_seconds": 1.0945471660234034,
+        "mps_allocated_peak_sampled_bytes": 12919808,
+        "mps_driver_peak_sampled_bytes": 53166080,
+        "optimizer_steps": 600,
+        "process_cpu_percent_one_core_normalization": 48.68853682533812,
+        "process_cpu_seconds_during_loop": 0.5329189999999996,
+        "process_lifetime_peak_rss_bytes": 853426176,
+        "selected_epoch": 68,
+        "selection": "calibration passing-set NLL; no development inputs",
+        "training_function_groups": 768,
+        "training_weighted_state_rows": 5695
+      }
+    },
+    "set-initial": {
+      "fp32": {
+        "epochs": 100,
+        "history": [
+          {
+            "calibration_passing_set_nll": 1.2573652267456055,
+            "calibration_uniform_target_cross_entropy": 1.3875408172607422,
+            "epoch": 1,
+            "train_objective": 1.2718786398569744
+          },
+          {
+            "calibration_passing_set_nll": 1.2565217018127441,
+            "calibration_uniform_target_cross_entropy": 1.386630376180013,
+            "epoch": 2,
+            "train_objective": 1.2686739762624104
+          },
+          {
+            "calibration_passing_set_nll": 1.2557484308878581,
+            "calibration_uniform_target_cross_entropy": 1.385824203491211,
+            "epoch": 3,
+            "train_objective": 1.2661677598953247
+          },
+          {
+            "calibration_passing_set_nll": 1.2550560633341472,
+            "calibration_uniform_target_cross_entropy": 1.3850944836934407,
+            "epoch": 4,
+            "train_objective": 1.2628540396690369
+          },
+          {
+            "calibration_passing_set_nll": 1.2543662389119465,
+            "calibration_uniform_target_cross_entropy": 1.3843952814737956,
+            "epoch": 5,
+            "train_objective": 1.2596492369969685
+          },
+          {
+            "calibration_passing_set_nll": 1.2536765734354656,
+            "calibration_uniform_target_cross_entropy": 1.3836994171142578,
+            "epoch": 6,
+            "train_objective": 1.2559553980827332
+          },
+          {
+            "calibration_passing_set_nll": 1.2529771327972412,
+            "calibration_uniform_target_cross_entropy": 1.3830140431722004,
+            "epoch": 7,
+            "train_objective": 1.251539905865987
+          },
+          {
+            "calibration_passing_set_nll": 1.2522786458333333,
+            "calibration_uniform_target_cross_entropy": 1.3823453585306804,
+            "epoch": 8,
+            "train_objective": 1.2467392683029175
+          },
+          {
+            "calibration_passing_set_nll": 1.2512416044871013,
+            "calibration_uniform_target_cross_entropy": 1.3813079198201497,
+            "epoch": 9,
+            "train_objective": 1.2408201694488525
+          },
+          {
+            "calibration_passing_set_nll": 1.2502468427022297,
+            "calibration_uniform_target_cross_entropy": 1.3803596496582031,
+            "epoch": 10,
+            "train_objective": 1.2346100211143494
+          },
+          {
+            "calibration_passing_set_nll": 1.249075174331665,
+            "calibration_uniform_target_cross_entropy": 1.379206657409668,
+            "epoch": 11,
+            "train_objective": 1.2272492249806721
+          },
+          {
+            "calibration_passing_set_nll": 1.248019774754842,
+            "calibration_uniform_target_cross_entropy": 1.3782343864440918,
+            "epoch": 12,
+            "train_objective": 1.2189857761065166
+          },
+          {
+            "calibration_passing_set_nll": 1.246520757675171,
+            "calibration_uniform_target_cross_entropy": 1.3767820994059246,
+            "epoch": 13,
+            "train_objective": 1.2100717822710674
+          },
+          {
+            "calibration_passing_set_nll": 1.2451341152191162,
+            "calibration_uniform_target_cross_entropy": 1.3754587173461914,
+            "epoch": 14,
+            "train_objective": 1.2002024451891582
+          },
+          {
+            "calibration_passing_set_nll": 1.243676980336507,
+            "calibration_uniform_target_cross_entropy": 1.3740921020507812,
+            "epoch": 15,
+            "train_objective": 1.1901045838991802
+          },
+          {
+            "calibration_passing_set_nll": 1.2423211733500164,
+            "calibration_uniform_target_cross_entropy": 1.3728680610656738,
+            "epoch": 16,
+            "train_objective": 1.1795386870702107
+          },
+          {
+            "calibration_passing_set_nll": 1.2407625516255696,
+            "calibration_uniform_target_cross_entropy": 1.3714269002278645,
+            "epoch": 17,
+            "train_objective": 1.1680604219436646
+          },
+          {
+            "calibration_passing_set_nll": 1.2393563588460286,
+            "calibration_uniform_target_cross_entropy": 1.3702001571655273,
+            "epoch": 18,
+            "train_objective": 1.1563454667727153
+          },
+          {
+            "calibration_passing_set_nll": 1.2376890977223713,
+            "calibration_uniform_target_cross_entropy": 1.3686353365580242,
+            "epoch": 19,
+            "train_objective": 1.1441122492154439
+          },
+          {
+            "calibration_passing_set_nll": 1.2363312244415283,
+            "calibration_uniform_target_cross_entropy": 1.3674999872843425,
+            "epoch": 20,
+            "train_objective": 1.1314354538917542
+          },
+          {
+            "calibration_passing_set_nll": 1.2352040608723958,
+            "calibration_uniform_target_cross_entropy": 1.36664883295695,
+            "epoch": 21,
+            "train_objective": 1.1190624634424846
+          },
+          {
+            "calibration_passing_set_nll": 1.2338671684265137,
+            "calibration_uniform_target_cross_entropy": 1.3655462265014648,
+            "epoch": 22,
+            "train_objective": 1.1069319049517314
+          },
+          {
+            "calibration_passing_set_nll": 1.2326502799987793,
+            "calibration_uniform_target_cross_entropy": 1.364595095316569,
+            "epoch": 23,
+            "train_objective": 1.093976100285848
+          },
+          {
+            "calibration_passing_set_nll": 1.2314212322235107,
+            "calibration_uniform_target_cross_entropy": 1.3636630376180012,
+            "epoch": 24,
+            "train_objective": 1.081482470035553
+          },
+          {
+            "calibration_passing_set_nll": 1.230607271194458,
+            "calibration_uniform_target_cross_entropy": 1.363219420115153,
+            "epoch": 25,
+            "train_objective": 1.068134884039561
+          },
+          {
+            "calibration_passing_set_nll": 1.2302316029866536,
+            "calibration_uniform_target_cross_entropy": 1.3632280031840007,
+            "epoch": 26,
+            "train_objective": 1.0558215777079265
+          },
+          {
+            "calibration_passing_set_nll": 1.2290927569071453,
+            "calibration_uniform_target_cross_entropy": 1.362488587697347,
+            "epoch": 27,
+            "train_objective": 1.0435548027356465
+          },
+          {
+            "calibration_passing_set_nll": 1.2288949489593506,
+            "calibration_uniform_target_cross_entropy": 1.3628466924031575,
+            "epoch": 28,
+            "train_objective": 1.0320510069529216
+          },
+          {
+            "calibration_passing_set_nll": 1.2285831769307454,
+            "calibration_uniform_target_cross_entropy": 1.3629619280497234,
+            "epoch": 29,
+            "train_objective": 1.020146866639455
+          },
+          {
+            "calibration_passing_set_nll": 1.228775421778361,
+            "calibration_uniform_target_cross_entropy": 1.3636714617411296,
+            "epoch": 30,
+            "train_objective": 1.008737434943517
+          },
+          {
+            "calibration_passing_set_nll": 1.2287463347117107,
+            "calibration_uniform_target_cross_entropy": 1.3642314275105794,
+            "epoch": 31,
+            "train_objective": 0.9979259371757507
+          },
+          {
+            "calibration_passing_set_nll": 1.2292485237121582,
+            "calibration_uniform_target_cross_entropy": 1.3653047879536946,
+            "epoch": 32,
+            "train_objective": 0.9878030916055044
+          },
+          {
+            "calibration_passing_set_nll": 1.229428768157959,
+            "calibration_uniform_target_cross_entropy": 1.3662211100260417,
+            "epoch": 33,
+            "train_objective": 0.9780346155166626
+          },
+          {
+            "calibration_passing_set_nll": 1.230908711751302,
+            "calibration_uniform_target_cross_entropy": 1.3682390848795574,
+            "epoch": 34,
+            "train_objective": 0.9685100018978119
+          },
+          {
+            "calibration_passing_set_nll": 1.2315664291381836,
+            "calibration_uniform_target_cross_entropy": 1.369535764058431,
+            "epoch": 35,
+            "train_objective": 0.9594206015268961
+          },
+          {
+            "calibration_passing_set_nll": 1.2327338059743245,
+            "calibration_uniform_target_cross_entropy": 1.3714303970336914,
+            "epoch": 36,
+            "train_objective": 0.9503048459688822
+          },
+          {
+            "calibration_passing_set_nll": 1.233999252319336,
+            "calibration_uniform_target_cross_entropy": 1.3734874725341797,
+            "epoch": 37,
+            "train_objective": 0.9419154028097788
+          },
+          {
+            "calibration_passing_set_nll": 1.2365965048472087,
+            "calibration_uniform_target_cross_entropy": 1.3769289652506511,
+            "epoch": 38,
+            "train_objective": 0.9341231286525726
+          },
+          {
+            "calibration_passing_set_nll": 1.236536979675293,
+            "calibration_uniform_target_cross_entropy": 1.3776578903198242,
+            "epoch": 39,
+            "train_objective": 0.9275699257850647
+          },
+          {
+            "calibration_passing_set_nll": 1.240498383839925,
+            "calibration_uniform_target_cross_entropy": 1.382229487101237,
+            "epoch": 40,
+            "train_objective": 0.9180943667888641
+          },
+          {
+            "calibration_passing_set_nll": 1.2413485844930012,
+            "calibration_uniform_target_cross_entropy": 1.384116490681966,
+            "epoch": 41,
+            "train_objective": 0.9116622706254324
+          },
+          {
+            "calibration_passing_set_nll": 1.2428305943806965,
+            "calibration_uniform_target_cross_entropy": 1.3862242698669434,
+            "epoch": 42,
+            "train_objective": 0.904409259557724
+          },
+          {
+            "calibration_passing_set_nll": 1.245663007100423,
+            "calibration_uniform_target_cross_entropy": 1.3898911476135254,
+            "epoch": 43,
+            "train_objective": 0.8971828023592631
+          },
+          {
+            "calibration_passing_set_nll": 1.2469420433044434,
+            "calibration_uniform_target_cross_entropy": 1.3920526504516602,
+            "epoch": 44,
+            "train_objective": 0.8908974130948385
+          },
+          {
+            "calibration_passing_set_nll": 1.24759308497111,
+            "calibration_uniform_target_cross_entropy": 1.3935001691182454,
+            "epoch": 45,
+            "train_objective": 0.884963850180308
+          },
+          {
+            "calibration_passing_set_nll": 1.25166916847229,
+            "calibration_uniform_target_cross_entropy": 1.3983294169108074,
+            "epoch": 46,
+            "train_objective": 0.8788507779439291
+          },
+          {
+            "calibration_passing_set_nll": 1.2532369295756023,
+            "calibration_uniform_target_cross_entropy": 1.4008193016052246,
+            "epoch": 47,
+            "train_objective": 0.8728939592838287
+          },
+          {
+            "calibration_passing_set_nll": 1.2547866503397624,
+            "calibration_uniform_target_cross_entropy": 1.4031817118326824,
+            "epoch": 48,
+            "train_objective": 0.8672707776228586
+          },
+          {
+            "calibration_passing_set_nll": 1.2590182622273762,
+            "calibration_uniform_target_cross_entropy": 1.4083914756774902,
+            "epoch": 49,
+            "train_objective": 0.8617635567982992
+          },
+          {
+            "calibration_passing_set_nll": 1.2614473501841228,
+            "calibration_uniform_target_cross_entropy": 1.4117190043131511,
+            "epoch": 50,
+            "train_objective": 0.8571515878041586
+          },
+          {
+            "calibration_passing_set_nll": 1.2626732190450032,
+            "calibration_uniform_target_cross_entropy": 1.4136568705240886,
+            "epoch": 51,
+            "train_objective": 0.8519733349482218
+          },
+          {
+            "calibration_passing_set_nll": 1.2662349541982014,
+            "calibration_uniform_target_cross_entropy": 1.4182189305623372,
+            "epoch": 52,
+            "train_objective": 0.8467815816402435
+          },
+          {
+            "calibration_passing_set_nll": 1.2701762517293294,
+            "calibration_uniform_target_cross_entropy": 1.4232254028320312,
+            "epoch": 53,
+            "train_objective": 0.84215181072553
+          },
+          {
+            "calibration_passing_set_nll": 1.2725764115651448,
+            "calibration_uniform_target_cross_entropy": 1.4264097213745117,
+            "epoch": 54,
+            "train_objective": 0.8374286989370981
+          },
+          {
+            "calibration_passing_set_nll": 1.2743484179178874,
+            "calibration_uniform_target_cross_entropy": 1.4292151133219402,
+            "epoch": 55,
+            "train_objective": 0.8324716289838155
+          },
+          {
+            "calibration_passing_set_nll": 1.2772693634033203,
+            "calibration_uniform_target_cross_entropy": 1.433031717936198,
+            "epoch": 56,
+            "train_objective": 0.8280762036641439
+          },
+          {
+            "calibration_passing_set_nll": 1.2777625719706218,
+            "calibration_uniform_target_cross_entropy": 1.4341820081075032,
+            "epoch": 57,
+            "train_objective": 0.8238628506660461
+          },
+          {
+            "calibration_passing_set_nll": 1.2822742462158203,
+            "calibration_uniform_target_cross_entropy": 1.4397913614908855,
+            "epoch": 58,
+            "train_objective": 0.8192314803600311
+          },
+          {
+            "calibration_passing_set_nll": 1.2849642435709636,
+            "calibration_uniform_target_cross_entropy": 1.4435545603434246,
+            "epoch": 59,
+            "train_objective": 0.815301756064097
+          },
+          {
+            "calibration_passing_set_nll": 1.2884074846903484,
+            "calibration_uniform_target_cross_entropy": 1.447911262512207,
+            "epoch": 60,
+            "train_objective": 0.8109279274940491
+          },
+          {
+            "calibration_passing_set_nll": 1.292843262354533,
+            "calibration_uniform_target_cross_entropy": 1.4534289042154949,
+            "epoch": 61,
+            "train_objective": 0.8067338069279989
+          },
+          {
+            "calibration_passing_set_nll": 1.2964167594909668,
+            "calibration_uniform_target_cross_entropy": 1.45807679494222,
+            "epoch": 62,
+            "train_objective": 0.8029108544190725
+          },
+          {
+            "calibration_passing_set_nll": 1.2974180380503337,
+            "calibration_uniform_target_cross_entropy": 1.4600310325622559,
+            "epoch": 63,
+            "train_objective": 0.7981069386005402
+          },
+          {
+            "calibration_passing_set_nll": 1.301743507385254,
+            "calibration_uniform_target_cross_entropy": 1.4651292165120442,
+            "epoch": 64,
+            "train_objective": 0.7945091426372528
+          },
+          {
+            "calibration_passing_set_nll": 1.3006962140401204,
+            "calibration_uniform_target_cross_entropy": 1.465088685353597,
+            "epoch": 65,
+            "train_objective": 0.7900175849596659
+          },
+          {
+            "calibration_passing_set_nll": 1.3068381945292156,
+            "calibration_uniform_target_cross_entropy": 1.472649097442627,
+            "epoch": 66,
+            "train_objective": 0.7863956888516744
+          },
+          {
+            "calibration_passing_set_nll": 1.314153512318929,
+            "calibration_uniform_target_cross_entropy": 1.480918248494466,
+            "epoch": 67,
+            "train_objective": 0.7826008498668671
+          },
+          {
+            "calibration_passing_set_nll": 1.311442534128825,
+            "calibration_uniform_target_cross_entropy": 1.4791455268859863,
+            "epoch": 68,
+            "train_objective": 0.7785733838876089
+          },
+          {
+            "calibration_passing_set_nll": 1.3168147404988606,
+            "calibration_uniform_target_cross_entropy": 1.48578945795695,
+            "epoch": 69,
+            "train_objective": 0.7744116286436716
+          },
+          {
+            "calibration_passing_set_nll": 1.3209867477416992,
+            "calibration_uniform_target_cross_entropy": 1.4912249247233074,
+            "epoch": 70,
+            "train_objective": 0.7699271440505981
+          },
+          {
+            "calibration_passing_set_nll": 1.3234256108601887,
+            "calibration_uniform_target_cross_entropy": 1.4944631258646648,
+            "epoch": 71,
+            "train_objective": 0.7663977841536204
+          },
+          {
+            "calibration_passing_set_nll": 1.3243807156880696,
+            "calibration_uniform_target_cross_entropy": 1.4965871175130208,
+            "epoch": 72,
+            "train_objective": 0.762692372004191
+          },
+          {
+            "calibration_passing_set_nll": 1.3304187456766765,
+            "calibration_uniform_target_cross_entropy": 1.5039612452189128,
+            "epoch": 73,
+            "train_objective": 0.7581119537353516
+          },
+          {
+            "calibration_passing_set_nll": 1.3317516644795735,
+            "calibration_uniform_target_cross_entropy": 1.506349245707194,
+            "epoch": 74,
+            "train_objective": 0.7540046175320944
+          },
+          {
+            "calibration_passing_set_nll": 1.331743558247884,
+            "calibration_uniform_target_cross_entropy": 1.507242202758789,
+            "epoch": 75,
+            "train_objective": 0.7498433391253153
+          },
+          {
+            "calibration_passing_set_nll": 1.3393532435099285,
+            "calibration_uniform_target_cross_entropy": 1.516070048014323,
+            "epoch": 76,
+            "train_objective": 0.7458353638648987
+          },
+          {
+            "calibration_passing_set_nll": 1.3396172523498535,
+            "calibration_uniform_target_cross_entropy": 1.5171724955240886,
+            "epoch": 77,
+            "train_objective": 0.7414165139198303
+          },
+          {
+            "calibration_passing_set_nll": 1.345174789428711,
+            "calibration_uniform_target_cross_entropy": 1.5242942174275715,
+            "epoch": 78,
+            "train_objective": 0.7377180953820547
+          },
+          {
+            "calibration_passing_set_nll": 1.3472118377685547,
+            "calibration_uniform_target_cross_entropy": 1.5272734959920247,
+            "epoch": 79,
+            "train_objective": 0.7339467207590739
+          },
+          {
+            "calibration_passing_set_nll": 1.3487895329793294,
+            "calibration_uniform_target_cross_entropy": 1.5297892888387044,
+            "epoch": 80,
+            "train_objective": 0.730973502000173
+          },
+          {
+            "calibration_passing_set_nll": 1.3539433479309082,
+            "calibration_uniform_target_cross_entropy": 1.5363311767578125,
+            "epoch": 81,
+            "train_objective": 0.7265085776646932
+          },
+          {
+            "calibration_passing_set_nll": 1.3534094492594402,
+            "calibration_uniform_target_cross_entropy": 1.5366398493448894,
+            "epoch": 82,
+            "train_objective": 0.7229903340339661
+          },
+          {
+            "calibration_passing_set_nll": 1.3619022369384766,
+            "calibration_uniform_target_cross_entropy": 1.5465685526529949,
+            "epoch": 83,
+            "train_objective": 0.7184911072254181
+          },
+          {
+            "calibration_passing_set_nll": 1.3620150883992512,
+            "calibration_uniform_target_cross_entropy": 1.5477178891499836,
+            "epoch": 84,
+            "train_objective": 0.7146755258242289
+          },
+          {
+            "calibration_passing_set_nll": 1.365523338317871,
+            "calibration_uniform_target_cross_entropy": 1.5523802439371746,
+            "epoch": 85,
+            "train_objective": 0.7107123533884684
+          },
+          {
+            "calibration_passing_set_nll": 1.3707857131958008,
+            "calibration_uniform_target_cross_entropy": 1.5588286717732747,
+            "epoch": 86,
+            "train_objective": 0.7072430650393168
+          },
+          {
+            "calibration_passing_set_nll": 1.3721178372701008,
+            "calibration_uniform_target_cross_entropy": 1.5614352226257324,
+            "epoch": 87,
+            "train_objective": 0.7038332223892212
+          },
+          {
+            "calibration_passing_set_nll": 1.3761928876241047,
+            "calibration_uniform_target_cross_entropy": 1.5662724177042644,
+            "epoch": 88,
+            "train_objective": 0.7002189457416534
+          },
+          {
+            "calibration_passing_set_nll": 1.376158078511556,
+            "calibration_uniform_target_cross_entropy": 1.5674460728963215,
+            "epoch": 89,
+            "train_objective": 0.6966952780882517
+          },
+          {
+            "calibration_passing_set_nll": 1.3813249270121257,
+            "calibration_uniform_target_cross_entropy": 1.573914368947347,
+            "epoch": 90,
+            "train_objective": 0.6936037937800089
+          },
+          {
+            "calibration_passing_set_nll": 1.3845154444376628,
+            "calibration_uniform_target_cross_entropy": 1.5782585144042969,
+            "epoch": 91,
+            "train_objective": 0.6899196604887644
+          },
+          {
+            "calibration_passing_set_nll": 1.3881456057230632,
+            "calibration_uniform_target_cross_entropy": 1.5830685297648113,
+            "epoch": 92,
+            "train_objective": 0.686467041571935
+          },
+          {
+            "calibration_passing_set_nll": 1.3921529452006023,
+            "calibration_uniform_target_cross_entropy": 1.5883913040161133,
+            "epoch": 93,
+            "train_objective": 0.6838143070538839
+          },
+          {
+            "calibration_passing_set_nll": 1.3924198150634766,
+            "calibration_uniform_target_cross_entropy": 1.5893139839172363,
+            "epoch": 94,
+            "train_objective": 0.6802604993184408
+          },
+          {
+            "calibration_passing_set_nll": 1.3979918162027996,
+            "calibration_uniform_target_cross_entropy": 1.5964558919270833,
+            "epoch": 95,
+            "train_objective": 0.6772762636343638
+          },
+          {
+            "calibration_passing_set_nll": 1.4008197784423828,
+            "calibration_uniform_target_cross_entropy": 1.6000868479410808,
+            "epoch": 96,
+            "train_objective": 0.6734025975068411
+          },
+          {
+            "calibration_passing_set_nll": 1.4023982683817546,
+            "calibration_uniform_target_cross_entropy": 1.6028976440429688,
+            "epoch": 97,
+            "train_objective": 0.6704980532328287
+          },
+          {
+            "calibration_passing_set_nll": 1.4110619227091472,
+            "calibration_uniform_target_cross_entropy": 1.612300713857015,
+            "epoch": 98,
+            "train_objective": 0.6679138044516245
+          },
+          {
+            "calibration_passing_set_nll": 1.4089609781901042,
+            "calibration_uniform_target_cross_entropy": 1.6117846171061199,
+            "epoch": 99,
+            "train_objective": 0.6645504037539164
+          },
+          {
+            "calibration_passing_set_nll": 1.4126510620117188,
+            "calibration_uniform_target_cross_entropy": 1.6159931818644206,
+            "epoch": 100,
+            "train_objective": 0.6615288853645325
+          }
+        ],
+        "loop_wall_seconds": 0.8631394170224667,
+        "mps_allocated_peak_sampled_bytes": 4179712,
+        "mps_driver_peak_sampled_bytes": 53166080,
+        "optimizer_steps": 600,
+        "process_cpu_percent_one_core_normalization": 46.06498002044678,
+        "process_cpu_seconds_during_loop": 0.3976050000000001,
+        "process_lifetime_peak_rss_bytes": 509444096,
+        "selected_epoch": 29,
+        "selection": "calibration passing-set NLL; no development inputs",
+        "training_function_groups": 768,
+        "training_weighted_state_rows": 1536
+      },
+      "qat_ternary": {
+        "epochs": 100,
+        "history": [
+          {
+            "calibration_passing_set_nll": 1.2460877895355225,
+            "calibration_uniform_target_cross_entropy": 1.3765657742818196,
+            "epoch": 1,
+            "train_objective": 1.201286296049754
+          },
+          {
+            "calibration_passing_set_nll": 1.245958964029948,
+            "calibration_uniform_target_cross_entropy": 1.37629238764445,
+            "epoch": 2,
+            "train_objective": 1.1966795325279236
+          },
+          {
+            "calibration_passing_set_nll": 1.244473934173584,
+            "calibration_uniform_target_cross_entropy": 1.3748235702514648,
+            "epoch": 3,
+            "train_objective": 1.1933445731798809
+          },
+          {
+            "calibration_passing_set_nll": 1.2437713940938313,
+            "calibration_uniform_target_cross_entropy": 1.374112606048584,
+            "epoch": 4,
+            "train_objective": 1.1900864044825237
+          },
+          {
+            "calibration_passing_set_nll": 1.2432737350463867,
+            "calibration_uniform_target_cross_entropy": 1.3735796610514324,
+            "epoch": 5,
+            "train_objective": 1.1870978474617004
+          },
+          {
+            "calibration_passing_set_nll": 1.2433316707611084,
+            "calibration_uniform_target_cross_entropy": 1.3735472361246746,
+            "epoch": 6,
+            "train_objective": 1.1847973664601643
+          },
+          {
+            "calibration_passing_set_nll": 1.2426530520121257,
+            "calibration_uniform_target_cross_entropy": 1.3728801409403484,
+            "epoch": 7,
+            "train_objective": 1.1809799869855244
+          },
+          {
+            "calibration_passing_set_nll": 1.241848627726237,
+            "calibration_uniform_target_cross_entropy": 1.3722437222798665,
+            "epoch": 8,
+            "train_objective": 1.1770998040835063
+          },
+          {
+            "calibration_passing_set_nll": 1.2416892051696777,
+            "calibration_uniform_target_cross_entropy": 1.3719571431477864,
+            "epoch": 9,
+            "train_objective": 1.1730083028475444
+          },
+          {
+            "calibration_passing_set_nll": 1.2411638100941975,
+            "calibration_uniform_target_cross_entropy": 1.3714612325032551,
+            "epoch": 10,
+            "train_objective": 1.1697260737419128
+          },
+          {
+            "calibration_passing_set_nll": 1.2407317161560059,
+            "calibration_uniform_target_cross_entropy": 1.3710314432779949,
+            "epoch": 11,
+            "train_objective": 1.1667934656143188
+          },
+          {
+            "calibration_passing_set_nll": 1.240012804667155,
+            "calibration_uniform_target_cross_entropy": 1.3703444798787434,
+            "epoch": 12,
+            "train_objective": 1.1630580027898152
+          },
+          {
+            "calibration_passing_set_nll": 1.2393603324890137,
+            "calibration_uniform_target_cross_entropy": 1.3697141011555989,
+            "epoch": 13,
+            "train_objective": 1.1597988804181416
+          },
+          {
+            "calibration_passing_set_nll": 1.2385201454162598,
+            "calibration_uniform_target_cross_entropy": 1.3689184188842773,
+            "epoch": 14,
+            "train_objective": 1.1558523376782734
+          },
+          {
+            "calibration_passing_set_nll": 1.238620360692342,
+            "calibration_uniform_target_cross_entropy": 1.3690611521402996,
+            "epoch": 15,
+            "train_objective": 1.152385413646698
+          },
+          {
+            "calibration_passing_set_nll": 1.238126277923584,
+            "calibration_uniform_target_cross_entropy": 1.368611176808675,
+            "epoch": 16,
+            "train_objective": 1.1486518780390422
+          },
+          {
+            "calibration_passing_set_nll": 1.2386411031087239,
+            "calibration_uniform_target_cross_entropy": 1.3691403071085613,
+            "epoch": 17,
+            "train_objective": 1.1447288393974304
+          },
+          {
+            "calibration_passing_set_nll": 1.2376103401184082,
+            "calibration_uniform_target_cross_entropy": 1.3681511878967285,
+            "epoch": 18,
+            "train_objective": 1.1406689484914143
+          },
+          {
+            "calibration_passing_set_nll": 1.236639420191447,
+            "calibration_uniform_target_cross_entropy": 1.3672202428181965,
+            "epoch": 19,
+            "train_objective": 1.1365535855293274
+          },
+          {
+            "calibration_passing_set_nll": 1.2368966738382976,
+            "calibration_uniform_target_cross_entropy": 1.3675047556559246,
+            "epoch": 20,
+            "train_objective": 1.1324744423230488
+          },
+          {
+            "calibration_passing_set_nll": 1.2370912233988445,
+            "calibration_uniform_target_cross_entropy": 1.3677314122517903,
+            "epoch": 21,
+            "train_objective": 1.1289305885632832
+          },
+          {
+            "calibration_passing_set_nll": 1.2348256905873616,
+            "calibration_uniform_target_cross_entropy": 1.365522066752116,
+            "epoch": 22,
+            "train_objective": 1.124668538570404
+          },
+          {
+            "calibration_passing_set_nll": 1.2357686360677083,
+            "calibration_uniform_target_cross_entropy": 1.3664350509643555,
+            "epoch": 23,
+            "train_objective": 1.1195260087649028
+          },
+          {
+            "calibration_passing_set_nll": 1.23471204439799,
+            "calibration_uniform_target_cross_entropy": 1.3653982480367024,
+            "epoch": 24,
+            "train_objective": 1.1152503093083699
+          },
+          {
+            "calibration_passing_set_nll": 1.2346269289652507,
+            "calibration_uniform_target_cross_entropy": 1.3653639157613118,
+            "epoch": 25,
+            "train_objective": 1.110606571038564
+          },
+          {
+            "calibration_passing_set_nll": 1.234054724375407,
+            "calibration_uniform_target_cross_entropy": 1.3648470242818196,
+            "epoch": 26,
+            "train_objective": 1.1064071257909138
+          },
+          {
+            "calibration_passing_set_nll": 1.2324503262837727,
+            "calibration_uniform_target_cross_entropy": 1.3632938067118328,
+            "epoch": 27,
+            "train_objective": 1.1025237242380779
+          },
+          {
+            "calibration_passing_set_nll": 1.2333402633666992,
+            "calibration_uniform_target_cross_entropy": 1.3642365137736003,
+            "epoch": 28,
+            "train_objective": 1.0984541376431782
+          },
+          {
+            "calibration_passing_set_nll": 1.2320929368336995,
+            "calibration_uniform_target_cross_entropy": 1.3631089528401692,
+            "epoch": 29,
+            "train_objective": 1.0938864747683208
+          },
+          {
+            "calibration_passing_set_nll": 1.2327566941579182,
+            "calibration_uniform_target_cross_entropy": 1.363972822825114,
+            "epoch": 30,
+            "train_objective": 1.0885623097419739
+          },
+          {
+            "calibration_passing_set_nll": 1.231836477915446,
+            "calibration_uniform_target_cross_entropy": 1.3630510965983074,
+            "epoch": 31,
+            "train_objective": 1.0838729937871296
+          },
+          {
+            "calibration_passing_set_nll": 1.2309420108795166,
+            "calibration_uniform_target_cross_entropy": 1.362339973449707,
+            "epoch": 32,
+            "train_objective": 1.0794154405593872
+          },
+          {
+            "calibration_passing_set_nll": 1.2305153210957844,
+            "calibration_uniform_target_cross_entropy": 1.3621997833251953,
+            "epoch": 33,
+            "train_objective": 1.0763114889462788
+          },
+          {
+            "calibration_passing_set_nll": 1.2306618690490723,
+            "calibration_uniform_target_cross_entropy": 1.3623085021972656,
+            "epoch": 34,
+            "train_objective": 1.070870041847229
+          },
+          {
+            "calibration_passing_set_nll": 1.2308098475138347,
+            "calibration_uniform_target_cross_entropy": 1.3624626795450847,
+            "epoch": 35,
+            "train_objective": 1.0664166609446208
+          },
+          {
+            "calibration_passing_set_nll": 1.2306913534800212,
+            "calibration_uniform_target_cross_entropy": 1.3624704678853352,
+            "epoch": 36,
+            "train_objective": 1.0617280006408691
+          },
+          {
+            "calibration_passing_set_nll": 1.229408582051595,
+            "calibration_uniform_target_cross_entropy": 1.3613395690917969,
+            "epoch": 37,
+            "train_objective": 1.0578450957934062
+          },
+          {
+            "calibration_passing_set_nll": 1.2312273979187012,
+            "calibration_uniform_target_cross_entropy": 1.3630762100219727,
+            "epoch": 38,
+            "train_objective": 1.0539566079775493
+          },
+          {
+            "calibration_passing_set_nll": 1.2301974296569824,
+            "calibration_uniform_target_cross_entropy": 1.3625035285949707,
+            "epoch": 39,
+            "train_objective": 1.0505667924880981
+          },
+          {
+            "calibration_passing_set_nll": 1.2311414082845051,
+            "calibration_uniform_target_cross_entropy": 1.3634198506673176,
+            "epoch": 40,
+            "train_objective": 1.0456927418708801
+          },
+          {
+            "calibration_passing_set_nll": 1.2282387415568035,
+            "calibration_uniform_target_cross_entropy": 1.3608423868815105,
+            "epoch": 41,
+            "train_objective": 1.0404445727666218
+          },
+          {
+            "calibration_passing_set_nll": 1.2311652501424153,
+            "calibration_uniform_target_cross_entropy": 1.36335023244222,
+            "epoch": 42,
+            "train_objective": 1.0373297731081645
+          },
+          {
+            "calibration_passing_set_nll": 1.2287612756093342,
+            "calibration_uniform_target_cross_entropy": 1.3616450627644856,
+            "epoch": 43,
+            "train_objective": 1.031655212243398
+          },
+          {
+            "calibration_passing_set_nll": 1.2308273315429688,
+            "calibration_uniform_target_cross_entropy": 1.3635549545288086,
+            "epoch": 44,
+            "train_objective": 1.0282848874727886
+          },
+          {
+            "calibration_passing_set_nll": 1.2287364800771077,
+            "calibration_uniform_target_cross_entropy": 1.3620384534200032,
+            "epoch": 45,
+            "train_objective": 1.0230919520060222
+          },
+          {
+            "calibration_passing_set_nll": 1.2298559347788494,
+            "calibration_uniform_target_cross_entropy": 1.3633079528808594,
+            "epoch": 46,
+            "train_objective": 1.018618216117223
+          },
+          {
+            "calibration_passing_set_nll": 1.2318472067515056,
+            "calibration_uniform_target_cross_entropy": 1.3656091690063477,
+            "epoch": 47,
+            "train_objective": 1.0142703652381897
+          },
+          {
+            "calibration_passing_set_nll": 1.2279806931813557,
+            "calibration_uniform_target_cross_entropy": 1.3623450597127278,
+            "epoch": 48,
+            "train_objective": 1.006883164246877
+          },
+          {
+            "calibration_passing_set_nll": 1.2308289210001628,
+            "calibration_uniform_target_cross_entropy": 1.3652586936950684,
+            "epoch": 49,
+            "train_objective": 1.0017063816388447
+          },
+          {
+            "calibration_passing_set_nll": 1.2306920687357585,
+            "calibration_uniform_target_cross_entropy": 1.365277926127116,
+            "epoch": 50,
+            "train_objective": 0.9973887999852499
+          },
+          {
+            "calibration_passing_set_nll": 1.2308926582336426,
+            "calibration_uniform_target_cross_entropy": 1.365782101949056,
+            "epoch": 51,
+            "train_objective": 0.9925590256849924
+          },
+          {
+            "calibration_passing_set_nll": 1.23145858446757,
+            "calibration_uniform_target_cross_entropy": 1.3674359321594238,
+            "epoch": 52,
+            "train_objective": 0.9862372279167175
+          },
+          {
+            "calibration_passing_set_nll": 1.235512336095174,
+            "calibration_uniform_target_cross_entropy": 1.3721477190653484,
+            "epoch": 53,
+            "train_objective": 0.9804895520210266
+          },
+          {
+            "calibration_passing_set_nll": 1.235307772954305,
+            "calibration_uniform_target_cross_entropy": 1.3727658589680989,
+            "epoch": 54,
+            "train_objective": 0.974529892206192
+          },
+          {
+            "calibration_passing_set_nll": 1.2350122133890789,
+            "calibration_uniform_target_cross_entropy": 1.3738190333048503,
+            "epoch": 55,
+            "train_objective": 0.9689483741919199
+          },
+          {
+            "calibration_passing_set_nll": 1.2358729044596355,
+            "calibration_uniform_target_cross_entropy": 1.3741515477498372,
+            "epoch": 56,
+            "train_objective": 0.9637385805447897
+          },
+          {
+            "calibration_passing_set_nll": 1.2327350775400798,
+            "calibration_uniform_target_cross_entropy": 1.371605396270752,
+            "epoch": 57,
+            "train_objective": 0.9584282437960306
+          },
+          {
+            "calibration_passing_set_nll": 1.2353200912475586,
+            "calibration_uniform_target_cross_entropy": 1.3759520848592122,
+            "epoch": 58,
+            "train_objective": 0.9515574077765147
+          },
+          {
+            "calibration_passing_set_nll": 1.2346448103586833,
+            "calibration_uniform_target_cross_entropy": 1.3757065137227376,
+            "epoch": 59,
+            "train_objective": 0.9476409355799357
+          },
+          {
+            "calibration_passing_set_nll": 1.236296812693278,
+            "calibration_uniform_target_cross_entropy": 1.376752535502116,
+            "epoch": 60,
+            "train_objective": 0.9426857928435007
+          },
+          {
+            "calibration_passing_set_nll": 1.2395381927490234,
+            "calibration_uniform_target_cross_entropy": 1.3792813618977864,
+            "epoch": 61,
+            "train_objective": 0.9416306217511495
+          },
+          {
+            "calibration_passing_set_nll": 1.2397940158843994,
+            "calibration_uniform_target_cross_entropy": 1.3801698684692383,
+            "epoch": 62,
+            "train_objective": 0.9446490506331126
+          },
+          {
+            "calibration_passing_set_nll": 1.2355509599049885,
+            "calibration_uniform_target_cross_entropy": 1.3806034723917644,
+            "epoch": 63,
+            "train_objective": 0.9320448140303293
+          },
+          {
+            "calibration_passing_set_nll": 1.252241849899292,
+            "calibration_uniform_target_cross_entropy": 1.4075175921122234,
+            "epoch": 64,
+            "train_objective": 0.9270198146502177
+          },
+          {
+            "calibration_passing_set_nll": 1.2382176717122395,
+            "calibration_uniform_target_cross_entropy": 1.3833808898925781,
+            "epoch": 65,
+            "train_objective": 0.9282115797201792
+          },
+          {
+            "calibration_passing_set_nll": 1.2422011693318684,
+            "calibration_uniform_target_cross_entropy": 1.3871326446533203,
+            "epoch": 66,
+            "train_objective": 0.9223145941893259
+          },
+          {
+            "calibration_passing_set_nll": 1.2539997895558674,
+            "calibration_uniform_target_cross_entropy": 1.409157435099284,
+            "epoch": 67,
+            "train_objective": 0.9184304078420004
+          },
+          {
+            "calibration_passing_set_nll": 1.2420250574747722,
+            "calibration_uniform_target_cross_entropy": 1.3899699846903484,
+            "epoch": 68,
+            "train_objective": 0.9158348341782888
+          },
+          {
+            "calibration_passing_set_nll": 1.2554385662078857,
+            "calibration_uniform_target_cross_entropy": 1.4123754501342773,
+            "epoch": 69,
+            "train_objective": 0.9127287367979685
+          },
+          {
+            "calibration_passing_set_nll": 1.2449549833933513,
+            "calibration_uniform_target_cross_entropy": 1.3927741050720215,
+            "epoch": 70,
+            "train_objective": 0.9042140543460846
+          },
+          {
+            "calibration_passing_set_nll": 1.2578667004903157,
+            "calibration_uniform_target_cross_entropy": 1.4207156499226887,
+            "epoch": 71,
+            "train_objective": 0.9011970261732737
+          },
+          {
+            "calibration_passing_set_nll": 1.248949448267619,
+            "calibration_uniform_target_cross_entropy": 1.3978862762451172,
+            "epoch": 72,
+            "train_objective": 0.9046344558397929
+          },
+          {
+            "calibration_passing_set_nll": 1.2572991847991943,
+            "calibration_uniform_target_cross_entropy": 1.4177289009094238,
+            "epoch": 73,
+            "train_objective": 0.8985068400700887
+          },
+          {
+            "calibration_passing_set_nll": 1.2464841206868489,
+            "calibration_uniform_target_cross_entropy": 1.4004707336425781,
+            "epoch": 74,
+            "train_objective": 0.8902207016944885
+          },
+          {
+            "calibration_passing_set_nll": 1.2474823792775471,
+            "calibration_uniform_target_cross_entropy": 1.400398890177409,
+            "epoch": 75,
+            "train_objective": 0.8902958134810129
+          },
+          {
+            "calibration_passing_set_nll": 1.260434865951538,
+            "calibration_uniform_target_cross_entropy": 1.428678830464681,
+            "epoch": 76,
+            "train_objective": 0.8829959630966187
+          },
+          {
+            "calibration_passing_set_nll": 1.2544331550598145,
+            "calibration_uniform_target_cross_entropy": 1.4050771395365398,
+            "epoch": 77,
+            "train_objective": 0.8920398056507111
+          },
+          {
+            "calibration_passing_set_nll": 1.249298095703125,
+            "calibration_uniform_target_cross_entropy": 1.4069024721781414,
+            "epoch": 78,
+            "train_objective": 0.8870686888694763
+          },
+          {
+            "calibration_passing_set_nll": 1.2620920340220134,
+            "calibration_uniform_target_cross_entropy": 1.4348748524983723,
+            "epoch": 79,
+            "train_objective": 0.8766169051329294
+          },
+          {
+            "calibration_passing_set_nll": 1.2709129651387532,
+            "calibration_uniform_target_cross_entropy": 1.4515706698099773,
+            "epoch": 80,
+            "train_objective": 0.8717810908953348
+          },
+          {
+            "calibration_passing_set_nll": 1.259572982788086,
+            "calibration_uniform_target_cross_entropy": 1.4320025444030762,
+            "epoch": 81,
+            "train_objective": 0.8794111212094625
+          },
+          {
+            "calibration_passing_set_nll": 1.2631315390268962,
+            "calibration_uniform_target_cross_entropy": 1.4330825805664062,
+            "epoch": 82,
+            "train_objective": 0.874683698018392
+          },
+          {
+            "calibration_passing_set_nll": 1.2564291954040527,
+            "calibration_uniform_target_cross_entropy": 1.4210968017578125,
+            "epoch": 83,
+            "train_objective": 0.8629999260107676
+          },
+          {
+            "calibration_passing_set_nll": 1.2809975147247314,
+            "calibration_uniform_target_cross_entropy": 1.4671894709269206,
+            "epoch": 84,
+            "train_objective": 0.8563236991564432
+          },
+          {
+            "calibration_passing_set_nll": 1.264351447423299,
+            "calibration_uniform_target_cross_entropy": 1.4316317240397136,
+            "epoch": 85,
+            "train_objective": 0.8572812080383301
+          },
+          {
+            "calibration_passing_set_nll": 1.2741764386494954,
+            "calibration_uniform_target_cross_entropy": 1.4566097259521484,
+            "epoch": 86,
+            "train_objective": 0.851410706837972
+          },
+          {
+            "calibration_passing_set_nll": 1.2651344935099285,
+            "calibration_uniform_target_cross_entropy": 1.4329592386881511,
+            "epoch": 87,
+            "train_objective": 0.8493036925792694
+          },
+          {
+            "calibration_passing_set_nll": 1.2657116254170735,
+            "calibration_uniform_target_cross_entropy": 1.438724676767985,
+            "epoch": 88,
+            "train_objective": 0.8472032845020294
+          },
+          {
+            "calibration_passing_set_nll": 1.2668094635009766,
+            "calibration_uniform_target_cross_entropy": 1.4379711151123047,
+            "epoch": 89,
+            "train_objective": 0.8426353633403778
+          },
+          {
+            "calibration_passing_set_nll": 1.2956384023030598,
+            "calibration_uniform_target_cross_entropy": 1.4967247645060222,
+            "epoch": 90,
+            "train_objective": 0.8372777700424194
+          },
+          {
+            "calibration_passing_set_nll": 1.277128537495931,
+            "calibration_uniform_target_cross_entropy": 1.4652214050292969,
+            "epoch": 91,
+            "train_objective": 0.8449668288230896
+          },
+          {
+            "calibration_passing_set_nll": 1.2687015533447266,
+            "calibration_uniform_target_cross_entropy": 1.4485750198364258,
+            "epoch": 92,
+            "train_objective": 0.8335359891255697
+          },
+          {
+            "calibration_passing_set_nll": 1.266877810160319,
+            "calibration_uniform_target_cross_entropy": 1.4429443677266438,
+            "epoch": 93,
+            "train_objective": 0.8402052025000254
+          },
+          {
+            "calibration_passing_set_nll": 1.2753424644470215,
+            "calibration_uniform_target_cross_entropy": 1.45267915725708,
+            "epoch": 94,
+            "train_objective": 0.8299181560675303
+          },
+          {
+            "calibration_passing_set_nll": 1.2706029415130615,
+            "calibration_uniform_target_cross_entropy": 1.451817512512207,
+            "epoch": 95,
+            "train_objective": 0.8294927577177683
+          },
+          {
+            "calibration_passing_set_nll": 1.2901727358500164,
+            "calibration_uniform_target_cross_entropy": 1.4854893684387207,
+            "epoch": 96,
+            "train_objective": 0.8201990028222402
+          },
+          {
+            "calibration_passing_set_nll": 1.2758034865061443,
+            "calibration_uniform_target_cross_entropy": 1.4539891878763835,
+            "epoch": 97,
+            "train_objective": 0.82945117354393
+          },
+          {
+            "calibration_passing_set_nll": 1.2944920063018799,
+            "calibration_uniform_target_cross_entropy": 1.4911543528238933,
+            "epoch": 98,
+            "train_objective": 0.8206225633621216
+          },
+          {
+            "calibration_passing_set_nll": 1.2798015276590984,
+            "calibration_uniform_target_cross_entropy": 1.4702587127685547,
+            "epoch": 99,
+            "train_objective": 0.8195404211680094
+          },
+          {
+            "calibration_passing_set_nll": 1.2800857226053874,
+            "calibration_uniform_target_cross_entropy": 1.460772196451823,
+            "epoch": 100,
+            "train_objective": 0.8153161207834879
+          }
+        ],
+        "loop_wall_seconds": 0.894967625150457,
+        "mps_allocated_peak_sampled_bytes": 4179712,
+        "mps_driver_peak_sampled_bytes": 53166080,
+        "optimizer_steps": 600,
+        "process_cpu_percent_one_core_normalization": 46.34268194117905,
+        "process_cpu_seconds_during_loop": 0.4147519999999999,
+        "process_lifetime_peak_rss_bytes": 510640128,
+        "selected_epoch": 48,
+        "selection": "calibration passing-set NLL; no development inputs",
+        "training_function_groups": 768,
+        "training_weighted_state_rows": 1536
+      }
+    },
+    "uniform-initial": {
+      "fp32": {
+        "epochs": 100,
+        "history": [
+          {
+            "calibration_passing_set_nll": 1.2573350270589192,
+            "calibration_uniform_target_cross_entropy": 1.3874858220418294,
+            "epoch": 1,
+            "train_objective": 1.3875942428906758
+          },
+          {
+            "calibration_passing_set_nll": 1.256420373916626,
+            "calibration_uniform_target_cross_entropy": 1.38649320602417,
+            "epoch": 2,
+            "train_objective": 1.3843613068262737
+          },
+          {
+            "calibration_passing_set_nll": 1.2557055155436199,
+            "calibration_uniform_target_cross_entropy": 1.3857510884602864,
+            "epoch": 3,
+            "train_objective": 1.3818663358688354
+          },
+          {
+            "calibration_passing_set_nll": 1.255043586095174,
+            "calibration_uniform_target_cross_entropy": 1.3850584030151367,
+            "epoch": 4,
+            "train_objective": 1.3785206079483032
+          },
+          {
+            "calibration_passing_set_nll": 1.254407008488973,
+            "calibration_uniform_target_cross_entropy": 1.3844188054402669,
+            "epoch": 5,
+            "train_objective": 1.3753459850947063
+          },
+          {
+            "calibration_passing_set_nll": 1.253691037495931,
+            "calibration_uniform_target_cross_entropy": 1.3836924235026042,
+            "epoch": 6,
+            "train_objective": 1.371740202109019
+          },
+          {
+            "calibration_passing_set_nll": 1.252978245417277,
+            "calibration_uniform_target_cross_entropy": 1.3829952875773113,
+            "epoch": 7,
+            "train_objective": 1.3672467668851216
+          },
+          {
+            "calibration_passing_set_nll": 1.2521661122639973,
+            "calibration_uniform_target_cross_entropy": 1.3822058041890461,
+            "epoch": 8,
+            "train_objective": 1.362511893113454
+          },
+          {
+            "calibration_passing_set_nll": 1.2511175473531086,
+            "calibration_uniform_target_cross_entropy": 1.3811537424723308,
+            "epoch": 9,
+            "train_objective": 1.3565574884414673
+          },
+          {
+            "calibration_passing_set_nll": 1.2501578330993652,
+            "calibration_uniform_target_cross_entropy": 1.3802399635314941,
+            "epoch": 10,
+            "train_objective": 1.3503377636273701
+          },
+          {
+            "calibration_passing_set_nll": 1.2489032745361328,
+            "calibration_uniform_target_cross_entropy": 1.379002571105957,
+            "epoch": 11,
+            "train_objective": 1.3429519534111023
+          },
+          {
+            "calibration_passing_set_nll": 1.2479015986124675,
+            "calibration_uniform_target_cross_entropy": 1.3780709902445476,
+            "epoch": 12,
+            "train_objective": 1.3349720040957134
+          },
+          {
+            "calibration_passing_set_nll": 1.246459166208903,
+            "calibration_uniform_target_cross_entropy": 1.376651128133138,
+            "epoch": 13,
+            "train_objective": 1.3263091047604878
+          },
+          {
+            "calibration_passing_set_nll": 1.2452902793884277,
+            "calibration_uniform_target_cross_entropy": 1.375571886698405,
+            "epoch": 14,
+            "train_objective": 1.3167292873064678
+          },
+          {
+            "calibration_passing_set_nll": 1.2437834739685059,
+            "calibration_uniform_target_cross_entropy": 1.3741294542948406,
+            "epoch": 15,
+            "train_objective": 1.3069062232971191
+          },
+          {
+            "calibration_passing_set_nll": 1.2423445383707683,
+            "calibration_uniform_target_cross_entropy": 1.3727922439575195,
+            "epoch": 16,
+            "train_objective": 1.2967257897059123
+          },
+          {
+            "calibration_passing_set_nll": 1.2408061027526855,
+            "calibration_uniform_target_cross_entropy": 1.371362527211507,
+            "epoch": 17,
+            "train_objective": 1.285386900107066
+          },
+          {
+            "calibration_passing_set_nll": 1.2393807570139568,
+            "calibration_uniform_target_cross_entropy": 1.370070457458496,
+            "epoch": 18,
+            "train_objective": 1.2739503781000774
+          },
+          {
+            "calibration_passing_set_nll": 1.2377293904622395,
+            "calibration_uniform_target_cross_entropy": 1.3685234387715657,
+            "epoch": 19,
+            "train_objective": 1.2618929346402485
+          },
+          {
+            "calibration_passing_set_nll": 1.236430327097575,
+            "calibration_uniform_target_cross_entropy": 1.3674201965332031,
+            "epoch": 20,
+            "train_objective": 1.2494357824325562
+          },
+          {
+            "calibration_passing_set_nll": 1.2351600329081218,
+            "calibration_uniform_target_cross_entropy": 1.366358757019043,
+            "epoch": 21,
+            "train_objective": 1.2372995217641194
+          },
+          {
+            "calibration_passing_set_nll": 1.2338205178578694,
+            "calibration_uniform_target_cross_entropy": 1.3652804692586262,
+            "epoch": 22,
+            "train_objective": 1.2251402338345845
+          },
+          {
+            "calibration_passing_set_nll": 1.2325010299682617,
+            "calibration_uniform_target_cross_entropy": 1.3641738891601562,
+            "epoch": 23,
+            "train_objective": 1.2125543753306072
+          },
+          {
+            "calibration_passing_set_nll": 1.231359322865804,
+            "calibration_uniform_target_cross_entropy": 1.363365650177002,
+            "epoch": 24,
+            "train_objective": 1.2000147302945454
+          },
+          {
+            "calibration_passing_set_nll": 1.2303667068481445,
+            "calibration_uniform_target_cross_entropy": 1.3626619974772136,
+            "epoch": 25,
+            "train_objective": 1.1872122089068096
+          },
+          {
+            "calibration_passing_set_nll": 1.2299996217091878,
+            "calibration_uniform_target_cross_entropy": 1.3626952171325684,
+            "epoch": 26,
+            "train_objective": 1.1751840909322102
+          },
+          {
+            "calibration_passing_set_nll": 1.2287449836730957,
+            "calibration_uniform_target_cross_entropy": 1.3617536226908367,
+            "epoch": 27,
+            "train_objective": 1.163395365079244
+          },
+          {
+            "calibration_passing_set_nll": 1.2282805442810059,
+            "calibration_uniform_target_cross_entropy": 1.3617534637451172,
+            "epoch": 28,
+            "train_objective": 1.152104417483012
+          },
+          {
+            "calibration_passing_set_nll": 1.2279608249664307,
+            "calibration_uniform_target_cross_entropy": 1.3618535995483398,
+            "epoch": 29,
+            "train_objective": 1.1403043866157532
+          },
+          {
+            "calibration_passing_set_nll": 1.2281419436136882,
+            "calibration_uniform_target_cross_entropy": 1.36253023147583,
+            "epoch": 30,
+            "train_objective": 1.128693203131358
+          },
+          {
+            "calibration_passing_set_nll": 1.2278035481770833,
+            "calibration_uniform_target_cross_entropy": 1.3626867930094402,
+            "epoch": 31,
+            "train_objective": 1.1178643107414246
+          },
+          {
+            "calibration_passing_set_nll": 1.2278060118357341,
+            "calibration_uniform_target_cross_entropy": 1.3631579081217449,
+            "epoch": 32,
+            "train_objective": 1.1077781915664673
+          },
+          {
+            "calibration_passing_set_nll": 1.227634032567342,
+            "calibration_uniform_target_cross_entropy": 1.3635505040486653,
+            "epoch": 33,
+            "train_objective": 1.0982792774836223
+          },
+          {
+            "calibration_passing_set_nll": 1.2288658618927002,
+            "calibration_uniform_target_cross_entropy": 1.3652706146240234,
+            "epoch": 34,
+            "train_objective": 1.0886908372243245
+          },
+          {
+            "calibration_passing_set_nll": 1.2290570735931396,
+            "calibration_uniform_target_cross_entropy": 1.3659518559773762,
+            "epoch": 35,
+            "train_objective": 1.0796544750531514
+          },
+          {
+            "calibration_passing_set_nll": 1.2293842633565266,
+            "calibration_uniform_target_cross_entropy": 1.3667929967244465,
+            "epoch": 36,
+            "train_objective": 1.0707258582115173
+          },
+          {
+            "calibration_passing_set_nll": 1.2299213409423828,
+            "calibration_uniform_target_cross_entropy": 1.3678048451741536,
+            "epoch": 37,
+            "train_objective": 1.06271626551946
+          },
+          {
+            "calibration_passing_set_nll": 1.2314225832621257,
+            "calibration_uniform_target_cross_entropy": 1.3698477745056152,
+            "epoch": 38,
+            "train_objective": 1.0555299719174702
+          },
+          {
+            "calibration_passing_set_nll": 1.2309224605560303,
+            "calibration_uniform_target_cross_entropy": 1.3698348999023438,
+            "epoch": 39,
+            "train_objective": 1.049219270547231
+          },
+          {
+            "calibration_passing_set_nll": 1.234234094619751,
+            "calibration_uniform_target_cross_entropy": 1.3737958272298176,
+            "epoch": 40,
+            "train_objective": 1.0404239098230998
+          },
+          {
+            "calibration_passing_set_nll": 1.2342464129130046,
+            "calibration_uniform_target_cross_entropy": 1.3742278416951497,
+            "epoch": 41,
+            "train_objective": 1.0344444115956624
+          },
+          {
+            "calibration_passing_set_nll": 1.235207160313924,
+            "calibration_uniform_target_cross_entropy": 1.3756418228149414,
+            "epoch": 42,
+            "train_objective": 1.0274081230163574
+          },
+          {
+            "calibration_passing_set_nll": 1.2369362513224285,
+            "calibration_uniform_target_cross_entropy": 1.377902348836263,
+            "epoch": 43,
+            "train_objective": 1.02050785223643
+          },
+          {
+            "calibration_passing_set_nll": 1.2375832398732503,
+            "calibration_uniform_target_cross_entropy": 1.3788723945617676,
+            "epoch": 44,
+            "train_objective": 1.0148460268974304
+          },
+          {
+            "calibration_passing_set_nll": 1.237097978591919,
+            "calibration_uniform_target_cross_entropy": 1.3787689208984375,
+            "epoch": 45,
+            "train_objective": 1.0089216828346252
+          },
+          {
+            "calibration_passing_set_nll": 1.2398812770843506,
+            "calibration_uniform_target_cross_entropy": 1.382085641225179,
+            "epoch": 46,
+            "train_objective": 1.0032589137554169
+          },
+          {
+            "calibration_passing_set_nll": 1.2410578727722168,
+            "calibration_uniform_target_cross_entropy": 1.3836921056111653,
+            "epoch": 47,
+            "train_objective": 0.9976941545804342
+          },
+          {
+            "calibration_passing_set_nll": 1.2417203585306804,
+            "calibration_uniform_target_cross_entropy": 1.3848066329956055,
+            "epoch": 48,
+            "train_objective": 0.992186039686203
+          },
+          {
+            "calibration_passing_set_nll": 1.2439476648966472,
+            "calibration_uniform_target_cross_entropy": 1.3875061670939128,
+            "epoch": 49,
+            "train_objective": 0.9868431687355042
+          },
+          {
+            "calibration_passing_set_nll": 1.2455324331919353,
+            "calibration_uniform_target_cross_entropy": 1.389468828837077,
+            "epoch": 50,
+            "train_objective": 0.9824436207612356
+          },
+          {
+            "calibration_passing_set_nll": 1.2459022204081218,
+            "calibration_uniform_target_cross_entropy": 1.3901764551798503,
+            "epoch": 51,
+            "train_objective": 0.9774607618649801
+          },
+          {
+            "calibration_passing_set_nll": 1.2479474544525146,
+            "calibration_uniform_target_cross_entropy": 1.3927748998006184,
+            "epoch": 52,
+            "train_objective": 0.9725721180438995
+          },
+          {
+            "calibration_passing_set_nll": 1.250798225402832,
+            "calibration_uniform_target_cross_entropy": 1.3959825833638508,
+            "epoch": 53,
+            "train_objective": 0.9679913222789764
+          },
+          {
+            "calibration_passing_set_nll": 1.2511672178904216,
+            "calibration_uniform_target_cross_entropy": 1.3967138926188152,
+            "epoch": 54,
+            "train_objective": 0.9635444382826487
+          },
+          {
+            "calibration_passing_set_nll": 1.252444585164388,
+            "calibration_uniform_target_cross_entropy": 1.3984546661376953,
+            "epoch": 55,
+            "train_objective": 0.9586078723271688
+          },
+          {
+            "calibration_passing_set_nll": 1.2536104520161946,
+            "calibration_uniform_target_cross_entropy": 1.3998915354410808,
+            "epoch": 56,
+            "train_objective": 0.9542180498441061
+          },
+          {
+            "calibration_passing_set_nll": 1.2532409032185872,
+            "calibration_uniform_target_cross_entropy": 1.3998098373413086,
+            "epoch": 57,
+            "train_objective": 0.9501916170120239
+          },
+          {
+            "calibration_passing_set_nll": 1.2559514840443928,
+            "calibration_uniform_target_cross_entropy": 1.4029353459676106,
+            "epoch": 58,
+            "train_objective": 0.9455838104089102
+          },
+          {
+            "calibration_passing_set_nll": 1.2571876049041748,
+            "calibration_uniform_target_cross_entropy": 1.4045953750610352,
+            "epoch": 59,
+            "train_objective": 0.9414133528868357
+          },
+          {
+            "calibration_passing_set_nll": 1.2586633364359539,
+            "calibration_uniform_target_cross_entropy": 1.4063069025675456,
+            "epoch": 60,
+            "train_objective": 0.9371302922566732
+          },
+          {
+            "calibration_passing_set_nll": 1.2603948911031086,
+            "calibration_uniform_target_cross_entropy": 1.4085246721903484,
+            "epoch": 61,
+            "train_objective": 0.9326849579811096
+          },
+          {
+            "calibration_passing_set_nll": 1.263323465983073,
+            "calibration_uniform_target_cross_entropy": 1.411777178446452,
+            "epoch": 62,
+            "train_objective": 0.9285253981749216
+          },
+          {
+            "calibration_passing_set_nll": 1.262257734934489,
+            "calibration_uniform_target_cross_entropy": 1.4109937349955242,
+            "epoch": 63,
+            "train_objective": 0.9238098661104838
+          },
+          {
+            "calibration_passing_set_nll": 1.2646968364715576,
+            "calibration_uniform_target_cross_entropy": 1.4137318929036458,
+            "epoch": 64,
+            "train_objective": 0.9196146031220754
+          },
+          {
+            "calibration_passing_set_nll": 1.2630046208699544,
+            "calibration_uniform_target_cross_entropy": 1.4122506777445476,
+            "epoch": 65,
+            "train_objective": 0.9151124159495035
+          },
+          {
+            "calibration_passing_set_nll": 1.265158732732137,
+            "calibration_uniform_target_cross_entropy": 1.4146509170532227,
+            "epoch": 66,
+            "train_objective": 0.9107164343198141
+          },
+          {
+            "calibration_passing_set_nll": 1.2691407203674316,
+            "calibration_uniform_target_cross_entropy": 1.4191548029581706,
+            "epoch": 67,
+            "train_objective": 0.9067522883415222
+          },
+          {
+            "calibration_passing_set_nll": 1.2676345507303874,
+            "calibration_uniform_target_cross_entropy": 1.4178229967753093,
+            "epoch": 68,
+            "train_objective": 0.9027650554974874
+          },
+          {
+            "calibration_passing_set_nll": 1.2696164449055989,
+            "calibration_uniform_target_cross_entropy": 1.4201048215230305,
+            "epoch": 69,
+            "train_objective": 0.8985702296098074
+          },
+          {
+            "calibration_passing_set_nll": 1.272397518157959,
+            "calibration_uniform_target_cross_entropy": 1.4233463605244954,
+            "epoch": 70,
+            "train_objective": 0.8941964209079742
+          },
+          {
+            "calibration_passing_set_nll": 1.273953914642334,
+            "calibration_uniform_target_cross_entropy": 1.424993673960368,
+            "epoch": 71,
+            "train_objective": 0.8905121187369028
+          },
+          {
+            "calibration_passing_set_nll": 1.2737197875976562,
+            "calibration_uniform_target_cross_entropy": 1.4249887466430664,
+            "epoch": 72,
+            "train_objective": 0.8869730134805044
+          },
+          {
+            "calibration_passing_set_nll": 1.2767043113708496,
+            "calibration_uniform_target_cross_entropy": 1.4283822377522786,
+            "epoch": 73,
+            "train_objective": 0.8828236758708954
+          },
+          {
+            "calibration_passing_set_nll": 1.2763498624165852,
+            "calibration_uniform_target_cross_entropy": 1.4282720883687336,
+            "epoch": 74,
+            "train_objective": 0.8790082732836405
+          },
+          {
+            "calibration_passing_set_nll": 1.277201493581136,
+            "calibration_uniform_target_cross_entropy": 1.4293991724650066,
+            "epoch": 75,
+            "train_objective": 0.8751989305019379
+          },
+          {
+            "calibration_passing_set_nll": 1.2809205055236816,
+            "calibration_uniform_target_cross_entropy": 1.4333772659301758,
+            "epoch": 76,
+            "train_objective": 0.8714640935262045
+          },
+          {
+            "calibration_passing_set_nll": 1.2802910804748535,
+            "calibration_uniform_target_cross_entropy": 1.4330940246582031,
+            "epoch": 77,
+            "train_objective": 0.8672309915224711
+          },
+          {
+            "calibration_passing_set_nll": 1.2828070322672527,
+            "calibration_uniform_target_cross_entropy": 1.4358832041422527,
+            "epoch": 78,
+            "train_objective": 0.8635517160097758
+          },
+          {
+            "calibration_passing_set_nll": 1.2851381301879883,
+            "calibration_uniform_target_cross_entropy": 1.4384256998697917,
+            "epoch": 79,
+            "train_objective": 0.8597867687543234
+          },
+          {
+            "calibration_passing_set_nll": 1.2848242123921711,
+            "calibration_uniform_target_cross_entropy": 1.4383811950683594,
+            "epoch": 80,
+            "train_objective": 0.8562227487564087
+          },
+          {
+            "calibration_passing_set_nll": 1.2858079274495442,
+            "calibration_uniform_target_cross_entropy": 1.4395241737365723,
+            "epoch": 81,
+            "train_objective": 0.8519334892431895
+          },
+          {
+            "calibration_passing_set_nll": 1.2870818773905437,
+            "calibration_uniform_target_cross_entropy": 1.4410613377888997,
+            "epoch": 82,
+            "train_objective": 0.8483863472938538
+          },
+          {
+            "calibration_passing_set_nll": 1.291944980621338,
+            "calibration_uniform_target_cross_entropy": 1.4464139938354492,
+            "epoch": 83,
+            "train_objective": 0.8442132771015167
+          },
+          {
+            "calibration_passing_set_nll": 1.291701316833496,
+            "calibration_uniform_target_cross_entropy": 1.4461720784505208,
+            "epoch": 84,
+            "train_objective": 0.8402744134267172
+          },
+          {
+            "calibration_passing_set_nll": 1.2932110627492268,
+            "calibration_uniform_target_cross_entropy": 1.4481112162272136,
+            "epoch": 85,
+            "train_objective": 0.836321622133255
+          },
+          {
+            "calibration_passing_set_nll": 1.2959736188252766,
+            "calibration_uniform_target_cross_entropy": 1.4510993957519531,
+            "epoch": 86,
+            "train_objective": 0.8328304688135783
+          },
+          {
+            "calibration_passing_set_nll": 1.2977473735809326,
+            "calibration_uniform_target_cross_entropy": 1.4533287684122722,
+            "epoch": 87,
+            "train_objective": 0.829203724861145
+          },
+          {
+            "calibration_passing_set_nll": 1.2990504900614421,
+            "calibration_uniform_target_cross_entropy": 1.4547193845113118,
+            "epoch": 88,
+            "train_objective": 0.8255282243092855
+          },
+          {
+            "calibration_passing_set_nll": 1.2993834813435872,
+            "calibration_uniform_target_cross_entropy": 1.4554376602172852,
+            "epoch": 89,
+            "train_objective": 0.8221228917439779
+          },
+          {
+            "calibration_passing_set_nll": 1.3011452356974285,
+            "calibration_uniform_target_cross_entropy": 1.4573822021484375,
+            "epoch": 90,
+            "train_objective": 0.8188857833544413
+          },
+          {
+            "calibration_passing_set_nll": 1.3044974009195964,
+            "calibration_uniform_target_cross_entropy": 1.4612415631612141,
+            "epoch": 91,
+            "train_objective": 0.814871480067571
+          },
+          {
+            "calibration_passing_set_nll": 1.3068598906199138,
+            "calibration_uniform_target_cross_entropy": 1.4638512929280598,
+            "epoch": 92,
+            "train_objective": 0.8113837838172913
+          },
+          {
+            "calibration_passing_set_nll": 1.3077272574106853,
+            "calibration_uniform_target_cross_entropy": 1.4650122324625652,
+            "epoch": 93,
+            "train_objective": 0.8080775439739227
+          },
+          {
+            "calibration_passing_set_nll": 1.3098433017730713,
+            "calibration_uniform_target_cross_entropy": 1.4673754374186199,
+            "epoch": 94,
+            "train_objective": 0.8046329418818156
+          },
+          {
+            "calibration_passing_set_nll": 1.3111309210459392,
+            "calibration_uniform_target_cross_entropy": 1.4691343307495117,
+            "epoch": 95,
+            "train_objective": 0.8015433152516683
+          },
+          {
+            "calibration_passing_set_nll": 1.3150622844696045,
+            "calibration_uniform_target_cross_entropy": 1.4732176462809246,
+            "epoch": 96,
+            "train_objective": 0.7976163725058237
+          },
+          {
+            "calibration_passing_set_nll": 1.3135242462158203,
+            "calibration_uniform_target_cross_entropy": 1.4719096819559734,
+            "epoch": 97,
+            "train_objective": 0.7946697870890299
+          },
+          {
+            "calibration_passing_set_nll": 1.322275956471761,
+            "calibration_uniform_target_cross_entropy": 1.480940818786621,
+            "epoch": 98,
+            "train_objective": 0.7920920153458914
+          },
+          {
+            "calibration_passing_set_nll": 1.3185042540232341,
+            "calibration_uniform_target_cross_entropy": 1.4775937398274739,
+            "epoch": 99,
+            "train_objective": 0.7885559896628062
+          },
+          {
+            "calibration_passing_set_nll": 1.3233825365702312,
+            "calibration_uniform_target_cross_entropy": 1.4828071594238281,
+            "epoch": 100,
+            "train_objective": 0.7853687008221945
+          }
+        ],
+        "loop_wall_seconds": 1.4537816250231117,
+        "mps_allocated_peak_sampled_bytes": 4179712,
+        "mps_driver_peak_sampled_bytes": 53166080,
+        "optimizer_steps": 600,
+        "process_cpu_percent_one_core_normalization": 42.050332008446006,
+        "process_cpu_seconds_during_loop": 0.61132,
+        "process_lifetime_peak_rss_bytes": 490078208,
+        "selected_epoch": 33,
+        "selection": "calibration passing-set NLL; no development inputs",
+        "training_function_groups": 768,
+        "training_weighted_state_rows": 1536
+      },
+      "qat_ternary": {
+        "epochs": 100,
+        "history": [
+          {
+            "calibration_passing_set_nll": 1.2437564531962078,
+            "calibration_uniform_target_cross_entropy": 1.3741248448689778,
+            "epoch": 1,
+            "train_objective": 1.30266938606898
+          },
+          {
+            "calibration_passing_set_nll": 1.242600440979004,
+            "calibration_uniform_target_cross_entropy": 1.3729197184244792,
+            "epoch": 2,
+            "train_objective": 1.2963006893793743
+          },
+          {
+            "calibration_passing_set_nll": 1.2409854729970295,
+            "calibration_uniform_target_cross_entropy": 1.3713760375976562,
+            "epoch": 3,
+            "train_objective": 1.292914867401123
+          },
+          {
+            "calibration_passing_set_nll": 1.240780194600423,
+            "calibration_uniform_target_cross_entropy": 1.3711013793945312,
+            "epoch": 4,
+            "train_objective": 1.288176953792572
+          },
+          {
+            "calibration_passing_set_nll": 1.240958611170451,
+            "calibration_uniform_target_cross_entropy": 1.3712679545084636,
+            "epoch": 5,
+            "train_objective": 1.284585177898407
+          },
+          {
+            "calibration_passing_set_nll": 1.2406760851542156,
+            "calibration_uniform_target_cross_entropy": 1.3710190455118816,
+            "epoch": 6,
+            "train_objective": 1.2820697625478108
+          },
+          {
+            "calibration_passing_set_nll": 1.239993413289388,
+            "calibration_uniform_target_cross_entropy": 1.3703570365905762,
+            "epoch": 7,
+            "train_objective": 1.2786243359247844
+          },
+          {
+            "calibration_passing_set_nll": 1.2390878200531006,
+            "calibration_uniform_target_cross_entropy": 1.3694823582967122,
+            "epoch": 8,
+            "train_objective": 1.2757420937220256
+          },
+          {
+            "calibration_passing_set_nll": 1.2429510752360027,
+            "calibration_uniform_target_cross_entropy": 1.373571236928304,
+            "epoch": 9,
+            "train_objective": 1.2724231481552124
+          },
+          {
+            "calibration_passing_set_nll": 1.238811731338501,
+            "calibration_uniform_target_cross_entropy": 1.3692502975463867,
+            "epoch": 10,
+            "train_objective": 1.2705175677935283
+          },
+          {
+            "calibration_passing_set_nll": 1.2431018352508545,
+            "calibration_uniform_target_cross_entropy": 1.373792012532552,
+            "epoch": 11,
+            "train_objective": 1.2656962474187214
+          },
+          {
+            "calibration_passing_set_nll": 1.2380355993906658,
+            "calibration_uniform_target_cross_entropy": 1.3685366312662761,
+            "epoch": 12,
+            "train_objective": 1.2620796362559001
+          },
+          {
+            "calibration_passing_set_nll": 1.2380472819010417,
+            "calibration_uniform_target_cross_entropy": 1.3685619036356609,
+            "epoch": 13,
+            "train_objective": 1.2587355176607768
+          },
+          {
+            "calibration_passing_set_nll": 1.238282044728597,
+            "calibration_uniform_target_cross_entropy": 1.3688801129659016,
+            "epoch": 14,
+            "train_objective": 1.25609956185023
+          },
+          {
+            "calibration_passing_set_nll": 1.2412638664245605,
+            "calibration_uniform_target_cross_entropy": 1.3720890680948894,
+            "epoch": 15,
+            "train_objective": 1.2514468828837078
+          },
+          {
+            "calibration_passing_set_nll": 1.2366677125295003,
+            "calibration_uniform_target_cross_entropy": 1.3673620223999023,
+            "epoch": 16,
+            "train_objective": 1.2480194965998332
+          },
+          {
+            "calibration_passing_set_nll": 1.2371366024017334,
+            "calibration_uniform_target_cross_entropy": 1.36789337793986,
+            "epoch": 17,
+            "train_objective": 1.2448641260464985
+          },
+          {
+            "calibration_passing_set_nll": 1.236211935679118,
+            "calibration_uniform_target_cross_entropy": 1.3670546213785808,
+            "epoch": 18,
+            "train_objective": 1.2396747668584187
+          },
+          {
+            "calibration_passing_set_nll": 1.2398900985717773,
+            "calibration_uniform_target_cross_entropy": 1.3710009256998699,
+            "epoch": 19,
+            "train_objective": 1.2360153198242188
+          },
+          {
+            "calibration_passing_set_nll": 1.235573132832845,
+            "calibration_uniform_target_cross_entropy": 1.3665124575297039,
+            "epoch": 20,
+            "train_objective": 1.233980655670166
+          },
+          {
+            "calibration_passing_set_nll": 1.2358843485514324,
+            "calibration_uniform_target_cross_entropy": 1.3668793042500813,
+            "epoch": 21,
+            "train_objective": 1.2286216815312703
+          },
+          {
+            "calibration_passing_set_nll": 1.2338253657023113,
+            "calibration_uniform_target_cross_entropy": 1.3649098078409831,
+            "epoch": 22,
+            "train_objective": 1.224273145198822
+          },
+          {
+            "calibration_passing_set_nll": 1.2350312074025471,
+            "calibration_uniform_target_cross_entropy": 1.3661216100056965,
+            "epoch": 23,
+            "train_objective": 1.2192130883534749
+          },
+          {
+            "calibration_passing_set_nll": 1.2336660226186116,
+            "calibration_uniform_target_cross_entropy": 1.3648239771525066,
+            "epoch": 24,
+            "train_objective": 1.213428537050883
+          },
+          {
+            "calibration_passing_set_nll": 1.2343358993530273,
+            "calibration_uniform_target_cross_entropy": 1.3655883471171062,
+            "epoch": 25,
+            "train_objective": 1.2090601523717244
+          },
+          {
+            "calibration_passing_set_nll": 1.2347707748413086,
+            "calibration_uniform_target_cross_entropy": 1.3662811915079753,
+            "epoch": 26,
+            "train_objective": 1.2055540482203166
+          },
+          {
+            "calibration_passing_set_nll": 1.2328430811564128,
+            "calibration_uniform_target_cross_entropy": 1.3644215265909831,
+            "epoch": 27,
+            "train_objective": 1.2003799279530842
+          },
+          {
+            "calibration_passing_set_nll": 1.2353302637736003,
+            "calibration_uniform_target_cross_entropy": 1.3670395215352376,
+            "epoch": 28,
+            "train_objective": 1.1960761944452922
+          },
+          {
+            "calibration_passing_set_nll": 1.2327351570129395,
+            "calibration_uniform_target_cross_entropy": 1.3644116719563801,
+            "epoch": 29,
+            "train_objective": 1.1917494932810466
+          },
+          {
+            "calibration_passing_set_nll": 1.232372760772705,
+            "calibration_uniform_target_cross_entropy": 1.364047368367513,
+            "epoch": 30,
+            "train_objective": 1.1871245702107747
+          },
+          {
+            "calibration_passing_set_nll": 1.2331735293070476,
+            "calibration_uniform_target_cross_entropy": 1.3649360338846843,
+            "epoch": 31,
+            "train_objective": 1.183430294195811
+          },
+          {
+            "calibration_passing_set_nll": 1.2325960000356038,
+            "calibration_uniform_target_cross_entropy": 1.3644501368204753,
+            "epoch": 32,
+            "train_objective": 1.1792800823847454
+          },
+          {
+            "calibration_passing_set_nll": 1.2315573692321777,
+            "calibration_uniform_target_cross_entropy": 1.3635133107503254,
+            "epoch": 33,
+            "train_objective": 1.1760245164235432
+          },
+          {
+            "calibration_passing_set_nll": 1.2343032360076904,
+            "calibration_uniform_target_cross_entropy": 1.3663841883341472,
+            "epoch": 34,
+            "train_objective": 1.1714428861935933
+          },
+          {
+            "calibration_passing_set_nll": 1.2321617603302002,
+            "calibration_uniform_target_cross_entropy": 1.364243507385254,
+            "epoch": 35,
+            "train_objective": 1.1686184803644817
+          },
+          {
+            "calibration_passing_set_nll": 1.2336169878641765,
+            "calibration_uniform_target_cross_entropy": 1.3658212025960286,
+            "epoch": 36,
+            "train_objective": 1.1633663177490234
+          },
+          {
+            "calibration_passing_set_nll": 1.2312145233154297,
+            "calibration_uniform_target_cross_entropy": 1.3634827931722004,
+            "epoch": 37,
+            "train_objective": 1.15994131565094
+          },
+          {
+            "calibration_passing_set_nll": 1.2344983418782551,
+            "calibration_uniform_target_cross_entropy": 1.3669274648030598,
+            "epoch": 38,
+            "train_objective": 1.1559722423553467
+          },
+          {
+            "calibration_passing_set_nll": 1.2304191589355469,
+            "calibration_uniform_target_cross_entropy": 1.36282745997111,
+            "epoch": 39,
+            "train_objective": 1.1531525452931721
+          },
+          {
+            "calibration_passing_set_nll": 1.2326905727386475,
+            "calibration_uniform_target_cross_entropy": 1.3651520411173503,
+            "epoch": 40,
+            "train_objective": 1.147231121857961
+          },
+          {
+            "calibration_passing_set_nll": 1.2309529781341553,
+            "calibration_uniform_target_cross_entropy": 1.3635443051656086,
+            "epoch": 41,
+            "train_objective": 1.1437578399976094
+          },
+          {
+            "calibration_passing_set_nll": 1.2316579818725586,
+            "calibration_uniform_target_cross_entropy": 1.364321231842041,
+            "epoch": 42,
+            "train_objective": 1.1402207414309184
+          },
+          {
+            "calibration_passing_set_nll": 1.2314069271087646,
+            "calibration_uniform_target_cross_entropy": 1.3642838795979817,
+            "epoch": 43,
+            "train_objective": 1.1356536944707234
+          },
+          {
+            "calibration_passing_set_nll": 1.2326738834381104,
+            "calibration_uniform_target_cross_entropy": 1.3656587600708008,
+            "epoch": 44,
+            "train_objective": 1.136640687783559
+          },
+          {
+            "calibration_passing_set_nll": 1.2297697861989338,
+            "calibration_uniform_target_cross_entropy": 1.3627716700236003,
+            "epoch": 45,
+            "train_objective": 1.1280996600786846
+          },
+          {
+            "calibration_passing_set_nll": 1.2358365058898926,
+            "calibration_uniform_target_cross_entropy": 1.3690098126729329,
+            "epoch": 46,
+            "train_objective": 1.1250009536743164
+          },
+          {
+            "calibration_passing_set_nll": 1.2324679692586262,
+            "calibration_uniform_target_cross_entropy": 1.3657973607381184,
+            "epoch": 47,
+            "train_objective": 1.119267205397288
+          },
+          {
+            "calibration_passing_set_nll": 1.2331774234771729,
+            "calibration_uniform_target_cross_entropy": 1.366584300994873,
+            "epoch": 48,
+            "train_objective": 1.1148895422617595
+          },
+          {
+            "calibration_passing_set_nll": 1.234015941619873,
+            "calibration_uniform_target_cross_entropy": 1.3676495552062988,
+            "epoch": 49,
+            "train_objective": 1.111530880133311
+          },
+          {
+            "calibration_passing_set_nll": 1.2348694801330566,
+            "calibration_uniform_target_cross_entropy": 1.3687933286031086,
+            "epoch": 50,
+            "train_objective": 1.1052580674489338
+          },
+          {
+            "calibration_passing_set_nll": 1.2339523633321126,
+            "calibration_uniform_target_cross_entropy": 1.3679601351420085,
+            "epoch": 51,
+            "train_objective": 1.101687729358673
+          },
+          {
+            "calibration_passing_set_nll": 1.2349434693654378,
+            "calibration_uniform_target_cross_entropy": 1.3691563606262207,
+            "epoch": 52,
+            "train_objective": 1.0982468525568645
+          },
+          {
+            "calibration_passing_set_nll": 1.2379895846048992,
+            "calibration_uniform_target_cross_entropy": 1.3723955154418945,
+            "epoch": 53,
+            "train_objective": 1.0938490827878316
+          },
+          {
+            "calibration_passing_set_nll": 1.2370542685190837,
+            "calibration_uniform_target_cross_entropy": 1.371395428975423,
+            "epoch": 54,
+            "train_objective": 1.0909867684046428
+          },
+          {
+            "calibration_passing_set_nll": 1.23586638768514,
+            "calibration_uniform_target_cross_entropy": 1.370343526204427,
+            "epoch": 55,
+            "train_objective": 1.0864234964052837
+          },
+          {
+            "calibration_passing_set_nll": 1.2358068625132244,
+            "calibration_uniform_target_cross_entropy": 1.3705631891886394,
+            "epoch": 56,
+            "train_objective": 1.0823434392611186
+          },
+          {
+            "calibration_passing_set_nll": 1.238503058751424,
+            "calibration_uniform_target_cross_entropy": 1.3732872009277344,
+            "epoch": 57,
+            "train_objective": 1.0794525345166524
+          },
+          {
+            "calibration_passing_set_nll": 1.2374032338460286,
+            "calibration_uniform_target_cross_entropy": 1.3721424738566081,
+            "epoch": 58,
+            "train_objective": 1.0761807958285015
+          },
+          {
+            "calibration_passing_set_nll": 1.2356247107187908,
+            "calibration_uniform_target_cross_entropy": 1.3705800374348958,
+            "epoch": 59,
+            "train_objective": 1.07363361120224
+          },
+          {
+            "calibration_passing_set_nll": 1.2395811875661213,
+            "calibration_uniform_target_cross_entropy": 1.3743756612141926,
+            "epoch": 60,
+            "train_objective": 1.0704333980878193
+          },
+          {
+            "calibration_passing_set_nll": 1.2372939586639404,
+            "calibration_uniform_target_cross_entropy": 1.372625509897868,
+            "epoch": 61,
+            "train_objective": 1.067977746327718
+          },
+          {
+            "calibration_passing_set_nll": 1.2436689535776775,
+            "calibration_uniform_target_cross_entropy": 1.3790346781412761,
+            "epoch": 62,
+            "train_objective": 1.0631676117579143
+          },
+          {
+            "calibration_passing_set_nll": 1.2387367884318035,
+            "calibration_uniform_target_cross_entropy": 1.3743750254313152,
+            "epoch": 63,
+            "train_objective": 1.061347742875417
+          },
+          {
+            "calibration_passing_set_nll": 1.2454153696695964,
+            "calibration_uniform_target_cross_entropy": 1.3811159133911133,
+            "epoch": 64,
+            "train_objective": 1.0585505763689678
+          },
+          {
+            "calibration_passing_set_nll": 1.240296999613444,
+            "calibration_uniform_target_cross_entropy": 1.3765745162963867,
+            "epoch": 65,
+            "train_objective": 1.0541794300079346
+          },
+          {
+            "calibration_passing_set_nll": 1.24626890818278,
+            "calibration_uniform_target_cross_entropy": 1.3820902506510417,
+            "epoch": 66,
+            "train_objective": 1.051290253798167
+          },
+          {
+            "calibration_passing_set_nll": 1.2425581614176433,
+            "calibration_uniform_target_cross_entropy": 1.3790222803751628,
+            "epoch": 67,
+            "train_objective": 1.0487994750340779
+          },
+          {
+            "calibration_passing_set_nll": 1.245641787846883,
+            "calibration_uniform_target_cross_entropy": 1.382293701171875,
+            "epoch": 68,
+            "train_objective": 1.0464032689730327
+          },
+          {
+            "calibration_passing_set_nll": 1.2454118728637695,
+            "calibration_uniform_target_cross_entropy": 1.3816485404968262,
+            "epoch": 69,
+            "train_objective": 1.0425646702448528
+          },
+          {
+            "calibration_passing_set_nll": 1.2487858931223552,
+            "calibration_uniform_target_cross_entropy": 1.3856480916341145,
+            "epoch": 70,
+            "train_objective": 1.0402437448501587
+          },
+          {
+            "calibration_passing_set_nll": 1.248751958211263,
+            "calibration_uniform_target_cross_entropy": 1.385909080505371,
+            "epoch": 71,
+            "train_objective": 1.0388302206993103
+          },
+          {
+            "calibration_passing_set_nll": 1.2540555795033772,
+            "calibration_uniform_target_cross_entropy": 1.391545295715332,
+            "epoch": 72,
+            "train_objective": 1.0361829002698262
+          },
+          {
+            "calibration_passing_set_nll": 1.2534364859263103,
+            "calibration_uniform_target_cross_entropy": 1.3915239969889324,
+            "epoch": 73,
+            "train_objective": 1.0312362213929493
+          },
+          {
+            "calibration_passing_set_nll": 1.2544606526692708,
+            "calibration_uniform_target_cross_entropy": 1.3928243319193523,
+            "epoch": 74,
+            "train_objective": 1.0283128519852955
+          },
+          {
+            "calibration_passing_set_nll": 1.254456917444865,
+            "calibration_uniform_target_cross_entropy": 1.3923972447713215,
+            "epoch": 75,
+            "train_objective": 1.0253289739290874
+          },
+          {
+            "calibration_passing_set_nll": 1.2568154335021973,
+            "calibration_uniform_target_cross_entropy": 1.3950818379720051,
+            "epoch": 76,
+            "train_objective": 1.0235825181007385
+          },
+          {
+            "calibration_passing_set_nll": 1.254136323928833,
+            "calibration_uniform_target_cross_entropy": 1.3930877049763997,
+            "epoch": 77,
+            "train_objective": 1.0203999280929565
+          },
+          {
+            "calibration_passing_set_nll": 1.2651999791463215,
+            "calibration_uniform_target_cross_entropy": 1.403853416442871,
+            "epoch": 78,
+            "train_objective": 1.018203337987264
+          },
+          {
+            "calibration_passing_set_nll": 1.2686283588409424,
+            "calibration_uniform_target_cross_entropy": 1.4140686988830566,
+            "epoch": 79,
+            "train_objective": 1.0212425390879314
+          },
+          {
+            "calibration_passing_set_nll": 1.2590889930725098,
+            "calibration_uniform_target_cross_entropy": 1.397126833597819,
+            "epoch": 80,
+            "train_objective": 1.0158424476782482
+          },
+          {
+            "calibration_passing_set_nll": 1.2706316312154133,
+            "calibration_uniform_target_cross_entropy": 1.4170594215393066,
+            "epoch": 81,
+            "train_objective": 1.0124985376993816
+          },
+          {
+            "calibration_passing_set_nll": 1.2644784450531006,
+            "calibration_uniform_target_cross_entropy": 1.402774175008138,
+            "epoch": 82,
+            "train_objective": 1.0218912462393444
+          },
+          {
+            "calibration_passing_set_nll": 1.2650468349456787,
+            "calibration_uniform_target_cross_entropy": 1.4034970601399739,
+            "epoch": 83,
+            "train_objective": 1.0152463018894196
+          },
+          {
+            "calibration_passing_set_nll": 1.258367379506429,
+            "calibration_uniform_target_cross_entropy": 1.397364616394043,
+            "epoch": 84,
+            "train_objective": 1.0052392780780792
+          },
+          {
+            "calibration_passing_set_nll": 1.2690664132436116,
+            "calibration_uniform_target_cross_entropy": 1.4078865051269531,
+            "epoch": 85,
+            "train_objective": 1.0072518587112427
+          },
+          {
+            "calibration_passing_set_nll": 1.260677178700765,
+            "calibration_uniform_target_cross_entropy": 1.3997268676757812,
+            "epoch": 86,
+            "train_objective": 1.0013674994309743
+          },
+          {
+            "calibration_passing_set_nll": 1.2703829606374104,
+            "calibration_uniform_target_cross_entropy": 1.4094403584798176,
+            "epoch": 87,
+            "train_objective": 1.004651427268982
+          },
+          {
+            "calibration_passing_set_nll": 1.2582794825236003,
+            "calibration_uniform_target_cross_entropy": 1.3979954719543457,
+            "epoch": 88,
+            "train_objective": 0.9971774021784464
+          },
+          {
+            "calibration_passing_set_nll": 1.2630263169606526,
+            "calibration_uniform_target_cross_entropy": 1.4023717244466145,
+            "epoch": 89,
+            "train_objective": 0.9981635212898254
+          },
+          {
+            "calibration_passing_set_nll": 1.2713513374328613,
+            "calibration_uniform_target_cross_entropy": 1.4176419576009114,
+            "epoch": 90,
+            "train_objective": 0.9940664768218994
+          },
+          {
+            "calibration_passing_set_nll": 1.2703744570414226,
+            "calibration_uniform_target_cross_entropy": 1.409754753112793,
+            "epoch": 91,
+            "train_objective": 0.9976874192555746
+          },
+          {
+            "calibration_passing_set_nll": 1.2801289558410645,
+            "calibration_uniform_target_cross_entropy": 1.4200844764709473,
+            "epoch": 92,
+            "train_objective": 0.9911729395389557
+          },
+          {
+            "calibration_passing_set_nll": 1.2674262523651123,
+            "calibration_uniform_target_cross_entropy": 1.4116325378417969,
+            "epoch": 93,
+            "train_objective": 0.9921464423338572
+          },
+          {
+            "calibration_passing_set_nll": 1.2762336730957031,
+            "calibration_uniform_target_cross_entropy": 1.416567325592041,
+            "epoch": 94,
+            "train_objective": 0.9886603752772013
+          },
+          {
+            "calibration_passing_set_nll": 1.2705589930216472,
+            "calibration_uniform_target_cross_entropy": 1.410120964050293,
+            "epoch": 95,
+            "train_objective": 0.9889869888623556
+          },
+          {
+            "calibration_passing_set_nll": 1.2638765970865886,
+            "calibration_uniform_target_cross_entropy": 1.4067894617716472,
+            "epoch": 96,
+            "train_objective": 0.984309603770574
+          },
+          {
+            "calibration_passing_set_nll": 1.2660682996114094,
+            "calibration_uniform_target_cross_entropy": 1.406028111775716,
+            "epoch": 97,
+            "train_objective": 0.9818573097387949
+          },
+          {
+            "calibration_passing_set_nll": 1.277702808380127,
+            "calibration_uniform_target_cross_entropy": 1.4193743069966633,
+            "epoch": 98,
+            "train_objective": 0.9807407259941101
+          },
+          {
+            "calibration_passing_set_nll": 1.269450346628825,
+            "calibration_uniform_target_cross_entropy": 1.412072976430257,
+            "epoch": 99,
+            "train_objective": 0.9764859477678934
+          },
+          {
+            "calibration_passing_set_nll": 1.2787783940633137,
+            "calibration_uniform_target_cross_entropy": 1.4201377232869465,
+            "epoch": 100,
+            "train_objective": 0.9744073649247488
+          }
+        ],
+        "loop_wall_seconds": 0.8748125419951975,
+        "mps_allocated_peak_sampled_bytes": 4179712,
+        "mps_driver_peak_sampled_bytes": 53166080,
+        "optimizer_steps": 600,
+        "process_cpu_percent_one_core_normalization": 48.41334339286655,
+        "process_cpu_seconds_during_loop": 0.4235259999999999,
+        "process_lifetime_peak_rss_bytes": 492175360,
+        "selected_epoch": 45,
+        "selection": "calibration passing-set NLL; no development inputs",
+        "training_function_groups": 768,
+        "training_weighted_state_rows": 1536
+      }
+    }
+  }
+}
