@@ -5,6 +5,7 @@ import (
 	"archive/zip"
 	"bufio"
 	"bytes"
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"flag"
@@ -72,6 +73,16 @@ func walkJSON(v any) error {
 		for k, v := range x {
 			if privateText.MatchString(k) {
 				return errors.New("private key")
+			}
+			if k == "stderr_bytes" {
+				text, ok := v.(string)
+				if !ok {
+					return errors.New("encoded diagnostics must be a string")
+				}
+				decoded, err := base64.StdEncoding.DecodeString(text)
+				if err != nil || privateText.Match(decoded) {
+					return errors.New("private encoded diagnostics")
+				}
 			}
 			if e := walkJSON(v); e != nil {
 				return e
@@ -229,6 +240,9 @@ func verify(root string, standalone bool) {
 	var expected map[string]string
 	if m.Schema == compactNativeSchema {
 		wantCount, capBytes, expected = 684, 32<<20, compactFiles("")
+	} else if m.Schema == fullNativeSchema {
+		expected = fullNativeFiles("")
+		wantCount, capBytes = len(expected), 128<<20
 	} else if m.Schema == wrapperSchema {
 		expected = wrapperFiles("", "", "", "")
 		wantCount, capBytes, memberCap = len(expected), 96<<20, 32<<20
@@ -286,7 +300,7 @@ func verify(root string, standalone bool) {
 	fmt.Printf("PASS: %d members, %d decoded bytes, %d ZIP bytes\n", len(m.Files), total, len(raw))
 }
 func main() {
-	mode := flag.String("mode", "verify", "pack, pack-compact-native, pack-wrappers, verify, or verify-bundle")
+	mode := flag.String("mode", "verify", "pack, pack-compact-native, pack-full-native, pack-wrappers, verify, or verify-bundle")
 	training := flag.String("training", "", "training capture")
 	native := flag.String("native", "", "native capture")
 	dataset := flag.String("dataset", "", "frozen wrapper-audit dataset")
@@ -302,6 +316,8 @@ func main() {
 		pack(*training, *native, *out)
 	case "pack-compact-native":
 		packCompact(*native, *out)
+	case "pack-full-native":
+		packFullNative(*native, *out)
 	case "pack-wrappers":
 		packWrappers(*native, *dataset, *dense, *shared, *out)
 	case "verify":

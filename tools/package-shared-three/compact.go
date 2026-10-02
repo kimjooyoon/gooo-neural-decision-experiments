@@ -11,6 +11,9 @@ import (
 const compactNativeSchema = "gooo/compact-shared-native-public-evidence/v1"
 
 func standaloneFile(name, schema string) bool {
+	if schema == fullNativeSchema {
+		return name == "README.md" || name == "LICENSE" || name == "native/report.json" || name == "native/preexecution.json" || name == "native/independent-consumption.json"
+	}
 	if schema == wrapperSchema {
 		return name == "README.md" || name == "LICENSE" || name == "raw/report.json" || name == "process-metrics.json"
 	}

@@ -53,9 +53,10 @@ Gooo 선언을 설계도, 작은 모델을 조립 순서를 고르는 장치로 
 272개 후보 순위에 차이가 있었습니다. 이후 반올림 시점을 명시한 규칙으로
 147,456회 호출을 대조했고, 18,432개 입력 쌍의 계산값과 전체 순위가 모두
 일치했습니다. 새 계약은 SDK v0.2.15로 공개했고, 로컬과 Linux에서 각각
-18,432개 입력·36,864회 판단으로 연구 결과를 재현했습니다. 컴파일러는 현재
-SDK v0.2.14를 사용합니다. 실제 Gooo 생성·실행 연결이 다음 단계이며, 현재
-컴파일러에 쓸 V3 모델은 아래 사용 예시에 고정된 리비전으로 안내합니다.
+18,432개 입력·36,864회 판단으로 연구 결과를 재현했습니다. 이어서 SDK v0.2.15를
+연결한 컴파일러로 400회 생성과 800회 실행을 완료했고, 9,600개 기대값이
+모두 일치했습니다. 실제 모델 판단은 816회였으며, 모델을 끈 경로도 결정론적으로
+완료했습니다. 아래에 새 관측과 기존 V3 모델 사용 예시를 각각 연결했습니다.
 
 ## What we want this to contribute
 
@@ -79,8 +80,9 @@ helps the system identify the next useful experiment.
 
 | What you want to do | Compatible starting point |
 | --- | --- |
-| Generate with the current Gooo compiler | Pinned compact V3 bundle in the usage example below; compiler SDK v0.2.14 |
+| Generate with SDK v0.2.14 or later | Pinned compact V3 bundle in the usage example below |
 | Explore the new V3/V4 arithmetic contract in Go | [SDK v0.2.15](https://github.com/kimjooyoon/gooo-decision-runtime/releases/tag/v0.2.15-experimental) and [explicit-arithmetic models](research/full-input-separate-20261003/README.md) |
+| Generate with the new V4 contract | Compiler source `e461c1d` and [integration PR 1158](https://github.com/kimjooyoon/meta-ontology-go/pull/1158); [native evidence](research/full-input-native-20261003/README.md) |
 | Follow the current language work | [Language guide](https://github.com/kimjooyoon/meta-ontology-go/blob/dev/docs/language-direction.ko.md), [experiment repository](https://github.com/kimjooyoon/gooo-neural-decision-experiments) and the dated appendices here |
 
 SDK release source `59c8d342da4475506b90954469aa201f85cadeb3` passed complete
@@ -88,8 +90,30 @@ replay on darwin/arm64 and linux/amd64: each made 36,864 predictions over 18,432
 frozen inputs, matching intermediate values, probabilities and full rankings.
 [Both original SDK reports](research/full-input-sdk-20261003/README.md) and
 [Linux CI](https://github.com/kimjooyoon/gooo-decision-runtime/actions/runs/37070241916)
-are public. This stage performed zero training updates. Actual native V4
-generation and execution are the next integration step.
+are public. This stage performed zero training updates. The native integration
+observation below follows that library replay.
+
+## New native generation and execution observation
+
+On sixteen known bilingual tasks, four training arms × three precisions × two
+layouts plus a disconnected arm completed **400 generations and 800 compiled
+runs**. All **9,600 supplied expectations** and **192 representation pairs**
+matched. An independent reader checked the original source/result bindings,
+1,760 progress records and 432 feedback records. Total actual predictions were
+816; the disconnected requests made zero model calls.
+
+Bag-original FP32 completed the first path for 16/16 requests in this integration
+slice. Its broader development result stays 368/512. Compact median prediction
+time was 8.33 µs, whole codegen 10.00 ms and compiler peak RSS 17.78 MiB. Process
+CPU was 78.84% of one core; host-wide utilization change was unmeasured. The
+disconnected arm completed after 96 extra candidates, with 9.80 ms median codegen.
+This task size shows reduced search attempts and similar process latency.
+
+[Full native results, every variant and original records](research/full-input-native-20261003/README.md)
+retain the timing conditions and known-task scope. All 400 receipts keep
+`permission_boundary` unresolved. The observation used compiler `e461c1d` and
+SDK v0.2.15, with zero training updates and no new default checkpoint. Compiler
+promotion status is tracked in PR 1158 above.
 
 ## New full-input research exports — 2026-10-03
 
@@ -117,13 +141,14 @@ across export parity, compact parity, calibration and three development forms.
 All twelve exports and complete raw evidence are public. Optimization took
 42.18 seconds; average process CPU was 49.83% of one core and peak RSS was
 1,809,678,336 bytes. CPU usage describes the optimizer process. Model inference
-and native generation need separate measurements for these new artifacts.
+and native generation have their separate measurement above.
 
 V4 compact artifacts use `triple_semantic_context_bag_v4_joint_v1` and the
 [research Go runtime](https://github.com/kimjooyoon/gooo-neural-decision-experiments/commit/d23bd7e9e9fa3f197ffb5ee8d10872ad982e29ca).
-The matching SDK v0.2.15 is published with complete numerical replay. Remaining
-split/form comparisons and actual native compiler execution are subsequent steps.
-The existing native measurements below belong to their pinned earlier models.
+The matching SDK v0.2.15 is published with complete numerical replay and the
+native integration observation above. Remaining split/form comparisons and new
+intentions are subsequent steps. Later historical sections retain the measurements
+of their pinned earlier models.
 
 The subsequent [Linux comparison](research/full-input-platform-20261003/README.md)
 retained the same first selected mask on all 18,432 development rows, with 272
@@ -179,9 +204,10 @@ feedback rows. Quality numbers below describe this known development cohort.
 | `evidence.zip`, `go-audit.json`, `manifest.json` | Original training and native study evidence | Go audit tools in the research repository |
 | `research/compact-runtime-20261003/` | Exact representation parity and kernel measurements | SDK v0.2.14-experimental |
 | `research/compact-native-20261003/` | Actual paired Gooo generation and compiled execution | Compiler and independent receipt reader |
-| `research/full-input-initial-20261003/` | Four-arm study: full inputs, twelve exports and original observations | Research runtime and SDK v0.2.15; native V4 adoption pending |
+| `research/full-input-initial-20261003/` | Four-arm study: full inputs, twelve exports and original observations | Research runtime and SDK v0.2.15 |
 | `research/full-input-platform-20261003/` | Retained Linux replay and complete ranking diagnosis | Offline Go diagnostic reader |
 | `research/full-input-separate-20261003/` | Explicit arithmetic, paired observations and converted metadata | Research runtime and SDK v0.2.15 |
+| `research/full-input-native-20261003/` | 400 generations, 800 compiled runs, 192 matched pairs and independent receipt consumption | Compiler `e461c1d` with SDK v0.2.15 |
 | `research/full-input-sdk-20261003/` | Complete local/Linux SDK replay reports | SDK release source `59c8d34` |
 
 Compact files use `gooo/tiny-shared-three-choice-path-model/v1` metadata and
