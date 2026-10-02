@@ -10,6 +10,34 @@ permissions:
   contents: read
 
 jobs:
+  separate-arithmetic-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GOTOOLCHAIN: local
+      GOWORK: "off"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.27.1'
+          cache: false
+      - name: Check arithmetic contracts and closed original evidence
+        run: |
+          go test ./internal/jointdecision ./internal/pathplan ./tools/audit-separate-arithmetic
+          go run ./tools/package-full-input-study --mode verify
+      - name: Collect every frozen input under both arithmetic contracts
+        run: |
+          go run ./tools/audit-separate-arithmetic \
+            --source-revision "$GITHUB_SHA" \
+            --output runs/own-three-separate-linux-ci
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: separate-arithmetic-linux-replay
+          path: runs/own-three-separate-linux-ci
+          if-no-files-found: error
+
   full-input-initial-replay:
     runs-on: ubuntu-latest
     timeout-minutes: 10

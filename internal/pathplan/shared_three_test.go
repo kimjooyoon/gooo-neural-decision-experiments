@@ -20,9 +20,14 @@ func testSharedThreeModel(t *testing.T) *jointdecision.ThreeModel {
 }
 
 func testSharedThreeFeatures(t *testing.T, feature string) *jointdecision.ThreeModel {
+	return testSharedThreeContract(t, feature, "")
+}
+
+func testSharedThreeContract(t *testing.T, feature, arithmetic string) *jointdecision.ThreeModel {
 	t.Helper()
 	raw := make([]byte, 8288)
 	meta := jointdecision.Metadata{Schema: jointdecision.SharedThreeSchema, Feature: feature, Variant: "fp32", FeatureDim: 768, HiddenDim: 8, MaxBytes: 1600, Temperature: 1, WeightsFile: "weights.bin", WeightsSHA: hash(raw), Labels: []string{"mask_0", "mask_1", "mask_2", "mask_3", "mask_4", "mask_5", "mask_6", "mask_7"}}
+	meta.Arithmetic = arithmetic
 	var at int64
 	for i, name := range [3]string{"w1", "b1", "w2"} {
 		rows, cols := [3]int{8, 1, 2}[i], [3]int{256, 8, 8}[i]

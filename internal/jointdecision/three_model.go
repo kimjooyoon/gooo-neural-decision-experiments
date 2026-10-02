@@ -50,8 +50,18 @@ func (m *ThreeModel) WeightsSHA256() string    { return m.inner.WeightsSHA256() 
 func (m *ThreeModel) PackedFileBytes() int     { return m.inner.PackedFileBytes() }
 func (m *ThreeModel) ResidentTensorBytes() int { return m.inner.ResidentTensorBytes() }
 func (m *ThreeModel) MatrixScaleBytes() int    { return m.inner.MatrixScaleBytes() }
+func (m *ThreeModel) ArithmeticVersion() string {
+	if m == nil || m.inner == nil {
+		return ""
+	}
+	return m.inner.arithmetic
+}
 
 func (m *ThreeModel) first(x *[ThreeFeatureDim]float32, y *[HiddenDim]float32) {
+	if m.inner.arithmetic == SeparateArithmeticVersion {
+		m.separateFirst(x, y)
+		return
+	}
 	if m.shared {
 		m.sharedFirst(x, y)
 		return
@@ -73,6 +83,10 @@ func (m *ThreeModel) first(x *[ThreeFeatureDim]float32, y *[HiddenDim]float32) {
 	}
 }
 func (m *ThreeModel) last(x *[HiddenDim]float32, y *[ThreeLabelCount]float32) {
+	if m.inner.arithmetic == SeparateArithmeticVersion {
+		m.separateLast(x, y)
+		return
+	}
 	if m.shared {
 		m.sharedLast(x, y)
 		return
