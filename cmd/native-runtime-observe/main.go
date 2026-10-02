@@ -52,6 +52,10 @@ type processCost struct {
 }
 
 func child(dir, binary string, args ...string) ([]byte, processCost, error) {
+	return childBound(dir, binary, 8<<20, args...)
+}
+
+func childBound(dir, binary string, limit int, args ...string) ([]byte, processCost, error) {
 	ctx, stop := context.WithTimeout(context.Background(), 75*time.Second)
 	defer stop()
 	cmd := exec.CommandContext(ctx, binary, args...)
@@ -65,7 +69,7 @@ func child(dir, binary string, args ...string) ([]byte, processCost, error) {
 		}
 	}
 	cmd.Env = append(cmd.Env, "GOTOOLCHAIN=local", "GOWORK=off", "GOPROXY=off", "GOSUMDB=off")
-	out, diagnostics := &capture{maximum: 8 << 20}, &capture{maximum: 64 << 10}
+	out, diagnostics := &capture{maximum: limit}, &capture{maximum: 64 << 10}
 	cmd.Stdout, cmd.Stderr = out, diagnostics
 	start := time.Now()
 	err := cmd.Run()
@@ -135,8 +139,8 @@ func runtimeAxis(result runtimeResult, id string) dimension {
 }
 
 func main() {
-	if len(os.Args) != 5 && (len(os.Args) != 7 || os.Args[5] != "--shared-models") {
-		panic("usage: native-runtime-observe output-directory compiler go-binary compiler-source-sha [--shared-models training-directory]")
+	if len(os.Args) != 5 && (len(os.Args) != 7 || (os.Args[5] != "--shared-models" && os.Args[5] != "--compact-models")) {
+		panic("usage: native-runtime-observe output-directory compiler go-binary compiler-source-sha [--shared-models training-directory | --compact-models compact-study-directory]")
 	}
 	output, compiler, goBinary, revision := os.Args[1], os.Args[2], os.Args[3], os.Args[4]
 	info, err := buildinfo.ReadFile(compiler)
@@ -156,10 +160,19 @@ func main() {
 	must(err)
 	policies := []runtimePolicy{{"model", model}, {"offline", ""}}
 	modelPins := map[string]string{"model": sha(modelBytes)}
-	shared := len(os.Args) == 7
+	shared := len(os.Args) == 7 && os.Args[5] == "--shared-models"
+	var compact *compactStudy
+	invoke := child
 	if shared {
 		policies, modelPins = sharedPolicies(os.Args[6])
 		checkSharedStorage()
+	}
+	if len(os.Args) == 7 && os.Args[5] == "--compact-models" {
+		compact = newCompactStudy(os.Args[6], output)
+		policies, modelPins = compact.Policies, compact.MetadataPins
+		invoke = func(dir, binary string, args ...string) ([]byte, processCost, error) {
+			return childBound(dir, binary, 1<<20, args...)
+		}
 	}
 	planned := 16 * len(policies)
 	must(os.Mkdir(output, 0700))
@@ -169,7 +182,10 @@ func main() {
 		"shared_model_comparison": shared, "planned_generations": planned, "planned_native_runs": 2 * planned,
 		"runtime_inputs_added": []int64{-257, -127, -31, -7, 7, 31, 127, 257}, "new_optimizer_updates": 0,
 		"scope": "Frozen observed source cohort; extra runtime inputs are disjoint only from the current selection suite, not a claim of training holdout or accuracy improvement"}
-	if !shared {
+	if compact != nil {
+		preexecution["compact_comparison"] = compact.Preexecution()
+	}
+	if !shared && compact == nil {
 		preexecution["model_metadata_sha256"] = sha(modelBytes)
 	}
 	save(filepath.Join(output, "preexecution.json"), preexecution)
@@ -205,6 +221,9 @@ func main() {
 			if shared {
 				checkSharedStorage()
 			}
+			if compact != nil {
+				compact.CheckStorage(compactPairReserve)
+			}
 			name := v.Family + "-" + v.Language + "-" + mode
 			dir := filepath.Join(output, name)
 			must(os.Mkdir(dir, 0700))
@@ -215,7 +234,7 @@ func main() {
 			if policy.Model != "" {
 				args = append(args, "--path-model", policy.Model, "--path-feedback-rounds", "7", "--path-feedback-unfixed")
 			}
-			raw, codegenCost, err := child(dir, compiler, args...)
+			raw, codegenCost, err := invoke(dir, compiler, args...)
 			must(os.WriteFile(filepath.Join(dir, "generation.json"), raw, 0600))
 			must(err)
 			var native generation
@@ -226,7 +245,7 @@ func main() {
 			}
 			must(os.WriteFile(filepath.Join(dir, "generated.go"), []byte(native.Source), 0600))
 			args = []string{"body-execute", "--source", "input.gooo", "--path-plan", "plan.json", "--generation", "generation.json", "--cases", "runtime-cases.json", "--go-bin", goBinary}
-			observed, cost, err := child(dir, compiler, args...)
+			observed, cost, err := invoke(dir, compiler, args...)
 			must(os.WriteFile(filepath.Join(dir, "runtime.json"), observed, 0600))
 			must(err)
 			var result runtimeResult
@@ -243,7 +262,7 @@ func main() {
 					passed++
 				}
 			}
-			if !shared && passed != 24 {
+			if !shared && compact == nil && passed != 24 {
 				panic("original finite runtime comparison differs")
 			}
 			accuracy := runtimeAxis(result, "runtime_finite_accuracy")
@@ -270,9 +289,20 @@ func main() {
 			totalPassed += passed
 			fmt.Printf("%s: %d/24 compiled outputs; 8 selection-disjoint inputs; %d model calls\n", name, passed, selection.Calls)
 		}
+		if compact != nil {
+			compact.CompareView(output, v.Family, v.Language, v.ID)
+			// Each bilingual pair gets both representation orders; every generation
+			// is still immediately followed by its own native execution.
+			for i := 0; i < len(policies); i += 2 {
+				policies[i], policies[i+1] = policies[i+1], policies[i]
+			}
+		}
 	}
 	if len(rows) != planned {
 		panic("cohort denominator differs")
 	}
 	save(filepath.Join(output, "report.json"), map[string]any{"schema": "gooo/native-runtime-study-result/v1", "status": "PASS", "compiler_source_sha": revision, "actual_generations": planned, "actual_model_predictions": predictions, "runtime_model_predictions": 0, "external_provider_calls": 0, "compiled_program_runs": 2 * planned, "finite_expectations": 24 * planned, "finite_expectations_passed": totalPassed, "ordered_compiled_outputs": 48 * planned, "selection_disjoint_expectations": 8 * planned, "new_optimizer_updates": 0, "rows": rows})
+	if compact != nil {
+		compact.Finish(output)
+	}
 }
