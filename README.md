@@ -1,5 +1,22 @@
 # Gooo neural decision experiments
 
+## Compact models in actual Gooo codegen
+
+[The complete native appendix](publication/compact-shared-native-20261003/README.md)
+records 96 generations, 298 actual model predictions and 192 compiled runs.
+All 2,304 finite expectations passed; all 48 expanded/compact pairs retained
+equal unseeded generated source, path search, feedback semantics and ordered
+outputs. An independent compiler consumer verified 596 progress records and
+202 feedback records. Every receipt still identifies the unresolved permission
+boundary; this is neither a new holdout nor whole-language completeness.
+
+Compact prediction medians were 23.7–30.2 µs, while fresh-process codegen medians
+were 27.8–29.5 ms. QAT's complete codegen median increased slightly, and cold
+cache outliers remain in the report. Process CPU medians were 83.7–84.6% of one
+core. The full 684-member evidence archive occupies about 3.04 MB compressed.
+CI verifies the complete inventory and independently consumes the frozen
+runtime receipts against the exact compiler source.
+
 ## Shared judge in compact Go storage
 
 [Public compact own models](https://huggingface.co/asketeddy/gooo-shared-judgment-tiny-v1/tree/985999a89caba6a31cc7147f66ba29a5ce76a1d9/research/compact-runtime-20261003)

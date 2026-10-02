@@ -92,6 +92,16 @@ func privacy(name string, raw []byte) {
 	}
 	if strings.HasSuffix(name, ".json") {
 		check(raw)
+		if strings.HasSuffix(name, "/runtime.json") {
+			var envelope struct {
+				Parent []byte `json:"parent_receipt_bytes"`
+			}
+			must(json.Unmarshal(raw, &envelope))
+			if len(envelope.Parent) == 0 {
+				panic("missing embedded parent receipt")
+			}
+			check(envelope.Parent)
+		}
 	}
 	if strings.HasSuffix(name, ".jsonl") {
 		s := bufio.NewScanner(bytes.NewReader(raw))
@@ -159,12 +169,16 @@ func files(training, native string) map[string]string {
 }
 func pack(training, native, out string) {
 	all := files(training, native)
+	packInventory(all, out, "gooo/shared-three-public-evidence/v1", "Closed six-model, all-epoch/update, full Go-development and 96 native/runtime evidence inventory; original failure preserved. Text and decoded JSON scanned for private host paths and credential patterns. No environment dump or external/pretrained weights.", 64<<20)
+}
+
+func packInventory(all map[string]string, out, schema, scope string, capBytes int) {
 	names := make([]string, 0, len(all))
 	for name := range all {
 		names = append(names, name)
 	}
 	sort.Strings(names)
-	m := manifest{Schema: "gooo/shared-three-public-evidence/v1", Scope: "Closed six-model, all-epoch/update, full Go-development and 96 native/runtime evidence inventory; original failure preserved. Text and decoded JSON scanned for private host paths and credential patterns. No environment dump or external/pretrained weights."}
+	m := manifest{Schema: schema, Scope: scope}
 	must(os.Mkdir(out, 0700))
 	f, err := os.OpenFile(filepath.Join(out, "evidence.zip"), os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0600)
 	must(err)
@@ -173,7 +187,7 @@ func pack(training, native, out string) {
 		raw := read(all[name])
 		privacy(name, raw)
 		m.Bytes += len(raw)
-		if m.Bytes > 64<<20 {
+		if m.Bytes > capBytes {
 			panic("public decoded cap")
 		}
 		h := &zip.FileHeader{Name: name, Method: zip.Deflate}
@@ -183,7 +197,7 @@ func pack(training, native, out string) {
 		_, err = w.Write(raw)
 		must(err)
 		m.Files = append(m.Files, member{name, len(raw), threecohort.SHA(raw)})
-		if strings.HasPrefix(name, "models/") || name == "README.md" || name == "LICENSE" || name == "training/go-audit.json" || name == "native/independent-consumption.json" {
+		if standaloneFile(name, m.Schema) {
 			path := filepath.Join(out, name)
 			must(os.MkdirAll(filepath.Dir(path), 0700))
 			must(os.WriteFile(path, raw, 0600))
@@ -204,7 +218,14 @@ func pack(training, native, out string) {
 func verify(root string, standalone bool) {
 	var m manifest
 	must(json.Unmarshal(read(filepath.Join(root, "manifest.json")), &m))
-	if m.Schema != "gooo/shared-three-public-evidence/v1" || len(m.Files) != 1116 || m.Bytes > 64<<20 || m.ArchiveBytes <= 0 || m.ArchiveBytes > 64<<20 {
+	wantCount, capBytes := 1116, 64<<20
+	var expected map[string]string
+	if m.Schema == compactNativeSchema {
+		wantCount, capBytes, expected = 684, 32<<20, compactFiles("")
+	} else if m.Schema != "gooo/shared-three-public-evidence/v1" {
+		panic("unknown evidence schema")
+	}
+	if len(m.Files) != wantCount || m.Bytes <= 0 || m.Bytes > capBytes || m.ArchiveBytes <= 0 || m.ArchiveBytes > capBytes {
 		panic("closed shared bundle extent")
 	}
 	info, err := os.Lstat(filepath.Join(root, "evidence.zip"))
@@ -225,6 +246,11 @@ func verify(root string, standalone bool) {
 	total := 0
 	for i, f := range z.File {
 		pin := m.Files[i]
+		if expected != nil {
+			if _, ok := expected[pin.Name]; !ok {
+				panic("unexpected compact inventory member")
+			}
+		}
 		if f.Name != pin.Name || int(f.UncompressedSize64) != pin.Bytes || pin.Bytes > 8<<20 || filepath.IsAbs(pin.Name) || strings.Contains(pin.Name, "..") || (i > 0 && m.Files[i-1].Name >= pin.Name) {
 			panic("closed archive member identity")
 		}
@@ -238,7 +264,7 @@ func verify(root string, standalone bool) {
 		}
 		privacy(pin.Name, b)
 		total += len(b)
-		if standalone && (strings.HasPrefix(pin.Name, "models/") || pin.Name == "README.md" || pin.Name == "LICENSE" || pin.Name == "training/go-audit.json" || pin.Name == "native/independent-consumption.json") {
+		if standalone && standaloneFile(pin.Name, m.Schema) {
 			if !bytes.Equal(read(filepath.Join(root, pin.Name)), b) {
 				panic("standalone export differs")
 			}
@@ -250,7 +276,7 @@ func verify(root string, standalone bool) {
 	fmt.Printf("PASS: %d members, %d decoded bytes, %d ZIP bytes\n", len(m.Files), total, len(raw))
 }
 func main() {
-	mode := flag.String("mode", "verify", "pack, verify, or verify-bundle")
+	mode := flag.String("mode", "verify", "pack, pack-compact-native, verify, or verify-bundle")
 	training := flag.String("training", "", "training capture")
 	native := flag.String("native", "", "native capture")
 	out := flag.String("output", "", "fresh stage or existing stage for verify")
@@ -261,6 +287,8 @@ func main() {
 	switch *mode {
 	case "pack":
 		pack(*training, *native, *out)
+	case "pack-compact-native":
+		packCompact(*native, *out)
 	case "verify":
 		verify(*out, true)
 	case "verify-bundle":

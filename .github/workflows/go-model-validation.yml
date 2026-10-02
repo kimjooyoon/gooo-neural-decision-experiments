@@ -10,6 +10,43 @@ permissions:
   contents: read
 
 jobs:
+  compact-native-receipt-consumption:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GOTOOLCHAIN: local
+      GOWORK: "off"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.27.1'
+          cache: false
+      - name: Verify full frozen native inventory before decoding
+        run: |
+          go run ./tools/package-shared-three --mode verify-bundle \
+            --output publication/compact-shared-native-20261003
+          unzip -q publication/compact-shared-native-20261003/evidence.zip -d "$RUNNER_TEMP/compact-native"
+          for name in main.go compact.go shared.go; do
+            cmp "cmd/native-runtime-observe/$name" "$RUNNER_TEMP/compact-native/source/native-runner/$name"
+          done
+      - uses: actions/checkout@v7
+        with:
+          repository: kimjooyoon/meta-ontology-go
+          ref: 7db19b6bc9a2909aa059f1265d39a539c3573a57
+          path: .ci-compact-compiler
+      - name: Independently consume all source bindings and receipt chains
+        working-directory: .ci-compact-compiler
+        run: |
+          test "$(git rev-parse HEAD)" = 7db19b6bc9a2909aa059f1265d39a539c3573a57
+          cp "$RUNNER_TEMP/compact-native/native/independent-consumer.go" compact_runtime_consumer.go
+          go run ./compact_runtime_consumer.go "$RUNNER_TEMP/compact-native/native" > "$RUNNER_TEMP/compact-consumption.json"
+          cmp "$RUNNER_TEMP/compact-consumption.json" "$RUNNER_TEMP/compact-native/native/independent-consumption.json"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: compact-native-independent-consumption
+          path: ${{ runner.temp }}/compact-consumption.json
+          if-no-files-found: error
   three-choice-source-teacher-audit:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -107,6 +144,10 @@ jobs:
                 "$RUNNER_TEMP/compact-shared-ci/models/$variant/$name"
             done
           done
+      - name: Verify all compact native observations and embedded receipts
+        run: |
+          go run ./tools/package-shared-three --mode verify-bundle \
+            --output publication/compact-shared-native-20261003
       - uses: actions/upload-artifact@v7
         with:
           name: three-choice-source-teacher-independent-audits
