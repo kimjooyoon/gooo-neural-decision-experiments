@@ -2,6 +2,12 @@
 
 ## Shared local Gooo judge — fresh model comparison
 
+[Public own models on Hugging Face](https://huggingface.co/asketeddy/gooo-shared-judgment-tiny-v1/tree/9ce1d57a0688c0e07dd0007bd7af558a5642cf4e)
+include all six exports and the full evidence bundle. Anonymous retrieval
+verified all 18 public files and all 1,116 archived members byte-for-byte.
+[Transport verification](publication/shared-three-hf-verification-20261003.json)
+is separate from the recorded model and native observations.
+
 [Full results and limitations](docs/shared-three-judgment-results-20261003.md):
 3,200 actual MPS updates, six exports, 288 Go parity checks, 3,072 development
 predictions, and 96 immediate Gooo generation/runtime pairs. Shared FP32 raises
