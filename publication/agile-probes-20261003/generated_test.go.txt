@@ -1,0 +1,11 @@
+package bodyplan
+
+import "testing"
+
+func TestObservedOrderBody(t *testing.T) {
+	for _, c := range []struct{ input, expected int64 }{{-7,9}, {0,2}, {2,0}, {3,-1}, {9,-7}} {
+		actual := Adjust(c.input)
+		t.Logf("input=%d expected=%d actual=%d", c.input, c.expected, actual)
+		if actual != c.expected { t.Fatalf("wrong order: %+v actual=%d", c, actual) }
+	}
+}

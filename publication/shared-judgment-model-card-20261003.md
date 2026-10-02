@@ -61,6 +61,13 @@ Gooo 선언을 설계도, 작은 모델을 조립 순서를 고르는 장치로 
 
 ## What we want this to contribute
 
+The [2026-10-03 research update](https://github.com/kimjooyoon/gooo-neural-decision-experiments/blob/main/docs/agile-language-research-20261003.ko.md)
+narrows the next work to useful bounded language features: choosing informative
+execution inputs, preserving operation order, and reusing small typed assemblies.
+An additive Go SDK probe-ranking API explores the first step with zero model
+calls or training updates. Model artifacts and the existing task scores below
+remain attached to their original observations.
+
 The language carries the plan, and the model supplies small local judgments.
 Our aim is to make intent, construction and observed behavior travel together
 as a program evolves. We measure complete finite behavior, partial coverage,
@@ -83,7 +90,7 @@ helps the system identify the next useful experiment.
 | --- | --- |
 | Generate with SDK v0.2.14 or later | Pinned compact V3 bundle in the usage example below |
 | Explore the new V3/V4 arithmetic contract in Go | [SDK v0.2.15](https://github.com/kimjooyoon/gooo-decision-runtime/releases/tag/v0.2.15-experimental) and [explicit-arithmetic models](research/full-input-separate-20261003/README.md) |
-| Generate with the new V4 contract | Integration merged to dev `75b2b7d` in [PR 1158](https://github.com/kimjooyoon/meta-ontology-go/pull/1158); [main promotion PR 1159](https://github.com/kimjooyoon/meta-ontology-go/pull/1159); [native evidence](research/full-input-native-20261003/README.md) |
+| Generate with the new V4 contract | Integration on main `fc0e99c4` through [merged PR 1159](https://github.com/kimjooyoon/meta-ontology-go/pull/1159); [native evidence](research/full-input-native-20261003/README.md) |
 | Follow the current language work | [Language guide](https://github.com/kimjooyoon/meta-ontology-go/blob/dev/docs/language-direction.ko.md), [experiment repository](https://github.com/kimjooyoon/gooo-neural-decision-experiments) and the dated appendices here |
 
 SDK release source `59c8d342da4475506b90954469aa201f85cadeb3` passed complete
@@ -114,7 +121,7 @@ This task size shows reduced search attempts and similar process latency.
 retain the timing conditions and known-task scope. All 400 receipts keep
 `permission_boundary` unresolved. The observation used compiler `e461c1d` and
 SDK v0.2.15, with zero training updates and no new default checkpoint. Compiler
-integration merged to dev in PR 1158; main promotion is tracked in PR 1159 above.
+integration merged to dev in PR 1158 and main in PR 1159 above.
 
 ## New full-input research exports — 2026-10-03
 

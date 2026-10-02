@@ -8,6 +8,10 @@ training tools and original evidence behind that process.
 
 ## Start here — 2026-10-03
 
+- [최근 연구와 다음 작은 언어 기능](docs/agile-language-research-20261003.ko.md):
+  Laya, LAVOIR, OpenAI, Meta and current community discussions; a bounded Go
+  implementation that proposes the next useful execution input without training.
+
 - [Gooo Wiki, 한국어](https://github.com/kimjooyoon/meta-ontology-go/wiki):
   an introduction, language/model walkthrough, metric definitions and research connections.
 - [Language and compiler](https://github.com/kimjooyoon/meta-ontology-go): source,
@@ -46,6 +50,9 @@ Go observations. The SDK replay and native observation below have since complete
 The remaining wording/split comparisons have a
 [published protocol](docs/full-input-all-forms-protocol-20261003.md); its planned
 calls are separate from completed observations. The cohort has been observed before.
+All 33,792 inputs are now prepared and verified, with zero model calls. The
+planned 811,008-call collection has not started; useful small language features
+take priority under the updated research direction above.
 
 [Linux portability follow-up](docs/full-input-numerical-portability-followup-20261003.md):
 all 18,432 first selected masks match arm64, while 272 full candidate rankings
@@ -86,7 +93,7 @@ and [all original evidence](publication/full-input-native-20261003/README.md).
 
 The measured compiler source is `e461c1d`, using SDK v0.2.15. The integration merged
 to dev as `75b2b7d` in [PR 1158](https://github.com/kimjooyoon/meta-ontology-go/pull/1158).
-Main promotion is tracked in [PR 1159](https://github.com/kimjooyoon/meta-ontology-go/pull/1159).
+Main promotion completed as `fc0e99c4` in [PR 1159](https://github.com/kimjooyoon/meta-ontology-go/pull/1159).
 This observation made zero training updates and
 kept the existing model default. All 400 receipts retain `permission_boundary`
 as their first unresolved dimension.
@@ -126,7 +133,7 @@ its own prediction count, separate from the original collection.
 | Does the new representation help path selection? | Original-input FP32 completion rose 113→368 out of 512; extra ranked attempts fell 1,469→186 | Remaining forms/splits, new tasks and the retained operation-order alias |
 | Do Korean/English intentions lead to valid behavior? | Bag-original FP32 chose valid paths in both languages for 180/256 pairs; 68 pairs chose the same wrong path | Both-valid agreement across wording, task families and newly authored intentions |
 | Does compact storage preserve behavior? | Explicit arithmetic matches 18,432 cross-platform rankings; all 192 native expanded/compact pairs match | Broader inputs and operation-order representation |
-| Can generated code run? | New V3/V4 models passed 9,600 supplied expectations across 800 compiled runs | Compiler promotion, broader types and workflows |
+| Can generated code run? | New V3/V4 models passed 9,600 supplied expectations across 800 compiled runs | Broader types and workflows |
 
 Model quality, representation parity, finite execution and resource usage have
 separate denominators. The current development cohort has been observed in
