@@ -144,6 +144,7 @@ func study(dataset, root, output, revision string) (failure error) {
 	}
 	sessions, predictions := 0, 0
 	defer func() {
+		collectorWall, collectorCPU := time.Since(start).Nanoseconds(), cpuNS()-cpuStart
 		status, message := "SDK_CAPTURED_PENDING_EXTERNAL_REPLAY", ""
 		if failure != nil {
 			status, message = "FAILED_PREFIX_RETAINED", failure.Error()
@@ -166,7 +167,7 @@ func study(dataset, root, output, revision string) (failure error) {
 			}
 			files[d.Name()] = p
 		}
-		e = store.save(filepath.Join(absolute, "collection-attempt.json"), map[string]any{"schema": "gooo/own-three-sdk-collection-attempt/v1", "status": status, "error": message, "actual_sdk_sessions": sessions, "actual_model_predictions": predictions, "prior_raw_bytes": store.Prior, "retained_new_bytes_before_attempt": store.Used - store.Prior, "retained_files_before_attempt": files, "new_optimizer_updates": 0, "native_calls": 0})
+		e = store.save(filepath.Join(absolute, "collection-attempt.json"), map[string]any{"schema": "gooo/own-three-sdk-collection-attempt/v1", "status": status, "error": message, "actual_sdk_sessions": sessions, "actual_model_predictions": predictions, "prior_raw_bytes": store.Prior, "retained_new_bytes_before_attempt": store.Used - store.Prior, "retained_files_before_attempt": files, "new_optimizer_updates": 0, "native_calls": 0, "whole_collector_wall_ns": collectorWall, "whole_collector_cpu_ns": collectorCPU, "cpu_percent_of_one_core": 100 * float64(collectorCPU) / float64(collectorWall), "process_lifetime_peak_rss_bytes": peakRSS()})
 		if e != nil && failure == nil {
 			failure = e
 		}

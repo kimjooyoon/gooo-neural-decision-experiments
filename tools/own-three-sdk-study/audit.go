@@ -54,6 +54,10 @@ func auditStudy(dataset, root, output, destination string) error {
 		Files       map[string]threestudent.Pin `json:"retained_files_before_attempt"`
 		Updates     int                         `json:"new_optimizer_updates"`
 		Native      int                         `json:"native_calls"`
+		WallNS      int64                       `json:"whole_collector_wall_ns"`
+		CPUNS       int64                       `json:"whole_collector_cpu_ns"`
+		CPUPercent  float64                     `json:"cpu_percent_of_one_core"`
+		RSS         int64                       `json:"process_lifetime_peak_rss_bytes"`
 	}
 	if err = strict(filepath.Join(output, "collection-attempt.json"), &attempt); err != nil {
 		return err
@@ -219,5 +223,9 @@ func auditStudy(dataset, root, output, destination string) error {
 	} else if _, ok := attempt.Files["report.json"]; ok {
 		return errors.New("failed prefix cannot carry a full report")
 	}
-	return (&storage{}).save(destination, map[string]any{"schema": "gooo/own-three-sdk-independent-audit/v1", "status": status, "producer_source_revision": pre.Source, "actual_captured_sdk_sessions": sessions, "actual_captured_model_predictions": predictions, "actual_independently_verified_ordered_values": values, "calibration_selected_candidate": selected, "complete_calibration_cells": len(all["calibration"]), "complete_development_cells": len(all["development"]), "prior_retained_raw_bytes": pre.PriorBytes, "retained_phase_bytes": newBytes, "raw_cap_bytes": threestudent.RawCap, "new_model_predictions": 0, "new_optimizer_updates": 0, "native_calls": 0, "default_model_promoted": false, "scope": "All retained rows are decoded strictly; every actual source, ordered value, full failed context, fixed/unnecessary/declined ranking, observed probability and committed frontier/progress chain is independently reconciled without running a model. A verified incomplete prefix is not full eleven-policy comparison."})
+	resourceAvailable := attempt.WallNS > 0
+	if resourceAvailable && (attempt.CPUNS < 0 || attempt.RSS < 0 || attempt.CPUPercent != 100*float64(attempt.CPUNS)/float64(attempt.WallNS)) {
+		return errors.New("terminal collector resource arithmetic differs")
+	}
+	return (&storage{}).save(destination, map[string]any{"schema": "gooo/own-three-sdk-independent-audit/v1", "status": status, "producer_source_revision": pre.Source, "actual_captured_sdk_sessions": sessions, "actual_captured_model_predictions": predictions, "actual_independently_verified_ordered_values": values, "calibration_selected_candidate": selected, "complete_calibration_cells": len(all["calibration"]), "complete_development_cells": len(all["development"]), "calibration": all["calibration"], "development_complete_cells": all["development"], "collector_resource_metrics_available": resourceAvailable, "prior_retained_raw_bytes": pre.PriorBytes, "retained_phase_bytes": newBytes, "raw_cap_bytes": threestudent.RawCap, "new_model_predictions": 0, "new_optimizer_updates": 0, "native_calls": 0, "default_model_promoted": false, "scope": "All retained rows are decoded strictly; every actual source, ordered value, full failed context, fixed/unnecessary/declined ranking, observed probability and committed frontier/progress chain is independently reconciled without running a model. A verified incomplete prefix is not full eleven-policy comparison. Collector resource values absent from an earlier failed receipt are unavailable, not zero utilization."})
 }
