@@ -19,9 +19,11 @@ and execution order. 3,072 Korean/English views retain all passing-mask ties;
 The [frozen study](docs/own-three-choice-completeness-preregistration-20261002.md)
 keeps actual native corpus export/freeze, teacher observation, fresh training,
 student/native measurements and public weight verification as separate phases.
-The first source-export attempt is retained with a collector correction;
-the full native corpus is not yet complete. Teacher observation, training and
-trained native measurement have not started; no default model is promoted.
+The [native corpus audit](publication/own-three-choice-curriculum-audit-20261002.json)
+now verifies all 3,072 actual exports, 9,216 complete individual inputs and
+43,440,202 journal bytes. The first failed attempt remains retained.
+Teacher observation, training and trained native measurement have not started;
+no default model is promoted.
 The existing nine v2 models below remain the latest trained edition.
 
 ## Own feedback Gooo model v2 — latest experiment

@@ -52,3 +52,21 @@ The exact captured native output now passes a permanent race-tested regression.
 The original 10,055-byte failed prefix and [negative receipt](../publication/own-three-choice-first-collection-negative-20261002.json)
 remain. Native source, protocol, authored families, cases and targets are unchanged.
 No teacher observations or optimizer updates occur in this failed attempt.
+
+## Completed concrete corpus freeze
+
+Corrected runner `df572c63010f42288dcf3a1d7c07558be7886645` collects all 3,072
+actual native source exports in a fresh directory. The subsequent
+[independent audit](../publication/own-three-choice-curriculum-audit-20261002.json)
+passes all source/document/input/capture hashes and 393,216 typed/oracle
+comparisons without further native calls. It retains 878 tied function views
+and all 9,216 complete individual input records in 3,072 grouped dataset rows.
+
+The concrete manifest SHA256 is
+`1b1b8d4724c79ed5d7cb4aff79194a03451826c8a5acc7f80f97c18fdfa3b371`;
+dataset SHA256 is
+`9a887dc09caf2f2b2b947641509328a2ee6f25dcefb6b52efe178fe8aff4fb3a`.
+Raw journals occupy 43,440,202 bytes (about 41.4 MiB), below the fixed 768 MiB cap.
+Together with the first failed attempt this phase records 3,073 native exports,
+zero model predictions and zero optimizer updates. Actual trained quality and
+the declared generative 640-call native study remain separate phases.
