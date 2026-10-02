@@ -37,6 +37,7 @@ jobs:
           go run ./tools/package-full-input-study --mode verify \
             --compare-audit runs/own-three-full-input-ci-replay/report.json
       - uses: actions/upload-artifact@v7
+        if: always()
         with:
           name: full-input-initial-linux-replay
           path: runs/own-three-full-input-ci-replay

@@ -19,3 +19,11 @@ func TestAuditComparisonKeepsCountsExact(t *testing.T) {
 		t.Fatal("key drift accepted")
 	}
 }
+
+func TestAuditDifferenceCollectionRetainsArrayPositions(t *testing.T) {
+	var out []auditDifference
+	collectDifferences("/curve", []any{float64(1), float64(2)}, []any{float64(3), float64(2)}, &out)
+	if len(out) != 1 || out[0].Path != "/curve[0]" || out[0].Expected != float64(1) || out[0].Actual != float64(3) {
+		t.Fatal(out)
+	}
+}

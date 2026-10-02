@@ -82,10 +82,48 @@ func compareAudit(expected, actual string) error {
 		return err
 	}
 	if err = compareValue("", a, b); err != nil {
+		differences := []auditDifference{}
+		collectDifferences("", a, b, &differences)
+		encoded, _ := json.Marshal(map[string]any{"status": "MISMATCH", "differences": differences, "scope": "Exact outcome differences remain failures; preserve the complete replay artifact for diagnosis."})
+		fmt.Println(string(encoded))
 		return err
 	}
 	fmt.Println(`{"status":"PASS","comparison":"all model identities, counts, families, languages and bilingual outcomes exact; accumulated float64 mass/NLL tolerance 0.001; each export parity maximum <= 0.00001"}`)
 	return nil
+}
+
+type auditDifference struct {
+	Path     string `json:"path"`
+	Expected any    `json:"expected"`
+	Actual   any    `json:"actual"`
+}
+
+func collectDifferences(path string, a, b any, out *[]auditDifference) {
+	if compareValue(path, a, b) == nil {
+		return
+	}
+	if x, ok := a.(map[string]any); ok {
+		if y, ok := b.(map[string]any); ok && len(x) == len(y) {
+			keys := make([]string, 0, len(x))
+			for key := range x {
+				keys = append(keys, key)
+			}
+			sort.Strings(keys)
+			for _, key := range keys {
+				collectDifferences(path+"/"+key, x[key], y[key], out)
+			}
+			return
+		}
+	}
+	if x, ok := a.([]any); ok {
+		if y, ok := b.([]any); ok && len(x) == len(y) {
+			for i := range x {
+				collectDifferences(fmt.Sprintf("%s[%d]", path, i), x[i], y[i], out)
+			}
+			return
+		}
+	}
+	*out = append(*out, auditDifference{path, a, b})
 }
 
 func compareValue(path string, a, b any) error {
