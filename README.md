@@ -37,6 +37,16 @@ diagnosis; the published original-input quality measurement stays 113/512.
 Next training will retain complete caller text and compare phrasing diversity
 and positional features. [Closed evidence bundle](publication/bilingual-wrapper-audit-20261003/README.md).
 
+The [next comparison protocol](docs/full-input-judgment-preregistration-20261003.md)
+now freezes four freshly initialized 2,072-parameter judges: positioned or
+whole-text fragment features, each trained with original or varied wording.
+Go reconstructs complete inputs and rejected forms, and independently replays
+their features and weights before local MPS optimization. The plan fixes 6,400
+optimizer updates and retains all twelve FP32/PTQ/QAT exports. A negative control
+shows how fragment counts can alias two different operation orders; it remains
+part of the evidence even if average quality improves. This protocol/source
+publication precedes the new training and makes no new quality claim.
+
 [Independent Linux replay](https://github.com/kimjooyoon/gooo-neural-decision-experiments/actions/runs/37049184049)
 reproduced all 92,160 selected paths and all 30 condition summaries within the
 declared numerical tolerance. The same run's 13 CI jobs passed. This replay has

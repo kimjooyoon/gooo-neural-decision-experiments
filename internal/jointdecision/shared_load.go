@@ -48,11 +48,11 @@ func LoadSharedThree(name string) (*ThreeModel, error) {
 	if err = sharedLayout(meta, weights, m); err != nil {
 		return nil, err
 	}
-	return &ThreeModel{inner: m, shared: true}, nil
+	return &ThreeModel{inner: m, shared: true, feature: meta.Feature}, nil
 }
 
 func validateShared(meta Metadata) error {
-	if meta.Schema != SharedThreeSchema || meta.Feature != ThreeFeatureVersion || meta.FeatureDim != ThreeFeatureDim ||
+	if meta.Schema != SharedThreeSchema || (meta.Feature != ThreeFeatureVersion && meta.Feature != ThreeBagFeatureVersion) || meta.FeatureDim != ThreeFeatureDim ||
 		meta.HiddenDim != SharedHiddenDim || meta.MaxBytes != ThreeInputMaxBytes || len(meta.Labels) != ThreeLabelCount ||
 		meta.WeightsFile != "weights.bin" || len(meta.Tensors) != 3 {
 		return errors.New("closed shared three-choice dimensions/schema differ")

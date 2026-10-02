@@ -18,8 +18,9 @@ type ThreePrediction struct {
 
 // ThreeModel exposes a separate ABI and never exposes a v1 prediction view.
 type ThreeModel struct {
-	inner  *Model
-	shared bool
+	inner   *Model
+	shared  bool
+	feature string
 }
 
 var threeContract = modelContract{ThreeSchema, ThreeFeatureVersion, ThreeFeatureDim, ThreeLabelCount, ThreeInputMaxBytes, 128 << 10}
@@ -37,7 +38,12 @@ func (m *ThreeModel) Schema() string {
 	}
 	return ThreeSchema
 }
-func (m *ThreeModel) FeatureVersion() string   { return ThreeFeatureVersion }
+func (m *ThreeModel) FeatureVersion() string {
+	if m != nil && m.feature != "" {
+		return m.feature
+	}
+	return ThreeFeatureVersion
+}
 func (m *ThreeModel) Variant() string          { return m.inner.Variant() }
 func (m *ThreeModel) MetadataSHA256() string   { return m.inner.MetadataSHA256() }
 func (m *ThreeModel) WeightsSHA256() string    { return m.inner.WeightsSHA256() }
@@ -95,7 +101,7 @@ func (m *ThreeModel) PredictInto(text string, workspace *ThreeWorkspace, output 
 		return errors.New("three-choice model/workspace/output required")
 	}
 	var candidate ThreeWorkspace
-	if err := FeaturesIntoThree(text, &candidate.Features); err != nil {
+	if err := threeFeatures(text, m.FeatureVersion(), &candidate.Features); err != nil {
 		return err
 	}
 	m.first(&candidate.Features, &candidate.Hidden)

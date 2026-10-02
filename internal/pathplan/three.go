@@ -59,7 +59,7 @@ func (prepared *PreparedPlan) ThreeInput() (string, error) {
 	return b.String(), errors.New("complete three-choice input is unsupported")
 }
 func threeReceipt(text string, decisions int, model *jointdecision.ThreeModel) ThreeReceipt {
-	r := ThreeReceipt{Schema: model.Schema(), Feature: jointdecision.ThreeFeatureVersion, Input: text, InputSHA: hash([]byte(text)), Bytes: len(text), Decisions: decisions}
+	r := ThreeReceipt{Schema: model.Schema(), Feature: model.FeatureVersion(), Input: text, InputSHA: hash([]byte(text)), Bytes: len(text), Decisions: decisions}
 	if parts, err := jointdecision.ThreeParts(text); err == nil {
 		for i, part := range parts {
 			r.PartSHA[i] = hash([]byte(part))
