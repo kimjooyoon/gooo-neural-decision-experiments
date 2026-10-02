@@ -70,9 +70,32 @@ func verifyAttempts(v threecohort.View, s pathplan.SearchResult) error {
 	return nil
 }
 
+// VerifyFiniteAttempts checks every captured emitted fragment and ordered value
+// against the frozen independent arithmetic, without operational predictions.
+func VerifyFiniteAttempts(v threecohort.View, s pathplan.SearchResult) error {
+	if s.Schema != "gooo/typed-path-tdd-search/v1" || s.Status != "TRAINING_COMPLETE" || s.DeclaredCombinations != 8 || s.TrainingTotal != 16 || s.SelectedTrainingPassed != 16 || s.TypeRejected != 0 || s.Evaluated != len(s.Attempts) || len(s.Attempts) < 1 || len(s.Attempts) > 8 || s.Unattempted != 8-len(s.Attempts) {
+		return errors.New("complete eight-mask finite search required")
+	}
+	return verifyAttempts(v, s)
+}
+
+// VerifyIndependentObservation verifies an unseeded held-out reference session.
+// The original teacher verifier still requires its training-only seeded schema.
+func VerifyIndependentObservation(v threecohort.View, c Capture) error {
+	if c.Schema != "gooo/own-three-choice-sdk-capture/v1" || c.ViewID != v.ID || c.SourceSHA != v.SourceSHA || c.InputSHA != threecohort.SHA([]byte(v.Text)) || c.SeedIndex != -1 || c.Seed != "" || c.WallNS <= 0 || c.RuntimeError != "" || len(c.Feedback) != len(c.Search.Attempts)-1 || len(c.Progress) != 2*len(c.Search.Attempts) {
+		return errors.New("complete unseeded independent reference observation required")
+	}
+	if err := VerifyFiniteAttempts(v, c.Search); err != nil {
+		return err
+	}
+	return verifyTrace(v, c)
+}
+
 type frontier struct {
 	scheduled, queued, committed uint8
 	weights                      [3][2]float64
+	joint                        bool
+	maskWeights                  [8]float64
 }
 
 func (q *frontier) add(mask int) bool {
@@ -85,6 +108,9 @@ func (q *frontier) add(mask int) bool {
 	return true
 }
 func (q *frontier) score(mask int) float64 {
+	if q.joint {
+		return q.maskWeights[mask]
+	}
 	var sum float64
 	for i := range 3 {
 		sum += q.weights[i][(mask>>i)&1]
@@ -164,6 +190,12 @@ func validatePrediction(r pathplan.Receipt, choice pathplan.Choice, weights [2]f
 	return nil
 }
 func sampled(v threecohort.View, c Capture, choice pathplan.Choice, w [2]float64) string {
+	if c.Seed == "" {
+		if w[1] > w[0] {
+			return choice.Options[1].Label
+		}
+		return choice.Options[0].Label
+	}
 	bound := []byte(v.Prepared.PlanSHA256() + "\x00" + choice.ID + "\x00" + TeacherMetadata + "\x00" + TeacherWeights + "\x00" + c.Seed)
 	total := w[0] + w[1]
 	for i, o := range choice.Options {
@@ -184,7 +216,11 @@ func sampled(v threecohort.View, c Capture, choice pathplan.Choice, w [2]float64
 func verifyTrace(v threecohort.View, c Capture) error {
 	initial := c.Progress[0]
 	sel := initial.Selection
-	if sel.Schema != "gooo/typed-body-path-selection/v1" || sel.MetadataSHA256 != TeacherMetadata || sel.WeightsSHA256 != TeacherWeights || sel.ModelVariant != "fp32" || sel.PlanSHA256 != v.Prepared.PlanSHA256() || sel.SeedSHA256 != threecohort.SHA([]byte(c.Seed)) || sel.ModelCalls != 3 || sel.ExternalCalls != 0 || !sel.ExternalCallsKnown || sel.Joint != nil || sel.Three != nil || len(sel.Receipts) != 3 || len(initial.EligibleProbabilities) != 3 || !reflect.DeepEqual(sel.Choices, v.Prepared.Defaults()) {
+	seedSHA := ""
+	if c.Seed != "" {
+		seedSHA = threecohort.SHA([]byte(c.Seed))
+	}
+	if sel.Schema != "gooo/typed-body-path-selection/v1" || sel.MetadataSHA256 != TeacherMetadata || sel.WeightsSHA256 != TeacherWeights || sel.ModelVariant != "fp32" || sel.PlanSHA256 != v.Prepared.PlanSHA256() || sel.SeedSHA256 != seedSHA || sel.ModelCalls != 3 || sel.ExternalCalls != 0 || !sel.ExternalCallsKnown || sel.Joint != nil || sel.Three != nil || len(sel.Receipts) != 3 || len(initial.EligibleProbabilities) != 3 || !reflect.DeepEqual(sel.Choices, v.Prepared.Defaults()) {
 		return errors.New("initial independent teacher binding differs")
 	}
 	q := frontier{}
