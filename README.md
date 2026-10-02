@@ -2,6 +2,13 @@
 
 ## Shared judge in compact Go storage
 
+[Public compact own models](https://huggingface.co/asketeddy/gooo-shared-judgment-tiny-v1/tree/985999a89caba6a31cc7147f66ba29a5ce76a1d9/research/compact-runtime-20261003)
+and [Go SDK v0.2.14-experimental](https://github.com/kimjooyoon/gooo-decision-runtime/releases/tag/v0.2.14-experimental)
+are available. Anonymous immutable downloads verified all ten appendix files,
+the updated model card and the complete decoded comparison ledger.
+[Transport evidence](publication/compact-shared-hf-verification-20261003.json)
+is separate from the numerical/runtime observations below.
+
 The [preregistered representation study](preexecution/shared-three-compact-runtime-preregistration-20261003.json)
 now exports an explicit shared-weight ABI for the existing own models. No new
 optimizer updates or quality selection were performed. All 10,739 frozen

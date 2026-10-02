@@ -101,6 +101,12 @@ jobs:
             --teacher-curriculum "$RUNNER_TEMP/three-choice-training/own-three-teacher-curriculum-20261002" \
             --output "$RUNNER_TEMP/compact-shared-ci" \
             --source-revision "$GITHUB_SHA"
+          for variant in fp32 ptq_ternary qat_ternary; do
+            for name in model.json weights.bin; do
+              cmp "publication/compact-shared-runtime-20261003/models/$variant/$name" \
+                "$RUNNER_TEMP/compact-shared-ci/models/$variant/$name"
+            done
+          done
       - uses: actions/upload-artifact@v7
         with:
           name: three-choice-source-teacher-independent-audits
