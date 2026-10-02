@@ -1,0 +1,16 @@
+{
+  "schema": "gooo/shared-three-architecture-preflight/v1",
+  "status": "PASS",
+  "mps_available": true,
+  "protocol_sha256": "96227c0c84c61cd48d2c696e9d858f1e6f149b081f32a76e9e86383c8472927b",
+  "fresh_expanded_initial_sha256": "e2ccb2bd0de4df48ecd1537acf2e54d44d4a3e81ea97c52ca4da928df54bd8fd",
+  "trainable_parameters": 2072,
+  "expanded_parameters": 18656,
+  "fp32_expanded_forward_max_error": 0.0,
+  "qat_expanded_forward_max_error": 0.0,
+  "probe_rows": 4,
+  "probe_definition": "torch.arange(4*768,dtype=float32).reshape(4,768)/3072",
+  "all_parameter_gradients_present_and_finite": true,
+  "optimizer_updates": 0,
+  "scope": "Offline architecture preflight only: SharedLocal versus its expanded dense Torch computation, FP32/QAT, exact checkpoint reconstruction. Does not prove Go parity, learned quality, native adoption or speedup."
+}
