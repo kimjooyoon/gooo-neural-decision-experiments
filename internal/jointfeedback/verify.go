@@ -28,7 +28,31 @@ func Verify(v jointcohort.View, c Capture) error {
 	if err != nil {
 		return err
 	}
-	return verifyFeedback(v, c, progress)
+	return verifyFeedback(v, c, progress, TeacherMetadata, TeacherWeights)
+}
+
+// VerifyJointObservation audits frozen joint students without new inference.
+// Source/intent authority comes from the independently reconstructed View.
+func VerifyJointObservation(v jointcohort.View, c Capture, metadata, weights string) error {
+	if c.ViewID != v.ID || c.SourceSHA != v.SourceSHA || c.JointSHA != jointcohort.SHA([]byte(v.JointInput)) || c.Seed != "" || c.Search.Selection.SeedSHA256 != "" || c.Search.Selection.MetadataSHA256 != metadata || c.Search.Selection.WeightsSHA256 != weights || c.Search.Status != "TRAINING_COMPLETE" || c.Search.TrainingTotal != 16 || c.Search.DeclaredCombinations != 4 || c.Search.TypeRejected != 0 || c.Search.Evaluated != len(c.Search.Attempts) {
+		return errors.New("student source/model/search binding differs")
+	}
+	if err := verifyAttempts(v, c.Search); err != nil {
+		return err
+	}
+	p, err := verifyProgress(v, c)
+	if err != nil {
+		return err
+	}
+	return verifyFeedback(v, c, p, metadata, weights)
+}
+
+// VerifyFiniteAttempts checks captured actual values with independent arithmetic.
+func VerifyFiniteAttempts(v jointcohort.View, s pathplan.SearchResult) error {
+	if len(s.Attempts) < 1 || len(s.Attempts) > 4 || s.Status != "TRAINING_COMPLETE" || s.TypeRejected != 0 || s.TrainingTotal != 16 || s.SelectedTrainingPassed != 16 {
+		return errors.New("completed four-path observation required")
+	}
+	return verifyAttempts(v, s)
 }
 
 func verifyAttempts(v jointcohort.View, s pathplan.SearchResult) error {
@@ -117,14 +141,14 @@ func verifyProgress(v jointcohort.View, c Capture) (map[string]pathplan.SessionP
 	return bySHA, nil
 }
 
-func verifyFeedback(v jointcohort.View, c Capture, progress map[string]pathplan.SessionProgress) error {
+func verifyFeedback(v jointcohort.View, c Capture, progress map[string]pathplan.SessionProgress, metadata, weights string) error {
 	previous, calls := "", 1
 	for i, f := range c.Feedback {
 		sha := f.SHA
 		f.SHA = ""
 		raw, err := json.Marshal(f)
 		p, ok := progress[f.FromProgressSHA]
-		if err != nil || !ok || 2*i+1 >= len(c.Progress) || f.FromProgressSHA != c.Progress[2*i+1].SHA || sha == "" || jointcohort.SHA(raw) != sha || f.Round != i+1 || f.PreviousSHA != previous || f.MetadataSHA != TeacherMetadata || f.WeightsSHA != TeacherWeights || f.PlanSHA != v.Prepared.PlanSHA256() || f.CaseSHA != p.CaseSHA || f.Attempted != p.Attempted || f.Passed != p.SelectedPassed || f.Cases != 16 || f.TypeRejected != 0 || f.CI != nil || f.CIIsAuthority || p.Status == "TRAINING_COMPLETE" {
+		if err != nil || !ok || 2*i+1 >= len(c.Progress) || f.FromProgressSHA != c.Progress[2*i+1].SHA || sha == "" || jointcohort.SHA(raw) != sha || f.Round != i+1 || f.PreviousSHA != previous || f.MetadataSHA != metadata || f.WeightsSHA != weights || f.PlanSHA != v.Prepared.PlanSHA256() || f.CaseSHA != p.CaseSHA || f.Attempted != p.Attempted || f.Passed != p.SelectedPassed || f.Cases != 16 || f.TypeRejected != 0 || f.CI != nil || f.CIIsAuthority || p.Status == "TRAINING_COMPLETE" {
 			return errors.New("teacher feedback cause or receipt differs")
 		}
 		var first *pathplan.TestResult
