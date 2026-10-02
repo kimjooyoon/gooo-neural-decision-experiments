@@ -176,8 +176,10 @@ metadata and retains all caller input.
 The [subsequent Linux replay](full-input-numerical-portability-followup-20261003.md)
 has completed its collection and exposed 272 complete candidate-order differences.
 Its exact comparison remains failed; the report retains every observation.
-Next, specify and measure the arithmetic contract, complete all split/form
-comparisons, exact feature-conflict inventories, timing and allocation measurements,
+The [versioned arithmetic follow-up](full-input-separate-arithmetic-results-20261003.md)
+now reproduces every hidden/logit/probability vector and complete ranking across
+both platforms on these 18,432 rows. Next, complete all split/form comparisons,
+exact feature-conflict inventories, timing and allocation measurements,
 and source-bound native Gooo generation followed immediately by compiled execution. Preserve
 the complete input, deterministic zero-prediction continuation and unresolved
 completeness frontier. Model adoption will use these additional observations.

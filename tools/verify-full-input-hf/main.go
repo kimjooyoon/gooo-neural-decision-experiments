@@ -24,14 +24,15 @@ import (
 func main() {
 	revision := flag.String("revision", "", "immutable public Hugging Face revision")
 	output := flag.String("output", "", "fresh transport verification report")
+	separate := flag.Bool("include-separate", false, "also verify the explicit arithmetic appendix")
 	flag.Parse()
-	if err := verify(*revision, *output); err != nil {
+	if err := verify(*revision, *output, *separate); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 }
 
-func verify(revision, output string) error {
+func verify(revision, output string, includeSeparate bool) error {
 	if !regexp.MustCompile(`^[0-9a-f]{40}$`).MatchString(revision) || output == "" {
 		return errors.New("immutable revision and fresh output required")
 	}
@@ -88,6 +89,31 @@ func verify(revision, output string) error {
 		return err
 	}
 	files[platformAppendix+"manifest.json"] = platformPin
+	if includeSeparate {
+		const root = "publication/full-input-separate-arithmetic-20261003"
+		const prefix = "research/full-input-separate-20261003/"
+		encoded, err := os.ReadFile(root + "/manifest.json")
+		if err != nil {
+			return err
+		}
+		var separate struct {
+			Files map[string]threestudent.Pin `json:"files"`
+		}
+		if err = json.Unmarshal(encoded, &separate); err != nil || len(separate.Files) != 56 {
+			return errors.New("complete separate manifest required")
+		}
+		for name, pin := range separate.Files {
+			if !filepath.IsLocal(name) || strings.Contains(name, "\\") {
+				return errors.New("local separate member required")
+			}
+			files[prefix+name] = pin
+		}
+		pin, err := threestudent.FilePin(root + "/manifest.json")
+		if err != nil {
+			return err
+		}
+		files[prefix+"manifest.json"] = pin
+	}
 	client := &http.Client{Timeout: 120 * time.Second}
 	metadata, err := client.Get("https://huggingface.co/api/models/" + repo + "/revision/" + revision)
 	if err != nil {

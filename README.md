@@ -46,8 +46,11 @@ the next steps in the same protocol. The cohort has been observed before.
 [Linux portability follow-up](docs/full-input-numerical-portability-followup-20261003.md):
 all 18,432 first selected masks match arm64, while 272 full candidate rankings
 differ under small score deltas. The exact comparison failed on partial-completion
-curves. Complete Linux records are retained; the numerical-contract repair is
-the next runtime task.
+curves. The [explicit-arithmetic follow-up](docs/full-input-separate-arithmetic-results-20261003.md)
+now pairs 147,456 actual predictions with unchanged weights: all 18,432 input
+pairs match exactly in intermediate values, scores and candidate order under the
+new rule. First-path completion and extra attempts stay unchanged. The original
+failure remains reproducible; SDK/native adoption is the next runtime step.
 
 ### Motivating diagnosis: input phrasing changes the chosen path
 
@@ -83,7 +86,7 @@ its own prediction count, separate from the original collection.
 | --- | --- | --- |
 | Does the new representation help path selection? | Original-input FP32 completion rose 113→368 out of 512; extra ranked attempts fell 1,469→186 | Remaining forms/splits, new tasks and the retained operation-order alias |
 | Do Korean/English intentions lead to valid behavior? | Bag-original FP32 chose valid paths in both languages for 180/256 pairs; 68 pairs chose the same wrong path | Both-valid agreement across wording, task families and newly authored intentions |
-| Does compact storage preserve behavior? | Earlier models matched on 10,739 states and 48 native pairs; all twelve new exports passed local expanded/compact vector parity | Complete rankings across architectures; 272 Linux/arm64 differences remain |
+| Does compact storage preserve behavior? | Expanded/compact lanes and all 18,432 cross-platform rankings match under explicit arithmetic; legacy rules retain 272 ranking differences | SDK/native adoption and broader inputs under the versioned rule |
 | Can generated code run? | Earlier V3 compact models passed 2,304 supplied expectations across 192 compiled runs | V4 SDK extraction and native adoption, then broader types and workflows |
 
 Model quality, representation parity, finite execution and resource usage have

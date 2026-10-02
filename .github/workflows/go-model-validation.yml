@@ -26,11 +26,18 @@ jobs:
         run: |
           go test ./internal/jointdecision ./internal/pathplan ./tools/audit-separate-arithmetic
           go run ./tools/package-full-input-study --mode verify
+          go run ./tools/package-full-input-study --mode verify --output publication/full-input-separate-arithmetic-20261003
       - name: Collect every frozen input under both arithmetic contracts
         run: |
           go run ./tools/audit-separate-arithmetic \
             --source-revision "$GITHUB_SHA" \
             --output runs/own-three-separate-linux-ci
+      - name: Compare every new Linux observation with the frozen arm64 collection
+        run: |
+          unzip -q publication/full-input-separate-arithmetic-20261003/arm64.zip -d "$RUNNER_TEMP/separate-arm64"
+          go run ./tools/audit-separate-arithmetic --mode compare \
+            --local "$RUNNER_TEMP/separate-arm64" --remote runs/own-three-separate-linux-ci \
+            --output runs/own-three-separate-linux-ci/platform-comparison.json
       - uses: actions/upload-artifact@v7
         if: always()
         with:

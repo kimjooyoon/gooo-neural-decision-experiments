@@ -1,0 +1,54 @@
+{
+  "schema": "gooo/tiny-shared-three-choice-path-model/v1",
+  "feature_version": "triple_semantic_context_v3_joint_v1",
+  "arithmetic_version": "float32_separate_v1",
+  "variant": "ptq_ternary",
+  "feature_dim": 768,
+  "hidden_dim": 8,
+  "max_bytes": 1600,
+  "labels": [
+    "mask_0",
+    "mask_1",
+    "mask_2",
+    "mask_3",
+    "mask_4",
+    "mask_5",
+    "mask_6",
+    "mask_7"
+  ],
+  "temperature": 0.5,
+  "weights_file": "weights.bin",
+  "weights_sha256": "9421651deabac7172e3377e46798aa9b2e525a953f72ed83b098efcd2a4a69df",
+  "tensors": [
+    {
+      "name": "w1",
+      "count": 2048,
+      "rows": 8,
+      "cols": 256,
+      "encoding": "ternary_base3_5",
+      "offset": 0,
+      "bytes": 410,
+      "scale": 0.06144197657704353
+    },
+    {
+      "name": "b1",
+      "count": 8,
+      "rows": 1,
+      "cols": 8,
+      "encoding": "float32_le",
+      "offset": 410,
+      "bytes": 32,
+      "scale": 1
+    },
+    {
+      "name": "w2",
+      "count": 16,
+      "rows": 2,
+      "cols": 8,
+      "encoding": "ternary_base3_5",
+      "offset": 442,
+      "bytes": 4,
+      "scale": 0.9200226664543152
+    }
+  ]
+}

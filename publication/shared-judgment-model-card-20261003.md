@@ -50,9 +50,10 @@ Gooo 선언을 설계도, 작은 모델을 조립 순서를 고르는 장치로 
 연구 부록에 있으며, 기존 모델의 코드 생성·실행 관측은 해당 실험별로 남아 있습니다.
 
 새 모델을 arm64와 Linux에서 대조한 결과, 첫 선택은 같았고 후순위까지 포함한
-272개 후보 순위에 차이가 있었습니다. 계산 규칙을 명시하는 작업과 새 V4 모델의
-SDK·컴파일러 반영이 다음 단계입니다. 현재 사용 가능한 V3 모델 경로는 아래
-사용 예시에 고정된 리비전으로 안내합니다.
+272개 후보 순위에 차이가 있었습니다. 이후 반올림 시점을 명시한 규칙으로
+147,456회 호출을 대조했고, 18,432개 입력 쌍의 계산값과 전체 순위가 모두
+일치했습니다. SDK·컴파일러 반영이 다음 단계입니다. 현재 사용 가능한 V3 모델
+경로는 아래 사용 예시에 고정된 리비전으로 안내합니다.
 
 ## What we want this to contribute
 
@@ -105,8 +106,14 @@ The subsequent [Linux comparison](research/full-input-platform-20261003/README.m
 retained the same first selected mask on all 18,432 development rows, with 272
 different complete candidate orders. Small score deltas changed partial-completion
 curves, so the exact cross-platform comparison failed. Its complete observations
-are public; an explicit arithmetic contract and paired validation are the next
-runtime work.
+are public. The [explicit-arithmetic follow-up](research/full-input-separate-20261003/README.md)
+then made 73,728 predictions per platform with unchanged weight bytes and zero
+training updates. All 18,432 paired inputs now have identical hidden/logit/
+probability bits and complete rankings under `float32_separate_v1`. Original
+first-path completeness and extra ranked attempts stay unchanged; partial
+coverage shifts in both directions compared with legacy arm64 arithmetic.
+Converted metadata and complete four-lane journals are public in that appendix.
+SDK and native compiler adoption remain the next runtime work.
 
 ## How the model is used
 

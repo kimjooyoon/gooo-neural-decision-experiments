@@ -47,6 +47,8 @@ func main() {
 		err = pack(*output)
 	case "package-platform":
 		err = packPlatform(*output)
+	case "package-separate":
+		err = packSeparate(*output)
 	case "verify":
 		err = verify(*output)
 	default:
@@ -485,7 +487,7 @@ func verify(output string) error {
 	if err = threecohort.Decode(raw, &m); err != nil {
 		return err
 	}
-	validSchema := m.Schema == "gooo/full-input-initial-publication/v1" && len(m.Archives) == 4 || m.Schema == "gooo/full-input-platform-publication/v1" && len(m.Archives) == 1
+	validSchema := m.Schema == "gooo/full-input-initial-publication/v1" && len(m.Archives) == 4 || m.Schema == "gooo/full-input-platform-publication/v1" && len(m.Archives) == 1 || m.Schema == "gooo/full-input-separate-publication/v1" && len(m.Archives) == 3
 	if !validSchema || m.Decoded <= 0 || m.Decoded > 768<<20 {
 		return errors.New("closed archive contract required")
 	}

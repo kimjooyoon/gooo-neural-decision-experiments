@@ -1,7 +1,9 @@
 # Full-input judgments: numerical portability follow-up
 
-Status: observed platform difference; arithmetic repair and paired validation
-remain pending. Optimizer updates for this follow-up: zero.
+Status: the original platform difference is retained below. The subsequent
+[explicit-arithmetic comparison](full-input-separate-arithmetic-results-20261003.md)
+passes all 18,432 paired rows, including complete rankings and intermediate
+arrays. SDK/native adoption remains next. Optimizer updates for both follow-ups: zero.
 
 The original full-input model comparison is retained in
 [the initial report](full-input-judgment-initial-results-20261003.md). Its Linux
@@ -45,7 +47,7 @@ run preserved the actual Linux rows used here; training was not repeated.
 - [Anonymous Hugging Face byte verification](../publication/full-input-initial-hf-verification-20261003.json)
   independently verified all 59 public files including the model card.
 
-## Planned repair, before more inference collection
+## Repair plan recorded before the subsequent collection
 
 1. Inspect multiplication/accumulation and scaled-bias operations for compiler
    fusion differences. Use explicit float32 rounding in a separately identified
