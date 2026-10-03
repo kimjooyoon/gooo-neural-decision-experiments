@@ -8,6 +8,11 @@ training tools and original evidence behind that process.
 
 ## Start here — 2026-10-03
 
+- [Generate and execute the Korean example with one Go command](examples/whole-candidate-order):
+  `go run ./cmd/order-example --model ... --out ...` reads source, recipe and
+  finite cases, executes each body immediately and saves complete receipts.
+  Omit the model for deterministic construction. Sequential open-input requests
+  expose preparation reuse and separate response from native execution time.
 - [Reuse a checked source projection inside recipe expansion](publication/source-recipe-projection-reuse-20261003):
   512 generations and 1,024 native executions retain original outcomes. Paired
   decoder measurement: 8,192 decodes, all document/plan pairs match, median

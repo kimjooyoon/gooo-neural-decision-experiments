@@ -10,6 +10,52 @@ permissions:
   contents: read
 
 jobs:
+  order-example:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GOTOOLCHAIN: local
+      GOWORK: "off"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.27.1'
+          cache: false
+      - name: Check immediate execution, protocol errors and cancellation
+        run: |
+          go test -race ./cmd/order-example
+          go vet ./cmd/order-example
+          go build -o "$RUNNER_TEMP/order-example" ./cmd/order-example
+      - uses: actions/checkout@v7
+        with:
+          repository: kimjooyoon/meta-ontology-go
+          ref: cb2892cb583e693190bd68f75eb4df223819f053
+          path: .order-example-compiler
+      - name: Build pinned integrated Gooo compiler
+        run: |
+          cd .order-example-compiler
+          go build -o "$RUNNER_TEMP/gooo" ./cmd/gooo
+      - name: Generate and immediately execute the public model and deterministic examples
+        run: |
+          "$RUNNER_TEMP/order-example" --compiler "$RUNNER_TEMP/gooo" \
+            --go-bin "$(command -v go)" --out "$RUNNER_TEMP/order-example-model" \
+            --model publication/order-judge-initial-20261003/model.json
+          "$RUNNER_TEMP/order-example" --compiler "$RUNNER_TEMP/gooo" \
+            --go-bin "$(command -v go)" --out "$RUNNER_TEMP/order-example-deterministic"
+          jq -e 'length==2 and all(.[]; .passed==8 and .total==8 and .native_runs==2 and .model_predictions==1) and .[0].preparation_reused==false and .[1].preparation_reused==true' \
+            "$RUNNER_TEMP/order-example-model/summary.json"
+          jq -e 'length==2 and all(.[]; .passed==8 and .total==8 and .native_runs==2 and .model_predictions==0)' \
+            "$RUNNER_TEMP/order-example-deterministic/summary.json"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: order-example-immediate-native
+          path: |
+            ${{ runner.temp }}/order-example-model
+            ${{ runner.temp }}/order-example-deterministic
+          if-no-files-found: error
+
   whole-candidate-judge:
     runs-on: ubuntu-latest
     timeout-minutes: 5

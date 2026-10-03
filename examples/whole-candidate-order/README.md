@@ -7,12 +7,41 @@
 이 파일들은 공개 네이티브 실험의 `new-template-add-multiply-ko-s0-w1-t2` 과제에서
 그대로 가져왔습니다. [256회 생성·512회 실행의 전체 관측](../../publication/order-judge-native-20261003).
 
-## 실행
+## 준비
 
 Go1.27.1과 [main `cb2892cb`](https://github.com/kimjooyoon/meta-ontology-go/tree/cb2892cb583e693190bd68f75eb4df223819f053)의
 컴파일러가 필요합니다. 컴파일러 저장소에서 `go build -o gooo ./cmd/gooo`로 한 번
 빌드한 `gooo`와 Go1.27.1을 PATH에 두고, 이 연구 저장소의 루트에서 실행합니다.
 모델은 저장소에 공개된 최초 가중치를 사용합니다.
+
+## 한 명령으로 조립하고 실행하기
+
+아래 Go 예제는 소스·레시피·기대값을 읽고 `gooo body-path-stream`에 보냅니다.
+응답 하나가 도착하면 바로 `body-execute`로 컴파일하고 실행한 뒤 다음 요청을 보냅니다.
+기본 두 요청 동안 입력을 열어 두어 후보 준비를 재사용합니다.
+
+```sh
+out_root="$(mktemp -d)"
+go run ./cmd/order-example \
+  --model publication/order-judge-initial-20261003/model.json \
+  --out "$out_root/model"
+
+go run ./cmd/order-example --out "$out_root/deterministic"
+```
+
+모델 옵션이 없는 두 번째 명령은 결정론적으로 진행합니다. 각 요청의 응답 시간,
+실행 시간, 실제 모델 호출 수와 기대값 충족 수가 표시됩니다. 출력 폴더에는 입력 파일,
+`order-1-response.json`, `order-1-generation.json`, `order-1-runtime.json`과
+전체 `summary.json`이 남습니다. 생성 파일의 `source`에서 실제 조립한 Go를 읽습니다.
+새 출력 폴더를 사용하고, 기대값이 미충족이면 기록을 남긴 뒤 오류로 종료합니다.
+이 예제는 `Compose` 활동의 한 소스를 순차 반복하는 실행법입니다.
+
+첫 응답 시간에는 시작 중인 워커의 준비 비용이 포함될 수 있습니다. 실행 시간은
+별도 명령의 컴파일과 두 번 실행을 포함합니다. 이 두 요청은 실행법 확인이며
+처리량 측정과 일반화 평가는 별도 실험에서 다룹니다. Linux·macOS에서는 취소 시
+자식 프로세스 그룹을 함께 종료합니다. 전체 예제의 제한 시간은 90초입니다.
+
+## 생성과 실행을 나눠 보기
 
 ```sh
 gooo body-codegen --json --activity Compose \
