@@ -599,11 +599,21 @@ jobs:
           go run ./tools/native-feedback-study --mode compound-cohort --out "$RUNNER_TEMP/compound-path-cohort"
           cmp studies/compound-path-v1/cohort.jsonl "$RUNNER_TEMP/compound-path-cohort/cohort.jsonl"
           cmp studies/compound-path-v1/manifest.json "$RUNNER_TEMP/compound-path-cohort/manifest.json"
-      - name: Reproduce finite feedback targets with preserved ambiguity
+      - name: Reproduce unchanged feedback targets with the revised body source
         run: |
           go run ./cmd/feedback-curriculum --out "$RUNNER_TEMP/feedback-path-curriculum"
           cmp data/feedback-path-v1/dataset.jsonl "$RUNNER_TEMP/feedback-path-curriculum/dataset.jsonl"
-          cmp data/feedback-path-v1/manifest.json "$RUNNER_TEMP/feedback-path-curriculum/manifest.json"
+          current=publication/constant-body-feedback-compatibility-20261003/manifest.json
+          cmp "$current" "$RUNNER_TEMP/feedback-path-curriculum/manifest.json"
+          jq -S '.source_sha256["internal/bodyplan/bodyplan.go"] = "6ebd90bde6e97ffc93dede1ae741a262cb56408194ca3696e9ced530dd109a07"' \
+            "$current" > "$RUNNER_TEMP/feedback-prior-source.json"
+          jq -S . data/feedback-path-v1/manifest.json > "$RUNNER_TEMP/feedback-original-manifest.json"
+          cmp "$RUNNER_TEMP/feedback-original-manifest.json" "$RUNNER_TEMP/feedback-prior-source.json"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: feedback-curriculum-revised-source
+          path: ${{ runner.temp }}/feedback-path-curriculum/manifest.json
+          if-no-files-found: error
       - name: Verify feedback-trained model pairs and numerical parity
         run: |
           go run ./tools/audit-feedback-model --models runs/feedback-path-soft-target-mps-20261001/models \
