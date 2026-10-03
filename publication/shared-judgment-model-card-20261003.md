@@ -33,6 +33,20 @@ attempt. A receipt connects the original intention to the choices and result.
 
 ## 한국어 요약
 
+### 최근 재현 검사
+
+과거 계산 방식의 macOS·Linux 기록을 각각 고정 원본과 대조하는 Go 검증기를
+추가했습니다. 새 실행은 환경마다 18,432개 개발 기록과 24개 조밀 저장 파일을
+모두 재현했습니다. 원래 두 환경에서 달랐던 요약 101개 항목과 후보 순위 272개는
+양쪽 값과 입력 해시를 함께 보존합니다. 검증기는 모델을 호출하지 않으며 새 감사
+실행의 Go 추론 호출은 환경마다 25,824회입니다. 원래 가중치와 기대값은 유지합니다.
+
+[Linux 검사 37126899513](https://github.com/kimjooyoon/gooo-neural-decision-experiments/actions/runs/37126899513)의
+19개 작업이 통과한 뒤 연구 PR #1을 병합했습니다. 새 산술의 플랫폼 간 검사는
+계속 별도로 실행합니다. [새 원본과 재현 방법](research/legacy-platform-replay-20261003/README.md)을
+공개했습니다. 현재 설치된 컴파일러 main `ed2c2cac`는 SDK v0.2.20-experimental을
+사용하고, 이전 연결 실험의 버전·결과는 아래에 남아 있습니다.
+
 Gooo 선언을 설계도, 작은 모델을 조립 순서를 고르는 장치로 생각하면 됩니다.
 현재 모델은 세 가지 이진 판단으로 이루어진 여덟 경로에 순위를 매깁니다.
 컴파일러는 조건식·할당·분기 등을 조립하고, 실패한 입출력 예시를 다음 시도의

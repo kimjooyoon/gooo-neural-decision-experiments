@@ -8,6 +8,14 @@ training tools and original evidence behind that process.
 
 ## Start here — 2026-10-03
 
+- [Reproduce historical model results and retain the original platform differences](publication/legacy-platform-replay-20261003):
+  new macOS/Linux audits each reproduce all 18,432 development rows and 24 compact
+  files from their fixed platform archives. The original 101 summary differences
+  and 272 changed complete rankings remain in the Linux record. Both the legacy
+  replay and the separate explicit-arithmetic comparison pass; all 19 research
+  CI jobs passed before PR #1 merged as `87c6f219`. Weights and expectations are
+  unchanged. The reader makes zero predictions; each audit records 25,824 runtime
+  predictions on known inputs. Original comparator and local failures are public.
 - [Reuse the first native Go version check during repeated body execution](publication/toolchain-version-reuse-20261003):
   unchanged source replay, current Go-file hashes and two native runs per request.
   Paired macOS observations on the same two known EN/KO fixtures: warm response

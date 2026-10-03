@@ -204,6 +204,16 @@ The current whole-candidate judge and separate-arithmetic replay jobs pass; 18
 of 19 jobs pass. Original failures and exact differences are linked in the same
 publication. The whole research workflow records FAIL.
 
+The subsequent [legacy replay repair](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/legacy-platform-replay-20261003)
+merged as research main `87c6f219`, after all 19 jobs in
+[workflow 37126899513](https://github.com/kimjooyoon/gooo-neural-decision-experiments/actions/runs/37126899513)
+passed. It requires every historical row and compact artifact to reproduce the
+frozen result for the reader's actual platform. The earlier shared model's
+101 differing summary path/value pairs and 272 changed full rankings remain
+recorded as the original `MISMATCH`. The explicit-arithmetic cross-platform
+check passes separately. This repair leaves this order judge's 16,384-byte
+weights and its previously reported native behavior unchanged.
+
 ## Reading the limits
 
 The feature projection is narrow and lossy. Long instructions, branching,
