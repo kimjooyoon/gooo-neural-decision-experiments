@@ -3,8 +3,9 @@
 2026-10-04 KST. 개발 [#1198](https://github.com/kimjooyoon/meta-ontology-go/pull/1198)은
 필수 여섯 검사와 내려받은 증거의 독립 검증 뒤 `a0f23f0b`로 정상 병합했습니다.
 깨끗한 후보 `9ef577404e93a1dc3443492c145e5eb8e04fc337`의 실제 실행 기록입니다.
-같은 개발 트리·현재 main의 단일 부모를 가진 [main #1199](https://github.com/kimjooyoon/meta-ontology-go/pull/1199)는
-별도의 CI를 진행하고 있습니다. 이 시점의 설치본은 앞선 main `93c6463d`입니다.
+같은 개발 트리·당시 main의 단일 부모를 가진 [main #1199](https://github.com/kimjooyoon/meta-ontology-go/pull/1199)도
+자체 필수 여섯 검사·독립 증거·승격 결속을 확인한 뒤 정상 병합했습니다. 깨끗한 main
+`93fa2742e2f681c86546ee6fc459a76bae640913`를 Go1.27.1로 빌드·설치했습니다.
 
 ## 사용하는 사람이 알아야 하는 변화
 
@@ -82,6 +83,20 @@ CPU 사용률은 미관측입니다. macOS arm64, Apple M4, Go1.27.1에서 기�
 
 ## 원본과 재실행
 
+새 설치본은 한영 모델·결정론 성공 8회·판단 4회·실행 16회에서 1,024/1,024와
+이전 생성 Go를 유지했습니다. 모델 재사용 응답은 한영 26.54·27.57ms, 결정론
+25.50·25.99ms였고 최초 응답 662.41·474.39·302.57·301.94ms도 보존합니다.
+공구 조회 실패와 FIFO 실패는 각각 종료 1·판단 0·실행 0·기대값 128개 미관측입니다.
+실제 설치 FIFO는 전체 CLI **19.665ms**, 요청 응답 **5.527ms**, 실패한 공구 해시
+**0.042458ms**였습니다. 위 후보 최초 604.14ms와 준비·캐시 조건이 달라 두 관측을
+별도로 보존합니다. 성공·실패의 저장 기록 읽기 전용 검사 여섯 회가 통과했습니다.
+
+위키의 가장 작은 변수·조건 분기 예제도 설치본에서 별도로 두 번 조립했습니다.
+모델 판단 0회·실제 실행 4회에서 **6/6**과 원래 생성 Go 두 개가 일치했습니다.
+첫 응답 656.44ms, 재사용 26.60ms이며 저장 기록 확인 한 회도 통과했습니다.
+이 작은 예제의 분모는 한영 128개 기대값과 따로 읽습니다. 기존 과제의 반복이며
+새 의도·학습 갱신은 0개입니다.
+
 - `native-control.zip`: 후보의 FIFO 요청, 성공·공구 조회 실패, 96회 비교 원본,
   중단된 관측의 입력, 현재 고정 원본·기대값. 모든 파일과 닫힌 목록을 대조합니다.
 - `paired-summary.json`, `candidate-smoke-summary.json`, `fifo-summary.json`:
@@ -90,6 +105,13 @@ CPU 사용률은 미관측입니다. macOS arm64, Apple M4, Go1.27.1에서 기�
 - `corrected-tests.raw`, `race-tests.raw`, `vet.raw`, `modernizer.raw`: 실제 로컬 검사.
 - `dev-proof-verification.json`, `dev-merge.json`, `promotion-inputs.json`:
   정확한 개발 소스 증거와 현재 main 승격 입력.
+- `main-proof-verification.json`, `promotion-authorization.json`, `main-merge.json`,
+  `installed-buildinfo.txt`: 별도 main 증거·현재 참조 재확인·정상 병합·설치 생산자 결속.
+- `installed-native.zip`: 새 main의 성공·공구 조회 실패·FIFO 실패·변수/분기 예제 원본.
+  `installed-smoke-summary.json`, `installed-fifo-summary.json`,
+  `installed-quickstart-verified.json`에 각 범위를 따로 집계했습니다.
+- `cleanup.json`: 익명 공개 보관본과 바이트·닫힌 목록을 확인한 중복 896개 파일,
+  27,398,056바이트를 개별 재확인 뒤 정리했습니다.
 - `paired/main.go`, `smoke/main.go`, `fifo-probe/main.go`, `archive-readback/main.go`:
   Go 수집기·원본 대조기. 작은 배열과 기존 자체 모델을 사용하며 별도 큰 모델 다운로드는 없습니다.
 

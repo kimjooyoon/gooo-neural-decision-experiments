@@ -37,6 +37,7 @@ func main() {
 		}
 		prefix, _, _ := strings.Cut(f.Name, "/")
 		if prefix != "paired" && prefix != "successful-native" && prefix != "installed-native" &&
+			prefix != "installed-quickstart" &&
 			prefix != "fifo-native" && prefix != "installed-fifo" && prefix != "fifo-interrupted-inputs" &&
 			prefix != "inputs" && prefix != "expected" {
 			panic("unexpected archive root")

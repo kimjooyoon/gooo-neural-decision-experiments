@@ -15,8 +15,12 @@ training tools and original evidence behind that process.
   observation, failing tests and compile failure are retained. Same-window ABBA
   controls kept 12,288/12,288 expectations and all frozen Go in 96 constructions,
   48 judgments and 192 runs; warm medians 21.54/22.07ms overlap. Dev #1198 passed
-  canonical checks and an independent source proof, then merged. Main #1199 has
-  its own CI in progress; current installation remains the verified main below.
+  canonical checks and an independent source proof, then merged. Main #1199 also
+  passed its own source-bound proof/promotion checks and merged. Current clean
+  main `93fa2742` is installed: eight successes/four predictions/16 runs kept
+  1,024/1,024; the installed FIFO failed promptly in 19.665ms total CLI time.
+  The direct variable/condition quickstart additionally kept 6/6 over two
+  deterministic constructions/four native runs. Original failures remain public.
 
 - [Reduce repeated hash allocations and read missing timing stages](publication/owned-hash-reader-20261004):
   a lazily owned 32 KiB buffer, released on close/cancellation, retains current
@@ -26,8 +30,8 @@ training tools and original evidence behind that process.
   all frozen generated sources match. Warm responses were 64.13→65.88ms;
   these overlapping one-device observations establish no speed improvement.
   Missing stderr phases now read `unobserved`. Dev #1196/main #1197 passed their
-  own canonical CI and independent proofs, then merged. Clean main `93c6463d`
-  is installed: eight fresh successes, four predictions, 16 runs and 1,024/1,024
+  own canonical CI and independent proofs, then merged. At that stage, clean main `93c6463d`
+  was installed: eight fresh successes, four predictions, 16 runs and 1,024/1,024
   finite expectations; a separate missing-tool failure retains 128 unobserved
   expectations and zero runs. Weights, training and intent scope are unchanged.
 
@@ -40,7 +44,7 @@ training tools and original evidence behind that process.
   costs without establishing a recorder speedup. Original CI modernizer failure
   and source revisions are retained; weights and intent scope are unchanged.
   Dev #1194/main #1195 passed their own six canonical checks and independent
-  exact-source proofs, then merged. Clean main `041c8bbf` is installed; eight fresh
+  exact-source proofs, then merged. At that stage, clean main `041c8bbf` was installed; eight fresh
   generations, four predictions and 16 runs kept 1,024/1,024 finite expectations.
 - [Reproduce historical model results and retain the original platform differences](publication/legacy-platform-replay-20261003):
   new macOS/Linux audits each reproduce all 18,432 development rows and 24 compact
@@ -60,7 +64,7 @@ training tools and original evidence behind that process.
   Original check/output stays in runtime v3; old v2 comparisons remain identical.
   Model weights and the number of distinct intent tasks are unchanged.
   Dev #1192/main #1193 passed canonical CI and independent immutable proofs,
-  then merged. Clean main `ed2c2cac` is installed; fresh replay made eight
+  then merged. At that stage, clean main `ed2c2cac` was installed; fresh replay made eight
   generations/four predictions/16 runs with 1,024/1,024 expectations unchanged.
 - [Replay saved IR baselines with Go](publication/go-baseline-replay-20261003):
   an explicit source-version repair preserves the original freeze and current

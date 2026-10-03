@@ -43,28 +43,36 @@ fits. Equal pieces can reuse an earlier measurement.
   #1197 passed their own canonical CI and independent source proofs, then merged.
   [Original records, failures and Go collectors](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/owned-hash-reader-20261004).
 - CPU fit and local Go inference. This architecture currently has FP32 weights.
-- Current installed compiler: main `93c6463d6a34713eb907a3fb46287bb2869fed80`,
+- Current installed compiler: main `93fa2742e2f681c86546ee6fc459a76bae640913`,
   with direct file construction, immediate execution, owned runtime comparison
   and literal multiline bodies. Fresh installation replay made eight generations,
   four actual predictions and 16 native runs: 1,024/1,024 finite expectations and
   all eight earlier generated Go sources match. Separate raw clamp cases pass
   8/8 in the earlier raw-body installation. Runtime v3 also retains the first
   native Go version check, verifies current tool bytes/context and excludes
-  historical checks from current resources. Dev #1196/main #1197 passed their
+  historical checks from current resources. Dev #1198/main #1199 passed their
   own six canonical checks and independent immutable proofs, then merged.
   Optional phase diagnostics and file-binding readback are now installed.
-  Fresh installed warm responses were 69.42/62.53ms with the model and
-  65.49/60.34ms deterministically; original cold/slow observations remain public.
+  Fresh installed warm responses were 26.54/27.57ms with the model and
+  25.50/25.99ms deterministically; original cold/slow observations remain public.
   A missing-tool request retains exit 1, 128 unobserved expectations, zero
   predictions/runs and the `native unobserved` display. A separate executable
-  FIFO can block before regular-file validation; its interrupted observation is
-  retained. Dev #1198 passed canonical CI and its independent proof, then merged
-  a Unix nonblocking-open/file-kind check; main #1199 is running its own CI.
-  The clean candidate rejected a writer-free FIFO in 604.14ms total CLI time.
+  FIFO blocked before regular-file validation in the earlier compiler; its
+  interrupted observation is retained. The installed Unix nonblocking-open/file-kind
+  check rejects a writer-free FIFO. Its installed total CLI time was 19.665ms,
+  with 5.527ms request response and no predictions/native runs; the earlier
+  candidate's 604.14ms observation is retained separately because preparation and
+  cache conditions differ. Dev #1198/main #1199 passed their own immutable proofs,
+  main promotion authorization and live tree/sole-parent checks, then merged.
   Same-window old/new controls kept 12,288/12,288 finite expectations in 96
   generations/48 predictions/192 native runs; warm medians 21.54/22.07ms overlap.
   [FIFO originals, measurements and Go collectors](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/nonregular-tool-20261004).
-  [Current installation and original failures](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/owned-hash-reader-20261004).
+  The installed direct variable/condition quickstart additionally made two
+  deterministic constructions and four native runs, preserving 6/6 expectations
+  and both earlier generated sources. That fixture's denominator is recorded
+  separately from the Korean/English 128-example requests. Weights and training
+  are unchanged.
+  [Current installation and original failures](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/nonregular-tool-20261004).
 - The released Go SDK v0.2.20 adds preparation reuse to the existing direct
   in-compiler generation route.
   The [native collection](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/order-judge-native-20261003)
