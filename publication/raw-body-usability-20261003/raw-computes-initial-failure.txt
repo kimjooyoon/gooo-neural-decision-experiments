@@ -1,0 +1,43 @@
+--- FAIL: TestLexRawStringPreservesTextAndSpans (0.00s)
+    raw_string_test.go:10: raw literal did not produce one string: [{illegal token raw.gooo:1:1-1:2 ` ` `} {identifier raw.gooo:1:2-1:4 한글 한글 한글} {illegal token raw.gooo:1:4-1:5 \ \ \} {identifier raw.gooo:1:5-1:6 n n n} {identifier raw.gooo:2:1-2:6 first first first} {identifier raw.gooo:3:1-3:7 second second second} {identifier raw.gooo:4:1-4:6 third third third} {illegal token raw.gooo:4:6-4:7 ` ` `} {identifier raw.gooo:4:8-4:12 next next next} {end of file raw.gooo:4:12   }], [raw.gooo:1:1-1:2: error lex.unexpected-character: unexpected character "`" raw.gooo:1:4-1:5: error lex.unexpected-character: unexpected character "\\" raw.gooo:4:6-4:7: error lex.unexpected-character: unexpected character "`"]
+--- FAIL: TestLexRawStringKeepsEscapesLiteralAndReportsMalformedInput (0.00s)
+    --- FAIL: TestLexRawStringKeepsEscapesLiteralAndReportsMalformedInput/literal_escapes (0.00s)
+        raw_string_test.go:32: raw recovery changed literal bytes: syntax.Tokens{syntax.Token{Kind:0x0, Span:syntax.Span{Filename:"raw.gooo", Start:syntax.Position{Offset:0, Line:1, Column:1}, End:syntax.Position{Offset:1, Line:1, Column:2}}, Text:"`", Lexeme:"`", Value:"`"}, syntax.Token{Kind:0x0, Span:syntax.Span{Filename:"raw.gooo", Start:syntax.Position{Offset:1, Line:1, Column:2}, End:syntax.Position{Offset:2, Line:1, Column:3}}, Text:"\\", Lexeme:"\\", Value:"\\"}, syntax.Token{Kind:0x2, Span:syntax.Span{Filename:"raw.gooo", Start:syntax.Position{Offset:2, Line:1, Column:3}, End:syntax.Position{Offset:7, Line:1, Column:8}}, Text:"uD800", Lexeme:"uD800", Value:"uD800"}, syntax.Token{Kind:0x0, Span:syntax.Span{Filename:"raw.gooo", Start:syntax.Position{Offset:8, Line:1, Column:9}, End:syntax.Position{Offset:9, Line:1, Column:10}}, Text:"\\", Lexeme:"\\", Value:"\\"}, syntax.Token{Kind:0x2, Span:syntax.Span{Filename:"raw.gooo", Start:syntax.Position{Offset:9, Line:1, Column:10}, End:syntax.Position{Offset:10, Line:1, Column:11}}, Text:"n", Lexeme:"n", Value:"n"}, syntax.Token{Kind:0x0, Span:syntax.Span{Filename:"raw.gooo", Start:syntax.Position{Offset:11, Line:1, Column:12}, End:syntax.Position{Offset:12, Line:1, Column:13}}, Text:"\\", Lexeme:"\\", Value:"\\"}, syntax.Token{Kind:0x0, Span:syntax.Span{Filename:"raw.gooo", Start:syntax.Position{Offset:12, Line:1, Column:13}, End:syntax.Position{Offset:13, Line:1, Column:14}}, Text:"\\", Lexeme:"\\", Value:"\\"}, syntax.Token{Kind:0x3, Span:syntax.Span{Filename:"raw.gooo", Start:syntax.Position{Offset:14, Line:1, Column:15}, End:syntax.Position{Offset:22, Line:1, Column:23}}, Text:"\"quoted\"", Lexeme:"\"quoted\"", Value:"quoted"}, syntax.Token{Kind:0x0, Span:syntax.Span{Filename:"raw.gooo", Start:syntax.Position{Offset:22, Line:1, Column:23}, End:syntax.Position{Offset:23, Line:1, Column:24}}, Text:"`", Lexeme:"`", Value:"`"}, syntax.Token{Kind:0x1, Span:syntax.Span{Filename:"raw.gooo", Start:syntax.Position{Offset:23, Line:1, Column:24}, End:syntax.Position{Offset:23, Line:1, Column:24}}, Text:"", Lexeme:"", Value:""}}
+    --- FAIL: TestLexRawStringKeepsEscapesLiteralAndReportsMalformedInput/unterminated (0.00s)
+        raw_string_test.go:32: raw recovery changed literal bytes: syntax.Tokens{syntax.Token{Kind:0x0, Span:syntax.Span{Filename:"raw.gooo", Start:syntax.Position{Offset:0, Line:1, Column:1}, End:syntax.Position{Offset:1, Line:1, Column:2}}, Text:"`", Lexeme:"`", Value:"`"}, syntax.Token{Kind:0x2, Span:syntax.Span{Filename:"raw.gooo", Start:syntax.Position{Offset:1, Line:1, Column:2}, End:syntax.Position{Offset:5, Line:1, Column:6}}, Text:"body", Lexeme:"body", Value:"body"}, syntax.Token{Kind:0x2, Span:syntax.Span{Filename:"raw.gooo", Start:syntax.Position{Offset:6, Line:2, Column:1}, End:syntax.Position{Offset:10, Line:2, Column:5}}, Text:"next", Lexeme:"next", Value:"next"}, syntax.Token{Kind:0x1, Span:syntax.Span{Filename:"raw.gooo", Start:syntax.Position{Offset:10, Line:2, Column:5}, End:syntax.Position{Offset:10, Line:2, Column:5}}, Text:"", Lexeme:"", Value:""}}
+    --- FAIL: TestLexRawStringKeepsEscapesLiteralAndReportsMalformedInput/malformed_UTF8 (0.00s)
+        raw_string_test.go:32: raw recovery changed literal bytes: syntax.Tokens{syntax.Token{Kind:0x0, Span:syntax.Span{Filename:"raw.gooo", Start:syntax.Position{Offset:0, Line:1, Column:1}, End:syntax.Position{Offset:1, Line:1, Column:2}}, Text:"`", Lexeme:"`", Value:"`"}, syntax.Token{Kind:0x2, Span:syntax.Span{Filename:"raw.gooo", Start:syntax.Position{Offset:1, Line:1, Column:2}, End:syntax.Position{Offset:2, Line:1, Column:3}}, Text:"a", Lexeme:"a", Value:"a"}, syntax.Token{Kind:0x0, Span:syntax.Span{Filename:"raw.gooo", Start:syntax.Position{Offset:2, Line:1, Column:3}, End:syntax.Position{Offset:3, Line:1, Column:4}}, Text:"\xff", Lexeme:"\xff", Value:"\xff"}, syntax.Token{Kind:0x2, Span:syntax.Span{Filename:"raw.gooo", Start:syntax.Position{Offset:3, Line:1, Column:4}, End:syntax.Position{Offset:4, Line:1, Column:5}}, Text:"b", Lexeme:"b", Value:"b"}, syntax.Token{Kind:0x0, Span:syntax.Span{Filename:"raw.gooo", Start:syntax.Position{Offset:4, Line:1, Column:5}, End:syntax.Position{Offset:5, Line:1, Column:6}}, Text:"`", Lexeme:"`", Value:"`"}, syntax.Token{Kind:0x1, Span:syntax.Span{Filename:"raw.gooo", Start:syntax.Position{Offset:5, Line:1, Column:6}, End:syntax.Position{Offset:5, Line:1, Column:6}}, Text:"", Lexeme:"", Value:""}}
+FAIL
+FAIL	github.com/kimjooyoon/meta-ontology-go/internal/syntax	0.418s
+--- FAIL: TestGenerateRawComputesMatchesQuotedBody (0.00s)
+    raw_computes_test.go:19: parse .gooo source: main.gooo:5:54-5:55: error lex.unexpected-character: unexpected character "`"
+        main.gooo:6:11-6:12: error lex.unexpected-character: unexpected character "="
+        main.gooo:7:7-7:8: error lex.unexpected-character: unexpected character "="
+        main.gooo:8:14-8:15: error lex.unexpected-character: unexpected character "="
+        main.gooo:8:22-8:23: error lex.unexpected-character: unexpected character ">"
+        main.gooo:8:23-8:24: error lex.unexpected-character: unexpected character "="
+        main.gooo:8:25-8:26: error lex.unexpected-character: unexpected character "0"
+        main.gooo:12:12-12:13: error lex.unexpected-character: unexpected character "0"
+        main.gooo:14:1-14:2: error lex.unexpected-character: unexpected character "`"
+        main.gooo:6:1-6:4: error parse.expected-string: expected quoted activity value program
+        main.gooo:6:1-6:4: error parse.unexpected-token: expected entity, activity, policy, binding, or feedback
+        main.gooo:6:5-6:10: error parse.unexpected-token: expected entity, activity, policy, binding, or feedback
+        main.gooo:6:13-6:18: error parse.unexpected-token: expected entity, activity, policy, binding, or feedback
+        main.gooo:7:1-7:6: error parse.unexpected-token: expected entity, activity, policy, binding, or feedback
+        main.gooo:7:9-7:14: error parse.unexpected-token: expected entity, activity, policy, binding, or feedback
+        main.gooo:8:1-8:4: error parse.unexpected-token: expected entity, activity, policy, binding, or feedback
+        main.gooo:8:5-8:13: error parse.unexpected-token: expected entity, activity, policy, binding, or feedback
+        main.gooo:8:16-8:21: error parse.unexpected-token: expected entity, activity, policy, binding, or feedback
+        main.gooo:9:1-9:3: error parse.unexpected-token: expected entity, activity, policy, binding, or feedback
+        main.gooo:9:4-9:12: error parse.unexpected-token: expected entity, activity, policy, binding, or feedback
+        main.gooo:9:13-9:14: error parse.unexpected-token: expected entity, activity, policy, binding, or feedback
+        main.gooo:10:5-10:11: error parse.unexpected-token: expected entity, activity, policy, binding, or feedback
+        main.gooo:10:12-10:17: error parse.unexpected-token: expected entity, activity, policy, binding, or feedback
+        main.gooo:11:1-11:2: error parse.unexpected-token: expected entity, activity, policy, binding, or feedback
+        main.gooo:11:3-11:7: error parse.unexpected-token: expected entity, activity, policy, binding, or feedback
+        main.gooo:11:8-11:9: error parse.unexpected-token: expected entity, activity, policy, binding, or feedback
+        main.gooo:12:5-12:11: error parse.unexpected-token: expected entity, activity, policy, binding, or feedback
+        main.gooo:13:1-13:2: error parse.unexpected-token: expected entity, activity, policy, binding, or feedback
+FAIL
+FAIL	github.com/kimjooyoon/meta-ontology-go/internal/bodycodegen	0.549s
+FAIL

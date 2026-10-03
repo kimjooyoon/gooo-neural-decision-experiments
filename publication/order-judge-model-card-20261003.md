@@ -33,12 +33,13 @@ fits. Equal pieces can reuse an earlier measurement.
 - The 128-byte prediction workspace excludes feature arrays, preparation,
   artifact loading, program objects and receipts.
 - CPU fit and local Go inference. This architecture currently has FP32 weights.
-- Current installed compiler: main `fc854ef49be02644006c956c652e60cc8d1d06bf`,
-  with `body-path-run` for direct source/recipe/case files and immediate execution.
-  Known English/Korean arithmetic arms passed 1,024/1,024 finite expectations
-  in eight generations, four actual predictions and 16 compiled executions.
-  Conditional assembly and original unmet outcomes are also preserved separately.
-  [Current installation evidence and complete costs](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/body-path-file-cli-20261003).
+- Current installed compiler: main `05746e4ae712cfcdcc22aa9fb463d0c88ee90dd5`,
+  with direct file construction, immediate execution and owned runtime comparison.
+  The new installation made two actual model predictions/two generations/four
+  native runs and passed 256/256 finite expectations; conditional assembly
+  separately passed 6/6. Earlier file CLI installation arms passed 1,024/1,024
+  expectations in eight generations/four predictions/16 runs.
+  [Current reader installation and original failures](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/owned-runtime-comparison-20261003).
 - The released Go SDK v0.2.20 adds preparation reuse to the existing direct
   in-compiler generation route.
   The [native collection](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/order-judge-native-20261003)
@@ -307,7 +308,7 @@ remain unchanged.
 
 Dev #1186 and [main #1187](https://github.com/kimjooyoon/meta-ontology-go/pull/1187)
 passed their own six canonical checks and independently verified immutable proofs.
-Clean main `fc854ef4` is installed with Go1.27.1. Source files, a named activity,
+Clean main `fc854ef4` was installed with Go1.27.1. Source files, a named activity,
 full typed plans or short recipes and finite expectations can now be passed
 directly to one compiler command. It saves generated Go, original inputs, each
 generation/runtime record and an incremental summary before the next request.
@@ -346,13 +347,30 @@ CI feedback requires a supporting model profile and explicit step/round budgets;
 this whole-candidate model currently uses ordinary bounded search and rejects
 feedback/batching options.
 
-The installed completeness-delta reader still rejects owned runtime v2 records.
-A [separate correction #1188](https://github.com/kimjooyoon/meta-ontology-go/pull/1188)
-passed local race/vet and read 12 historical comparisons, then used this unchanged
-model for two new generations/four native runs and 256/256 finite expectations.
-Its canonical CI, proof and installation are pending. Changed resource units and
+The v2 reader correction [dev #1188](https://github.com/kimjooyoon/meta-ontology-go/pull/1188)
+and [main #1189](https://github.com/kimjooyoon/meta-ontology-go/pull/1189) passed their
+own six canonical checks and independently verified immutable proofs, then merged.
+Clean main `05746e4a` is now installed. It read 18 earlier installed-record pairs
+with byte-for-byte output matches, then used this unchanged model for two new
+generations/four native runs and 256/256 finite expectations. The separate variable/
+conditional assembly example passed 6/6 in two generations/four runs. Warm
+responses including execution were 31.297/31.455ms. Changed resource units and
 4→3 denominators retain both observations without a numerical improvement.
 [Reader correction sources, failures and original records](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/owned-runtime-comparison-20261003).
+
+### Writing bodies on multiple lines
+
+[Experimental PR #1190](https://github.com/kimjooyoon/meta-ontology-go/pull/1190)
+adds backtick strings for Gooo `computes` bodies. Canonical formatting preserves
+the decoded content and stable IDs; literal whitespace can affect source digests
+and generated layout. Local syntax/body-codegen race and whole-module vet pass.
+The clean experimental compiler used this unchanged model on raw Korean/English
+bodies: eight generations/four actual predictions/16 native runs, 1,024/1,024
+finite expectations and all eight original generated Go sources matched.
+Model-on warm responses were 32.719/31.766ms, first responses 487.173/477.383ms.
+This syntax has pending canonical CI/proof and is not installed yet. Original
+TDD, fixture and collector failures remain in the
+[raw body records](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/raw-body-usability-20261003).
 
 ## Research acknowledgments
 

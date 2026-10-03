@@ -8,11 +8,19 @@ training tools and original evidence behind that process.
 
 ## Start here — 2026-10-03
 
+- [Write body statements directly on multiple lines](publication/raw-body-usability-20261003):
+  raw backtick literals preserve decoded text, line endings and source diagnostics.
+  Local syntax/body-codegen race and whole-module vet pass. Eight generations,
+  four actual own-model predictions and 16 native runs retain 1,024/1,024 finite
+  expectations and all eight original generated sources. PR #1190 canonical CI
+  and proof are pending; this syntax is not installed yet.
 - [Read owned runtime records in completeness comparisons](publication/owned-runtime-comparison-20261003):
-  local correction in PR #1188 reads 12 original record comparisons, then dogfoods
-  the unchanged own model in two generations/four native runs with 256/256 finite
-  expectations. Changed resource units/denominators have no numerical improvement.
-  Canonical CI, proof, merge and installation remain pending for this correction.
+  dev #1188/main #1189 passed their own six canonical checks and independently
+  verified immutable proofs, and clean main `05746e4a` is installed. New own-model
+  generation/execution passes 256/256 finite expectations; conditional/variable
+  assembly passes 6/6. Eighteen earlier installed-record comparisons match the
+  candidate outputs byte-for-byte. Changed resource units/denominators retain
+  both observations without a numerical improvement. All initial failures remain.
 - [Use source/recipe/case files directly](publication/body-path-file-cli-20261003):
   experimental `gooo body-path-run` saves generated Go and current native
   observations without constructing input JSON lines. Named EN/KO activities,

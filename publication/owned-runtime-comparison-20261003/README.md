@@ -2,9 +2,40 @@
 
 2026-10-03. 컴파일러 [PR #1188](https://github.com/kimjooyoon/meta-ontology-go/pull/1188),
 로컬 측정 소스 [`d830766b`](https://github.com/kimjooyoon/meta-ontology-go/commit/d830766b0b1ade80c561e3f994386e927f035f72).
-집중 race와 전체 vet, 실제 CLI 확인을 마쳤고 정규 CI·증거·병합·설치는 진행 중입니다.
-파일 실행 기능의 [main 승격 #1187](https://github.com/kimjooyoon/meta-ontology-go/pull/1187)과
-별도 변경이며, 현재 설치본의 소비자 지원으로 표시하지 않습니다.
+개발 #1188과 [main #1189](https://github.com/kimjooyoon/meta-ontology-go/pull/1189)의
+필수 여섯 검사·원본 증거를 독립 확인해 병합했습니다. 깨끗한 main
+`05746e4ae712cfcdcc22aa9fb463d0c88ee90dd5`를 Go 1.27.1로 설치했습니다.
+파일 실행 기능의 [main #1187](https://github.com/kimjooyoon/meta-ontology-go/pull/1187)에
+이어 저장한 실행 결과를 비교 입력으로 사용하도록 연결한 변경입니다.
+
+## 현재 설치본에서 사용하기
+
+`body-path-run --repeat 2`가 저장한 출력 폴더에서 다음 명령을 실행합니다.
+
+```sh
+gooo completeness-delta --before body-results/run-1-generation.json \
+  --after body-results/run-1-runtime.json
+gooo completeness-delta --before body-results/run-1-runtime.json \
+  --after body-results/run-2-runtime.json
+```
+
+main 설치본에서 모델 경로 2회 생성·실제 판단 2회·4회 실행과 256/256 기대값,
+조건·변수 예제 2회 생성·4회 실행과 6/6 기대값을 확인했습니다. 반복 응답은 각각
+31.297·31.455ms였습니다. 앞선 설치본의 기록 18쌍도 읽었고 수정 후보의 비교 출력과
+바이트 단위로 일치했습니다. 과거 기록 읽기를 새 모델·실행 횟수로 세지 않습니다.
+
+원래 미충족 쌍은 0/2→0/2, 바꾼 기대값은 128/128과 127/128을 비교할 수 없는
+조건으로 남았습니다. 같은 유한 과제에서 oracle 관측을 추가한 경우는 0/2→2/2를
+기술적인 충족 수 변화 +2로 기록하고 달라진 선택 관측을 보존했습니다.
+처음 수집기는 oracle 옵션이 바뀌면 항상 비교 조건이 달라질 것으로 예상했습니다.
+실제 계약은 같은 원본·계획·유한 묶음·선언한 예산을 비교한다는 점을 확인하고
+검사 기대를 고쳤습니다. 이 과정은 `collector-scope-assumption.json`에 기록했습니다.
+원인별 효과를 구분하려면 별도의 통제된 비교가 필요합니다.
+
+`installed-main-replay.zip`, `installed-summary.json`에 새 설치본의 모든 결과를
+보존했고 dev/main의 아티팩트·ZIP 해시·독립 검증은 두 `*-proof-verification.json`에
+있습니다. 설치 실행파일 SHA256은
+`6f2ccb9ad64409635f1e4d128725dffc56c9e7838903d4437bec2b9d4d847af7`입니다.
 
 ## 발견한 연결 문제
 
