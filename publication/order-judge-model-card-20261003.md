@@ -381,6 +381,24 @@ resources and retain uncontrolled cache/scheduling effects. Weights were unchang
 Original TDD, fixture and collector failures remain in the
 [raw body records](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/raw-body-usability-20261003).
 
+## Reproduce body candidates and feedback in Go
+
+The companion language curriculum now has a Go1.27.1 replay path, merged in
+[public PR #19](https://github.com/kimjooyoon/gooo-metaprogramming-experiments/pull/19).
+It executes 93 original and 96 repaired candidate packages for the same 32
+intentions. All 189 result files are removed from temporary copies before
+execution and then compared to the frozen bytes. The tool also binds 96 provider
+plans and 32 feedback sets to the fresh training observations. This replay makes
+zero model calls and preserves each candidate's finite behavior, compiler
+failures and source versions. The weights published here retain their existing
+training scope.
+
+Run `go run . --revision2 --root ../.. --output /tmp/gooo-candidates-new` from the
+corpus's `tools/baseline-replay` directory. Use a fresh output folder.
+[Korean execution and result-reading guide](https://github.com/kimjooyoon/meta-ontology-go/wiki/Replaying-Body-Experiments)
+and [source-bound local/Linux records](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/go-revision2-replay-20261003)
+show how to read compilation, training and evaluation counts separately.
+
 ## Research acknowledgments
 
 [ConvAI Innovations' Laya](https://huggingface.co/convaiinnovations/laya) motivated
