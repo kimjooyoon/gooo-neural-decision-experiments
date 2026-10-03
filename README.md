@@ -8,6 +8,12 @@ training tools and original evidence behind that process.
 
 ## Start here — 2026-10-03
 
+- [Whole-candidate tiny judge: 16 KiB, 64 training requests](publication/order-judge-initial-20261003):
+  first finite completion 48/96 → 82/96 on authored development contrasts.
+  Real search plus exact equal-body reuse uses 110 versus 144 body evaluations;
+  complete search latency remains slightly higher. Includes weights, sources,
+  all failures and 480 follow-up model calls. Native integration of this new
+  architecture is the next stage.
 - [Small recipes derived from Gooo source](publication/source-recipes-20261003):
   24 generations and 48 compiled runs; 12 recipe/full-document pairs match.
   Authored JSON shrinks by 63%. Oracle arms meet 72/72 runtime expectations;
@@ -46,7 +52,7 @@ network across three decisions. Gooo supplies eight complete candidate paths.
 The research asks whether this division of work can reduce search cost while
 preserving source meaning and making incomplete behavior easy to inspect.
 
-### Latest training: keep the complete instruction
+### Previous shared-judge training: keep the complete instruction
 
 The [four-arm full-input comparison](docs/full-input-judgment-initial-results-20261003.md)
 completed **6,400 local MPS updates** and retained all twelve FP32/PTQ/QAT exports.

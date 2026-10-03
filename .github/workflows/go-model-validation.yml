@@ -10,6 +10,38 @@ permissions:
   contents: read
 
 jobs:
+  whole-candidate-judge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GOTOOLCHAIN: local
+      GOWORK: "off"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.27.1'
+          cache: false
+      - name: Check bounded whole-candidate search and public artifact bytes
+        run: |
+          go test -race ./internal/orderjudge ./internal/orderfacts ./cmd/order-judge-pilot
+          go vet ./internal/orderjudge ./internal/orderfacts ./cmd/order-judge-replay
+          (cd publication/order-judge-initial-20261003 && sha256sum -c SHA256SUMS)
+          unzip -q publication/order-judge-initial-20261003/initial.zip -d "$RUNNER_TEMP/order-initial"
+          cmp publication/order-judge-initial-20261003/model.json "$RUNNER_TEMP/order-initial/model.json"
+          cmp publication/order-judge-initial-20261003/weights.bin "$RUNNER_TEMP/order-initial/weights.bin"
+      - name: Replay every fixed prediction and execute bounded search on Linux
+        run: |
+          go build -trimpath -o "$RUNNER_TEMP/order-replay" ./cmd/order-judge-replay
+          "$RUNNER_TEMP/order-replay" --input "$RUNNER_TEMP/order-initial" --output "$RUNNER_TEMP/order-linux"
+          cmp publication/order-judge-initial-20261003/runtime-summary.json "$RUNNER_TEMP/order-linux/summary.json"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: whole-candidate-judge-linux-replay
+          path: ${{ runner.temp }}/order-linux
+          if-no-files-found: error
+
   path-observation-evidence:
     runs-on: ubuntu-latest
     timeout-minutes: 5
