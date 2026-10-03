@@ -8,6 +8,12 @@ training tools and original evidence behind that process.
 
 ## Start here — 2026-10-03
 
+- [Replay saved IR baselines with Go](publication/go-baseline-replay-20261003):
+  an explicit source-version repair preserves the original freeze and current
+  Go1.27.1 scripts. A stdlib Go tool binds all 142 frozen inputs, then replays
+  52 saved modules and 96 candidate packages, including the three expected
+  compile failures. Source hashes, original failures and unknown denominators
+  are retained. Public PR #19 has local race/vet/replay PASS; Linux CI is pending.
 - [Write body statements directly on multiple lines](publication/raw-body-usability-20261003):
   raw backtick literals preserve decoded text, line endings and source diagnostics.
   Local syntax/body-codegen race and whole-module vet pass. Eight generations,
