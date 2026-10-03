@@ -14,7 +14,9 @@ training tools and original evidence behind that process.
   child CPU 215→9.8ms; 128/128 paired calls faster on macOS. `--retain-native` in
   the Go example uses immediate stream execution; omitting the model stays
   deterministic. Full records, first failed launch and exact measurement scope
-  are public. Compiler CI/promotion status is linked in the report.
+  are public. Dev #1184/main #1185 passed canonical CI and independent proofs,
+  merged, and main `8c6ec01c` is installed. Installation replay: four generations,
+  eight native runs and 32/32 cases; repeat responses including execution 30ms.
 - [Recipe projection reuse is merged and installed](publication/recipe-projection-installed-main-20261003):
   main `3bee55da`, SDK v0.2.20. Existing English/Korean tasks, integrated stream
   and the one-command example complete 24 generations, 12 model calls,

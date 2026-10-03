@@ -253,8 +253,54 @@ native times were 5,351.99/182.90 ms; that long first interval is retained.
 These are two known sequential requests per route, with uncontrolled cache and
 platform differences. [All observations, CPU/RSS and stage costs](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/order-example-immediate-20261003).
 The new example's race, vet and actual Linux execution checks passed. No model
-weights or training changed. A retained-executable comparison is a published
-next protocol with no completed results yet.
+weights or training changed.
+
+### Retain one executable and execute current inputs
+
+The compiler [dev #1184](https://github.com/kimjooyoon/meta-ontology-go/pull/1184)
+adds `body-path-stream --execute` and per-request `execution_cases`. Each newly
+constructed body immediately enters native observation in the same process.
+One owned executable is retained; current source/plan/parent replay, executable
+hash checks and two current-input executions are performed on every request.
+`--retain-native` selects this route in the Go example. Model omission remains
+deterministic. Native construction can use bounded parallel workers; one
+cancellable gate owns the native workspace and serializes execution.
+
+On the original 64 known EN/KO development sources at budgets 1/8, 512 additional
+generations/predictions and 1,024 compiled executions matched every original
+ranking, source and finite result: 3,720/4,096 expectations, including partial
+failures. There were 384 actual builds and 128 artifact reuses, with zero training
+updates. On macOS arm64, warm execution observation median was 293.60→28.89 ms;
+all 128 paired calls were faster. Current-child CPU median was 214.98→9.76 ms;
+maximum single-current-child RSS median was 86,171,648→14,483,456 bytes. Prior
+build history is excluded from reuse costs. These are current child observations,
+separate from model tensor storage and parent/whole-host memory or utilization.
+The first owned call still builds; its execution median was 299.50 ms.
+
+The immediate Go example completed four generations, two model calls, eight
+native runs and 32/32 expectations across model/deterministic routes. Repeat
+responses including execution were 24.41/24.90 ms; first responses were
+967.38/433.50 ms. Startup/cache/platform differences remain present. The first
+collector failure exposed typed-live-scope versus decoded JSON ordering in parent
+comparison; both sides now pass the same exact-number decoder before comparison.
+The failure, raw observations and fixed protocol are
+[public](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/retained-native-execution-20261003).
+An exact-source Linux follow-up also passed: four matching generated bodies,
+two predictions, eight native runs and 32/32 expectations. Repeat responses
+including execution were 36.10/38.31 ms for model/deterministic routes. The
+dedicated job and immutable artifact are linked in the report; this does not
+change historical full-workflow arithmetic failures.
+
+Dev #1184 and [main #1185](https://github.com/kimjooyoon/meta-ontology-go/pull/1185)
+passed six canonical checks and independently verified immutable proofs, and are
+merged. Clean main `8c6ec01c4931186460244f3a2975013edda62325` is locally installed.
+Four generations, two predictions and eight compiled runs matched 32/32 finite
+expectations and preceding generated sources. Both repeat calls reused their
+executable; responses including execution were 30.72/29.52 ms. The first model
+response of 1,267.64 ms is retained. Changed expectations produced a new 1/2
+result and an omitted expectation was rejected before generation. Installation,
+exact proof archives and all observations are linked in the report. Weights
+remain unchanged.
 
 ## Research acknowledgments
 

@@ -1,0 +1,9 @@
+usage: gooo body-path-stream [--model model.json] [--workers 1..8] [--execute [--go-bin path]] < requests.jsonl
+  -execute
+    	observe each construction with current execution_cases; retain one native artifact
+  -go-bin string
+    	local Go 1.27.1 tool for --execute
+  -model string
+    	explicit local model.json; omit for deterministic construction
+  -workers int
+    	bounded construction workers (1..8) (default 1)

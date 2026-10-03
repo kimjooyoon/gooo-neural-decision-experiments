@@ -9,7 +9,7 @@
 
 ## 준비
 
-Go1.27.1과 [main `cb2892cb`](https://github.com/kimjooyoon/meta-ontology-go/tree/cb2892cb583e693190bd68f75eb4df223819f053)의
+Go1.27.1과 [main `8c6ec01c`](https://github.com/kimjooyoon/meta-ontology-go/tree/8c6ec01c4931186460244f3a2975013edda62325)의
 컴파일러가 필요합니다. 컴파일러 저장소에서 `go build -o gooo ./cmd/gooo`로 한 번
 빌드한 `gooo`와 Go1.27.1을 PATH에 두고, 이 연구 저장소의 루트에서 실행합니다.
 모델은 저장소에 공개된 최초 가중치를 사용합니다.
@@ -53,6 +53,7 @@ go run ./cmd/order-example --out "$out_root/deterministic"
 생성과 실행을 모두 포함한 왕복 시간이고, `execution_ms`는 그 안의 실행 관측 시간입니다.
 두 값을 더하지 않습니다. 개별 생성·빌드·실행 시간과 실제 출력은 보관한 원본에서
 읽을 수 있습니다. 모델을 빼면 같은 실행 구조를 결정론적으로 사용할 수 있습니다.
+[병합·설치 확인과 전체 비용](../../publication/retained-native-execution-20261003).
 
 ```sh
 gooo body-codegen --json --activity Compose \
