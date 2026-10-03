@@ -1,0 +1,1265 @@
+﻿2026-10-03T14:16:44.3370973Z Current runner version: '2.337.0'
+2026-10-03T14:16:44.3390634Z ##[group]Runner Image Provisioner
+2026-10-03T14:16:44.3391288Z Hosted Compute Agent
+2026-10-03T14:16:44.3391715Z Version: 20260901.588
+2026-10-03T14:16:44.3392128Z Commit: f88ec8081b781fac6c440065ac7ff9e710ce3d0b
+2026-10-03T14:16:44.3392544Z Build Date: 2026-09-01T19:56:44Z
+2026-10-03T14:16:44.3393030Z Worker ID: {0449bd1f-2c26-404c-8e1c-5e043e1e9ab9}
+2026-10-03T14:16:44.3393447Z Azure Region: centralus
+2026-10-03T14:16:44.3393824Z ##[endgroup]
+2026-10-03T14:16:44.3394647Z ##[group]Operating System
+2026-10-03T14:16:44.3395002Z Ubuntu
+2026-10-03T14:16:44.3395359Z 24.04.5
+2026-10-03T14:16:44.3395700Z LTS
+2026-10-03T14:16:44.3396017Z ##[endgroup]
+2026-10-03T14:16:44.3396415Z ##[group]Runner Image
+2026-10-03T14:16:44.3396788Z Image: ubuntu-24.04
+2026-10-03T14:16:44.3397192Z Version: 20260927.320.1
+2026-10-03T14:16:44.3397994Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260927.320/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-03T14:16:44.3398893Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260927.320
+2026-10-03T14:16:44.3399442Z ##[endgroup]
+2026-10-03T14:16:44.3400297Z ##[group]GITHUB_TOKEN Permissions
+2026-10-03T14:16:44.3401686Z Actions: read
+2026-10-03T14:16:44.3402078Z Checks: read
+2026-10-03T14:16:44.3402407Z Contents: read
+2026-10-03T14:16:44.3402727Z Metadata: read
+2026-10-03T14:16:44.3403141Z PullRequests: read
+2026-10-03T14:16:44.3403484Z ##[endgroup]
+2026-10-03T14:16:44.3404913Z Secret source: Actions
+2026-10-03T14:16:44.3405429Z Cache mode: write
+2026-10-03T14:16:44.3405897Z Prepare workflow directory
+2026-10-03T14:16:44.4380106Z Prepare all required actions
+2026-10-03T14:16:44.4424250Z Getting action download info
+2026-10-03T14:16:44.6915269Z Download action repository 'actions/checkout@v7' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-10-03T14:16:44.7863988Z Download action repository 'actions/setup-go@v7' (SHA:b7ad1dad31e06c5925ef5d2fc7ad053ef454303e)
+2026-10-03T14:16:45.3612694Z Download action repository 'actions/upload-artifact@v7' (SHA:043fb46d1a93c77aae656e7c1c64a875d1fc6a0a)
+2026-10-03T14:16:45.6722466Z Complete job name: gofmt
+2026-10-03T14:16:45.9236200Z ##[group]Run actions/checkout@v7
+2026-10-03T14:16:45.9236683Z with:
+2026-10-03T14:16:45.9236969Z   ref: d360355bc1157f4a88f806c9ad87786db70a830a
+2026-10-03T14:16:45.9237312Z   fetch-depth: 0
+2026-10-03T14:16:45.9237577Z   persist-credentials: false
+2026-10-03T14:16:45.9237891Z   repository: kimjooyoon/meta-ontology-go
+2026-10-03T14:16:45.9240230Z   token: ***
+2026-10-03T14:16:45.9240627Z   ssh-strict: true
+2026-10-03T14:16:45.9240883Z   ssh-user: git
+2026-10-03T14:16:45.9241128Z   clean: true
+2026-10-03T14:16:45.9241393Z   sparse-checkout-cone-mode: true
+2026-10-03T14:16:45.9241693Z   fetch-tags: false
+2026-10-03T14:16:45.9241972Z   show-progress: true
+2026-10-03T14:16:45.9242250Z   lfs: false
+2026-10-03T14:16:45.9242498Z   submodules: false
+2026-10-03T14:16:45.9242762Z   set-safe-directory: true
+2026-10-03T14:16:45.9243086Z   allow-unsafe-pr-checkout: false
+2026-10-03T14:16:45.9243497Z ##[endgroup]
+2026-10-03T14:16:45.9951780Z Syncing repository: kimjooyoon/meta-ontology-go
+2026-10-03T14:16:45.9953280Z ##[group]Getting Git version info
+2026-10-03T14:16:45.9953743Z Working directory is '/home/runner/work/meta-ontology-go/meta-ontology-go'
+2026-10-03T14:16:45.9954436Z [command]/usr/bin/git version
+2026-10-03T14:16:46.0050049Z git version 2.55.0
+2026-10-03T14:16:46.0063102Z ##[endgroup]
+2026-10-03T14:16:46.0072814Z Temporarily overriding HOME='/home/runner/work/_temp/adfd8f56-de71-4f77-9145-11f07936c375' before making global git config changes
+2026-10-03T14:16:46.0074026Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-03T14:16:46.0077780Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/meta-ontology-go/meta-ontology-go
+2026-10-03T14:16:46.0123032Z Deleting the contents of '/home/runner/work/meta-ontology-go/meta-ontology-go'
+2026-10-03T14:16:46.0125424Z ##[group]Determining repository object format
+2026-10-03T14:16:46.0126756Z ##[endgroup]
+2026-10-03T14:16:46.0127192Z ##[group]Initializing the repository
+2026-10-03T14:16:46.0130779Z [command]/usr/bin/git init /home/runner/work/meta-ontology-go/meta-ontology-go
+2026-10-03T14:16:46.0285526Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-03T14:16:46.0287880Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-03T14:16:46.0289015Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-03T14:16:46.0289881Z hint: call:
+2026-10-03T14:16:46.0290575Z hint:
+2026-10-03T14:16:46.0291240Z hint: 	git config --global init.defaultBranch <name>
+2026-10-03T14:16:46.0291967Z hint:
+2026-10-03T14:16:46.0292637Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-03T14:16:46.0293689Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-03T14:16:46.0294576Z hint:
+2026-10-03T14:16:46.0295220Z hint: 	git branch -m <name>
+2026-10-03T14:16:46.0295865Z hint:
+2026-10-03T14:16:46.0296645Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-03T14:16:46.0298171Z Initialized empty Git repository in /home/runner/work/meta-ontology-go/meta-ontology-go/.git/
+2026-10-03T14:16:46.0300671Z [command]/usr/bin/git remote add origin https://github.com/kimjooyoon/meta-ontology-go
+2026-10-03T14:16:46.0441834Z ##[endgroup]
+2026-10-03T14:16:46.0442382Z ##[group]Disabling automatic garbage collection
+2026-10-03T14:16:46.0444289Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-03T14:16:46.0477353Z ##[endgroup]
+2026-10-03T14:16:46.0477904Z ##[group]Setting up auth
+2026-10-03T14:16:46.0478454Z Removing SSH command configuration
+2026-10-03T14:16:46.0481277Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-03T14:16:46.0511299Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-03T14:16:46.0801424Z Removing HTTP extra header
+2026-10-03T14:16:46.0806555Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-03T14:16:46.0834672Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-03T14:16:46.1001098Z Removing includeIf entries pointing to credentials config files
+2026-10-03T14:16:46.1005084Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-03T14:16:46.1039242Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-03T14:16:46.1212399Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-0ab3fba4-818e-4791-9f88-17b4195fa411.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-03T14:16:46.1245365Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/meta-ontology-go/meta-ontology-go/.git.path /home/runner/work/_temp/git-credentials-0ab3fba4-818e-4791-9f88-17b4195fa411.config
+2026-10-03T14:16:46.1272193Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/meta-ontology-go/meta-ontology-go/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-0ab3fba4-818e-4791-9f88-17b4195fa411.config
+2026-10-03T14:16:46.1302339Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-0ab3fba4-818e-4791-9f88-17b4195fa411.config
+2026-10-03T14:16:46.1328160Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-0ab3fba4-818e-4791-9f88-17b4195fa411.config
+2026-10-03T14:16:46.1352679Z ##[endgroup]
+2026-10-03T14:16:46.1353121Z ##[group]Fetching the repository
+2026-10-03T14:16:46.1357506Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+2026-10-03T14:16:47.9915495Z From https://github.com/kimjooyoon/meta-ontology-go
+2026-10-03T14:16:47.9918350Z  * [new branch]        agent/accepted-revision-counterexample-20260920 -> origin/agent/accepted-revision-counterexample-20260920
+2026-10-03T14:16:47.9921816Z  * [new branch]        agent/accepted-revision-next-run-staging-20260920 -> origin/agent/accepted-revision-next-run-staging-20260920
+2026-10-03T14:16:47.9924553Z  * [new branch]        agent/accepted-revision-provenance-20260920 -> origin/agent/accepted-revision-provenance-20260920
+2026-10-03T14:16:47.9927443Z  * [new branch]        agent/accepted-source-revision-execution-20260920 -> origin/agent/accepted-source-revision-execution-20260920
+2026-10-03T14:16:47.9930092Z  * [new branch]        agent/action-runtime-conformance -> origin/agent/action-runtime-conformance
+2026-10-03T14:16:47.9932591Z  * [new branch]        agent/activity-cardinality-resolution -> origin/agent/activity-cardinality-resolution
+2026-10-03T14:16:47.9934464Z  * [new branch]        agent/analyzer          -> origin/agent/analyzer
+2026-10-03T14:16:47.9935987Z  * [new branch]        agent/analyzer-contract -> origin/agent/analyzer-contract
+2026-10-03T14:16:47.9937935Z  * [new branch]        agent/artifact-feedback-resolution-ci-v23 -> origin/agent/artifact-feedback-resolution-ci-v23
+2026-10-03T14:16:47.9940067Z  * [new branch]        agent/artifact-feedback-resolution-cli-v23 -> origin/agent/artifact-feedback-resolution-cli-v23
+2026-10-03T14:16:47.9943378Z  * [new branch]        agent/artifact-feedback-resolution-executor-v23 -> origin/agent/artifact-feedback-resolution-executor-v23
+2026-10-03T14:16:47.9946568Z  * [new branch]        agent/authority-boundary-observation-20260924 -> origin/agent/authority-boundary-observation-20260924
+2026-10-03T14:16:47.9949642Z  * [new branch]        agent/base-repair-repository-projection -> origin/agent/base-repair-repository-projection
+2026-10-03T14:16:47.9952673Z  * [new branch]        agent/baseline-samples-stream-20260929 -> origin/agent/baseline-samples-stream-20260929
+2026-10-03T14:16:47.9954308Z  * [new branch]        agent/bidir             -> origin/agent/bidir
+2026-10-03T14:16:47.9956064Z  * [new branch]        agent/body-codegen-completeness-receipt-20260930 -> origin/agent/body-codegen-completeness-receipt-20260930
+2026-10-03T14:16:47.9958217Z  * [new branch]        agent/body-condition-equivalence-20260930 -> origin/agent/body-condition-equivalence-20260930
+2026-10-03T14:16:47.9959958Z  * [new branch]        agent/body-path-files-20261003 -> origin/agent/body-path-files-20261003
+2026-10-03T14:16:47.9961713Z  * [new branch]        agent/body-path-stream-cli-20261003 -> origin/agent/body-path-stream-cli-20261003
+2026-10-03T14:16:47.9963330Z  * [new branch]        agent/body-wall-phases-20261003 -> origin/agent/body-wall-phases-20261003
+2026-10-03T14:16:47.9965244Z  * [new branch]        agent/bodycodegen-semantic-equivalence-20260930 -> origin/agent/bodycodegen-semantic-equivalence-20260930
+2026-10-03T14:16:47.9967440Z  * [new branch]        agent/boundary-unknown-records-20260908 -> origin/agent/boundary-unknown-records-20260908
+2026-10-03T14:16:47.9970330Z  * [new branch]        agent/bounded-grant-consumer-prior-artifact-query-fix-20260929 -> origin/agent/bounded-grant-consumer-prior-artifact-query-fix-20260929
+2026-10-03T14:16:47.9974117Z  * [new branch]        agent/bounded-grant-consumer-resolution-fix-20260929 -> origin/agent/bounded-grant-consumer-resolution-fix-20260929
+2026-10-03T14:16:47.9976588Z  * [new branch]        agent/bounded-grant-executor-v1-20260929 -> origin/agent/bounded-grant-executor-v1-20260929
+2026-10-03T14:16:47.9978369Z  * [new branch]        agent/cache             -> origin/agent/cache
+2026-10-03T14:16:47.9980232Z  * [new branch]        agent/cache-token-scope-20260906 -> origin/agent/cache-token-scope-20260906
+2026-10-03T14:16:47.9982601Z  * [new branch]        agent/callback-counterexample-retention-20260907 -> origin/agent/callback-counterexample-retention-20260907
+2026-10-03T14:16:47.9984889Z  * [new branch]        agent/callback-observer-cli-20260910 -> origin/agent/callback-observer-cli-20260910
+2026-10-03T14:16:47.9987013Z  * [new branch]        agent/candidate-leakage-activation -> origin/agent/candidate-leakage-activation
+2026-10-03T14:16:47.9988852Z  * [new branch]        agent/candidate-leakage-eligibility -> origin/agent/candidate-leakage-eligibility
+2026-10-03T14:16:47.9991062Z  * [new branch]        agent/candidate-source-run-binding-20260929 -> origin/agent/candidate-source-run-binding-20260929
+2026-10-03T14:16:47.9993364Z  * [new branch]        agent/cap-02-public-execution-claim-scope-20260911 -> origin/agent/cap-02-public-execution-claim-scope-20260911
+2026-10-03T14:16:47.9995754Z  * [new branch]        agent/cap-03-billing-user-transcript-20260911 -> origin/agent/cap-03-billing-user-transcript-20260911
+2026-10-03T14:16:47.9998052Z  * [new branch]        agent/capability-handle-provenance-20260924 -> origin/agent/capability-handle-provenance-20260924
+2026-10-03T14:16:48.0000298Z  * [new branch]        agent/capability-provenance-delta-20260924 -> origin/agent/capability-provenance-delta-20260924
+2026-10-03T14:16:48.0002923Z  * [new branch]        agent/capability-provenance-delta-composition-20260924 -> origin/agent/capability-provenance-delta-composition-20260924
+2026-10-03T14:16:48.0005505Z  * [new branch]        agent/capability-provenance-delta-series-20260924 -> origin/agent/capability-provenance-delta-series-20260924
+2026-10-03T14:16:48.0007910Z  * [new branch]        agent/capability-provenance-lifecycle-20260924 -> origin/agent/capability-provenance-lifecycle-20260924
+2026-10-03T14:16:48.0010206Z  * [new branch]        agent/capability-provenance-lineage-20260924 -> origin/agent/capability-provenance-lineage-20260924
+2026-10-03T14:16:48.0012452Z  * [new branch]        agent/changed-surface-receipt-activation -> origin/agent/changed-surface-receipt-activation
+2026-10-03T14:16:48.0014821Z  * [new branch]        agent/changed-surface-receipt-eligibility -> origin/agent/changed-surface-receipt-eligibility
+2026-10-03T14:16:48.0016837Z  * [new branch]        agent/changed-surface-receipt-shadow -> origin/agent/changed-surface-receipt-shadow
+2026-10-03T14:16:48.0018587Z  * [new branch]        agent/ci-alias-refresh  -> origin/agent/ci-alias-refresh
+2026-10-03T14:16:48.0019944Z  * [new branch]        agent/ci-artifact-lineage -> origin/agent/ci-artifact-lineage
+2026-10-03T14:16:48.0021546Z  * [new branch]        agent/ci-auto-promotion-20260929 -> origin/agent/ci-auto-promotion-20260929
+2026-10-03T14:16:48.0023873Z  * [new branch]        agent/ci-baseline-ref-resolution-20260929 -> origin/agent/ci-baseline-ref-resolution-20260929
+2026-10-03T14:16:48.0026137Z  * [new branch]        agent/ci-boundary-lifecycle-20260905 -> origin/agent/ci-boundary-lifecycle-20260905
+2026-10-03T14:16:48.0027903Z  * [new branch]        agent/ci-concurrency-lane -> origin/agent/ci-concurrency-lane
+2026-10-03T14:16:48.0029780Z  * [new branch]        agent/ci-effort-observation-fast-pending-20260905 -> origin/agent/ci-effort-observation-fast-pending-20260905
+2026-10-03T14:16:48.0031997Z  * [new branch]        agent/ci-effort-observation-v1 -> origin/agent/ci-effort-observation-v1
+2026-10-03T14:16:48.0033613Z  * [new branch]        agent/ci-evidence-contract -> origin/agent/ci-evidence-contract
+2026-10-03T14:16:48.0035031Z  * [new branch]        agent/ci-generator-current7 -> origin/agent/ci-generator-current7
+2026-10-03T14:16:48.0036710Z  * [new branch]        agent/ci-gofmt-baseline-repair-20260920 -> origin/agent/ci-gofmt-baseline-repair-20260920
+2026-10-03T14:16:48.0038822Z  * [new branch]        agent/ci-guardianless-bottleneck-metrics-20260928 -> origin/agent/ci-guardianless-bottleneck-metrics-20260928
+2026-10-03T14:16:48.0040898Z  * [new branch]        agent/ci-metrics-budget-20260906 -> origin/agent/ci-metrics-budget-20260906
+2026-10-03T14:16:48.0043061Z  * [new branch]        agent/ci-promotion-required-checks -> origin/agent/ci-promotion-required-checks
+2026-10-03T14:16:48.0045093Z  * [new branch]        agent/ci-read-retry-20260930 -> origin/agent/ci-read-retry-20260930
+2026-10-03T14:16:48.0046626Z  * [new branch]        agent/ci-scope-preflight-20260907 -> origin/agent/ci-scope-preflight-20260907
+2026-10-03T14:16:48.0048066Z  * [new branch]        agent/ci-scope-triage   -> origin/agent/ci-scope-triage
+2026-10-03T14:16:48.0049674Z  * [new branch]        agent/ci-tooling-observation-20260906 -> origin/agent/ci-tooling-observation-20260906
+2026-10-03T14:16:48.0051245Z  * [new branch]        agent/ci-workflow       -> origin/agent/ci-workflow
+2026-10-03T14:16:48.0052473Z  * [new branch]        agent/ci-workflow-stage -> origin/agent/ci-workflow-stage
+2026-10-03T14:16:48.0053668Z  * [new branch]        agent/cli               -> origin/agent/cli
+2026-10-03T14:16:48.0055443Z  * [new branch]        agent/cli-bootstrap-contract -> origin/agent/cli-bootstrap-contract
+2026-10-03T14:16:48.0056971Z  * [new branch]        agent/cli-check         -> origin/agent/cli-check
+2026-10-03T14:16:48.0058399Z  * [new branch]        agent/cli-check-current -> origin/agent/cli-check-current
+2026-10-03T14:16:48.0059778Z  * [new branch]        agent/cli-check-current2 -> origin/agent/cli-check-current2
+2026-10-03T14:16:48.0061455Z  * [new branch]        agent/coherence-boundary-probe-20260903 -> origin/agent/coherence-boundary-probe-20260903
+2026-10-03T14:16:48.0063406Z  * [new branch]        agent/coherence-boundary-probe-fix-20260830 -> origin/agent/coherence-boundary-probe-fix-20260830
+2026-10-03T14:16:48.0065335Z  * [new branch]        agent/collapse-executor-20260906 -> origin/agent/collapse-executor-20260906
+2026-10-03T14:16:48.0067189Z  * [new branch]        agent/compact-shared-judgment-runtime-20261003 -> origin/agent/compact-shared-judgment-runtime-20261003
+2026-10-03T14:16:48.0069188Z  * [new branch]        agent/compact-training-feedback-20260930 -> origin/agent/compact-training-feedback-20260930
+2026-10-03T14:16:48.0071495Z  * [new branch]        agent/compiler-conformance-evidence-upload-20260911 -> origin/agent/compiler-conformance-evidence-upload-20260911
+2026-10-03T14:16:48.0074067Z  * [new branch]        agent/compiler-envelope-self-improvement-20260903 -> origin/agent/compiler-envelope-self-improvement-20260903
+2026-10-03T14:16:48.0076522Z  * [new branch]        agent/compiler-envelope-self-improvement-iteration-20260904 -> origin/agent/compiler-envelope-self-improvement-iteration-20260904
+2026-10-03T14:16:48.0078661Z  * [new branch]        agent/compiler-observation-20260906 -> origin/agent/compiler-observation-20260906
+2026-10-03T14:16:48.0080557Z  * [new branch]        agent/compiler-self-improvement-20260903 -> origin/agent/compiler-self-improvement-20260903
+2026-10-03T14:16:48.0082745Z  * [new branch]        agent/compiler-self-improvement-compatibility-20260904-v18 -> origin/agent/compiler-self-improvement-compatibility-20260904-v18
+2026-10-03T14:16:48.0085210Z  * [new branch]        agent/compiler-self-improvement-iteration-20260904-v10 -> origin/agent/compiler-self-improvement-iteration-20260904-v10
+2026-10-03T14:16:48.0087545Z  * [new branch]        agent/compiler-self-improvement-iteration-20260904-v11 -> origin/agent/compiler-self-improvement-iteration-20260904-v11
+2026-10-03T14:16:48.0089876Z  * [new branch]        agent/compiler-self-improvement-iteration-20260904-v5 -> origin/agent/compiler-self-improvement-iteration-20260904-v5
+2026-10-03T14:16:48.0092235Z  * [new branch]        agent/compiler-self-improvement-iteration-20260904-v6 -> origin/agent/compiler-self-improvement-iteration-20260904-v6
+2026-10-03T14:16:48.0094537Z  * [new branch]        agent/compiler-self-improvement-iteration-20260904-v7 -> origin/agent/compiler-self-improvement-iteration-20260904-v7
+2026-10-03T14:16:48.0096828Z  * [new branch]        agent/compiler-self-improvement-iteration-20260904-v8 -> origin/agent/compiler-self-improvement-iteration-20260904-v8
+2026-10-03T14:16:48.0099213Z  * [new branch]        agent/compiler-self-improvement-iteration-20260904-v9 -> origin/agent/compiler-self-improvement-iteration-20260904-v9
+2026-10-03T14:16:48.0101625Z  * [new branch]        agent/compiler-self-improvement-orchestration-20260904-v14 -> origin/agent/compiler-self-improvement-orchestration-20260904-v14
+2026-10-03T14:16:48.0104079Z  * [new branch]        agent/compiler-self-improvement-partial-reuse-20260904-v15 -> origin/agent/compiler-self-improvement-partial-reuse-20260904-v15
+2026-10-03T14:16:48.0106610Z  * [new branch]        agent/compiler-self-improvement-resolution-repair-20260904-v16 -> origin/agent/compiler-self-improvement-resolution-repair-20260904-v16
+2026-10-03T14:16:48.0109012Z  * [new branch]        agent/compiler-self-improvement-utility-20260904-v12 -> origin/agent/compiler-self-improvement-utility-20260904-v12
+2026-10-03T14:16:48.0111379Z  * [new branch]        agent/compiler-self-improvement-utility-reuse-20260904-v13 -> origin/agent/compiler-self-improvement-utility-reuse-20260904-v13
+2026-10-03T14:16:48.0113865Z  * [new branch]        agent/compiler-self-improvement-workflow-lineage-20260904-v17 -> origin/agent/compiler-self-improvement-workflow-lineage-20260904-v17
+2026-10-03T14:16:48.0116187Z  * [new branch]        agent/compiler-self-observation-iteration-20260904 -> origin/agent/compiler-self-observation-iteration-20260904
+2026-10-03T14:16:48.0118226Z  * [new branch]        agent/completeness-observation-delta-20261003 -> origin/agent/completeness-observation-delta-20261003
+2026-10-03T14:16:48.0120045Z  * [new branch]        agent/concept-governed-refactoring-v29 -> origin/agent/concept-governed-refactoring-v29
+2026-10-03T14:16:48.0122037Z  * [new branch]        agent/concept-operation-binding-receipt-20260911 -> origin/agent/concept-operation-binding-receipt-20260911
+2026-10-03T14:16:48.0123631Z  * [new branch]        agent/conformance-fuzz  -> origin/agent/conformance-fuzz
+2026-10-03T14:16:48.0125242Z  * [new branch]        agent/continuation-transition-provenance-20260924 -> origin/agent/continuation-transition-provenance-20260924
+2026-10-03T14:16:48.0127410Z  * [new branch]        agent/continuation-transition-validation-20260924 -> origin/agent/continuation-transition-validation-20260924
+2026-10-03T14:16:48.0129308Z  * [new branch]        agent/continuity-previous-go-binding-785 -> origin/agent/continuity-previous-go-binding-785
+2026-10-03T14:16:48.0131085Z  * [new branch]        agent/core-conformance-registry-20260905 -> origin/agent/core-conformance-registry-20260905
+2026-10-03T14:16:48.0132791Z  * [new branch]        agent/core-evidence-integration-20260911 -> origin/agent/core-evidence-integration-20260911
+2026-10-03T14:16:48.0134343Z  * [new branch]        agent/core-rss-observability-v1 -> origin/agent/core-rss-observability-v1
+2026-10-03T14:16:48.0135915Z  * [new branch]        agent/current-language-model-docs-20261003 -> origin/agent/current-language-model-docs-20261003
+2026-10-03T14:16:48.0137789Z  * [new branch]        agent/current-package-type-reification-20260905 -> origin/agent/current-package-type-reification-20260905
+2026-10-03T14:16:48.0139487Z  * [new branch]        agent/dependency-cycle-detector -> origin/agent/dependency-cycle-detector
+2026-10-03T14:16:48.0140750Z  * [new branch]        agent/detection         -> origin/agent/detection
+2026-10-03T14:16:48.0142185Z  * [new branch]        agent/dev-main-promotion-integration-20260831 -> origin/agent/dev-main-promotion-integration-20260831
+2026-10-03T14:16:48.0143740Z  * [new branch]        agent/dev-main-sync-20260831 -> origin/agent/dev-main-sync-20260831
+2026-10-03T14:16:48.0145090Z  * [new branch]        agent/dev-main-sync-20260831-rerun -> origin/agent/dev-main-sync-20260831-rerun
+2026-10-03T14:16:48.0146424Z  * [new branch]        agent/dev-main-sync-20260902 -> origin/agent/dev-main-sync-20260902
+2026-10-03T14:16:48.0147892Z  * [new branch]        agent/dev-main-topology-repair-20260902 -> origin/agent/dev-main-topology-repair-20260902
+2026-10-03T14:16:48.0149791Z  * [new branch]        agent/diagnostic-observation-forwarding-20260905 -> origin/agent/diagnostic-observation-forwarding-20260905
+2026-10-03T14:16:48.0151668Z  * [new branch]        agent/diagnostic-subject-binding-20260906 -> origin/agent/diagnostic-subject-binding-20260906
+2026-10-03T14:16:48.0153167Z  * [new branch]        agent/direct-entry-resolution -> origin/agent/direct-entry-resolution
+2026-10-03T14:16:48.0154442Z  * [new branch]        agent/directory-kind-ci-v20 -> origin/agent/directory-kind-ci-v20
+2026-10-03T14:16:48.0155777Z  * [new branch]        agent/directory-kind-executor-v20 -> origin/agent/directory-kind-executor-v20
+2026-10-03T14:16:48.0157186Z  * [new branch]        agent/directory-kind-schema-v20 -> origin/agent/directory-kind-schema-v20
+2026-10-03T14:16:48.0158334Z  * [new branch]        agent/docs              -> origin/agent/docs
+2026-10-03T14:16:48.0159588Z  * [new branch]        agent/docs-arithmetic-results-20261003 -> origin/agent/docs-arithmetic-results-20261003
+2026-10-03T14:16:48.0161376Z  * [new branch]        agent/docs-language-model-progress-20261003 -> origin/agent/docs-language-model-progress-20261003
+2026-10-03T14:16:48.0163077Z  * [new branch]        agent/docs-observation-progress-20261003 -> origin/agent/docs-observation-progress-20261003
+2026-10-03T14:16:48.0164551Z  * [new branch]        agent/docs-sdk-status-20261003 -> origin/agent/docs-sdk-status-20261003
+2026-10-03T14:16:48.0166088Z  * [new branch]        agent/document-reference-provenance-20260924 -> origin/agent/document-reference-provenance-20260924
+2026-10-03T14:16:48.0167844Z  * [new branch]        agent/document-typed-plan-boundary-20260916 -> origin/agent/document-typed-plan-boundary-20260916
+2026-10-03T14:16:48.0169558Z  * [new branch]        agent/dogfood-candidate-selection-20260924 -> origin/agent/dogfood-candidate-selection-20260924
+2026-10-03T14:16:48.0171423Z  * [new branch]        agent/dogfood-counterexample-provenance-20260924 -> origin/agent/dogfood-counterexample-provenance-20260924
+2026-10-03T14:16:48.0173208Z  * [new branch]        agent/dogfood-execution-outcome-20260924 -> origin/agent/dogfood-execution-outcome-20260924
+2026-10-03T14:16:48.0175098Z  * [new branch]        agent/dogfood-promotion-execution-binding-20260924 -> origin/agent/dogfood-promotion-execution-binding-20260924
+2026-10-03T14:16:48.0177017Z  * [new branch]        agent/dogfood-regression-counterexample-20260924 -> origin/agent/dogfood-regression-counterexample-20260924
+2026-10-03T14:16:48.0178803Z  * [new branch]        agent/domain-completeness-receipt-20260929 -> origin/agent/domain-completeness-receipt-20260929
+2026-10-03T14:16:48.0180609Z  * [new branch]        agent/domain-completeness-receipt-dev-20260928 -> origin/agent/domain-completeness-receipt-dev-20260928
+2026-10-03T14:16:48.0182329Z  * [new branch]        agent/domain-completeness-schema-20261002 -> origin/agent/domain-completeness-schema-20261002
+2026-10-03T14:16:48.0183921Z  * [new branch]        agent/domain-observation-case-20260916 -> origin/agent/domain-observation-case-20260916
+2026-10-03T14:16:48.0185452Z  * [new branch]        agent/domain-runtime-dogfood-20260916 -> origin/agent/domain-runtime-dogfood-20260916
+2026-10-03T14:16:48.0186749Z  * [new branch]        agent/entity-fields-v1  -> origin/agent/entity-fields-v1
+2026-10-03T14:16:48.0188014Z  * [new branch]        agent/entity-graph-support-20260911 -> origin/agent/entity-graph-support-20260911
+2026-10-03T14:16:48.0189652Z  * [new branch]        agent/entityfields-support-projection-20260906 -> origin/agent/entityfields-support-projection-20260906
+2026-10-03T14:16:48.0191734Z  * [new branch]        agent/executable-guardian-scope-adoption-20260831 -> origin/agent/executable-guardian-scope-adoption-20260831
+2026-10-03T14:16:48.0193815Z  * [new branch]        agent/execution-plan-provenance-generation-dev-20260925-r1 -> origin/agent/execution-plan-provenance-generation-dev-20260925-r1
+2026-10-03T14:16:48.0195876Z  * [new branch]        agent/experience-memory-freshness-dev-20260925-r1 -> origin/agent/experience-memory-freshness-dev-20260925-r1
+2026-10-03T14:16:48.0197780Z  * [new branch]        agent/explicit-revision-contract-20260924 -> origin/agent/explicit-revision-contract-20260924
+2026-10-03T14:16:48.0199325Z  * [new branch]        agent/external-assurance-activation -> origin/agent/external-assurance-activation
+2026-10-03T14:16:48.0200920Z  * [new branch]        agent/external-assurance-eligibility -> origin/agent/external-assurance-eligibility
+2026-10-03T14:16:48.0202401Z  * [new branch]        agent/external-capability-execution -> origin/agent/external-capability-execution
+2026-10-03T14:16:48.0203876Z  * [new branch]        agent/external-ecosystem-conformance -> origin/agent/external-ecosystem-conformance
+2026-10-03T14:16:48.0205525Z  * [new branch]        agent/external-ecosystem-conformance-execution -> origin/agent/external-ecosystem-conformance-execution
+2026-10-03T14:16:48.0207230Z  * [new branch]        agent/extract-function-progress-20260906 -> origin/agent/extract-function-progress-20260906
+2026-10-03T14:16:48.0208866Z  * [new branch]        agent/failed-source-ci-observation-20260905 -> origin/agent/failed-source-ci-observation-20260905
+2026-10-03T14:16:48.0210485Z  * [new branch]        agent/feedback-payload-envelope-v27 -> origin/agent/feedback-payload-envelope-v27
+2026-10-03T14:16:48.0211935Z  * [new branch]        agent/feedback-predecessor-baseline -> origin/agent/feedback-predecessor-baseline
+2026-10-03T14:16:48.0213360Z  * [new branch]        agent/feedback-predecessor-ci-v24 -> origin/agent/feedback-predecessor-ci-v24
+2026-10-03T14:16:48.0214766Z  * [new branch]        agent/feedback-predecessor-cli-v24 -> origin/agent/feedback-predecessor-cli-v24
+2026-10-03T14:16:48.0216261Z  * [new branch]        agent/feedback-predecessor-selector-v24 -> origin/agent/feedback-predecessor-selector-v24
+2026-10-03T14:16:48.0217847Z  * [new branch]        agent/feedback-predecessor-usecases-v24 -> origin/agent/feedback-predecessor-usecases-v24
+2026-10-03T14:16:48.0219272Z  * [new branch]        agent/feedback-semantic-ci-v27 -> origin/agent/feedback-semantic-ci-v27
+2026-10-03T14:16:48.0220827Z  * [new branch]        agent/feedback-semantic-consumer-v27 -> origin/agent/feedback-semantic-consumer-v27
+2026-10-03T14:16:48.0222305Z  * [new branch]        agent/feedback-semantic-snapshot-v25 -> origin/agent/feedback-semantic-snapshot-v25
+2026-10-03T14:16:48.0223778Z  * [new branch]        agent/feedback-semantic-usecases-v27 -> origin/agent/feedback-semantic-usecases-v27
+2026-10-03T14:16:48.0225239Z  * [new branch]        agent/feedback-semantic-witness-v27 -> origin/agent/feedback-semantic-witness-v27
+2026-10-03T14:16:48.0226806Z  * [new branch]        agent/feedback-write-count-boundary-20260911 -> origin/agent/feedback-write-count-boundary-20260911
+2026-10-03T14:16:48.0228313Z  * [new branch]        agent/final-push-foundation-442 -> origin/agent/final-push-foundation-442
+2026-10-03T14:16:48.0229665Z  * [new branch]        agent/first-class-meta-policy-v20 -> origin/agent/first-class-meta-policy-v20
+2026-10-03T14:16:48.0231122Z  * [new branch]        agent/first-class-meta-policy-v20-1 -> origin/agent/first-class-meta-policy-v20-1
+2026-10-03T14:16:48.0232460Z  * [new branch]        agent/fix-compiler-metric-rss -> origin/agent/fix-compiler-metric-rss
+2026-10-03T14:16:48.0233834Z  * [new branch]        agent/fix-policy-revision-allocation -> origin/agent/fix-policy-revision-allocation
+2026-10-03T14:16:48.0235366Z  * [new branch]        agent/fix-promotion-self-block-20260930 -> origin/agent/fix-promotion-self-block-20260930
+2026-10-03T14:16:48.0236635Z  * [new branch]        agent/formatter         -> origin/agent/formatter
+2026-10-03T14:16:48.0238067Z  * [new branch]        agent/foundation-authorization-dev-sync-20260831 -> origin/agent/foundation-authorization-dev-sync-20260831
+2026-10-03T14:16:48.0240115Z  * [new branch]        agent/foundation-authorization-dispatch-adoption-20260831 -> origin/agent/foundation-authorization-dispatch-adoption-20260831
+2026-10-03T14:16:48.0242287Z  * [new branch]        agent/foundation-authorization-protocol-20260903 -> origin/agent/foundation-authorization-protocol-20260903
+2026-10-03T14:16:48.0244411Z  * [new branch]        agent/foundation-authorization-protocol-frontier-20260911 -> origin/agent/foundation-authorization-protocol-frontier-20260911
+2026-10-03T14:16:48.0246341Z  * [new branch]        agent/foundation-bootstrap-dev-sync-20260831 -> origin/agent/foundation-bootstrap-dev-sync-20260831
+2026-10-03T14:16:48.0248015Z  * [new branch]        agent/foundation-correction-child-20260831 -> origin/agent/foundation-correction-child-20260831
+2026-10-03T14:16:48.0249645Z  * [new branch]        agent/foundation-correction-dev-20260831 -> origin/agent/foundation-correction-dev-20260831
+2026-10-03T14:16:48.0251346Z  * [new branch]        agent/foundation-discovery-recovery-20260830 -> origin/agent/foundation-discovery-recovery-20260830
+2026-10-03T14:16:48.0253042Z  * [new branch]        agent/foundation-regression-repair-20260831 -> origin/agent/foundation-regression-repair-20260831
+2026-10-03T14:16:48.0254450Z  * [new branch]        agent/freshness-detection -> origin/agent/freshness-detection
+2026-10-03T14:16:48.0255676Z  * [new branch]        agent/full-input-native-20261003 -> origin/agent/full-input-native-20261003
+2026-10-03T14:16:48.0257203Z  * [new branch]        agent/function-extractor-diagnostic-20260905 -> origin/agent/function-extractor-diagnostic-20260905
+2026-10-03T14:16:48.0258578Z  * [new branch]        agent/fuzz-conformance  -> origin/agent/fuzz-conformance
+2026-10-03T14:16:48.0259944Z  * [new branch]        agent/generated-replay-closure-dev-20260929 -> origin/agent/generated-replay-closure-dev-20260929
+2026-10-03T14:16:48.0261741Z  * [new branch]        agent/generation-diagnostic-provenance-20260924 -> origin/agent/generation-diagnostic-provenance-20260924
+2026-10-03T14:16:48.0263639Z  * [new branch]        agent/generation-document-provenance-bridge-20260924 -> origin/agent/generation-document-provenance-bridge-20260924
+2026-10-03T14:16:48.0265109Z  * [new branch]        agent/generator         -> origin/agent/generator
+2026-10-03T14:16:48.0266391Z  * [new branch]        agent/gooo-artifact-attempt-binding -> origin/agent/gooo-artifact-attempt-binding
+2026-10-03T14:16:48.0267747Z  * [new branch]        agent/gooo-artifact-experiment -> origin/agent/gooo-artifact-experiment
+2026-10-03T14:16:48.0269136Z  * [new branch]        agent/gooo-artifact-lifecycle-receipt -> origin/agent/gooo-artifact-lifecycle-receipt
+2026-10-03T14:16:48.0270572Z  * [new branch]        agent/gooo-artifact-resolution -> origin/agent/gooo-artifact-resolution
+2026-10-03T14:16:48.0271934Z  * [new branch]        agent/gooo-bodycodegen-laya-20260929 -> origin/agent/gooo-bodycodegen-laya-20260929
+2026-10-03T14:16:48.0273339Z  * [new branch]        agent/gooo-candidate-lineage-fix -> origin/agent/gooo-candidate-lineage-fix
+2026-10-03T14:16:48.0274655Z  * [new branch]        agent/gooo-capability-boundary -> origin/agent/gooo-capability-boundary
+2026-10-03T14:16:48.0275826Z  * [new branch]        agent/gooo-ci-plan      -> origin/agent/gooo-ci-plan
+2026-10-03T14:16:48.0277084Z  * [new branch]        agent/gooo-closed-generation-example -> origin/agent/gooo-closed-generation-example
+2026-10-03T14:16:48.0278396Z  * [new branch]        agent/gooo-closed-value -> origin/agent/gooo-closed-value
+2026-10-03T14:16:48.0279769Z  * [new branch]        agent/gooo-compiler-context-export-20261001 -> origin/agent/gooo-compiler-context-export-20261001
+2026-10-03T14:16:48.0281542Z  * [new branch]        agent/gooo-declaration-provenance-20260924 -> origin/agent/gooo-declaration-provenance-20260924
+2026-10-03T14:16:48.0283050Z  * [new branch]        agent/gooo-exact-subject-transport -> origin/agent/gooo-exact-subject-transport
+2026-10-03T14:16:48.0284403Z  * [new branch]        agent/gooo-experimental-release -> origin/agent/gooo-experimental-release
+2026-10-03T14:16:48.0285754Z  * [new branch]        agent/gooo-experimental-release-v2 -> origin/agent/gooo-experimental-release-v2
+2026-10-03T14:16:48.0287157Z  * [new branch]        agent/gooo-experimental-release-v3 -> origin/agent/gooo-experimental-release-v3
+2026-10-03T14:16:48.0288505Z  * [new branch]        agent/gooo-generation-v1 -> origin/agent/gooo-generation-v1
+2026-10-03T14:16:48.0289819Z  * [new branch]        agent/gooo-independent-artifact-oracle -> origin/agent/gooo-independent-artifact-oracle
+2026-10-03T14:16:48.0291287Z  * [new branch]        agent/gooo-language-test -> origin/agent/gooo-language-test
+2026-10-03T14:16:48.0292914Z  * [new branch]        agent/gooo-language-test-v3 -> origin/agent/gooo-language-test-v3
+2026-10-03T14:16:48.0294179Z  * [new branch]        agent/gooo-nonexecuting-candidate -> origin/agent/gooo-nonexecuting-candidate
+2026-10-03T14:16:48.0295466Z  * [new branch]        agent/gooo-observation-input -> origin/agent/gooo-observation-input
+2026-10-03T14:16:48.0296842Z  * [new branch]        agent/gooo-operation-catalog-extension -> origin/agent/gooo-operation-catalog-extension
+2026-10-03T14:16:48.0298318Z  * [new branch]        agent/gooo-operation-catalog-kernel -> origin/agent/gooo-operation-catalog-kernel
+2026-10-03T14:16:48.0299781Z  * [new branch]        agent/gooo-operation-claim-causality -> origin/agent/gooo-operation-claim-causality
+2026-10-03T14:16:48.0301339Z  * [new branch]        agent/gooo-operation-claim-transitions -> origin/agent/gooo-operation-claim-transitions
+2026-10-03T14:16:48.0302706Z  * [new branch]        agent/gooo-operation-spec-ir -> origin/agent/gooo-operation-spec-ir
+2026-10-03T14:16:48.0304159Z  * [new branch]        agent/gooo-own-model-source-context-20261001 -> origin/agent/gooo-own-model-source-context-20261001
+2026-10-03T14:16:48.0305589Z  * [new branch]        agent/gooo-peak-rss-evidence -> origin/agent/gooo-peak-rss-evidence
+2026-10-03T14:16:48.0306763Z  * [new branch]        agent/gooo-peak-rss-runtime -> origin/agent/gooo-peak-rss-runtime
+2026-10-03T14:16:48.0308066Z  * [new branch]        agent/gooo-policy-foundation-binding -> origin/agent/gooo-policy-foundation-binding
+2026-10-03T14:16:48.0309429Z  * [new branch]        agent/gooo-profile-conformance -> origin/agent/gooo-profile-conformance
+2026-10-03T14:16:48.0311017Z  * [new branch]        agent/gooo-reader-resolution-projection -> origin/agent/gooo-reader-resolution-projection
+2026-10-03T14:16:48.0312386Z  * [new branch]        agent/gooo-release-asset-set -> origin/agent/gooo-release-asset-set
+2026-10-03T14:16:48.0313739Z  * [new branch]        agent/gooo-semantic-context-v3-20261002 -> origin/agent/gooo-semantic-context-v3-20261002
+2026-10-03T14:16:48.0315195Z  * [new branch]        agent/gooo-source-binding-promotion -> origin/agent/gooo-source-binding-promotion
+2026-10-03T14:16:48.0316575Z  * [new branch]        agent/gooo-source-program-20260929 -> origin/agent/gooo-source-program-20260929
+2026-10-03T14:16:48.0317867Z  * [new branch]        agent/gooo-stage-claim-ledger -> origin/agent/gooo-stage-claim-ledger
+2026-10-03T14:16:48.0319023Z  * [new branch]        agent/gooo-trace-debugger -> origin/agent/gooo-trace-debugger
+2026-10-03T14:16:48.0320097Z  * [new branch]        agent/gooo-v020-release -> origin/agent/gooo-v020-release
+2026-10-03T14:16:48.0321267Z  * [new branch]        agent/gooo-value-witness -> origin/agent/gooo-value-witness
+2026-10-03T14:16:48.0322556Z  * [new branch]        agent/graph-observer-coverage-20260911 -> origin/agent/graph-observer-coverage-20260911
+2026-10-03T14:16:48.0324200Z  * [new branch]        agent/guardian-kernel-digest-alignment-20260903 -> origin/agent/guardian-kernel-digest-alignment-20260903
+2026-10-03T14:16:48.0326073Z  * [new branch]        agent/guardian-preserve-promotion-observers-20260903 -> origin/agent/guardian-preserve-promotion-observers-20260903
+2026-10-03T14:16:48.0328002Z  * [new branch]        agent/guardian-proof-check-suite-authority-20260903 -> origin/agent/guardian-proof-check-suite-authority-20260903
+2026-10-03T14:16:48.0330010Z  * [new branch]        agent/guardian-successor-artifact-validation-fix-20260903 -> origin/agent/guardian-successor-artifact-validation-fix-20260903
+2026-10-03T14:16:48.0332547Z  * [new branch]        agent/guardian-successor-fail-closed-observers-20260903 -> origin/agent/guardian-successor-fail-closed-observers-20260903
+2026-10-03T14:16:48.0334524Z  * [new branch]        agent/guardian-successor-protocol-adoption-20260903 -> origin/agent/guardian-successor-protocol-adoption-20260903
+2026-10-03T14:16:48.0336386Z  * [new branch]        agent/guardian-trusted-observer-recovery-20260903 -> origin/agent/guardian-trusted-observer-recovery-20260903
+2026-10-03T14:16:48.0338292Z  * [new branch]        agent/guardian-trusted-observer-recovery-20260903-rerun -> origin/agent/guardian-trusted-observer-recovery-20260903-rerun
+2026-10-03T14:16:48.0340265Z  * [new branch]        agent/guardian-validate-preserved-observers-20260903 -> origin/agent/guardian-validate-preserved-observers-20260903
+2026-10-03T14:16:48.0342035Z  * [new branch]        agent/helper-only-rendering-20260906 -> origin/agent/helper-only-rendering-20260906
+2026-10-03T14:16:48.0343668Z  * [new branch]        agent/implementation-claim-dependency-causality-v1 -> origin/agent/implementation-claim-dependency-causality-v1
+2026-10-03T14:16:48.0345731Z  * [new branch]        agent/implementation-claim-dependency-corpus-registration-v1 -> origin/agent/implementation-claim-dependency-corpus-registration-v1
+2026-10-03T14:16:48.0347566Z  * [new branch]        agent/import-alias-shadowing-20260905 -> origin/agent/import-alias-shadowing-20260905
+2026-10-03T14:16:48.0361626Z  * [new branch]        agent/import-header-followup-20260905 -> origin/agent/import-header-followup-20260905
+2026-10-03T14:16:48.0363868Z  * [new branch]        agent/incremental-typed-paths-20261001 -> origin/agent/incremental-typed-paths-20261001
+2026-10-03T14:16:48.0366389Z  * [new branch]        agent/independent-policy-execution-observer-20260920 -> origin/agent/independent-policy-execution-observer-20260920
+2026-10-03T14:16:48.0368973Z  * [new branch]        agent/integer-local-typing-20260930 -> origin/agent/integer-local-typing-20260930
+2026-10-03T14:16:48.0371669Z  * [new branch]        agent/interrupted-operation-observation-20260924 -> origin/agent/interrupted-operation-observation-20260924
+2026-10-03T14:16:48.0374312Z  * [new branch]        agent/invocation-boundary-20260905 -> origin/agent/invocation-boundary-20260905
+2026-10-03T14:16:48.0375733Z  * [new branch]        agent/ir-body-fill-semantics-20260930 -> origin/agent/ir-body-fill-semantics-20260930
+2026-10-03T14:16:48.0377264Z  * [new branch]        agent/ir-search-provider-telemetry-20260930 -> origin/agent/ir-search-provider-telemetry-20260930
+2026-10-03T14:16:48.0378736Z  * [new branch]        agent/joint-path-model-v1-20261002 -> origin/agent/joint-path-model-v1-20261002
+2026-10-03T14:16:48.0380215Z  * [new branch]        agent/journal-process-interruption-20260908 -> origin/agent/journal-process-interruption-20260908
+2026-10-03T14:16:48.0381834Z  * [new branch]        agent/language-assurance-kernel -> origin/agent/language-assurance-kernel
+2026-10-03T14:16:48.0383291Z  * [new branch]        agent/language-assurance-raw-reconstruction -> origin/agent/language-assurance-raw-reconstruction
+2026-10-03T14:16:48.0384900Z  * [new branch]        agent/language-comparison-metric-20260929 -> origin/agent/language-comparison-metric-20260929
+2026-10-03T14:16:48.0386414Z  * [new branch]        agent/language-concept-artifact-ci-v28 -> origin/agent/language-concept-artifact-ci-v28
+2026-10-03T14:16:48.0387851Z  * [new branch]        agent/language-concept-artifact-v27 -> origin/agent/language-concept-artifact-v27
+2026-10-03T14:16:48.0389225Z  * [new branch]        agent/language-concept-catalog-v26 -> origin/agent/language-concept-catalog-v26
+2026-10-03T14:16:48.0390663Z  * [new branch]        agent/language-delivery-scorecard -> origin/agent/language-delivery-scorecard
+2026-10-03T14:16:48.0391997Z  * [new branch]        agent/language-deterministic-query -> origin/agent/language-deterministic-query
+2026-10-03T14:16:48.0393384Z  * [new branch]        agent/language-diagnostic-provenance -> origin/agent/language-diagnostic-provenance
+2026-10-03T14:16:48.0394842Z  * [new branch]        agent/language-go-interoperation -> origin/agent/language-go-interoperation
+2026-10-03T14:16:48.0396178Z  * [new branch]        agent/language-multi-file-execution -> origin/agent/language-multi-file-execution
+2026-10-03T14:16:48.0397473Z  * [new branch]        agent/language-package-runtime -> origin/agent/language-package-runtime
+2026-10-03T14:16:48.0398859Z  * [new branch]        agent/language-readiness-foundation-seed -> origin/agent/language-readiness-foundation-seed
+2026-10-03T14:16:48.0400222Z  * [new branch]        agent/language-semantic-model -> origin/agent/language-semantic-model
+2026-10-03T14:16:48.0401874Z  * [new branch]        agent/language-semantic-upstream-contract-20260911 -> origin/agent/language-semantic-upstream-contract-20260911
+2026-10-03T14:16:48.0403406Z  * [new branch]        agent/language-source-execution -> origin/agent/language-source-execution
+2026-10-03T14:16:48.0404817Z  * [new branch]        agent/language-syntax-provenance-20260924 -> origin/agent/language-syntax-provenance-20260924
+2026-10-03T14:16:48.0406555Z  * [new branch]        agent/language-syntax-readiness-composition-20260924 -> origin/agent/language-syntax-readiness-composition-20260924
+2026-10-03T14:16:48.0408123Z  * [new branch]        agent/language-syntax-roundtrip -> origin/agent/language-syntax-roundtrip
+2026-10-03T14:16:48.0409690Z  * [new branch]        agent/language-syntax-unknown-corpus-digest-20260920 -> origin/agent/language-syntax-unknown-corpus-digest-20260920
+2026-10-03T14:16:48.0411350Z  * [new branch]        agent/language-utility-evidence -> origin/agent/language-utility-evidence
+2026-10-03T14:16:48.0412592Z  * [new branch]        agent/laya-ir-body-fill-20260930 -> origin/agent/laya-ir-body-fill-20260930
+2026-10-03T14:16:48.0413889Z  * [new branch]        agent/laya-tdd-body-search-20260930 -> origin/agent/laya-tdd-body-search-20260930
+2026-10-03T14:16:48.0415007Z  * [new branch]        agent/linecaps          -> origin/agent/linecaps
+2026-10-03T14:16:48.0416074Z  * [new branch]        agent/linecaps-refactor-metric -> origin/agent/linecaps-refactor-metric
+2026-10-03T14:16:48.0417445Z  * [new branch]        agent/live-governance-snapshot-v1 -> origin/agent/live-governance-snapshot-v1
+2026-10-03T14:16:48.0418741Z  * [new branch]        agent/logical-root-schema-binding -> origin/agent/logical-root-schema-binding
+2026-10-03T14:16:48.0419825Z  * [new branch]        agent/lsp               -> origin/agent/lsp
+2026-10-03T14:16:48.0421124Z  * [new branch]        agent/lsp-completion-provenance-20260924 -> origin/agent/lsp-completion-provenance-20260924
+2026-10-03T14:16:48.0422666Z  * [new branch]        agent/lsp-cycle-result-provenance-20260924 -> origin/agent/lsp-cycle-result-provenance-20260924
+2026-10-03T14:16:48.0424336Z  * [new branch]        agent/lsp-cycle-result-provenance-dev-20260924-r1 -> origin/agent/lsp-cycle-result-provenance-dev-20260924-r1
+2026-10-03T14:16:48.0426077Z  * [new branch]        agent/lsp-declaration-completion-guard-20260924 -> origin/agent/lsp-declaration-completion-guard-20260924
+2026-10-03T14:16:48.0427883Z  * [new branch]        agent/lsp-declaration-completion-provenance-20260924 -> origin/agent/lsp-declaration-completion-provenance-20260924
+2026-10-03T14:16:48.0429720Z  * [new branch]        agent/lsp-diagnostic-declaration-origin-20260924 -> origin/agent/lsp-diagnostic-declaration-origin-20260924
+2026-10-03T14:16:48.0431603Z  * [new branch]        agent/lsp-diagnostic-provenance-20260924 -> origin/agent/lsp-diagnostic-provenance-20260924
+2026-10-03T14:16:48.0433235Z  * [new branch]        agent/lsp-execution-receipt-completion-20260924 -> origin/agent/lsp-execution-receipt-completion-20260924
+2026-10-03T14:16:48.0435096Z  * [new branch]        agent/lsp-generated-replay-identity-closure-dev-20260929 -> origin/agent/lsp-generated-replay-identity-closure-dev-20260929
+2026-10-03T14:16:48.0436952Z  * [new branch]        agent/lsp-hover-evidence-prefix-dev-20260925-r1 -> origin/agent/lsp-hover-evidence-prefix-dev-20260925-r1
+2026-10-03T14:16:48.0438572Z  * [new branch]        agent/lsp-hover-provenance-20260924 -> origin/agent/lsp-hover-provenance-20260924
+2026-10-03T14:16:48.0439897Z  * [new branch]        agent/lsp-prepare-rename-20260924 -> origin/agent/lsp-prepare-rename-20260924
+2026-10-03T14:16:48.0441779Z  * [new branch]        agent/lsp-provenance-recovery-dev-20260925 -> origin/agent/lsp-provenance-recovery-dev-20260925
+2026-10-03T14:16:48.0443316Z  * [new branch]        agent/lsp-references-provenance-20260924 -> origin/agent/lsp-references-provenance-20260924
+2026-10-03T14:16:48.0444884Z  * [new branch]        agent/lsp-refresh-observation-dev-20260925-r1 -> origin/agent/lsp-refresh-observation-dev-20260925-r1
+2026-10-03T14:16:48.0446372Z  * [new branch]        agent/lsp-story-provenance-20260924 -> origin/agent/lsp-story-provenance-20260924
+2026-10-03T14:16:48.0447736Z  * [new branch]        agent/lsp-symbol-provenance-20260924 -> origin/agent/lsp-symbol-provenance-20260924
+2026-10-03T14:16:48.0449226Z  * [new branch]        agent/luna-meta-01-claim-lifecycle-calculus -> origin/agent/luna-meta-01-claim-lifecycle-calculus
+2026-10-03T14:16:48.0450977Z  * [new branch]        agent/luna-meta-02-resolution-descent-lattice -> origin/agent/luna-meta-02-resolution-descent-lattice
+2026-10-03T14:16:48.0452600Z  * [new branch]        agent/luna-meta-03-meta-operation-provenance -> origin/agent/luna-meta-03-meta-operation-provenance
+2026-10-03T14:16:48.0454255Z  * [new branch]        agent/luna-meta-04-capability-scoped-expansion -> origin/agent/luna-meta-04-capability-scoped-expansion
+2026-10-03T14:16:48.0455881Z  * [new branch]        agent/luna-meta-05-phase-separation-witness -> origin/agent/luna-meta-05-phase-separation-witness
+2026-10-03T14:16:48.0457476Z  * [new branch]        agent/luna-meta-06-hygienic-origin-identity -> origin/agent/luna-meta-06-hygienic-origin-identity
+2026-10-03T14:16:48.0458988Z  * [new branch]        agent/luna-meta-07-proof-choice-algebra -> origin/agent/luna-meta-07-proof-choice-algebra
+2026-10-03T14:16:48.0460771Z  * [new branch]        agent/luna-meta-08-counterexample-first-compiler -> origin/agent/luna-meta-08-counterexample-first-compiler
+2026-10-03T14:16:48.0462353Z  * [new branch]        agent/luna-meta-09-causal-ci-selection -> origin/agent/luna-meta-09-causal-ci-selection
+2026-10-03T14:16:48.0463736Z  * [new branch]        agent/luna-meta-10-ambiguity-budget -> origin/agent/luna-meta-10-ambiguity-budget
+2026-10-03T14:16:48.0465103Z  * [new branch]        agent/luna-meta-11-evidence-freshness -> origin/agent/luna-meta-11-evidence-freshness
+2026-10-03T14:16:48.0466604Z  * [new branch]        agent/luna-meta-12-reproducibility-semantics -> origin/agent/luna-meta-12-reproducibility-semantics
+2026-10-03T14:16:48.0468155Z  * [new branch]        agent/luna-meta-13-observer-effect-ledger -> origin/agent/luna-meta-13-observer-effect-ledger
+2026-10-03T14:16:48.0469781Z  * [new branch]        agent/luna-meta-14-partial-knowledge-composition -> origin/agent/luna-meta-14-partial-knowledge-composition
+2026-10-03T14:16:48.0471565Z  * [new branch]        agent/luna-meta-15-proof-carrying-artifact -> origin/agent/luna-meta-15-proof-carrying-artifact
+2026-10-03T14:16:48.0473096Z  * [new branch]        agent/luna-meta-16-meta-circular-boundary -> origin/agent/luna-meta-16-meta-circular-boundary
+2026-10-03T14:16:48.0474641Z  * [new branch]        agent/luna-meta-17-reflective-query-sandbox -> origin/agent/luna-meta-17-reflective-query-sandbox
+2026-10-03T14:16:48.0476130Z  * [new branch]        agent/luna-meta-18-policy-compilation -> origin/agent/luna-meta-18-policy-compilation
+2026-10-03T14:16:48.0477576Z  * [new branch]        agent/luna-meta-18-policy-compilation-v2 -> origin/agent/luna-meta-18-policy-compilation-v2
+2026-10-03T14:16:48.0479107Z  * [new branch]        agent/luna-meta-19-invariant-transformation -> origin/agent/luna-meta-19-invariant-transformation
+2026-10-03T14:16:48.0480710Z  * [new branch]        agent/luna-meta-20-semantic-delta-receipt -> origin/agent/luna-meta-20-semantic-delta-receipt
+2026-10-03T14:16:48.0482273Z  * [new branch]        agent/luna-meta-21-audience-resolution -> origin/agent/luna-meta-21-audience-resolution
+2026-10-03T14:16:48.0483820Z  * [new branch]        agent/luna-meta-22-claim-dependency-causality -> origin/agent/luna-meta-22-claim-dependency-causality
+2026-10-03T14:16:48.0485408Z  * [new branch]        agent/luna-meta-23-nonmonotonic-refutation -> origin/agent/luna-meta-23-nonmonotonic-refutation
+2026-10-03T14:16:48.0486920Z  * [new branch]        agent/luna-meta-24-denominator-evolution -> origin/agent/luna-meta-24-denominator-evolution
+2026-10-03T14:16:48.0488456Z  * [new branch]        agent/luna-meta-25-external-oracle-humility -> origin/agent/luna-meta-25-external-oracle-humility
+2026-10-03T14:16:48.0490015Z  * [new branch]        agent/luna-meta-26-fixed-point-termination -> origin/agent/luna-meta-26-fixed-point-termination
+2026-10-03T14:16:48.0491640Z  * [new branch]        agent/luna-meta-27-meta-resource-budget -> origin/agent/luna-meta-27-meta-resource-budget
+2026-10-03T14:16:48.0493024Z  * [new branch]        agent/luna-meta-28-evidence-quorum -> origin/agent/luna-meta-28-evidence-quorum
+2026-10-03T14:16:48.0494497Z  * [new branch]        agent/luna-meta-29-minimal-causal-explanation -> origin/agent/luna-meta-29-minimal-causal-explanation
+2026-10-03T14:16:48.0496049Z  * [new branch]        agent/luna-meta-30-experiment-portfolio -> origin/agent/luna-meta-30-experiment-portfolio
+2026-10-03T14:16:48.0497719Z  * [new branch]        agent/luna-meta-31-conflict-free-registry-projection -> origin/agent/luna-meta-31-conflict-free-registry-projection
+2026-10-03T14:16:48.0499346Z  * [new branch]        agent/main-dev-ancestry-sync-20260928 -> origin/agent/main-dev-ancestry-sync-20260928
+2026-10-03T14:16:48.0501215Z  * [new branch]        agent/main-history-reconciliation-owner-authorization-20260903 -> origin/agent/main-history-reconciliation-owner-authorization-20260903
+2026-10-03T14:16:48.0503298Z  * [new branch]        agent/main-history-reconciliation-policy-route-20260903 -> origin/agent/main-history-reconciliation-policy-route-20260903
+2026-10-03T14:16:48.0505304Z  * [new branch]        agent/main-history-reconciliation-promotion-20260903 -> origin/agent/main-history-reconciliation-promotion-20260903
+2026-10-03T14:16:48.0507150Z  * [new branch]        agent/main-history-reconciliation-protocol-20260903 -> origin/agent/main-history-reconciliation-protocol-20260903
+2026-10-03T14:16:48.0508753Z  * [new branch]        agent/main-language-preview-20260906 -> origin/agent/main-language-preview-20260906
+2026-10-03T14:16:48.0510699Z  * [new branch]        agent/main-promotion-snapshot-06fef74576c47efcc1eeae6b8a32457da58c4649 -> origin/agent/main-promotion-snapshot-06fef74576c47efcc1eeae6b8a32457da58c4649
+2026-10-03T14:16:48.0513146Z  * [new branch]        agent/main-promotion-snapshot-09ab91a1d25fe24fefb3270381e2fdbf3b4842d5 -> origin/agent/main-promotion-snapshot-09ab91a1d25fe24fefb3270381e2fdbf3b4842d5
+2026-10-03T14:16:48.0515546Z  * [new branch]        agent/main-promotion-snapshot-09e63fa7ca11d797b0e2cb5f74178e56a2c4b669 -> origin/agent/main-promotion-snapshot-09e63fa7ca11d797b0e2cb5f74178e56a2c4b669
+2026-10-03T14:16:48.0517954Z  * [new branch]        agent/main-promotion-snapshot-0ec9eaed55cefb43d18feb54488a2bc2625d82af -> origin/agent/main-promotion-snapshot-0ec9eaed55cefb43d18feb54488a2bc2625d82af
+2026-10-03T14:16:48.0520443Z  * [new branch]        agent/main-promotion-snapshot-13187af6f3593ae7ae6bccfda8cc9dc2919fa057 -> origin/agent/main-promotion-snapshot-13187af6f3593ae7ae6bccfda8cc9dc2919fa057
+2026-10-03T14:16:48.0522833Z  * [new branch]        agent/main-promotion-snapshot-1ee5a528c0543c15e2af28a7af1b152919762145 -> origin/agent/main-promotion-snapshot-1ee5a528c0543c15e2af28a7af1b152919762145
+2026-10-03T14:16:48.0525224Z  * [new branch]        agent/main-promotion-snapshot-2126d17dc5462db31eb2c0426cf662a80b32a0bd -> origin/agent/main-promotion-snapshot-2126d17dc5462db31eb2c0426cf662a80b32a0bd
+2026-10-03T14:16:48.0527627Z  * [new branch]        agent/main-promotion-snapshot-22305abdfc61dec8735db6e1fa6d3b294a544fe8 -> origin/agent/main-promotion-snapshot-22305abdfc61dec8735db6e1fa6d3b294a544fe8
+2026-10-03T14:16:48.0530095Z  * [new branch]        agent/main-promotion-snapshot-384df90b742091844aa8bd30ad3a67f284dbc800 -> origin/agent/main-promotion-snapshot-384df90b742091844aa8bd30ad3a67f284dbc800
+2026-10-03T14:16:48.0532560Z  * [new branch]        agent/main-promotion-snapshot-38881035965f1ec025857719a38dd2f67680f0bf -> origin/agent/main-promotion-snapshot-38881035965f1ec025857719a38dd2f67680f0bf
+2026-10-03T14:16:48.0534901Z  * [new branch]        agent/main-promotion-snapshot-3f90889a9ebed8cb09e38092815f1d73db53c94e -> origin/agent/main-promotion-snapshot-3f90889a9ebed8cb09e38092815f1d73db53c94e
+2026-10-03T14:16:48.0537262Z  * [new branch]        agent/main-promotion-snapshot-40e1795ba2b804f8c0a7d9a870f1bb530244a017 -> origin/agent/main-promotion-snapshot-40e1795ba2b804f8c0a7d9a870f1bb530244a017
+2026-10-03T14:16:48.0539626Z  * [new branch]        agent/main-promotion-snapshot-41f1fcf6f9f31fa2061fd4a0f79ee17306e4d5cd -> origin/agent/main-promotion-snapshot-41f1fcf6f9f31fa2061fd4a0f79ee17306e4d5cd
+2026-10-03T14:16:48.0542180Z  * [new branch]        agent/main-promotion-snapshot-453c7c8a27cd1a5fcb80e1383ade3829477b8a2c -> origin/agent/main-promotion-snapshot-453c7c8a27cd1a5fcb80e1383ade3829477b8a2c
+2026-10-03T14:16:48.0544528Z  * [new branch]        agent/main-promotion-snapshot-454eb21185740b7a76d47c34d840b8bd56199de2 -> origin/agent/main-promotion-snapshot-454eb21185740b7a76d47c34d840b8bd56199de2
+2026-10-03T14:16:48.0546867Z  * [new branch]        agent/main-promotion-snapshot-46e4f23bdd13722f1d6d42111ae3ad0bad306020 -> origin/agent/main-promotion-snapshot-46e4f23bdd13722f1d6d42111ae3ad0bad306020
+2026-10-03T14:16:48.0549227Z  * [new branch]        agent/main-promotion-snapshot-4da2c3f91fa55de3dc48119ce74e36fe7b00ce71 -> origin/agent/main-promotion-snapshot-4da2c3f91fa55de3dc48119ce74e36fe7b00ce71
+2026-10-03T14:16:48.0551707Z  * [new branch]        agent/main-promotion-snapshot-5c02f784d67db4645baa0ed39e4aea9ee8ee5b3f -> origin/agent/main-promotion-snapshot-5c02f784d67db4645baa0ed39e4aea9ee8ee5b3f
+2026-10-03T14:16:48.0554251Z  * [new branch]        agent/main-promotion-snapshot-5eaea0f5bf5d96de29c63bf1726acb6c65b155fc -> origin/agent/main-promotion-snapshot-5eaea0f5bf5d96de29c63bf1726acb6c65b155fc
+2026-10-03T14:16:48.0556638Z  * [new branch]        agent/main-promotion-snapshot-6406392d97aeee4e20d6ff6abb74197d42b710c2 -> origin/agent/main-promotion-snapshot-6406392d97aeee4e20d6ff6abb74197d42b710c2
+2026-10-03T14:16:48.0558968Z  * [new branch]        agent/main-promotion-snapshot-674f4429b8050d19a6f13c1492ea7cf28510b21e -> origin/agent/main-promotion-snapshot-674f4429b8050d19a6f13c1492ea7cf28510b21e
+2026-10-03T14:16:48.0561409Z  * [new branch]        agent/main-promotion-snapshot-6c637f8b164e129a7aab1f24ef608d8c54cb4e75 -> origin/agent/main-promotion-snapshot-6c637f8b164e129a7aab1f24ef608d8c54cb4e75
+2026-10-03T14:16:48.0563763Z  * [new branch]        agent/main-promotion-snapshot-6cf73a8b33592c2d59f5cb3b49517289f94b9c15 -> origin/agent/main-promotion-snapshot-6cf73a8b33592c2d59f5cb3b49517289f94b9c15
+2026-10-03T14:16:48.0566124Z  * [new branch]        agent/main-promotion-snapshot-6d39283010e9c5f8009d8230f8e30d6f3bf3e7c6 -> origin/agent/main-promotion-snapshot-6d39283010e9c5f8009d8230f8e30d6f3bf3e7c6
+2026-10-03T14:16:48.0568458Z  * [new branch]        agent/main-promotion-snapshot-7501a4e608c2dda306fc1dd098365106d012b6ec -> origin/agent/main-promotion-snapshot-7501a4e608c2dda306fc1dd098365106d012b6ec
+2026-10-03T14:16:48.0570926Z  * [new branch]        agent/main-promotion-snapshot-75b2b7d91d601d694f858e347c36eac6e34cde6f -> origin/agent/main-promotion-snapshot-75b2b7d91d601d694f858e347c36eac6e34cde6f
+2026-10-03T14:16:48.0573283Z  * [new branch]        agent/main-promotion-snapshot-79e7e20cb348d6e3e0858c6d44798acd4a40f3ba -> origin/agent/main-promotion-snapshot-79e7e20cb348d6e3e0858c6d44798acd4a40f3ba
+2026-10-03T14:16:48.0575632Z  * [new branch]        agent/main-promotion-snapshot-7f7c34254bba34ed3a70e3179de5c25458b59346 -> origin/agent/main-promotion-snapshot-7f7c34254bba34ed3a70e3179de5c25458b59346
+2026-10-03T14:16:48.0578069Z  * [new branch]        agent/main-promotion-snapshot-82fee7098626069bda52f80b4254f08948f82aac -> origin/agent/main-promotion-snapshot-82fee7098626069bda52f80b4254f08948f82aac
+2026-10-03T14:16:48.0580473Z  * [new branch]        agent/main-promotion-snapshot-84a4f09f400b2b4f271ceec3998d088bbc3415d0 -> origin/agent/main-promotion-snapshot-84a4f09f400b2b4f271ceec3998d088bbc3415d0
+2026-10-03T14:16:48.0582840Z  * [new branch]        agent/main-promotion-snapshot-8845cbc662257e4d4a8a01f9de5b9181842a41cf -> origin/agent/main-promotion-snapshot-8845cbc662257e4d4a8a01f9de5b9181842a41cf
+2026-10-03T14:16:48.0585187Z  * [new branch]        agent/main-promotion-snapshot-8ad28b38fe253a3319393e055a5b7f4f3d1274fc -> origin/agent/main-promotion-snapshot-8ad28b38fe253a3319393e055a5b7f4f3d1274fc
+2026-10-03T14:16:48.0587535Z  * [new branch]        agent/main-promotion-snapshot-8b369dee7e4d4d1e2a5bcf5895297b066f63254a -> origin/agent/main-promotion-snapshot-8b369dee7e4d4d1e2a5bcf5895297b066f63254a
+2026-10-03T14:16:48.0589892Z  * [new branch]        agent/main-promotion-snapshot-8d00fef404291904e5dc5427ac686213904c21e9 -> origin/agent/main-promotion-snapshot-8d00fef404291904e5dc5427ac686213904c21e9
+2026-10-03T14:16:48.0592316Z  * [new branch]        agent/main-promotion-snapshot-8f3589cd103684015e480f16e363269d69c885a3 -> origin/agent/main-promotion-snapshot-8f3589cd103684015e480f16e363269d69c885a3
+2026-10-03T14:16:48.0594627Z  * [new branch]        agent/main-promotion-snapshot-9126f2398e7778cb964c139b4365d6dfd2663b7e -> origin/agent/main-promotion-snapshot-9126f2398e7778cb964c139b4365d6dfd2663b7e
+2026-10-03T14:16:48.0596948Z  * [new branch]        agent/main-promotion-snapshot-915ce3dc43f670fde8c876250332d23e9c6e40a1 -> origin/agent/main-promotion-snapshot-915ce3dc43f670fde8c876250332d23e9c6e40a1
+2026-10-03T14:16:48.0599289Z  * [new branch]        agent/main-promotion-snapshot-91a02c77618d156010f7e7efadf20df4d210ee14 -> origin/agent/main-promotion-snapshot-91a02c77618d156010f7e7efadf20df4d210ee14
+2026-10-03T14:16:48.0601772Z  * [new branch]        agent/main-promotion-snapshot-91e86c28fe88af0603b62649371d4ba13e6e307c -> origin/agent/main-promotion-snapshot-91e86c28fe88af0603b62649371d4ba13e6e307c
+2026-10-03T14:16:48.0604119Z  * [new branch]        agent/main-promotion-snapshot-92e2c017cba1d73c1961f4f06bd454b2e4f1a5a3 -> origin/agent/main-promotion-snapshot-92e2c017cba1d73c1961f4f06bd454b2e4f1a5a3
+2026-10-03T14:16:48.0606458Z  * [new branch]        agent/main-promotion-snapshot-94e9813c5a5d9de590e2293b26791c25a74cf6e4 -> origin/agent/main-promotion-snapshot-94e9813c5a5d9de590e2293b26791c25a74cf6e4
+2026-10-03T14:16:48.0608784Z  * [new branch]        agent/main-promotion-snapshot-952e0b4ba534ce3733a645f4dc5660077d878531 -> origin/agent/main-promotion-snapshot-952e0b4ba534ce3733a645f4dc5660077d878531
+2026-10-03T14:16:48.0611268Z  * [new branch]        agent/main-promotion-snapshot-95829ca590900e1d0e4edb7df122ebc03a83565e -> origin/agent/main-promotion-snapshot-95829ca590900e1d0e4edb7df122ebc03a83565e
+2026-10-03T14:16:48.0613606Z  * [new branch]        agent/main-promotion-snapshot-95de277c5f173179e31a1cdab86558b0a16d7c71 -> origin/agent/main-promotion-snapshot-95de277c5f173179e31a1cdab86558b0a16d7c71
+2026-10-03T14:16:48.0615924Z  * [new branch]        agent/main-promotion-snapshot-96820915ba5dd00308326e85cb5132626b3081e7 -> origin/agent/main-promotion-snapshot-96820915ba5dd00308326e85cb5132626b3081e7
+2026-10-03T14:16:48.0618240Z  * [new branch]        agent/main-promotion-snapshot-9c2e16b1eb1ce5069f8a7836f79d8562078eb067 -> origin/agent/main-promotion-snapshot-9c2e16b1eb1ce5069f8a7836f79d8562078eb067
+2026-10-03T14:16:48.0620654Z  * [new branch]        agent/main-promotion-snapshot-9fc2634720f0a43ca7d72bac46aacba5c77822ce -> origin/agent/main-promotion-snapshot-9fc2634720f0a43ca7d72bac46aacba5c77822ce
+2026-10-03T14:16:48.0623007Z  * [new branch]        agent/main-promotion-snapshot-a5816357161bb48e9097563e5e9b3ab0d70c0a2c -> origin/agent/main-promotion-snapshot-a5816357161bb48e9097563e5e9b3ab0d70c0a2c
+2026-10-03T14:16:48.0625416Z  * [new branch]        agent/main-promotion-snapshot-a5b2516ba3ad449c9369535c973507611b637ee8 -> origin/agent/main-promotion-snapshot-a5b2516ba3ad449c9369535c973507611b637ee8
+2026-10-03T14:16:48.0627744Z  * [new branch]        agent/main-promotion-snapshot-abf00ec83418767186673714f08443fd1956ac53 -> origin/agent/main-promotion-snapshot-abf00ec83418767186673714f08443fd1956ac53
+2026-10-03T14:16:48.0630080Z  * [new branch]        agent/main-promotion-snapshot-b1e7902bc3f035dfcac44d5b6e4df8b3cc093459 -> origin/agent/main-promotion-snapshot-b1e7902bc3f035dfcac44d5b6e4df8b3cc093459
+2026-10-03T14:16:48.0632476Z  * [new branch]        agent/main-promotion-snapshot-b46e25a8485cd0c219a2be3d93478e83b696da9b -> origin/agent/main-promotion-snapshot-b46e25a8485cd0c219a2be3d93478e83b696da9b
+2026-10-03T14:16:48.0634837Z  * [new branch]        agent/main-promotion-snapshot-b7cdbf18ac9e9e3e34ac2e9657e9c6e91cfce721 -> origin/agent/main-promotion-snapshot-b7cdbf18ac9e9e3e34ac2e9657e9c6e91cfce721
+2026-10-03T14:16:48.0637195Z  * [new branch]        agent/main-promotion-snapshot-b9d42bc6048d79bc672be6788726ed446b49d3db -> origin/agent/main-promotion-snapshot-b9d42bc6048d79bc672be6788726ed446b49d3db
+2026-10-03T14:16:48.0639526Z  * [new branch]        agent/main-promotion-snapshot-bcbe03428d3e91938b566db27dae319b79b9fabe -> origin/agent/main-promotion-snapshot-bcbe03428d3e91938b566db27dae319b79b9fabe
+2026-10-03T14:16:48.0641895Z  * [new branch]        agent/main-promotion-snapshot-beaa20350485356205530e1fb950c9b383d6bf4f -> origin/agent/main-promotion-snapshot-beaa20350485356205530e1fb950c9b383d6bf4f
+2026-10-03T14:16:48.0644270Z  * [new branch]        agent/main-promotion-snapshot-bf602f46a7dadeda9fcbd1e6fa389522ce76db5f -> origin/agent/main-promotion-snapshot-bf602f46a7dadeda9fcbd1e6fa389522ce76db5f
+2026-10-03T14:16:48.0646616Z  * [new branch]        agent/main-promotion-snapshot-bfdbe86f2022a12c606ea4f3d804a3b6606809c6 -> origin/agent/main-promotion-snapshot-bfdbe86f2022a12c606ea4f3d804a3b6606809c6
+2026-10-03T14:16:48.0649035Z  * [new branch]        agent/main-promotion-snapshot-c06d2528c04dbb5f3fc0743840177dbae1ece2c8 -> origin/agent/main-promotion-snapshot-c06d2528c04dbb5f3fc0743840177dbae1ece2c8
+2026-10-03T14:16:48.0651515Z  * [new branch]        agent/main-promotion-snapshot-c47baae4afcf6300911bf6439e389bffe39c82d3 -> origin/agent/main-promotion-snapshot-c47baae4afcf6300911bf6439e389bffe39c82d3
+2026-10-03T14:16:48.0653861Z  * [new branch]        agent/main-promotion-snapshot-ca8f3a4df239daf3445ca68dcb4db6df8fc8adda -> origin/agent/main-promotion-snapshot-ca8f3a4df239daf3445ca68dcb4db6df8fc8adda
+2026-10-03T14:16:48.0656214Z  * [new branch]        agent/main-promotion-snapshot-caa8ad8bfe8b3c7e302782c3d84d3187574de306 -> origin/agent/main-promotion-snapshot-caa8ad8bfe8b3c7e302782c3d84d3187574de306
+2026-10-03T14:16:48.0658541Z  * [new branch]        agent/main-promotion-snapshot-cdffd3191ff0911568a4a0c87f29119e2ecdea9f -> origin/agent/main-promotion-snapshot-cdffd3191ff0911568a4a0c87f29119e2ecdea9f
+2026-10-03T14:16:48.0660937Z  * [new branch]        agent/main-promotion-snapshot-ce9541730dcf5406beeb0a07a2bce8cfc6971ad5 -> origin/agent/main-promotion-snapshot-ce9541730dcf5406beeb0a07a2bce8cfc6971ad5
+2026-10-03T14:16:48.0663272Z  * [new branch]        agent/main-promotion-snapshot-cf30d322ccd1849fbf6d14b16fca3784f63862ed -> origin/agent/main-promotion-snapshot-cf30d322ccd1849fbf6d14b16fca3784f63862ed
+2026-10-03T14:16:48.0665598Z  * [new branch]        agent/main-promotion-snapshot-d84e73dd24ffaf7505022bea3f6f85fff83b4515 -> origin/agent/main-promotion-snapshot-d84e73dd24ffaf7505022bea3f6f85fff83b4515
+2026-10-03T14:16:48.0667934Z  * [new branch]        agent/main-promotion-snapshot-da54fcb975dab1c48dbe7ed74d7aa0cf6450453b -> origin/agent/main-promotion-snapshot-da54fcb975dab1c48dbe7ed74d7aa0cf6450453b
+2026-10-03T14:16:48.0670258Z  * [new branch]        agent/main-promotion-snapshot-dca8ef484d32508cd6b14821148237f8d319cdcb -> origin/agent/main-promotion-snapshot-dca8ef484d32508cd6b14821148237f8d319cdcb
+2026-10-03T14:16:48.0672768Z  * [new branch]        agent/main-promotion-snapshot-e5bd2edfbfed2ea48192566c5cb615deec7f20cf -> origin/agent/main-promotion-snapshot-e5bd2edfbfed2ea48192566c5cb615deec7f20cf
+2026-10-03T14:16:48.0675093Z  * [new branch]        agent/main-promotion-snapshot-e68e511e391859bda5212a30a0ff9b4fd10bb7fd -> origin/agent/main-promotion-snapshot-e68e511e391859bda5212a30a0ff9b4fd10bb7fd
+2026-10-03T14:16:48.0677404Z  * [new branch]        agent/main-promotion-snapshot-e6c2b96fd796e1c3ad7220b6fb021f004b5b5946 -> origin/agent/main-promotion-snapshot-e6c2b96fd796e1c3ad7220b6fb021f004b5b5946
+2026-10-03T14:16:48.0679708Z  * [new branch]        agent/main-promotion-snapshot-e9d1fd0f87fc1aa95756fd55293421051f6f3650 -> origin/agent/main-promotion-snapshot-e9d1fd0f87fc1aa95756fd55293421051f6f3650
+2026-10-03T14:16:48.0682086Z  * [new branch]        agent/main-promotion-snapshot-ecadcecc37daf493a543aa71580430a7a34c4c51 -> origin/agent/main-promotion-snapshot-ecadcecc37daf493a543aa71580430a7a34c4c51
+2026-10-03T14:16:48.0684429Z  * [new branch]        agent/main-promotion-snapshot-eeb1105d3baf1b12e832e5ee0b4f658065d6abb0 -> origin/agent/main-promotion-snapshot-eeb1105d3baf1b12e832e5ee0b4f658065d6abb0
+2026-10-03T14:16:48.0686759Z  * [new branch]        agent/main-promotion-snapshot-f3fb64910eb181bf3cfb9cceb8ea1331ae008703 -> origin/agent/main-promotion-snapshot-f3fb64910eb181bf3cfb9cceb8ea1331ae008703
+2026-10-03T14:16:48.0689076Z  * [new branch]        agent/main-promotion-snapshot-f53e6618efeb6e726d8301a496d9e167080425a2 -> origin/agent/main-promotion-snapshot-f53e6618efeb6e726d8301a496d9e167080425a2
+2026-10-03T14:16:48.0691493Z  * [new branch]        agent/main-promotion-snapshot-faa06007a99321e4c0ee580726e8a51f9af835fd -> origin/agent/main-promotion-snapshot-faa06007a99321e4c0ee580726e8a51f9af835fd
+2026-10-03T14:16:48.0693791Z  * [new branch]        agent/main-promotion-snapshot-fc0564cb8fb8457a5a3b2dd183fa2e0169856c63 -> origin/agent/main-promotion-snapshot-fc0564cb8fb8457a5a3b2dd183fa2e0169856c63
+2026-10-03T14:16:48.0696185Z  * [new branch]        agent/main-promotion-snapshot-fecd62f56445a67b6042ca9180948620784de4ff -> origin/agent/main-promotion-snapshot-fecd62f56445a67b6042ca9180948620784de4ff
+2026-10-03T14:16:48.0698020Z  * [new branch]        agent/main-snapshot-promotion-policy -> origin/agent/main-snapshot-promotion-policy
+2026-10-03T14:16:48.0699497Z  * [new branch]        agent/manifest-observation-ownership-20260907 -> origin/agent/manifest-observation-ownership-20260907
+2026-10-03T14:16:48.0700861Z  * [new branch]        agent/meta-action-outcomes -> origin/agent/meta-action-outcomes
+2026-10-03T14:16:48.0701983Z  * [new branch]        agent/meta-actionability-ci-v18 -> origin/agent/meta-actionability-ci-v18
+2026-10-03T14:16:48.0703133Z  * [new branch]        agent/meta-actionability-v18 -> origin/agent/meta-actionability-v18
+2026-10-03T14:16:48.0704303Z  * [new branch]        agent/meta-applicability-binding -> origin/agent/meta-applicability-binding
+2026-10-03T14:16:48.0705517Z  * [new branch]        agent/meta-binding-coverage-v17 -> origin/agent/meta-binding-coverage-v17
+2026-10-03T14:16:48.0706770Z  * [new branch]        agent/meta-cost-publication-20260907 -> origin/agent/meta-cost-publication-20260907
+2026-10-03T14:16:48.0708026Z  * [new branch]        agent/meta-cost-report-20260907 -> origin/agent/meta-cost-report-20260907
+2026-10-03T14:16:48.0709145Z  * [new branch]        agent/meta-decision-summary -> origin/agent/meta-decision-summary
+2026-10-03T14:16:48.0710301Z  * [new branch]        agent/meta-execution-cost-20260907 -> origin/agent/meta-execution-cost-20260907
+2026-10-03T14:16:48.0711819Z  * [new branch]        agent/meta-execution-driver-observation-20260905 -> origin/agent/meta-execution-driver-observation-20260905
+2026-10-03T14:16:48.0713222Z  * [new branch]        agent/meta-execution-manifest -> origin/agent/meta-execution-manifest
+2026-10-03T14:16:48.0714366Z  * [new branch]        agent/meta-indicator-decisions -> origin/agent/meta-indicator-decisions
+2026-10-03T14:16:48.0715565Z  * [new branch]        agent/meta-indicator-ledger -> origin/agent/meta-indicator-ledger
+2026-10-03T14:16:48.0716696Z  * [new branch]        agent/meta-indicator-membership -> origin/agent/meta-indicator-membership
+2026-10-03T14:16:48.0717815Z  * [new branch]        agent/meta-ledger-artifact -> origin/agent/meta-ledger-artifact
+2026-10-03T14:16:48.0718862Z  * [new branch]        agent/meta-ledger-evidence -> origin/agent/meta-ledger-evidence
+2026-10-03T14:16:48.0719899Z  * [new branch]        agent/meta-ledger-receipts -> origin/agent/meta-ledger-receipts
+2026-10-03T14:16:48.0721048Z  * [new branch]        agent/meta-operation-receipts -> origin/agent/meta-operation-receipts
+2026-10-03T14:16:48.0722604Z  * [new branch]        agent/meta-policy-compilation-semantic-authority-20260901 -> origin/agent/meta-policy-compilation-semantic-authority-20260901
+2026-10-03T14:16:48.0724316Z  * [new branch]        agent/meta-policy-native-binding-20260912 -> origin/agent/meta-policy-native-binding-20260912
+2026-10-03T14:16:48.0725796Z  * [new branch]        agent/meta-policy-public-profile-20260911 -> origin/agent/meta-policy-public-profile-20260911
+2026-10-03T14:16:48.0727388Z  * [new branch]        agent/meta-policy-receipt-reconstruction-20260912 -> origin/agent/meta-policy-receipt-reconstruction-20260912
+2026-10-03T14:16:48.0728771Z  * [new branch]        agent/meta-provenance-proof -> origin/agent/meta-provenance-proof
+2026-10-03T14:16:48.0729849Z  * [new branch]        agent/meta-receipt-artifact -> origin/agent/meta-receipt-artifact
+2026-10-03T14:16:48.0731045Z  * [new branch]        agent/meta-receipt-verifier -> origin/agent/meta-receipt-verifier
+2026-10-03T14:16:48.0732145Z  * [new branch]        agent/meta-root-applicability -> origin/agent/meta-root-applicability
+2026-10-03T14:16:48.0733223Z  * [new branch]        agent/meta-summary-budget -> origin/agent/meta-summary-budget
+2026-10-03T14:16:48.0734314Z  * [new branch]        agent/metric-counterfactual-v7 -> origin/agent/metric-counterfactual-v7
+2026-10-03T14:16:48.0735542Z  * [new branch]        agent/metric-intervention-v8 -> origin/agent/metric-intervention-v8
+2026-10-03T14:16:48.0736709Z  * [new branch]        agent/metric-meta-program-ci-v12 -> origin/agent/metric-meta-program-ci-v12
+2026-10-03T14:16:48.0738000Z  * [new branch]        agent/metric-meta-program-closure-v13 -> origin/agent/metric-meta-program-closure-v13
+2026-10-03T14:16:48.0739358Z  * [new branch]        agent/metric-meta-program-closure-v14 -> origin/agent/metric-meta-program-closure-v14
+2026-10-03T14:16:48.0740667Z  * [new branch]        agent/metric-meta-program-v11 -> origin/agent/metric-meta-program-v11
+2026-10-03T14:16:48.0741743Z  * [new branch]        agent/metric-strategy-v10 -> origin/agent/metric-strategy-v10
+2026-10-03T14:16:48.0742832Z  * [new branch]        agent/metric-transition-v6 -> origin/agent/metric-transition-v6
+2026-10-03T14:16:48.0744082Z  * [new branch]        agent/minimal-claim-resolution-contract -> origin/agent/minimal-claim-resolution-contract
+2026-10-03T14:16:48.0745396Z  * [new branch]        agent/mixed-outcome-terminal-v1 -> origin/agent/mixed-outcome-terminal-v1
+2026-10-03T14:16:48.0746863Z  * [new branch]        agent/module-identity-provenance-followup-20260925 -> origin/agent/module-identity-provenance-followup-20260925
+2026-10-03T14:16:48.0748514Z  * [new branch]        agent/native-journal-reconstruction-20260911 -> origin/agent/native-journal-reconstruction-20260911
+2026-10-03T14:16:48.0750009Z  * [new branch]        agent/native-operation-progress-20260905 -> origin/agent/native-operation-progress-20260905
+2026-10-03T14:16:48.0751457Z  * [new branch]        agent/native-test-cost-trace-20260911 -> origin/agent/native-test-cost-trace-20260911
+2026-10-03T14:16:48.0752933Z  * [new branch]        agent/observation-boundary-journal-20260907 -> origin/agent/observation-boundary-journal-20260907
+2026-10-03T14:16:48.0755052Z  * [new branch]        agent/observation-journal-artifact-20260908 -> origin/agent/observation-journal-artifact-20260908
+2026-10-03T14:16:48.0756673Z  * [new branch]        agent/observation-stale-output-20260907 -> origin/agent/observation-stale-output-20260907
+2026-10-03T14:16:48.0757870Z  * [new branch]        agent/ontology-visuals  -> origin/agent/ontology-visuals
+2026-10-03T14:16:48.0758915Z  * [new branch]        agent/opentofu-exact-reuse-v1 -> origin/agent/opentofu-exact-reuse-v1
+2026-10-03T14:16:48.0760218Z  * [new branch]        agent/opentofu-main-observation-20260929 -> origin/agent/opentofu-main-observation-20260929
+2026-10-03T14:16:48.0761682Z  * [new branch]        agent/operation-artifact-ci-v21 -> origin/agent/operation-artifact-ci-v21
+2026-10-03T14:16:48.0762888Z  * [new branch]        agent/operation-artifact-cli-v21 -> origin/agent/operation-artifact-cli-v21
+2026-10-03T14:16:48.0764645Z  * [new branch]        agent/operation-artifact-executor-v21 -> origin/agent/operation-artifact-executor-v21
+2026-10-03T14:16:48.0766147Z  * [new branch]        agent/operation-artifact-feedback-executor-v22 -> origin/agent/operation-artifact-feedback-executor-v22
+2026-10-03T14:16:48.0767767Z  * [new branch]        agent/operation-artifact-feedback-schema-v22 -> origin/agent/operation-artifact-feedback-schema-v22
+2026-10-03T14:16:48.0769199Z  * [new branch]        agent/operation-artifact-schema-v21 -> origin/agent/operation-artifact-schema-v21
+2026-10-03T14:16:48.0770785Z  * [new branch]        agent/operation-contract-parse-reuse-20260908 -> origin/agent/operation-contract-parse-reuse-20260908
+2026-10-03T14:16:48.0772368Z  * [new branch]        agent/operation-input-contract-cache-20260905 -> origin/agent/operation-input-contract-cache-20260905
+2026-10-03T14:16:48.0773826Z  * [new branch]        agent/owned-toolchain-reuse-20261003 -> origin/agent/owned-toolchain-reuse-20261003
+2026-10-03T14:16:48.0775536Z  * [new branch]        agent/partial-reuse-evidence-20260911 -> origin/agent/partial-reuse-evidence-20260911
+2026-10-03T14:16:48.0776825Z  * [new branch]        agent/partition-directory-ci-v19 -> origin/agent/partition-directory-ci-v19
+2026-10-03T14:16:48.0778248Z  * [new branch]        agent/partition-directory-executor-v19 -> origin/agent/partition-directory-executor-v19
+2026-10-03T14:16:48.0779504Z  * [new branch]        agent/partition-directory-v19 -> origin/agent/partition-directory-v19
+2026-10-03T14:16:48.0780891Z  * [new branch]        agent/path-ambiguity-diagnosis-20261001 -> origin/agent/path-ambiguity-diagnosis-20261001
+2026-10-03T14:16:48.0782257Z  * [new branch]        agent/path-observation-loop-20261003 -> origin/agent/path-observation-loop-20261003
+2026-10-03T14:16:48.0783622Z  * [new branch]        agent/path-observation-resolve-20261003 -> origin/agent/path-observation-resolve-20261003
+2026-10-03T14:16:48.0785006Z  * [new branch]        agent/path-observation-reuse-20261003 -> origin/agent/path-observation-reuse-20261003
+2026-10-03T14:16:48.0786127Z  * [new branch]        agent/performance       -> origin/agent/performance
+2026-10-03T14:16:48.0787293Z  * [new branch]        agent/pr-authoritative-contract-20260911 -> origin/agent/pr-authoritative-contract-20260911
+2026-10-03T14:16:48.0788761Z  * [new branch]        agent/pr-authoritative-promotion-20261001 -> origin/agent/pr-authoritative-promotion-20261001
+2026-10-03T14:16:48.0790178Z  * [new branch]        agent/prepared-order-codegen-20261003 -> origin/agent/prepared-order-codegen-20261003
+2026-10-03T14:16:48.0791619Z  * [new branch]        agent/prepared-typed-paths-20261001 -> origin/agent/prepared-typed-paths-20261001
+2026-10-03T14:16:48.0793134Z  * [new branch]        agent/preserve-runtime-binding-projection-20260923 -> origin/agent/preserve-runtime-binding-projection-20260923
+2026-10-03T14:16:48.0794765Z  * [new branch]        agent/problem-solving-continuation-20260920 -> origin/agent/problem-solving-continuation-20260920
+2026-10-03T14:16:48.0796304Z  * [new branch]        agent/problem-solving-scope-boundary-20260920 -> origin/agent/problem-solving-scope-boundary-20260920
+2026-10-03T14:16:48.0797774Z  * [new branch]        agent/progress-evidence-metrics -> origin/agent/progress-evidence-metrics
+2026-10-03T14:16:48.0799056Z  * [new branch]        agent/promotion-authorized-continuity -> origin/agent/promotion-authorized-continuity
+2026-10-03T14:16:48.0800491Z  * [new branch]        agent/promotion-continuity-recovery-v1 -> origin/agent/promotion-continuity-recovery-v1
+2026-10-03T14:16:48.0801746Z  * [new branch]        agent/promotion-continuity-v1 -> origin/agent/promotion-continuity-v1
+2026-10-03T14:16:48.0802954Z  * [new branch]        agent/promotion-foundation-genesis -> origin/agent/promotion-foundation-genesis
+2026-10-03T14:16:48.0804292Z  * [new branch]        agent/promotion-ledger-binding-20260924 -> origin/agent/promotion-ledger-binding-20260924
+2026-10-03T14:16:48.0805754Z  * [new branch]        agent/promotion-owned-continuation-20260930 -> origin/agent/promotion-owned-continuation-20260930
+2026-10-03T14:16:48.0807214Z  * [new branch]        agent/promotion-pr-ci-contract-20260930 -> origin/agent/promotion-pr-ci-contract-20260930
+2026-10-03T14:16:48.0808545Z  * [new branch]        agent/promotion-pr-template-route -> origin/agent/promotion-pr-template-route
+2026-10-03T14:16:48.0809631Z  * [new branch]        agent/proof-route-v9    -> origin/agent/proof-route-v9
+2026-10-03T14:16:48.0810980Z  * [new branch]        agent/proposal-pending-observation-20260907 -> origin/agent/proposal-pending-observation-20260907
+2026-10-03T14:16:48.0812615Z  * [new branch]        agent/proposal-predecessor-route-identity-20260903 -> origin/agent/proposal-predecessor-route-identity-20260903
+2026-10-03T14:16:48.0813964Z  * [new branch]        agent/protected-regions -> origin/agent/protected-regions
+2026-10-03T14:16:48.0814984Z  * [new branch]        agent/prototype-conformance -> origin/agent/prototype-conformance
+2026-10-03T14:16:48.0816033Z  * [new branch]        agent/prototype-detection -> origin/agent/prototype-detection
+2026-10-03T14:16:48.0817028Z  * [new branch]        agent/prototype-query   -> origin/agent/prototype-query
+2026-10-03T14:16:48.0818011Z  * [new branch]        agent/provenance-evidence -> origin/agent/provenance-evidence
+2026-10-03T14:16:48.0819096Z  * [new branch]        agent/provenance-store  -> origin/agent/provenance-store
+2026-10-03T14:16:48.0820433Z  * [new branch]        agent/provenance-surface-observation-20260924 -> origin/agent/provenance-surface-observation-20260924
+2026-10-03T14:16:48.0821988Z  * [new branch]        agent/provenance-trend-observation-20260924 -> origin/agent/provenance-trend-observation-20260924
+2026-10-03T14:16:48.0823273Z  * [new branch]        agent/public-pages-20260905 -> origin/agent/public-pages-20260905
+2026-10-03T14:16:48.0824507Z  * [new branch]        agent/public-trust-surface-20260904-v19 -> origin/agent/public-trust-surface-20260904-v19
+2026-10-03T14:16:48.0825967Z  * [new branch]        agent/quantified-improvement-transition-v31 -> origin/agent/quantified-improvement-transition-v31
+2026-10-03T14:16:48.0827434Z  * [new branch]        agent/quantified-language-readiness-v30 -> origin/agent/quantified-language-readiness-v30
+2026-10-03T14:16:48.0828605Z  * [new branch]        agent/query-engine      -> origin/agent/query-engine
+2026-10-03T14:16:48.0829622Z  * [new branch]        agent/query-story-cli-20260924 -> origin/agent/query-story-cli-20260924
+2026-10-03T14:16:48.0830941Z  * [new branch]        agent/query-story-evidence-20260924 -> origin/agent/query-story-evidence-20260924
+2026-10-03T14:16:48.0832191Z  * [new branch]        agent/race-job-time-bound-20260916 -> origin/agent/race-job-time-bound-20260916
+2026-10-03T14:16:48.0833475Z  * [new branch]        agent/raw-computes-usability-20261003 -> origin/agent/raw-computes-usability-20261003
+2026-10-03T14:16:48.0834866Z  * [new branch]        agent/read-only-observer-runtime-20260905 -> origin/agent/read-only-observer-runtime-20260905
+2026-10-03T14:16:48.0836320Z  * [new branch]        agent/readiness-autonomy-change-proposal -> origin/agent/readiness-autonomy-change-proposal
+2026-10-03T14:16:48.0837788Z  * [new branch]        agent/readiness-baseline-resolution -> origin/agent/readiness-baseline-resolution
+2026-10-03T14:16:48.0839076Z  * [new branch]        agent/readiness-guarded-capability -> origin/agent/readiness-guarded-capability
+2026-10-03T14:16:48.0840334Z  * [new branch]        agent/readiness-guarded-promotion -> origin/agent/readiness-guarded-promotion
+2026-10-03T14:16:48.0841668Z  * [new branch]        agent/readiness-push-continuity -> origin/agent/readiness-push-continuity
+2026-10-03T14:16:48.0842922Z  * [new branch]        agent/readiness-rollback-fixed-point -> origin/agent/readiness-rollback-fixed-point
+2026-10-03T14:16:48.0844216Z  * [new branch]        agent/readiness-squash-predecessor -> origin/agent/readiness-squash-predecessor
+2026-10-03T14:16:48.0845654Z  * [new branch]        agent/recipe-projection-cost-baseline-20261003 -> origin/agent/recipe-projection-cost-baseline-20261003
+2026-10-03T14:16:48.0847275Z  * [new branch]        agent/recipe-source-boundary-repair-dev-20260929 -> origin/agent/recipe-source-boundary-repair-dev-20260929
+2026-10-03T14:16:48.0848847Z  * [new branch]        agent/reconcile-rollback-attempts-20260912 -> origin/agent/reconcile-rollback-attempts-20260912
+2026-10-03T14:16:48.0850336Z  * [new branch]        agent/reconciliation-compact-auth-20260903 -> origin/agent/reconciliation-compact-auth-20260903
+2026-10-03T14:16:48.0851786Z  * [new branch]        agent/record-value-plan-20260907 -> origin/agent/record-value-plan-20260907
+2026-10-03T14:16:48.0853180Z  * [new branch]        agent/registration-native-integration-20260907 -> origin/agent/registration-native-integration-20260907
+2026-10-03T14:16:48.0854579Z  * [new branch]        agent/relay-graph-fields-20260911 -> origin/agent/relay-graph-fields-20260911
+2026-10-03T14:16:48.0856058Z  * [new branch]        agent/release-artifact-execution-isolation-20260907 -> origin/agent/release-artifact-execution-isolation-20260907
+2026-10-03T14:16:48.0857771Z  * [new branch]        agent/release-eligibility-unknown-cause-20260924 -> origin/agent/release-eligibility-unknown-cause-20260924
+2026-10-03T14:16:48.0859491Z  * [new branch]        agent/release-prepare-cache-isolation-20260906 -> origin/agent/release-prepare-cache-isolation-20260906
+2026-10-03T14:16:48.0861157Z  * [new branch]        agent/repair-candidate-digest-boundary-20260920 -> origin/agent/repair-candidate-digest-boundary-20260920
+2026-10-03T14:16:48.0862696Z  * [new branch]        agent/repair-handoff-consumption-20260920 -> origin/agent/repair-handoff-consumption-20260920
+2026-10-03T14:16:48.0864093Z  * [new branch]        agent/repair-handoff-dogfood-20260920 -> origin/agent/repair-handoff-dogfood-20260920
+2026-10-03T14:16:48.0865523Z  * [new branch]        agent/repair-recipe-source-boundary-20260916 -> origin/agent/repair-recipe-source-boundary-20260916
+2026-10-03T14:16:48.0867094Z  * [new branch]        agent/repair-recipe-source-boundary-v2-20260916 -> origin/agent/repair-recipe-source-boundary-v2-20260916
+2026-10-03T14:16:48.0868780Z  * [new branch]        agent/replay-preallocation-codeql-followup-20260906 -> origin/agent/replay-preallocation-codeql-followup-20260906
+2026-10-03T14:16:48.0870280Z  * [new branch]        agent/repository-topology-usecase -> origin/agent/repository-topology-usecase
+2026-10-03T14:16:48.0871714Z  * [new branch]        agent/resolve-declaration-capacity-v21 -> origin/agent/resolve-declaration-capacity-v21
+2026-10-03T14:16:48.0873091Z  * [new branch]        agent/resolve-workflow-run-lineage-v22 -> origin/agent/resolve-workflow-run-lineage-v22
+2026-10-03T14:16:48.0874520Z  * [new branch]        agent/retained-native-body-worker-20261001 -> origin/agent/retained-native-body-worker-20261001
+2026-10-03T14:16:48.0875943Z  * [new branch]        agent/retained-native-executor-20261003 -> origin/agent/retained-native-executor-20261003
+2026-10-03T14:16:48.0877260Z  * [new branch]        agent/revise-from-handoff-20260920 -> origin/agent/revise-from-handoff-20260920
+2026-10-03T14:16:48.0878527Z  * [new branch]        agent/rollback-integrity-activation -> origin/agent/rollback-integrity-activation
+2026-10-03T14:16:48.0879885Z  * [new branch]        agent/root-observation-witness -> origin/agent/root-observation-witness
+2026-10-03T14:16:48.0881198Z  * [new branch]        agent/root-readme-applicability-v16 -> origin/agent/root-readme-applicability-v16
+2026-10-03T14:16:48.0882339Z  * [new branch]        agent/root-readme-policy -> origin/agent/root-readme-policy
+2026-10-03T14:16:48.0883342Z  * [new branch]        agent/roundtrip-detection -> origin/agent/roundtrip-detection
+2026-10-03T14:16:48.0884559Z  * [new branch]        agent/runtime-binding-execution-20260906 -> origin/agent/runtime-binding-execution-20260906
+2026-10-03T14:16:48.0886145Z  * [new branch]        agent/runtime-execution-provenance-receipt-20260915 -> origin/agent/runtime-execution-provenance-receipt-20260915
+2026-10-03T14:16:48.0887716Z  * [new branch]        agent/runtime-repair-authority-current -> origin/agent/runtime-repair-authority-current
+2026-10-03T14:16:48.0889104Z  * [new branch]        agent/runtime-repair-candidate-20260915 -> origin/agent/runtime-repair-candidate-20260915
+2026-10-03T14:16:48.0890695Z  * [new branch]        agent/runtime-repair-candidate-gofmt-20260915 -> origin/agent/runtime-repair-candidate-gofmt-20260915
+2026-10-03T14:16:48.0892326Z  * [new branch]        agent/runtime-repair-candidate-validation-20260915 -> origin/agent/runtime-repair-candidate-validation-20260915
+2026-10-03T14:16:48.0893889Z  * [new branch]        agent/runtime-replay-comparison-20260915 -> origin/agent/runtime-replay-comparison-20260915
+2026-10-03T14:16:48.0895302Z  * [new branch]        agent/runtime-replay-integrity-20260915 -> origin/agent/runtime-replay-integrity-20260915
+2026-10-03T14:16:48.0896576Z  * [new branch]        agent/runtime-v2-delta-20261003 -> origin/agent/runtime-v2-delta-20261003
+2026-10-03T14:16:48.0897814Z  * [new branch]        agent/runtime-verifier-scope-20260916 -> origin/agent/runtime-verifier-scope-20260916
+2026-10-03T14:16:48.0899340Z  * [new branch]        agent/schema-coherence-migration-adoption-20260831 -> origin/agent/schema-coherence-migration-adoption-20260831
+2026-10-03T14:16:48.0901221Z  * [new branch]        agent/self-improvement-candidate-selection-20260924 -> origin/agent/self-improvement-candidate-selection-20260924
+2026-10-03T14:16:48.0903047Z  * [new branch]        agent/self-improvement-continuation-observation-20260924 -> origin/agent/self-improvement-continuation-observation-20260924
+2026-10-03T14:16:48.0904578Z  * [new branch]        agent/self-improvement-contract -> origin/agent/self-improvement-contract
+2026-10-03T14:16:48.0906138Z  * [new branch]        agent/self-improvement-counterexample-provenance-20260924 -> origin/agent/self-improvement-counterexample-provenance-20260924
+2026-10-03T14:16:48.0908011Z  * [new branch]        agent/self-improvement-counterexample-replay-20260924 -> origin/agent/self-improvement-counterexample-replay-20260924
+2026-10-03T14:16:48.0909592Z  * [new branch]        agent/self-improvement-cycle-envelope -> origin/agent/self-improvement-cycle-envelope
+2026-10-03T14:16:48.0911227Z  * [new branch]        agent/self-improvement-cycle-observation-20260924 -> origin/agent/self-improvement-cycle-observation-20260924
+2026-10-03T14:16:48.0913035Z  * [new branch]        agent/self-improvement-cycle-reverse-observation-20260924 -> origin/agent/self-improvement-cycle-reverse-observation-20260924
+2026-10-03T14:16:48.0914835Z  * [new branch]        agent/self-improvement-execution-history-20260924 -> origin/agent/self-improvement-execution-history-20260924
+2026-10-03T14:16:48.0916507Z  * [new branch]        agent/self-improvement-execution-outcome-20260924 -> origin/agent/self-improvement-execution-outcome-20260924
+2026-10-03T14:16:48.0918180Z  * [new branch]        agent/self-improvement-execution-request-20260924 -> origin/agent/self-improvement-execution-request-20260924
+2026-10-03T14:16:48.0919694Z  * [new branch]        agent/self-improvement-metric-binding -> origin/agent/self-improvement-metric-binding
+2026-10-03T14:16:48.0921235Z  * [new branch]        agent/self-improvement-metric-witness -> origin/agent/self-improvement-metric-witness
+2026-10-03T14:16:48.0922834Z  * [new branch]        agent/self-improvement-outcome-receipt-dev-20260925-r1 -> origin/agent/self-improvement-outcome-receipt-dev-20260925-r1
+2026-10-03T14:16:48.0924742Z  * [new branch]        agent/self-improvement-promotion-execution-binding-20260924 -> origin/agent/self-improvement-promotion-execution-binding-20260924
+2026-10-03T14:16:48.0926159Z  * [new branch]        agent/semantic          -> origin/agent/semantic
+2026-10-03T14:16:48.0927242Z  * [new branch]        agent/semantic-resolution-schema-v23 -> origin/agent/semantic-resolution-schema-v23
+2026-10-03T14:16:48.0928578Z  * [new branch]        agent/skip-sole-path-feedback-20261001 -> origin/agent/skip-sole-path-feedback-20261001
+2026-10-03T14:16:48.0929869Z  * [new branch]        agent/source-authority-promotion -> origin/agent/source-authority-promotion
+2026-10-03T14:16:48.0931144Z  * [new branch]        agent/source-authority-shadow -> origin/agent/source-authority-shadow
+2026-10-03T14:16:48.0932295Z  * [new branch]        agent/source-authority-upstream -> origin/agent/source-authority-upstream
+2026-10-03T14:16:48.0933622Z  * [new branch]        agent/source-binding-preservation-20260906 -> origin/agent/source-binding-preservation-20260906
+2026-10-03T14:16:48.0935085Z  * [new branch]        agent/source-context-plan-export-20261003 -> origin/agent/source-context-plan-export-20261003
+2026-10-03T14:16:48.0936524Z  * [new branch]        agent/source-evidence-binding-20260906 -> origin/agent/source-evidence-binding-20260906
+2026-10-03T14:16:48.0937827Z  * [new branch]        agent/source-path-recipes-20261003 -> origin/agent/source-path-recipes-20261003
+2026-10-03T14:16:48.0939228Z  * [new branch]        agent/source-recipe-condition-chains-20261003 -> origin/agent/source-recipe-condition-chains-20261003
+2026-10-03T14:16:48.0940849Z  * [new branch]        agent/source-recipe-projection-reuse-20261003 -> origin/agent/source-recipe-projection-reuse-20261003
+2026-10-03T14:16:48.0942563Z  * [new branch]        agent/source-recipe-projection-reuse-dev-20261003 -> origin/agent/source-recipe-projection-reuse-dev-20261003
+2026-10-03T14:16:48.0944135Z  * [new branch]        agent/source-recipes-unused-input-20261003 -> origin/agent/source-recipes-unused-input-20261003
+2026-10-03T14:16:48.0945611Z  * [new branch]        agent/source-splitter-conformance-adapter -> origin/agent/source-splitter-conformance-adapter
+2026-10-03T14:16:48.0947007Z  * [new branch]        agent/source-splitter-conformance-ci -> origin/agent/source-splitter-conformance-ci
+2026-10-03T14:16:48.0948418Z  * [new branch]        agent/source-splitter-conformance-contract -> origin/agent/source-splitter-conformance-contract
+2026-10-03T14:16:48.0949918Z  * [new branch]        agent/source-splitter-conformance-evaluator -> origin/agent/source-splitter-conformance-evaluator
+2026-10-03T14:16:48.0951581Z  * [new branch]        agent/source-splitter-conformance-fail-closed -> origin/agent/source-splitter-conformance-fail-closed
+2026-10-03T14:16:48.0953151Z  * [new branch]        agent/source-splitter-conformance-governance -> origin/agent/source-splitter-conformance-governance
+2026-10-03T14:16:48.0954741Z  * [new branch]        agent/source-splitter-conformance-governance-v2 -> origin/agent/source-splitter-conformance-governance-v2
+2026-10-03T14:16:48.0956257Z  * [new branch]        agent/source-subject-complete-binding -> origin/agent/source-subject-complete-binding
+2026-10-03T14:16:48.0957747Z  * [new branch]        agent/source-subject-witness-catalog-boundary-v1 -> origin/agent/source-subject-witness-catalog-boundary-v1
+2026-10-03T14:16:48.0959391Z  * [new branch]        agent/source-subject-witness-catalog-boundary-v2 -> origin/agent/source-subject-witness-catalog-boundary-v2
+2026-10-03T14:16:48.0961099Z  * [new branch]        agent/source-subject-witness-counterexample-v1 -> origin/agent/source-subject-witness-counterexample-v1
+2026-10-03T14:16:48.0962722Z  * [new branch]        agent/source-subject-witness-ledger-fix-v1 -> origin/agent/source-subject-witness-ledger-fix-v1
+2026-10-03T14:16:48.0964169Z  * [new branch]        agent/source-subject-witness-observed-v1 -> origin/agent/source-subject-witness-observed-v1
+2026-10-03T14:16:48.0965592Z  * [new branch]        agent/source-subject-witness-producer-v1 -> origin/agent/source-subject-witness-producer-v1
+2026-10-03T14:16:48.0966888Z  * [new branch]        agent/source-subject-witness-v4 -> origin/agent/source-subject-witness-v4
+2026-10-03T14:16:48.0968228Z  * [new branch]        agent/source-subject-workflow-applicability -> origin/agent/source-subject-workflow-applicability
+2026-10-03T14:16:48.0969606Z  * [new branch]        agent/splitgo-generation-receipts -> origin/agent/splitgo-generation-receipts
+2026-10-03T14:16:48.0971035Z  * [new branch]        agent/stale-action-test-markers-20260906 -> origin/agent/stale-action-test-markers-20260906
+2026-10-03T14:16:48.0972400Z  * [new branch]        agent/story-evidence-binding-20260924 -> origin/agent/story-evidence-binding-20260924
+2026-10-03T14:16:48.0973784Z  * [new branch]        agent/structured-upstream-cause-20260924 -> origin/agent/structured-upstream-cause-20260924
+2026-10-03T14:16:48.0975052Z  * [new branch]        agent/symbolic-usecase-metric -> origin/agent/symbolic-usecase-metric
+2026-10-03T14:16:48.0976029Z  * [new branch]        agent/syntax            -> origin/agent/syntax
+2026-10-03T14:16:48.0977133Z  * [new branch]        agent/syntax-negative-evidence-20260911 -> origin/agent/syntax-negative-evidence-20260911
+2026-10-03T14:16:48.0978578Z  * [new branch]        agent/syntax-registration-operator-20260907 -> origin/agent/syntax-registration-operator-20260907
+2026-10-03T14:16:48.0980004Z  * [new branch]        agent/system-derived-adoption-20260929 -> origin/agent/system-derived-adoption-20260929
+2026-10-03T14:16:48.0981485Z  * [new branch]        agent/system-derived-ci-baselines-20260928 -> origin/agent/system-derived-ci-baselines-20260928
+2026-10-03T14:16:48.0983029Z  * [new branch]        agent/system-derived-eligibility-20260929 -> origin/agent/system-derived-eligibility-20260929
+2026-10-03T14:16:48.0984394Z  * [new branch]        agent/temporal-transition-ticket-v1 -> origin/agent/temporal-transition-ticket-v1
+2026-10-03T14:16:48.0985786Z  * [new branch]        agent/terminal-failure-provenance-20260924 -> origin/agent/terminal-failure-provenance-20260924
+2026-10-03T14:16:48.0987200Z  * [new branch]        agent/three-choice-body-paths-20261002 -> origin/agent/three-choice-body-paths-20261002
+2026-10-03T14:16:48.0988456Z  * [new branch]        agent/tiny-go-provider-20261001 -> origin/agent/tiny-go-provider-20261001
+2026-10-03T14:16:48.0989483Z  * [new branch]        agent/toolchain-cli     -> origin/agent/toolchain-cli
+2026-10-03T14:16:48.0990771Z  * [new branch]        agent/toolchain-conformance -> origin/agent/toolchain-conformance
+2026-10-03T14:16:48.0992035Z  * [new branch]        agent/toolchain-cross-platform-release -> origin/agent/toolchain-cross-platform-release
+2026-10-03T14:16:48.0993385Z  * [new branch]        agent/toolchain-executable-usecases -> origin/agent/toolchain-executable-usecases
+2026-10-03T14:16:48.0994542Z  * [new branch]        agent/toolchain-format-fix -> origin/agent/toolchain-format-fix
+2026-10-03T14:16:48.0995517Z  * [new branch]        agent/toolchain-lsp     -> origin/agent/toolchain-lsp
+2026-10-03T14:16:48.0996541Z  * [new branch]        agent/transformation-effect-v5 -> origin/agent/transformation-effect-v5
+2026-10-03T14:16:48.0998034Z  * [new branch]        agent/transformation-executor-binding-v1 -> origin/agent/transformation-executor-binding-v1
+2026-10-03T14:16:48.0999517Z  * [new branch]        agent/transformation-replay-envelope-v1 -> origin/agent/transformation-replay-envelope-v1
+2026-10-03T14:16:48.1001076Z  * [new branch]        agent/type-evidence-diagnostic-pr707-20260905 -> origin/agent/type-evidence-diagnostic-pr707-20260905
+2026-10-03T14:16:48.1002455Z  * [new branch]        agent/typed-binding-plan-20260916 -> origin/agent/typed-binding-plan-20260916
+2026-10-03T14:16:48.1003866Z  * [new branch]        agent/typed-domain-integration-20260916 -> origin/agent/typed-domain-integration-20260916
+2026-10-03T14:16:48.1005343Z  * [new branch]        agent/typed-feedback-context-decline-20261001 -> origin/agent/typed-feedback-context-decline-20261001
+2026-10-03T14:16:48.1006804Z  * [new branch]        agent/typed-path-completeness-20261002 -> origin/agent/typed-path-completeness-20261002
+2026-10-03T14:16:48.1008105Z  * [new branch]        agent/typed-path-feedback-20261001 -> origin/agent/typed-path-feedback-20261001
+2026-10-03T14:16:48.1009324Z  * [new branch]        agent/typed-path-native-20261001 -> origin/agent/typed-path-native-20261001
+2026-10-03T14:16:48.1010776Z  * [new branch]        agent/typed-path-runtime-receipt-20261002 -> origin/agent/typed-path-runtime-receipt-20261002
+2026-10-03T14:16:48.1012174Z  * [new branch]        agent/typed-producer-result-20260906 -> origin/agent/typed-producer-result-20260906
+2026-10-03T14:16:48.1013570Z  * [new branch]        agent/typed-runtime-chain-dogfood-20260924 -> origin/agent/typed-runtime-chain-dogfood-20260924
+2026-10-03T14:16:48.1014957Z  * [new branch]        agent/unfixed-path-feedback-20261001 -> origin/agent/unfixed-path-feedback-20261001
+2026-10-03T14:16:48.1016273Z  * [new branch]        agent/upstream-auth-evidence-20260924 -> origin/agent/upstream-auth-evidence-20260924
+2026-10-03T14:16:48.1017658Z  * [new branch]        agent/upstream-cause-projection-20260924 -> origin/agent/upstream-cause-projection-20260924
+2026-10-03T14:16:48.1018916Z  * [new branch]        agent/user-journey-scorecard -> origin/agent/user-journey-scorecard
+2026-10-03T14:16:48.1020293Z  * [new branch]        agent/v23-exact-producer-subject-payload-20260905 -> origin/agent/v23-exact-producer-subject-payload-20260905
+2026-10-03T14:16:48.1022028Z  * [new branch]        agent/v24-candidate-authorization-bridge-20260905 -> origin/agent/v24-candidate-authorization-bridge-20260905
+2026-10-03T14:16:48.1023751Z  * [new branch]        agent/v25-candidate-execution-contract-20260905 -> origin/agent/v25-candidate-execution-contract-20260905
+2026-10-03T14:16:48.1025313Z  * [new branch]        agent/v25-v26-system-evidence-bridge-20260929 -> origin/agent/v25-v26-system-evidence-bridge-20260929
+2026-10-03T14:16:48.1026934Z  * [new branch]        agent/v25.1-execution-contract-workflow-fix-20260905 -> origin/agent/v25.1-execution-contract-workflow-fix-20260905
+2026-10-03T14:16:48.1028541Z  * [new branch]        agent/v26-separate-execution-grant-20260905 -> origin/agent/v26-separate-execution-grant-20260905
+2026-10-03T14:16:48.1030193Z  * [new branch]        agent/v26.1-execution-grant-artifact-retrieval-20260905 -> origin/agent/v26.1-execution-grant-artifact-retrieval-20260905
+2026-10-03T14:16:48.1032039Z  * [new branch]        agent/v26.2-exact-canonical-grant-fixture-20260905 -> origin/agent/v26.2-exact-canonical-grant-fixture-20260905
+2026-10-03T14:16:48.1034010Z  * [new branch]        agent/v27a-candidate-executable-value-witness-input-binding-20260905 -> origin/agent/v27a-candidate-executable-value-witness-input-binding-20260905
+2026-10-03T14:16:48.1036137Z  * [new branch]        agent/v27a1-authorization-roundtrip-value-equality-20260905 -> origin/agent/v27a1-authorization-roundtrip-value-equality-20260905
+2026-10-03T14:16:48.1037921Z  * [new branch]        agent/v27a2-auth-dispatch-string-audit-20260905 -> origin/agent/v27a2-auth-dispatch-string-audit-20260905
+2026-10-03T14:16:48.1039528Z  * [new branch]        agent/v27a2-ci-continuation-depth-reset-20260905 -> origin/agent/v27a2-ci-continuation-depth-reset-20260905
+2026-10-03T14:16:48.1041281Z  * [new branch]        agent/v27a2-continuation-artifact-path-fix-20260905 -> origin/agent/v27a2-continuation-artifact-path-fix-20260905
+2026-10-03T14:16:48.1042879Z  * [new branch]        agent/v27a2-dispatch-scalar-inputs-20260905 -> origin/agent/v27a2-dispatch-scalar-inputs-20260905
+2026-10-03T14:16:48.1044520Z  * [new branch]        agent/v27a2-v25-authorization-contract-binding-20260905 -> origin/agent/v27a2-v25-authorization-contract-binding-20260905
+2026-10-03T14:16:48.1046246Z  * [new branch]        agent/value-program-dogfood-sign-20260920 -> origin/agent/value-program-dogfood-sign-20260920
+2026-10-03T14:16:48.1047714Z  * [new branch]        agent/value-program-operation-abs-20260920 -> origin/agent/value-program-operation-abs-20260920
+2026-10-03T14:16:48.1049193Z  * [new branch]        agent/value-program-operation-mul-20260920 -> origin/agent/value-program-operation-mul-20260920
+2026-10-03T14:16:48.1050780Z  * [new branch]        agent/value-program-operation-neg-20260920 -> origin/agent/value-program-operation-neg-20260920
+2026-10-03T14:16:48.1052266Z  * [new branch]        agent/value-program-operation-sign-20260920 -> origin/agent/value-program-operation-sign-20260920
+2026-10-03T14:16:48.1053833Z  * [new branch]        agent/value-program-runtime-dogfood-abs-20260920 -> origin/agent/value-program-runtime-dogfood-abs-20260920
+2026-10-03T14:16:48.1055479Z  * [new branch]        agent/value-program-runtime-dogfood-add-20260920 -> origin/agent/value-program-runtime-dogfood-add-20260920
+2026-10-03T14:16:48.1057212Z  * [new branch]        agent/value-program-runtime-dogfood-bool-not-20260920 -> origin/agent/value-program-runtime-dogfood-bool-not-20260920
+2026-10-03T14:16:48.1059083Z  * [new branch]        agent/value-program-runtime-dogfood-boolean-and-20260920 -> origin/agent/value-program-runtime-dogfood-boolean-and-20260920
+2026-10-03T14:16:48.1061367Z  * [new branch]        agent/value-program-runtime-dogfood-boolean-and-20260920-v2 -> origin/agent/value-program-runtime-dogfood-boolean-and-20260920-v2
+2026-10-03T14:16:48.1063377Z  * [new branch]        agent/value-program-runtime-dogfood-boolean-and-plan-20260920 -> origin/agent/value-program-runtime-dogfood-boolean-and-plan-20260920
+2026-10-03T14:16:48.1065475Z  * [new branch]        agent/value-program-runtime-dogfood-boolean-composition-20260920 -> origin/agent/value-program-runtime-dogfood-boolean-composition-20260920
+2026-10-03T14:16:48.1067472Z  * [new branch]        agent/value-program-runtime-dogfood-div-20260920 -> origin/agent/value-program-runtime-dogfood-div-20260920
+2026-10-03T14:16:48.1069152Z  * [new branch]        agent/value-program-runtime-dogfood-iszero-20260920 -> origin/agent/value-program-runtime-dogfood-iszero-20260920
+2026-10-03T14:16:48.1070895Z  * [new branch]        agent/value-program-runtime-dogfood-max-20260920 -> origin/agent/value-program-runtime-dogfood-max-20260920
+2026-10-03T14:16:48.1072542Z  * [new branch]        agent/value-program-runtime-dogfood-min-20260920 -> origin/agent/value-program-runtime-dogfood-min-20260920
+2026-10-03T14:16:48.1074188Z  * [new branch]        agent/value-program-runtime-dogfood-mul-20260920 -> origin/agent/value-program-runtime-dogfood-mul-20260920
+2026-10-03T14:16:48.1075841Z  * [new branch]        agent/value-program-runtime-dogfood-neg-20260920 -> origin/agent/value-program-runtime-dogfood-neg-20260920
+2026-10-03T14:16:48.1077478Z  * [new branch]        agent/verifier-package-summary-advisory-20260911 -> origin/agent/verifier-package-summary-advisory-20260911
+2026-10-03T14:16:48.1079010Z  * [new branch]        agent/vertical-slice-closure-activation -> origin/agent/vertical-slice-closure-activation
+2026-10-03T14:16:48.1080512Z  * [new branch]        agent/vertical-slice-closure-eligibility -> origin/agent/vertical-slice-closure-eligibility
+2026-10-03T14:16:48.1081865Z  * [new branch]        agent/vertical-slice-closure-shadow -> origin/agent/vertical-slice-closure-shadow
+2026-10-03T14:16:48.1083195Z  * [new branch]        agent/whole-candidate-native-20261003 -> origin/agent/whole-candidate-native-20261003
+2026-10-03T14:16:48.1084486Z  * [new branch]        agent/workflow-bootstrap-exception -> origin/agent/workflow-bootstrap-exception
+2026-10-03T14:16:48.1085652Z  * [new branch]        agent/workgraph-cli-contract -> origin/agent/workgraph-cli-contract
+2026-10-03T14:16:48.1086666Z  * [new branch]        agent/workgraph-pilot   -> origin/agent/workgraph-pilot
+2026-10-03T14:16:48.1087998Z  * [new branch]        agent/workload-authority-provenance-20260924 -> origin/agent/workload-authority-provenance-20260924
+2026-10-03T14:16:48.1089550Z  * [new branch]        agent/workload-declaration-provenance-20260924 -> origin/agent/workload-declaration-provenance-20260924
+2026-10-03T14:16:48.1091217Z  * [new branch]        agent/workload-identity-observation-20260924 -> origin/agent/workload-identity-observation-20260924
+2026-10-03T14:16:48.1092715Z  * [new branch]        agent/workload-identity-provenance-20260924 -> origin/agent/workload-identity-provenance-20260924
+2026-10-03T14:16:48.1094172Z  * [new branch]        codex/domain-completeness-vector-20260928 -> origin/codex/domain-completeness-vector-20260928
+2026-10-03T14:16:48.1095357Z  * [new branch]        codex/ontology-visuals  -> origin/codex/ontology-visuals
+2026-10-03T14:16:48.1096823Z  * [new branch]        dependabot/github_actions/github/codeql-action/upload-sarif-4.38.2 -> origin/dependabot/github_actions/github/codeql-action/upload-sarif-4.38.2
+2026-10-03T14:16:48.1098188Z  * [new branch]        dev                     -> origin/dev
+2026-10-03T14:16:48.1099275Z  * [new branch]        experiment/lsp-context-completion-20260924 -> origin/experiment/lsp-context-completion-20260924
+2026-10-03T14:16:48.1101180Z  * [new branch]        feature/domain-completeness-contract-20260928 -> origin/feature/domain-completeness-contract-20260928
+2026-10-03T14:16:48.1102725Z  * [new branch]        main                    -> origin/main
+2026-10-03T14:16:48.1104064Z  * [new branch]        stack/source-splitter-conformance-evaluator -> origin/stack/source-splitter-conformance-evaluator
+2026-10-03T14:16:48.1105560Z  * [new tag]           v0.1.0-dev              -> v0.1.0-dev
+2026-10-03T14:16:48.1106340Z  * [new tag]           v0.2.0-dev              -> v0.2.0-dev
+2026-10-03T14:16:48.1107033Z  * [new tag]           v0.3.0-dev              -> v0.3.0-dev
+2026-10-03T14:16:48.1107725Z  * [new tag]           v0.4.0-dev              -> v0.4.0-dev
+2026-10-03T14:16:48.1108428Z  * [new tag]           v0.5.0-dev              -> v0.5.0-dev
+2026-10-03T14:16:48.1109215Z  * [new tag]           v0.6.0-dev              -> v0.6.0-dev
+2026-10-03T14:16:48.1111679Z [command]/usr/bin/git rev-parse --verify --quiet d360355bc1157f4a88f806c9ad87786db70a830a^{object}
+2026-10-03T14:16:48.1112734Z d360355bc1157f4a88f806c9ad87786db70a830a
+2026-10-03T14:16:48.1114190Z ##[endgroup]
+2026-10-03T14:16:48.1114949Z ##[group]Determining the checkout info
+2026-10-03T14:16:48.1115781Z ##[endgroup]
+2026-10-03T14:16:48.1116278Z [command]/usr/bin/git sparse-checkout disable
+2026-10-03T14:16:48.1117649Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-03T14:16:48.1119304Z ##[group]Checking out the ref
+2026-10-03T14:16:48.1120109Z [command]/usr/bin/git checkout --progress --force d360355bc1157f4a88f806c9ad87786db70a830a
+2026-10-03T14:16:48.2739414Z Note: switching to 'd360355bc1157f4a88f806c9ad87786db70a830a'.
+2026-10-03T14:16:48.2739715Z 
+2026-10-03T14:16:48.2739864Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-03T14:16:48.2740132Z changes and commit them, and you can discard any commits you make in this
+2026-10-03T14:16:48.2740482Z state without impacting any branches by switching back to a branch.
+2026-10-03T14:16:48.2740632Z 
+2026-10-03T14:16:48.2740731Z If you want to create a new branch to retain commits you create, you may
+2026-10-03T14:16:48.2740974Z do so (now or later) by using -c with the switch command. Example:
+2026-10-03T14:16:48.2741112Z 
+2026-10-03T14:16:48.2741176Z   git switch -c <new-branch-name>
+2026-10-03T14:16:48.2741266Z 
+2026-10-03T14:16:48.2741331Z Or undo this operation with:
+2026-10-03T14:16:48.2741415Z 
+2026-10-03T14:16:48.2741464Z   git switch -
+2026-10-03T14:16:48.2741529Z 
+2026-10-03T14:16:48.2741650Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-03T14:16:48.2741810Z 
+2026-10-03T14:16:48.2741932Z HEAD is now at d360355b feat(body-run): optional source-bound wall phase diagnostics
+2026-10-03T14:16:48.2760725Z ##[endgroup]
+2026-10-03T14:16:48.2801865Z [command]/usr/bin/git log -1 --format=%H
+2026-10-03T14:16:48.2824797Z d360355bc1157f4a88f806c9ad87786db70a830a
+2026-10-03T14:16:48.2832373Z ##[group]Removing auth
+2026-10-03T14:16:48.2832685Z Removing SSH command configuration
+2026-10-03T14:16:48.2836251Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-03T14:16:48.2863066Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-03T14:16:48.3037179Z Removing HTTP extra header
+2026-10-03T14:16:48.3039539Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-03T14:16:48.3067583Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-03T14:16:48.3236205Z Removing includeIf entries pointing to credentials config files
+2026-10-03T14:16:48.3238649Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-03T14:16:48.3262305Z includeif.gitdir:/home/runner/work/meta-ontology-go/meta-ontology-go/.git.path
+2026-10-03T14:16:48.3262897Z includeif.gitdir:/home/runner/work/meta-ontology-go/meta-ontology-go/.git/worktrees/*.path
+2026-10-03T14:16:48.3263223Z includeif.gitdir:/github/workspace/.git.path
+2026-10-03T14:16:48.3263416Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-03T14:16:48.3268882Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/meta-ontology-go/meta-ontology-go/.git.path
+2026-10-03T14:16:48.3292712Z /home/runner/work/_temp/git-credentials-0ab3fba4-818e-4791-9f88-17b4195fa411.config
+2026-10-03T14:16:48.3300169Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/meta-ontology-go/meta-ontology-go/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-0ab3fba4\-818e\-4791\-9f88\-17b4195fa411\.config
+2026-10-03T14:16:48.3334596Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/meta-ontology-go/meta-ontology-go/.git/worktrees/*.path
+2026-10-03T14:16:48.3354741Z /home/runner/work/_temp/git-credentials-0ab3fba4-818e-4791-9f88-17b4195fa411.config
+2026-10-03T14:16:48.3361268Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/meta-ontology-go/meta-ontology-go/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-0ab3fba4\-818e\-4791\-9f88\-17b4195fa411\.config
+2026-10-03T14:16:48.3418866Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-03T14:16:48.3461616Z /github/runner_temp/git-credentials-0ab3fba4-818e-4791-9f88-17b4195fa411.config
+2026-10-03T14:16:48.3467226Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-0ab3fba4\-818e\-4791\-9f88\-17b4195fa411\.config
+2026-10-03T14:16:48.3498260Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-03T14:16:48.3518693Z /github/runner_temp/git-credentials-0ab3fba4-818e-4791-9f88-17b4195fa411.config
+2026-10-03T14:16:48.3523852Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-0ab3fba4\-818e\-4791\-9f88\-17b4195fa411\.config
+2026-10-03T14:16:48.3552448Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-03T14:16:48.3724764Z Removing credentials config '/home/runner/work/_temp/git-credentials-0ab3fba4-818e-4791-9f88-17b4195fa411.config'
+2026-10-03T14:16:48.3733362Z ##[endgroup]
+2026-10-03T14:16:48.5281791Z ##[group]Run actions/setup-go@v7
+2026-10-03T14:16:48.5282081Z with:
+2026-10-03T14:16:48.5282191Z   go-version: 1.27.1
+2026-10-03T14:16:48.5282303Z   cache: false
+2026-10-03T14:16:48.5282412Z   check-latest: false
+2026-10-03T14:16:48.5283883Z   token: ***
+2026-10-03T14:16:48.5283998Z ##[endgroup]
+2026-10-03T14:16:48.6052699Z Setup go version spec 1.27.1
+2026-10-03T14:16:48.6057106Z Attempting to download 1.27.1...
+2026-10-03T14:16:49.2806928Z matching 1.27.1...
+2026-10-03T14:16:49.2811797Z Acquiring 1.27.1 from https://github.com/actions/go-versions/releases/download/1.27.1-33583469715/go-1.27.1-linux-x64.tar.gz
+2026-10-03T14:16:49.7646815Z Extracting Go...
+2026-10-03T14:16:49.7728447Z [command]/usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/713e962f-83e9-404d-9316-eecefb1ea001 -f /home/runner/work/_temp/558415af-6d5d-4afd-8dfc-b8a2c7fae654
+2026-10-03T14:16:51.0275291Z Successfully extracted go to /home/runner/work/_temp/713e962f-83e9-404d-9316-eecefb1ea001
+2026-10-03T14:16:51.0275582Z Adding to the cache ...
+2026-10-03T14:16:59.9132822Z Successfully cached go to /opt/hostedtoolcache/go/1.27.1/x64
+2026-10-03T14:16:59.9134249Z Added go to the path
+2026-10-03T14:16:59.9135878Z Successfully set up Go version 1.27.1
+2026-10-03T14:16:59.9294017Z go version go1.27.1 linux/amd64
+2026-10-03T14:16:59.9294150Z 
+2026-10-03T14:16:59.9294335Z ##[group]go env
+2026-10-03T14:17:00.0315472Z AR='ar'
+2026-10-03T14:17:00.0315685Z CC='gcc'
+2026-10-03T14:17:00.0315856Z CGO_CFLAGS='-O2 -g'
+2026-10-03T14:17:00.0316083Z CGO_CPPFLAGS=''
+2026-10-03T14:17:00.0316268Z CGO_CXXFLAGS='-O2 -g'
+2026-10-03T14:17:00.0316455Z CGO_ENABLED='1'
+2026-10-03T14:17:00.0316625Z CGO_FFLAGS='-O2 -g'
+2026-10-03T14:17:00.0316800Z CGO_LDFLAGS='-O2 -g'
+2026-10-03T14:17:00.0316967Z CXX='g++'
+2026-10-03T14:17:00.0317128Z GCCGO='gccgo'
+2026-10-03T14:17:00.0317289Z GO111MODULE=''
+2026-10-03T14:17:00.0317450Z GOAMD64='v1'
+2026-10-03T14:17:00.0317613Z GOARCH='amd64'
+2026-10-03T14:17:00.0317805Z GOAUTH='netrc'
+2026-10-03T14:17:00.0317981Z GOBIN='/home/runner/go/bin'
+2026-10-03T14:17:00.0318216Z GOCACHE='/home/runner/.cache/go-build'
+2026-10-03T14:17:00.0318461Z GOCACHEPROG=''
+2026-10-03T14:17:00.0318626Z GODEBUG=''
+2026-10-03T14:17:00.0318798Z GOENV='/home/runner/.config/go/env'
+2026-10-03T14:17:00.0319001Z GOEXE=''
+2026-10-03T14:17:00.0319196Z GOEXPERIMENT=''
+2026-10-03T14:17:00.0319370Z GOFIPS140='off'
+2026-10-03T14:17:00.0319535Z GOFLAGS=''
+2026-10-03T14:17:00.0320064Z GOGCCFLAGS='-fPIC -m64 -pthread -Wl,--no-gc-sections -fmessage-length=0 -ffile-prefix-map=/tmp/go-build2393658725=/tmp/go-build -gno-record-gcc-switches'
+2026-10-03T14:17:00.0320784Z GOHOSTARCH='amd64'
+2026-10-03T14:17:00.0320963Z GOHOSTOS='linux'
+2026-10-03T14:17:00.0321128Z GOINSECURE=''
+2026-10-03T14:17:00.0321383Z GOMOD='/home/runner/work/meta-ontology-go/meta-ontology-go/go.mod'
+2026-10-03T14:17:00.0321700Z GOMODCACHE='/home/runner/go/pkg/mod'
+2026-10-03T14:17:00.0321946Z GONOPROXY=''
+2026-10-03T14:17:00.0322116Z GONOSUMDB=''
+2026-10-03T14:17:00.0322280Z GOOS='linux'
+2026-10-03T14:17:00.0322451Z GOPACKAGESDRIVER=''
+2026-10-03T14:17:00.0322635Z GOPATH='/home/runner/go'
+2026-10-03T14:17:00.0322816Z GOPRIVATE=''
+2026-10-03T14:17:00.0323054Z GOPROXY='https://proxy.golang.org,direct'
+2026-10-03T14:17:00.0323318Z GOROOT='/opt/hostedtoolcache/go/1.27.1/x64'
+2026-10-03T14:17:00.0323554Z GOSUMDB='sum.golang.org'
+2026-10-03T14:17:00.0323746Z GOTELEMETRY='local'
+2026-10-03T14:17:00.0323960Z GOTELEMETRYDIR='/home/runner/.config/go/telemetry'
+2026-10-03T14:17:00.0324204Z GOTMPDIR=''
+2026-10-03T14:17:00.0324364Z GOTOOLCHAIN='local'
+2026-10-03T14:17:00.0324618Z GOTOOLDIR='/opt/hostedtoolcache/go/1.27.1/x64/pkg/tool/linux_amd64'
+2026-10-03T14:17:00.0324896Z GOVCS=''
+2026-10-03T14:17:00.0325052Z GOVERSION='go1.27.1'
+2026-10-03T14:17:00.0325221Z GOWORK=''
+2026-10-03T14:17:00.0325381Z PKG_CONFIG='pkg-config'
+2026-10-03T14:17:00.0325509Z 
+2026-10-03T14:17:00.0325865Z ##[endgroup]
+2026-10-03T14:17:00.0725134Z Prepare all required actions
+2026-10-03T14:17:00.0821356Z ##[group]Run ./.github/actions/materialize
+2026-10-03T14:17:00.0821664Z with:
+2026-10-03T14:17:00.0821805Z   expected-sha: d360355bc1157f4a88f806c9ad87786db70a830a
+2026-10-03T14:17:00.0821967Z env:
+2026-10-03T14:17:00.0822071Z   GOTOOLCHAIN: local
+2026-10-03T14:17:00.0822185Z ##[endgroup]
+2026-10-03T14:17:00.0913532Z ##[start-action display=Conform storage, index, and active workspace;id=materialize.materialize]
+2026-10-03T14:17:00.0999534Z ##[group]Run set -euo pipefail
+2026-10-03T14:17:00.0999779Z [36;1mset -euo pipefail[0m
+2026-10-03T14:17:00.0999980Z [36;1mwork="$RUNNER_TEMP/repository-materialize-$GITHUB_JOB"[0m
+2026-10-03T14:17:00.1000180Z [36;1mprojector_work="$work/projector"[0m
+2026-10-03T14:17:00.1000350Z [36;1mmaterializer_work="$work/materializer"[0m
+2026-10-03T14:17:00.1000633Z [36;1mstorage_root="$work/storage"[0m
+2026-10-03T14:17:00.1000782Z [36;1mgit_index="$work/logical.index"[0m
+2026-10-03T14:17:00.1001017Z [36;1mactivation_evidence="$work/activation-evidence.json"[0m
+2026-10-03T14:17:00.1001400Z [36;1mprojection_evidence="$projector_work/evidence.json"[0m
+2026-10-03T14:17:00.1001750Z [36;1mgit_dir="$(git -C "$GITHUB_WORKSPACE" rev-parse --absolute-git-dir)"[0m
+2026-10-03T14:17:00.1002086Z [36;1mphysical_checkout=false[0m
+2026-10-03T14:17:00.1002294Z [36;1m{[0m
+2026-10-03T14:17:00.1002480Z [36;1m  echo "storage-root=$storage_root"[0m
+2026-10-03T14:17:00.1002823Z [36;1m  echo "materialization-evidence=$materializer_work/materialization-evidence.json"[0m
+2026-10-03T14:17:00.1003163Z [36;1m  echo "activation-evidence=$activation_evidence"[0m
+2026-10-03T14:17:00.1003449Z [36;1m  echo "projection-evidence=$projection_evidence"[0m
+2026-10-03T14:17:00.1003731Z [36;1m} >> "$GITHUB_OUTPUT"[0m
+2026-10-03T14:17:00.1004018Z [36;1mif test -f "$GITHUB_WORKSPACE/projection/catalog/manifest.json"; then[0m
+2026-10-03T14:17:00.1004333Z [36;1m  physical_root="$GITHUB_WORKSPACE"[0m
+2026-10-03T14:17:00.1004564Z [36;1m  physical_checkout=true[0m
+2026-10-03T14:17:00.1004780Z [36;1melse[0m
+2026-10-03T14:17:00.1005073Z [36;1m  (cd "$GITHUB_WORKSPACE" && go run ./bootstrap/repository-projector/command \[0m
+2026-10-03T14:17:00.1005395Z [36;1m    --root "$GITHUB_WORKSPACE" --work "$projector_work" \[0m
+2026-10-03T14:17:00.1005712Z [36;1m    --expected-sha "d360355bc1157f4a88f806c9ad87786db70a830a")[0m
+2026-10-03T14:17:00.1006045Z [36;1m  physical_root="$projector_work/physical"[0m
+2026-10-03T14:17:00.1006279Z [36;1mfi[0m
+2026-10-03T14:17:00.1006551Z [36;1mgo run "$GITHUB_WORKSPACE"/bootstrap/repository-materializer/*.go \[0m
+2026-10-03T14:17:00.1006866Z [36;1m  --root "$GITHUB_WORKSPACE" --physical-root "$physical_root" \[0m
+2026-10-03T14:17:00.1007182Z [36;1m  --work "$materializer_work" --git-index "$git_index" \[0m
+2026-10-03T14:17:00.1007478Z [36;1m  --expected-sha "d360355bc1157f4a88f806c9ad87786db70a830a"[0m
+2026-10-03T14:17:00.1007803Z [36;1mgo run "$GITHUB_WORKSPACE"/bootstrap/workspace-activator/*.go \[0m
+2026-10-03T14:17:00.1008222Z [36;1m  --root "$physical_root" --logical-root "$materializer_work/materialized" \[0m
+2026-10-03T14:17:00.1008537Z [36;1m  --storage-root "$storage_root" --git-dir "$git_dir" \[0m
+2026-10-03T14:17:00.1008889Z [36;1m  --git-index "$git_index" --expected-sha "d360355bc1157f4a88f806c9ad87786db70a830a" \[0m
+2026-10-03T14:17:00.1019559Z [36;1m  --materialization "$materializer_work/materialization-evidence.json" \[0m
+2026-10-03T14:17:00.1019798Z [36;1m  --evidence "$activation_evidence"[0m
+2026-10-03T14:17:00.1019968Z [36;1mif test "$physical_checkout" = true; then[0m
+2026-10-03T14:17:00.1020209Z [36;1m  export GIT_DIR="$git_dir" GIT_WORK_TREE="$GITHUB_WORKSPACE" GIT_INDEX_FILE="$git_index"[0m
+2026-10-03T14:17:00.1020638Z [36;1m  (cd "$GITHUB_WORKSPACE" && go run ./bootstrap/repository-projector/command \[0m
+2026-10-03T14:17:00.1020885Z [36;1m    --root "$GITHUB_WORKSPACE" --work "$projector_work" \[0m
+2026-10-03T14:17:00.1021308Z [36;1m    --expected-sha "d360355bc1157f4a88f806c9ad87786db70a830a")[0m
+2026-10-03T14:17:00.1021488Z [36;1mfi[0m
+2026-10-03T14:17:00.1021717Z [36;1m{[0m
+2026-10-03T14:17:00.1021847Z [36;1m  echo "LOGICAL_WORKSPACE=$GITHUB_WORKSPACE"[0m
+2026-10-03T14:17:00.1022024Z [36;1m  echo "PHYSICAL_WORKSPACE=$storage_root"[0m
+2026-10-03T14:17:00.1022178Z [36;1m  echo "GIT_DIR=$git_dir"[0m
+2026-10-03T14:17:00.1022328Z [36;1m  echo "GIT_WORK_TREE=$GITHUB_WORKSPACE"[0m
+2026-10-03T14:17:00.1022489Z [36;1m  echo "GIT_INDEX_FILE=$git_index"[0m
+2026-10-03T14:17:00.1022635Z [36;1m} >> "$GITHUB_ENV"[0m
+2026-10-03T14:17:00.1239447Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-03T14:17:00.1239648Z env:
+2026-10-03T14:17:00.1239762Z   GOTOOLCHAIN: local
+2026-10-03T14:17:00.1239880Z ##[endgroup]
+2026-10-03T14:17:05.7073841Z repository-projector: tracked=7274 objects=7082 loss=0 observed_direct=1 direct=0 exempt_direct=1 mixed=0
+2026-10-03T14:17:06.3719663Z repository-materializer: restored=7274 tree=b0d31e3e5e1bf6ee6195d06caa39459d5e90fcce replacement=false
+2026-10-03T14:17:06.6414123Z workspace-activator: physical=7232 logical=7274 dirty=0 drift=0
+2026-10-03T14:17:06.6459035Z ##[end-action id=materialize.materialize;outcome=success;conclusion=success;duration_ms=6554]
+2026-10-03T14:17:06.6658479Z ##[group]Run test "$(go env GOVERSION)" = "go1.27.1"
+2026-10-03T14:17:06.6658721Z [36;1mtest "$(go env GOVERSION)" = "go1.27.1"[0m
+2026-10-03T14:17:06.6658887Z [36;1mgo version[0m
+2026-10-03T14:17:06.6714575Z shell: /usr/bin/bash -e {0}
+2026-10-03T14:17:06.6714722Z env:
+2026-10-03T14:17:06.6714841Z   GOTOOLCHAIN: local
+2026-10-03T14:17:06.6715032Z   LOGICAL_WORKSPACE: /home/runner/work/meta-ontology-go/meta-ontology-go
+2026-10-03T14:17:06.6715334Z   PHYSICAL_WORKSPACE: /home/runner/work/_temp/repository-materialize-format/storage
+2026-10-03T14:17:06.6715615Z   GIT_DIR: /home/runner/work/meta-ontology-go/meta-ontology-go/.git
+2026-10-03T14:17:06.6715855Z   GIT_WORK_TREE: /home/runner/work/meta-ontology-go/meta-ontology-go
+2026-10-03T14:17:06.6716133Z   GIT_INDEX_FILE: /home/runner/work/_temp/repository-materialize-format/logical.index
+2026-10-03T14:17:06.6716378Z ##[endgroup]
+2026-10-03T14:17:06.6831799Z go version go1.27.1 linux/amd64
+2026-10-03T14:17:06.6967998Z ##[group]Run go fix ./...
+2026-10-03T14:17:06.6968181Z [36;1mgo fix ./...[0m
+2026-10-03T14:17:06.6968303Z [36;1mgo mod tidy[0m
+2026-10-03T14:17:06.6968431Z [36;1mgit diff --exit-code[0m
+2026-10-03T14:17:06.7020906Z shell: /usr/bin/bash -e {0}
+2026-10-03T14:17:06.7021049Z env:
+2026-10-03T14:17:06.7021167Z   GOTOOLCHAIN: local
+2026-10-03T14:17:06.7021354Z   LOGICAL_WORKSPACE: /home/runner/work/meta-ontology-go/meta-ontology-go
+2026-10-03T14:17:06.7021646Z   PHYSICAL_WORKSPACE: /home/runner/work/_temp/repository-materialize-format/storage
+2026-10-03T14:17:06.7021922Z   GIT_DIR: /home/runner/work/meta-ontology-go/meta-ontology-go/.git
+2026-10-03T14:17:06.7022157Z   GIT_WORK_TREE: /home/runner/work/meta-ontology-go/meta-ontology-go
+2026-10-03T14:17:06.7022421Z   GIT_INDEX_FILE: /home/runner/work/_temp/repository-materialize-format/logical.index
+2026-10-03T14:17:06.7022645Z ##[endgroup]
+2026-10-03T14:17:07.0697326Z go: downloading github.com/kimjooyoon/gooo-decision-runtime v0.2.20-experimental
+2026-10-03T14:17:28.6626679Z diff --git a/internal/bodypathstream/file_timing.go b/internal/bodypathstream/file_timing.go
+2026-10-03T14:17:28.6627172Z index d0c135a7..9269c1a0 100644
+2026-10-03T14:17:28.6627451Z --- a/internal/bodypathstream/file_timing.go
+2026-10-03T14:17:28.6627748Z +++ b/internal/bodypathstream/file_timing.go
+2026-10-03T14:17:28.6628132Z @@ -167,8 +167,8 @@ func timingKeys(raw []byte, shape reflect.Type) error {
+2026-10-03T14:17:28.6628482Z  			return err
+2026-10-03T14:17:28.6628657Z  		}
+2026-10-03T14:17:28.6628958Z  		allowed := make(map[string]reflect.Type, shape.NumField())
+2026-10-03T14:17:28.6629284Z -		for i := range shape.NumField() {
+2026-10-03T14:17:28.6629543Z -			field := shape.Field(i)
+2026-10-03T14:17:28.6629784Z +		for field := range shape.Fields() {
+2026-10-03T14:17:28.6630027Z +			field := field
+2026-10-03T14:17:28.6630301Z  			allowed[field.Tag.Get("json")] = field.Type
+2026-10-03T14:17:28.6631285Z  		}
+2026-10-03T14:17:28.6631505Z  		for key, value := range fields {
+2026-10-03T14:17:28.7656074Z ##[error]Process completed with exit code 1.
+2026-10-03T14:17:28.7912190Z ##[group]Run set -euo pipefail
+2026-10-03T14:17:28.7912448Z [36;1mset -euo pipefail[0m
+2026-10-03T14:17:28.7912632Z [36;1mremediation_root="$RUNNER_TEMP/go-format-remediation"[0m
+2026-10-03T14:17:28.7912852Z [36;1mpaths="$remediation_root/gofmt-paths.txt"[0m
+2026-10-03T14:17:28.7913037Z [36;1mpatch_a="$remediation_root/gofmt.patch"[0m
+2026-10-03T14:17:28.7913233Z [36;1mpatch_b="$remediation_root/gofmt-replay.patch"[0m
+2026-10-03T14:17:28.7913455Z [36;1mpatch_a_fixed="$remediation_root/gofmt-fixed-point.patch"[0m
+2026-10-03T14:17:28.7913668Z [36;1mreceipt="$remediation_root/receipt.json"[0m
+2026-10-03T14:17:28.7913879Z [36;1msource_before="$remediation_root/source-before.status"[0m
+2026-10-03T14:17:28.7914105Z [36;1msource_after="$remediation_root/source-after.status"[0m
+2026-10-03T14:17:28.7914309Z [36;1mmkdir -p "$remediation_root"[0m
+2026-10-03T14:17:28.7914456Z [36;1m: > "$paths"[0m
+2026-10-03T14:17:28.7914578Z [36;1m: > "$patch_a"[0m
+2026-10-03T14:17:28.7914743Z [36;1m: > "$patch_b"[0m
+2026-10-03T14:17:28.7914868Z [36;1m: > "$patch_a_fixed"[0m
+2026-10-03T14:17:28.7915001Z [36;1m: > "$receipt"[0m
+2026-10-03T14:17:28.7915276Z [36;1menv -u GIT_DIR -u GIT_WORK_TREE -u GIT_INDEX_FILE git status --porcelain=v1 --untracked-files=all > "$source_before"[0m
+2026-10-03T14:17:28.7915574Z [36;1mgofmt -l . | sort > "$paths"[0m
+2026-10-03T14:17:28.7915751Z [36;1mpath_count="$(wc -l < "$paths" | tr -d '[:space:]')"[0m
+2026-10-03T14:17:28.7916010Z [36;1mcandidate_a="$(mktemp -d "$RUNNER_TEMP/go-format-candidate-a.XXXXXX")"[0m
+2026-10-03T14:17:28.7916289Z [36;1mcandidate_b="$(mktemp -d "$RUNNER_TEMP/go-format-candidate-b.XXXXXX")"[0m
+2026-10-03T14:17:28.7916493Z [36;1m[0m
+2026-10-03T14:17:28.7916606Z [36;1mmaterialize_candidate() {[0m
+2026-10-03T14:17:28.7916750Z [36;1m  candidate="$1"[0m
+2026-10-03T14:17:28.7916880Z [36;1m  patch="$2"[0m
+2026-10-03T14:17:28.7917081Z [36;1m  env -u GIT_DIR -u GIT_WORK_TREE -u GIT_INDEX_FILE git init --quiet "$candidate"[0m
+2026-10-03T14:17:28.7917435Z [36;1m  env -u GIT_DIR -u GIT_WORK_TREE -u GIT_INDEX_FILE git -C "$candidate" config user.email ci-format@example.invalid[0m
+2026-10-03T14:17:28.7917838Z [36;1m  env -u GIT_DIR -u GIT_WORK_TREE -u GIT_INDEX_FILE git -C "$candidate" config user.name ci-format-remediation[0m
+2026-10-03T14:17:28.7918110Z [36;1m  while IFS= read -r path; do[0m
+2026-10-03T14:17:28.7918262Z [36;1m    if [ -z "$path" ]; then[0m
+2026-10-03T14:17:28.7918406Z [36;1m      continue[0m
+2026-10-03T14:17:28.7918525Z [36;1m    fi[0m
+2026-10-03T14:17:28.7918640Z [36;1m    case "$path" in[0m
+2026-10-03T14:17:28.7918774Z [36;1m      /*|../*|*/../*|*/..)[0m
+2026-10-03T14:17:28.7918931Z [36;1m        echo "unsafe gofmt path: $path" >&2[0m
+2026-10-03T14:17:28.7919097Z [36;1m        return 1[0m
+2026-10-03T14:17:28.7919223Z [36;1m        ;;[0m
+2026-10-03T14:17:28.7919334Z [36;1m    esac[0m
+2026-10-03T14:17:28.7919475Z [36;1m    mkdir -p "$candidate/$(dirname -- "$path")"[0m
+2026-10-03T14:17:28.7919665Z [36;1m    cp -- "$path" "$candidate/$path"[0m
+2026-10-03T14:17:28.7919825Z [36;1m  done < "$paths"[0m
+2026-10-03T14:17:28.7919964Z [36;1m  if [ "$path_count" -gt 0 ]; then[0m
+2026-10-03T14:17:28.7920191Z [36;1m    env -u GIT_DIR -u GIT_WORK_TREE -u GIT_INDEX_FILE git -C "$candidate" add -- .[0m
+2026-10-03T14:17:28.7920590Z [36;1m    env -u GIT_DIR -u GIT_WORK_TREE -u GIT_INDEX_FILE git -C "$candidate" commit --quiet -m baseline[0m
+2026-10-03T14:17:28.7920834Z [36;1m    ([0m
+2026-10-03T14:17:28.7920949Z [36;1m      cd "$candidate"[0m
+2026-10-03T14:17:28.7921095Z [36;1m      while IFS= read -r path; do[0m
+2026-10-03T14:17:28.7921253Z [36;1m        if [ -n "$path" ]; then[0m
+2026-10-03T14:17:28.7921403Z [36;1m          gofmt -w "./$path"[0m
+2026-10-03T14:17:28.7921540Z [36;1m        fi[0m
+2026-10-03T14:17:28.7921788Z [36;1m      done < "$paths"[0m
+2026-10-03T14:17:28.7921915Z [36;1m    )[0m
+2026-10-03T14:17:28.7922019Z [36;1m  fi[0m
+2026-10-03T14:17:28.7922367Z [36;1m  env -u GIT_DIR -u GIT_WORK_TREE -u GIT_INDEX_FILE git -C "$candidate" diff --binary -- . > "$patch"[0m
+2026-10-03T14:17:28.7922614Z [36;1m}[0m
+2026-10-03T14:17:28.7922715Z [36;1m[0m
+2026-10-03T14:17:28.7922851Z [36;1mmaterialize_candidate "$candidate_a" "$patch_a"[0m
+2026-10-03T14:17:28.7923055Z [36;1mmaterialize_candidate "$candidate_b" "$patch_b"[0m
+2026-10-03T14:17:28.7923223Z [36;1m([0m
+2026-10-03T14:17:28.7923330Z [36;1m  cd "$candidate_a"[0m
+2026-10-03T14:17:28.7923469Z [36;1m  while IFS= read -r path; do[0m
+2026-10-03T14:17:28.7923619Z [36;1m    if [ -n "$path" ]; then[0m
+2026-10-03T14:17:28.7923764Z [36;1m      gofmt -w "./$path"[0m
+2026-10-03T14:17:28.7923903Z [36;1m    fi[0m
+2026-10-03T14:17:28.7924016Z [36;1m  done < "$paths"[0m
+2026-10-03T14:17:28.7924205Z [36;1m  env -u GIT_DIR -u GIT_WORK_TREE -u GIT_INDEX_FILE git diff --binary -- .[0m
+2026-10-03T14:17:28.7924420Z [36;1m) > "$patch_a_fixed"[0m
+2026-10-03T14:17:28.7924557Z [36;1mreplay_equal=false[0m
+2026-10-03T14:17:28.7924697Z [36;1mfixed_point=false[0m
+2026-10-03T14:17:28.7924843Z [36;1mif cmp -s "$patch_a" "$patch_b"; then[0m
+2026-10-03T14:17:28.7925001Z [36;1m  replay_equal=true[0m
+2026-10-03T14:17:28.7925126Z [36;1mfi[0m
+2026-10-03T14:17:28.7925260Z [36;1mif cmp -s "$patch_a" "$patch_a_fixed"; then[0m
+2026-10-03T14:17:28.7925432Z [36;1m  fixed_point=true[0m
+2026-10-03T14:17:28.7925556Z [36;1mfi[0m
+2026-10-03T14:17:28.7925802Z [36;1menv -u GIT_DIR -u GIT_WORK_TREE -u GIT_INDEX_FILE git status --porcelain=v1 --untracked-files=all > "$source_after"[0m
+2026-10-03T14:17:28.7926097Z [36;1msource_repository_writes=0[0m
+2026-10-03T14:17:28.7926273Z [36;1mif ! cmp -s "$source_before" "$source_after"; then[0m
+2026-10-03T14:17:28.7926456Z [36;1m  source_repository_writes=1[0m
+2026-10-03T14:17:28.7926593Z [36;1mfi[0m
+2026-10-03T14:17:28.7926810Z [36;1mpaths_json="$(jq -Rsc 'split("\n") | if . == [""] then [] elif .[-1] == "" then .[:-1] else . end' < "$paths")"[0m
+2026-10-03T14:17:28.7927104Z [36;1mpatch_bytes="$(wc -c < "$patch_a" | tr -d '[:space:]')"[0m
+2026-10-03T14:17:28.7927347Z [36;1mpatch_sha256="sha256:$(sha256sum "$patch_a" | awk '{print $1}')"[0m
+2026-10-03T14:17:28.7927613Z [36;1mreplay_patch_sha256="sha256:$(sha256sum "$patch_b" | awk '{print $1}')"[0m
+2026-10-03T14:17:28.7927824Z [36;1mjq -n \[0m
+2026-10-03T14:17:28.7927969Z [36;1m  --arg schema gooo/go-format-remediation/v1 \[0m
+2026-10-03T14:17:28.7928155Z [36;1m  --arg head_sha "$EXACT_HEAD_SHA" \[0m
+2026-10-03T14:17:28.7928318Z [36;1m  --arg toolchain go1.27.1 \[0m
+2026-10-03T14:17:28.7928473Z [36;1m  --arg go_version "$(go version)" \[0m
+2026-10-03T14:17:28.7928658Z [36;1m  --arg go_env_goversion "$(go env GOVERSION)" \[0m
+2026-10-03T14:17:28.7928843Z [36;1m  --argjson paths "$paths_json" \[0m
+2026-10-03T14:17:28.7929008Z [36;1m  --arg path_count "$path_count" \[0m
+2026-10-03T14:17:28.7929178Z [36;1m  --arg patch_sha256 "$patch_sha256" \[0m
+2026-10-03T14:17:28.7929374Z [36;1m  --arg replay_patch_sha256 "$replay_patch_sha256" \[0m
+2026-10-03T14:17:28.7929569Z [36;1m  --arg patch_bytes "$patch_bytes" \[0m
+2026-10-03T14:17:28.7929743Z [36;1m  --argjson replay_equal "$replay_equal" \[0m
+2026-10-03T14:17:28.7929925Z [36;1m  --argjson fixed_point "$fixed_point" \[0m
+2026-10-03T14:17:28.7930138Z [36;1m  --arg source_repository_writes "$source_repository_writes" \[0m
+2026-10-03T14:17:28.7930498Z [36;1m  --arg candidate_workspace_writes "$path_count" \[0m
+2026-10-03T14:17:28.7931488Z [36;1m  '{schema:$schema,head_sha:$head_sha,toolchain:$toolchain,go_version:$go_version,go_env_goversion:$go_env_goversion,sorted_paths:$paths,path_count:($path_count|tonumber),patch_sha256:$patch_sha256,replay_patch_sha256:$replay_patch_sha256,patch_bytes:($patch_bytes|tonumber),replay_equal:$replay_equal,fixed_point:$fixed_point,source_repository_writes:($source_repository_writes|tonumber),candidate_workspace_writes:($candidate_workspace_writes|tonumber)}' \[0m
+2026-10-03T14:17:28.7932484Z [36;1m  > "$receipt"[0m
+2026-10-03T14:17:28.7932705Z [36;1mtest -s "$receipt"[0m
+2026-10-03T14:17:28.7932852Z [36;1mif [ "$path_count" -gt 0 ]; then[0m
+2026-10-03T14:17:28.7933005Z [36;1m  test -s "$patch_a"[0m
+2026-10-03T14:17:28.7933140Z [36;1m  test -s "$patch_b"[0m
+2026-10-03T14:17:28.7933276Z [36;1m  test -s "$patch_a_fixed"[0m
+2026-10-03T14:17:28.7933413Z [36;1melse[0m
+2026-10-03T14:17:28.7933530Z [36;1m  test ! -s "$patch_a"[0m
+2026-10-03T14:17:28.7933669Z [36;1m  test ! -s "$patch_b"[0m
+2026-10-03T14:17:28.7933808Z [36;1m  test ! -s "$patch_a_fixed"[0m
+2026-10-03T14:17:28.7933945Z [36;1mfi[0m
+2026-10-03T14:17:28.7934059Z [36;1mtest "$replay_equal" = true[0m
+2026-10-03T14:17:28.7934206Z [36;1mtest "$fixed_point" = true[0m
+2026-10-03T14:17:28.7934372Z [36;1mtest "$source_repository_writes" -eq 0[0m
+2026-10-03T14:17:28.7934532Z [36;1mjq -e \[0m
+2026-10-03T14:17:28.7934677Z [36;1m  --arg schema gooo/go-format-remediation/v1 \[0m
+2026-10-03T14:17:28.7934860Z [36;1m  --arg head_sha "$EXACT_HEAD_SHA" \[0m
+2026-10-03T14:17:28.7935026Z [36;1m  --arg toolchain go1.27.1 \[0m
+2026-10-03T14:17:28.7935180Z [36;1m  --argjson paths "$paths_json" \[0m
+2026-10-03T14:17:28.7935341Z [36;1m  --arg path_count "$path_count" \[0m
+2026-10-03T14:17:28.7935511Z [36;1m  --arg patch_sha256 "$patch_sha256" \[0m
+2026-10-03T14:17:28.7935703Z [36;1m  --arg replay_patch_sha256 "$replay_patch_sha256" \[0m
+2026-10-03T14:17:28.7935898Z [36;1m  --arg patch_bytes "$patch_bytes" \[0m
+2026-10-03T14:17:28.7936703Z [36;1m  '.schema == $schema and .head_sha == $head_sha and .toolchain == $toolchain and .sorted_paths == $paths and .path_count == ($path_count|tonumber) and .patch_sha256 == $patch_sha256 and .replay_patch_sha256 == $replay_patch_sha256 and .patch_bytes == ($patch_bytes|tonumber) and .replay_equal == true and .fixed_point == true and .source_repository_writes == 0 and .candidate_workspace_writes == ($path_count|tonumber)' \[0m
+2026-10-03T14:17:28.7937490Z [36;1m  "$receipt" > /dev/null[0m
+2026-10-03T14:17:28.7937836Z [36;1mecho "format remediation paths=$path_count replay_equal=$replay_equal fixed_point=$fixed_point source_repository_writes=$source_repository_writes"[0m
+2026-10-03T14:17:28.7991020Z shell: /usr/bin/bash -e {0}
+2026-10-03T14:17:28.7991171Z env:
+2026-10-03T14:17:28.7991290Z   GOTOOLCHAIN: local
+2026-10-03T14:17:28.7991479Z   LOGICAL_WORKSPACE: /home/runner/work/meta-ontology-go/meta-ontology-go
+2026-10-03T14:17:28.7991775Z   PHYSICAL_WORKSPACE: /home/runner/work/_temp/repository-materialize-format/storage
+2026-10-03T14:17:28.7992054Z   GIT_DIR: /home/runner/work/meta-ontology-go/meta-ontology-go/.git
+2026-10-03T14:17:28.7992290Z   GIT_WORK_TREE: /home/runner/work/meta-ontology-go/meta-ontology-go
+2026-10-03T14:17:28.7992557Z   GIT_INDEX_FILE: /home/runner/work/_temp/repository-materialize-format/logical.index
+2026-10-03T14:17:28.7992827Z   EXACT_HEAD_SHA: d360355bc1157f4a88f806c9ad87786db70a830a
+2026-10-03T14:17:28.7993006Z ##[endgroup]
+2026-10-03T14:17:29.3918761Z format remediation paths=0 replay_equal=true fixed_point=true source_repository_writes=0
+2026-10-03T14:17:29.4259915Z ##[group]Run actions/upload-artifact@v7
+2026-10-03T14:17:29.4260088Z with:
+2026-10-03T14:17:29.4260267Z   name: go-format-remediation-d360355bc1157f4a88f806c9ad87786db70a830a
+2026-10-03T14:17:29.4261095Z   path: /home/runner/work/_temp/go-format-remediation/gofmt-paths.txt
+/home/runner/work/_temp/go-format-remediation/gofmt.patch
+/home/runner/work/_temp/go-format-remediation/gofmt-replay.patch
+/home/runner/work/_temp/go-format-remediation/gofmt-fixed-point.patch
+/home/runner/work/_temp/go-format-remediation/receipt.json
+
+2026-10-03T14:17:29.4261755Z   if-no-files-found: error
+2026-10-03T14:17:29.4261893Z   compression-level: 6
+2026-10-03T14:17:29.4262017Z   overwrite: false
+2026-10-03T14:17:29.4262137Z   include-hidden-files: false
+2026-10-03T14:17:29.4262270Z   archive: true
+2026-10-03T14:17:29.4262527Z env:
+2026-10-03T14:17:29.4262631Z   GOTOOLCHAIN: local
+2026-10-03T14:17:29.4262808Z   LOGICAL_WORKSPACE: /home/runner/work/meta-ontology-go/meta-ontology-go
+2026-10-03T14:17:29.4263144Z   PHYSICAL_WORKSPACE: /home/runner/work/_temp/repository-materialize-format/storage
+2026-10-03T14:17:29.4263418Z   GIT_DIR: /home/runner/work/meta-ontology-go/meta-ontology-go/.git
+2026-10-03T14:17:29.4263647Z   GIT_WORK_TREE: /home/runner/work/meta-ontology-go/meta-ontology-go
+2026-10-03T14:17:29.4263913Z   GIT_INDEX_FILE: /home/runner/work/_temp/repository-materialize-format/logical.index
+2026-10-03T14:17:29.4264136Z ##[endgroup]
+2026-10-03T14:17:29.5331258Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-10-03T14:17:29.5332528Z The least common ancestor is /home/runner/work/_temp/go-format-remediation. This will be the root directory of the artifact
+2026-10-03T14:17:29.5332950Z With the provided path, there will be 5 files uploaded
+2026-10-03T14:17:29.5335993Z Artifact name is valid!
+2026-10-03T14:17:29.5336215Z Root directory input is valid!
+2026-10-03T14:17:29.7851475Z Uploading artifact: go-format-remediation-d360355bc1157f4a88f806c9ad87786db70a830a.zip
+2026-10-03T14:17:29.7877611Z Beginning upload of artifact content to blob storage
+2026-10-03T14:17:29.9654761Z Uploaded bytes 948
+2026-10-03T14:17:30.0054376Z Finished uploading artifact content to blob storage!
+2026-10-03T14:17:30.0055083Z SHA256 digest of uploaded artifact is a30eb8d88e2ec376576a0efd452a25a5f26ba0c0be86a18f74a578c9890983bb
+2026-10-03T14:17:30.0055530Z Finalizing artifact upload
+2026-10-03T14:17:30.3199929Z Artifact go-format-remediation-d360355bc1157f4a88f806c9ad87786db70a830a successfully finalized. Artifact ID 11276690021
+2026-10-03T14:17:30.3201024Z Artifact go-format-remediation-d360355bc1157f4a88f806c9ad87786db70a830a has been successfully uploaded! Final size is 948 bytes. Artifact ID is 11276690021
+2026-10-03T14:17:30.3203752Z Artifact download URL: https://github.com/kimjooyoon/meta-ontology-go/actions/runs/37129032302/artifacts/11276690021
+2026-10-03T14:17:30.3400867Z ##[group]Run set -euo pipefail
+2026-10-03T14:17:30.3401089Z [36;1mset -euo pipefail[0m
+2026-10-03T14:17:30.3401301Z [36;1mremediation_root="$RUNNER_TEMP/go-format-remediation"[0m
+2026-10-03T14:17:30.3401553Z [36;1mpaths="$remediation_root/gofmt-paths.txt"[0m
+2026-10-03T14:17:30.3401757Z [36;1mpatch_a="$remediation_root/gofmt.patch"[0m
+2026-10-03T14:17:30.3401969Z [36;1mpatch_b="$remediation_root/gofmt-replay.patch"[0m
+2026-10-03T14:17:30.3402198Z [36;1mpatch_a_fixed="$remediation_root/gofmt-fixed-point.patch"[0m
+2026-10-03T14:17:30.3402421Z [36;1mreceipt="$remediation_root/receipt.json"[0m
+2026-10-03T14:17:30.3402602Z [36;1mtest -s "$receipt"[0m
+2026-10-03T14:17:30.3402762Z [36;1mpath_count="$(jq -r '.path_count' "$receipt")"[0m
+2026-10-03T14:17:30.3402944Z [36;1mtest "$path_count" -ge 0[0m
+2026-10-03T14:17:30.3403083Z [36;1mjq -e \[0m
+2026-10-03T14:17:30.3403212Z [36;1m  --arg head_sha "$EXACT_HEAD_SHA" \[0m
+2026-10-03T14:17:30.3403670Z [36;1m  '.head_sha == $head_sha and .toolchain == "go1.27.1" and .replay_equal == true and .fixed_point == true and .source_repository_writes == 0 and (.path_count|type) == "number" and .path_count >= 0' \[0m
+2026-10-03T14:17:30.3404068Z [36;1m  "$receipt" > /dev/null[0m
+2026-10-03T14:17:30.3404214Z [36;1mcmp -s "$patch_a" "$patch_b"[0m
+2026-10-03T14:17:30.3404374Z [36;1mcmp -s "$patch_a" "$patch_a_fixed"[0m
+2026-10-03T14:17:30.3404532Z [36;1mif [ "$path_count" -ne 0 ]; then[0m
+2026-10-03T14:17:30.3404704Z [36;1m  echo "gofmt required for $path_count paths"[0m
+2026-10-03T14:17:30.3404866Z [36;1m  exit 1[0m
+2026-10-03T14:17:30.3404978Z [36;1mfi[0m
+2026-10-03T14:17:30.3456923Z shell: /usr/bin/bash -e {0}
+2026-10-03T14:17:30.3457073Z env:
+2026-10-03T14:17:30.3457190Z   GOTOOLCHAIN: local
+2026-10-03T14:17:30.3457378Z   LOGICAL_WORKSPACE: /home/runner/work/meta-ontology-go/meta-ontology-go
+2026-10-03T14:17:30.3457664Z   PHYSICAL_WORKSPACE: /home/runner/work/_temp/repository-materialize-format/storage
+2026-10-03T14:17:30.3458122Z   GIT_DIR: /home/runner/work/meta-ontology-go/meta-ontology-go/.git
+2026-10-03T14:17:30.3458354Z   GIT_WORK_TREE: /home/runner/work/meta-ontology-go/meta-ontology-go
+2026-10-03T14:17:30.3458612Z   GIT_INDEX_FILE: /home/runner/work/_temp/repository-materialize-format/logical.index
+2026-10-03T14:17:30.3458865Z   EXACT_HEAD_SHA: d360355bc1157f4a88f806c9ad87786db70a830a
+2026-10-03T14:17:30.3459038Z ##[endgroup]
+2026-10-03T14:17:30.4202554Z Post job cleanup.
+2026-10-03T14:17:30.4817895Z [command]/usr/bin/git version
+2026-10-03T14:17:30.4863987Z git version 2.55.0
+2026-10-03T14:17:30.4890558Z Temporarily overriding HOME='/home/runner/work/_temp/c69785db-8de8-4fdc-95a4-7c0447d207ea' before making global git config changes
+2026-10-03T14:17:30.4891354Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-03T14:17:30.4896369Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/meta-ontology-go/meta-ontology-go
+2026-10-03T14:17:30.4930679Z Removing SSH command configuration
+2026-10-03T14:17:30.4936963Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-03T14:17:30.4972482Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-03T14:17:30.5194830Z Removing HTTP extra header
+2026-10-03T14:17:30.5200776Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-03T14:17:30.5247330Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-03T14:17:30.5472323Z Removing includeIf entries pointing to credentials config files
+2026-10-03T14:17:30.5478199Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-03T14:17:30.5510110Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-03T14:17:30.5829083Z Cleaning up orphan processes
