@@ -171,6 +171,9 @@ SDK API·실행 예제에 이어 컴파일러 CLI의 `--path-observation`에도 
 당시 로컬 실행 파일도 해당 `fc0e99c4` 리비전에서 빌드했다. 이후 관측 루프는
 main `a4f9c1c7`에 반영했고, 출력 재사용은
 [#1163](https://github.com/kimjooyoon/meta-ontology-go/pull/1163)으로 main `ec76ed7f`에 반영했다.
-유일 후보 직접 조립은 dev `96820915`에 병합했고
-[#1165](https://github.com/kimjooyoon/meta-ontology-go/pull/1165)에서 main 승격을 진행한다.
+유일 후보 직접 조립은 dev `96820915`에 이어
+[#1165](https://github.com/kimjooyoon/meta-ontology-go/pull/1165)로 main `57dfe4ec`에 반영했다.
+정확한 main 소스로 만든 설치본에서 새 관측·재사용 관측·기존 탐색을 각각 생성하고,
+각 다섯 입력과 두 번의 컴파일된 실행이 같은 결과를 내는지 확인했다.
+모델을 요청한 직접 조립도 실제 모델 판단과 탐색은 0회였다.
 현재 배포 상태는 [위키](https://github.com/kimjooyoon/meta-ontology-go/wiki/Current-Status)에서 갱신한다.
