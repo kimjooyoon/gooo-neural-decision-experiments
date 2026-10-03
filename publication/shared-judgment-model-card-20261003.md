@@ -65,8 +65,20 @@ The [2026-10-03 research update](https://github.com/kimjooyoon/gooo-neural-decis
 narrows the next work to useful bounded language features: choosing informative
 execution inputs, preserving operation order, and reusing small typed assemblies.
 An additive Go SDK probe-ranking API explores the first step with zero model
-calls or training updates. Model artifacts and the existing task scores below
-remain attached to their original observations.
+calls or training updates. Its compiler integration now has a
+[24-generation paired pilot](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/path-observation-loop-20261003):
+the frozen compact bag-original FP32 judge made 24 actual predictions across the
+model-enabled arms, and all configurations produced 48 compiled runs. A declared
+Gooo reference activity supplied one new observation before construction. The
+eight oracle-enabled generations matched 48/48 supplied expectations; controls
+remain in the publication, with 84/144 matched across all 24 generations.
+The original sparse selection case passed in every arm. This is one authored
+task with two language views and two repetitions, with zero weight updates.
+The Korean view needed extra search, and oracle-enabled generation added cost.
+[Compiler PR 1160](https://github.com/kimjooyoon/meta-ontology-go/pull/1160) tracks
+integration and deployment; the pilot pins compiler `2f02d244` and SDK v0.2.16.
+Model artifacts and the existing task scores below remain attached to their
+original observations.
 
 The language carries the plan, and the model supplies small local judgments.
 Our aim is to make intent, construction and observed behavior travel together
