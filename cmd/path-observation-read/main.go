@@ -129,7 +129,7 @@ func evaluate(mask int, input int64) int64 {
 	return v
 }
 
-func firstRankingSHA(raw []byte) string {
+func rankingSHA(raw []byte, index int) string {
 	for _, key := range []string{"report", "body_paths", "observation", "rounds"} {
 		var fields map[string]json.RawMessage
 		check(json.Unmarshal(raw, &fields) == nil, "ranking container")
@@ -137,8 +137,11 @@ func firstRankingSHA(raw []byte) string {
 	}
 	var rounds []map[string]json.RawMessage
 	check(json.Unmarshal(raw, &rounds) == nil && len(rounds) > 0, "initial ranking")
+	if index < 0 {
+		index = len(rounds) - 1
+	}
 	var compact bytes.Buffer
-	check(json.Compact(&compact, rounds[0]["ranking"]) == nil, "ranking JSON")
+	check(json.Compact(&compact, rounds[index]["ranking"]) == nil, "ranking JSON")
 	return sha(compact.Bytes())
 }
 
@@ -152,9 +155,11 @@ func observations(p object, mode, initialSHA string) []finiteCase {
 	o := obj(p["observation"])
 	rounds := list(o["rounds"])
 	check(o["source_sha256"] == p["original_source_sha256"], "oracle source binding")
-	oracle := mode == "oracle" || mode == "oracle_reuse"
+	oracle := mode == "oracle" || mode == "oracle_reuse" || mode == "oracle_resolve"
 	check(len(rounds) == 1 || oracle && len(rounds) == 2, "round bound")
-	check((obj(o["options"])["reuse_probe_outputs"] == true) == (mode == "oracle_reuse"), "reuse mode")
+	reuse := mode == "oracle_reuse" || mode == "oracle_resolve"
+	check((obj(o["options"])["reuse_probe_outputs"] == true) == reuse, "reuse mode")
+	check((obj(o["options"])["resolve_unique_candidate"] == true) == (mode == "oracle_resolve"), "resolution mode")
 	for index, item := range rounds {
 		r := obj(item)
 		q := obj(r["ranking"])
@@ -172,7 +177,7 @@ func observations(p object, mode, initialSHA string) []finiteCase {
 		}
 		check(string(canonical(survivors)) == string(canonical(q["surviving_masks"])), "survivors differ")
 		wantEvaluations := 8*len(cases) + 3*len(survivors)
-		if mode == "oracle_reuse" {
+		if reuse {
 			reused := obj(r["reuse"])
 			values, comparisons := 0, 0
 			if index > 0 {
@@ -225,6 +230,34 @@ func compareReusePair(dir, id string) {
 	check(reflect.DeepEqual(x["cases"], y["cases"]), "reuse pair runtime differs")
 }
 
+func checkResolutionPair(dir, id string, p object, generationRaw []byte, model bool) object {
+	r := obj(p["resolution"])
+	s := obj(r["selection"])
+	check(r["status"] == "RESOLVED" && r["search_skipped"] == true && p["search_started"] == false &&
+		r["model_ranking_skipped"] == model && r["model_load_skipped"] == model &&
+		r["feedback_skipped"] == model && r["seed_skipped"] == false && num(r["selected_mask"]) == 7, "resolution controls")
+	check(r["ranking_sha256"] == "sha256:"+rankingSHA(generationRaw, -1) &&
+		r["effective_cases_sha256"] == obj(p["observation"])["effective_cases_sha256"] &&
+		num(r["observed_cases_total"]) == 2 && num(r["observed_cases_passed"]) == 2, "resolution evidence")
+	check(num(s["local_model_predictions"]) == 0 && num(s["external_provider_calls"]) == 0 &&
+		s["external_provider_calls_known"] == true && len(list(obj(p["search"])["attempts"])) == 0 &&
+		len(list(p["feedback_judgments"])) == 0 && len(list(p["session_progress"])) == 0 && p["model_context"] == nil, "resolution invented work")
+	for _, item := range list(s["receipts"]) {
+		c := obj(item)
+		check(c["mode"] == "unique_source_observation" && c["selected"] == "layout_reverse" && num(c["predict_ns"]) == 0, "resolved choice provenance")
+	}
+	baseID := strings.Replace(id, "oracle_resolve", "oracle_reuse", 1)
+	base := decode(read(filepath.Join(dir, baseID+"-generation.json")))
+	current := decode(generationRaw)
+	basePath := obj(obj(base["report"])["body_paths"])
+	check(base["source"] == current["source"] && reflect.DeepEqual(basePath["native_case_results"], p["native_case_results"]) &&
+		reflect.DeepEqual(obj(obj(basePath["search"])["selection"])["choices"], s["choices"]), "direct projection changes selected body")
+	x := obj(decode(read(filepath.Join(dir, baseID+"-runtime.json")))["observation"])
+	y := obj(decode(read(filepath.Join(dir, id+"-runtime.json")))["observation"])
+	check(reflect.DeepEqual(x["cases"], y["cases"]), "direct projection runtime differs")
+	return s
+}
+
 func main() {
 	dir := flag.String("dir", "publication/path-observation-loop-20261003", "pilot directory")
 	flag.Parse()
@@ -242,13 +275,17 @@ func main() {
 	if manifest["include_reuse"] == true {
 		modes = append(modes, "oracle_reuse")
 	}
+	if manifest["include_resolve"] == true {
+		check(manifest["include_reuse"] == true, "missing reuse comparison arm")
+		modes = append(modes, "oracle_resolve")
+	}
 	wantRequests := 4 * len(modes) * repeats
 	check(len(rows) == wantRequests && num(manifest["generations"]) == wantRequests &&
 		num(manifest["compiled_runs"]) == 2*wantRequests, "fixed pilot request count")
 	sourceSHA := "sha256:" + sha(read(filepath.Join(*dir, "source.gooo")))
 	groups := map[string]*aggregate{}
 	seen := map[string]bool{}
-	predictions, passed, attempts, reusePairs := 0, 0, 0, 0
+	predictions, passed, attempts, reusePairs, resolutionPairs := 0, 0, 0, 0, 0
 	for _, row := range rows {
 		id := row["id"].(string)
 		check(!seen[id] && !strings.ContainsAny(id, "/\\"), "duplicate or invalid ID")
@@ -267,11 +304,20 @@ func main() {
 		}
 		useModel := row["model"].(bool)
 		initialSHA := ""
-		if mode == "oracle_reuse" {
-			initialSHA = firstRankingSHA(generationRaw)
+		if mode == "oracle_reuse" || mode == "oracle_resolve" {
+			initialSHA = rankingSHA(generationRaw, 0)
 		}
 		cases := observations(p, mode, initialSHA)
-		check(num(p["declared_test_cases"]) == 1 && num(s["training_cases"]) == len(cases), "selection denominator")
+		selection := obj(s["selection"])
+		selectedTotal := num(s["training_cases"])
+		if mode == "oracle_resolve" {
+			selection = checkResolutionPair(*dir, id, p, generationRaw, useModel)
+			selectedTotal = num(obj(p["resolution"])["observed_cases_total"])
+			resolutionPairs++
+		} else {
+			check(p["resolution"] == nil, "unexpected direct projection")
+		}
+		check(num(p["declared_test_cases"]) == 1 && selectedTotal == len(cases), "selection denominator")
 		for _, av := range list(s["attempts"]) {
 			a := obj(av)
 			mask := num(a["choice_mask"])
@@ -283,10 +329,9 @@ func main() {
 				check(int64(num(c["actual"])) == want && int64(num(c["expected"])) == cases[i].Expected && c["passed"] == (want == cases[i].Expected), "attempt arithmetic")
 			}
 		}
-		selection := obj(s["selection"])
 		calls := num(selection["local_model_predictions"])
 		actualCalls := 0
-		if useModel {
+		if useModel && mode != "oracle_resolve" {
 			actualCalls = num(obj(selection["three_choice_prediction"])["actual_predictions"])
 		}
 		for _, fv := range list(p["feedback_judgments"]) {
@@ -375,7 +420,7 @@ func main() {
 		a.MedianObservationMS = median(a.ObservationMS)
 		table = append(table, a)
 	}
-	result := object{"schema": "gooo/path-observation-pilot-reading/v1", "status": "PASS", "requests": wantRequests, "compiled_runs": 2 * wantRequests, "runtime_passed": passed, "runtime_cases": 6 * wantRequests, "model_predictions": predictions, "search_attempts": attempts, "reuse_pairs": reusePairs, "groups": table, "reader_model_calls": 0, "reader_program_executions": 0, "scope": "Independent arithmetic and accounting checks of one fixed authored pilot; timing samples are observations, not a causal benchmark."}
+	result := object{"schema": "gooo/path-observation-pilot-reading/v1", "status": "PASS", "requests": wantRequests, "compiled_runs": 2 * wantRequests, "runtime_passed": passed, "runtime_cases": 6 * wantRequests, "model_predictions": predictions, "search_attempts": attempts, "reuse_pairs": reusePairs, "resolution_pairs": resolutionPairs, "groups": table, "reader_model_calls": 0, "reader_program_executions": 0, "scope": "Independent arithmetic and accounting checks of one fixed authored pilot; timing samples are observations, not a causal benchmark."}
 	output, e := json.MarshalIndent(result, "", "  ")
 	if e != nil {
 		panic(e)

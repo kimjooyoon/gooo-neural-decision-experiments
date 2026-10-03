@@ -78,7 +78,7 @@ func run(binary, out string, args ...string) process {
 	return p
 }
 
-func fixtures(dir string, includeReuse bool) {
+func fixtures(dir string, includeReuse, includeResolve bool) {
 	source := "package observation\nnamespace observation\nentity Integer id \"observation://integer\"\n" +
 		"activity Assemble(Integer) -> Integer computes \"let a = (input - 1); let b = (a - 3); return (b - 9)\"\n" +
 		"activity Expected(Integer) -> Integer computes \"return (7 - input)\"\n" +
@@ -104,13 +104,19 @@ func fixtures(dir string, includeReuse bool) {
 	if includeReuse {
 		modes = append(modes, "oracle_reuse")
 	}
+	if includeResolve {
+		modes = append(modes, "oracle_resolve")
+	}
 	for _, mode := range modes {
 		request := map[string]any{"schema": "gooo/path-observation-request/v1", "inputs": []int{0, 3, -1}, "max_candidates": 8, "max_rounds": 2}
-		if mode == "oracle" || mode == "oracle_reuse" {
+		if mode == "oracle" || mode == "oracle_reuse" || mode == "oracle_resolve" {
 			request["oracle_activity"] = "Expected"
 		}
-		if mode == "oracle_reuse" {
+		if mode == "oracle_reuse" || mode == "oracle_resolve" {
 			request["reuse_probe_outputs"] = true
+		}
+		if mode == "oracle_resolve" {
+			request["resolve_unique_candidate"] = true
 		}
 		writeJSON(filepath.Join(dir, mode+".json"), request)
 	}
@@ -127,6 +133,7 @@ func main() {
 	goBin := flag.String("go-bin", "go", "Go 1.27.1 executable")
 	out := flag.String("out", "publication/path-observation-loop-20261003", "new result directory")
 	includeReuse := flag.Bool("include-reuse", false, "add the paired oracle output-reuse arm")
+	includeResolve := flag.Bool("include-resolve", false, "add direct unique-candidate projection; requires include-reuse")
 	repeats := flag.Int("repeats", 2, "bounded repetitions per language/model/mode (2..20)")
 	flag.Parse()
 	if *compiler == "" || len(*compilerSHA) != 40 {
@@ -135,11 +142,14 @@ func main() {
 	if *repeats < 2 || *repeats > 20 {
 		panic("repetitions must be between 2 and 20")
 	}
+	if *includeResolve && !*includeReuse {
+		panic("resolution comparison requires the reuse comparison arm")
+	}
 	if _, err := os.Stat(*out); !os.IsNotExist(err) {
 		panic("output must be a new directory; previous observations are immutable")
 	}
 	must(os.MkdirAll(*out, 0755))
-	fixtures(*out, *includeReuse)
+	fixtures(*out, *includeReuse, *includeResolve)
 	var rows []row
 	started := time.Now()
 	for repeat := range *repeats {
@@ -147,6 +157,9 @@ func main() {
 			modes := []string{"none", "rank_only", "oracle"}
 			if *includeReuse {
 				modes = append(modes, "oracle_reuse")
+			}
+			if *includeResolve {
+				modes = append(modes, "oracle_resolve")
 			}
 			if repeat%2 == 1 {
 				for i, j := 0, len(modes)-1; i < j; i, j = i+1, j-1 {
@@ -186,6 +199,6 @@ func main() {
 		"compiler_binary_sha256": sha(*compiler), "model_metadata_sha256": sha(model), "model_weights_sha256": sha(filepath.Join(filepath.Dir(model), "weights.bin")),
 		"os": runtime.GOOS, "arch": runtime.GOARCH, "go_version": runtime.Version(), "elapsed_ms": float64(time.Since(started)) / 1e6,
 		"generations": len(rows), "compiled_runs": 2 * len(rows), "training_updates": 0,
-		"include_reuse": *includeReuse, "repetitions": *repeats,
-		"scope": "One authored three-choice task, two language views, model on/off and no probes/rank-only/oracle with optional cached oracle arm. Finite mechanism pilot; task generalization and causal speedup remain unmeasured."})
+		"include_reuse": *includeReuse, "include_resolve": *includeResolve, "repetitions": *repeats,
+		"scope": "One authored three-choice task, two language views, model requested/disconnected and no probes/rank-only/oracle with optional cached and direct-projection arms. Finite mechanism pilot; task generalization and causal speedup remain unmeasured."})
 }
