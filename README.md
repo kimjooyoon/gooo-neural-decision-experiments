@@ -8,6 +8,9 @@ training tools and original evidence behind that process.
 
 ## Start here — 2026-10-03
 
+- [Runnable Korean order-assembly example](examples/whole-candidate-order):
+  source, short recipe, eight execution cases and two CLI commands. The model
+  selects actual operations for `input * 2 + 1` inside Gooo code generation.
 - [The new 16 KiB judge now runs inside Gooo codegen](publication/order-judge-native-20261003):
   256 generations, 128 direct model predictions, 512 immediately compiled runs.
   On 64 observed development requests, first-attempt completion is 32 → 52;
