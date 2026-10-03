@@ -4,7 +4,10 @@
 깨끗한 개발 후보 `d360355bc1157f4a88f806c9ad87786db70a830a`에서 실제 실행을
 완료했습니다. 형식 CI에서 Go1.27.1 현대화 검사가 요구한 필드 반복 API를 수정한
 `b6f577c3c840928da07663b5cd4da0a64ca281b7`에서도 같은 번갈아 실행을 새로 완료했습니다.
-병합·설치 상태는 후속 기록에서 구분합니다.
+개발 #1194는 필수 여섯 검사와 내려받은 정확한 소스 증거의 독립 검증 뒤
+`69aebdb5c87f1be02d5bd59c9b0e8b961dd51d56`으로 정상 병합했습니다.
+[main #1195](https://github.com/kimjooyoon/meta-ontology-go/pull/1195)는 이 개발 tree와
+현재 main 부모에 결속한 승격 검사를 진행 중입니다. 현재 설치본은 앞선 ed2c2cac입니다.
 
 ## 사용할 수 있는 기능
 
@@ -102,6 +105,10 @@ gooo body-path-run --verify-timing --out fresh-run
 - `test-launch-failure.raw`: 최종 테스트 시작 때 출력 경로 오류로 Go가 시작되지 않은 원본 기록.
 - `archive-readback/main.go`·`archive-readback.json`: 익명 공개 ZIP의 654개 파일,
   24,394,721바이트가 로컬 원본과 같음을 스트림 해시로 확인. 모델·실행 0회.
+- `anonymous-final-readback.json`: 공개 최종 ZIP의 654개 파일·24,393,096바이트도 원본과 일치.
+- `dev-proof-verification.json`, `dev-merge.json`, `promotion-inputs.json`: 정확한 소스 검사·병합·main 후보의 결속.
+- `cleanup.json`, `cleanup-inactive-files.json`: 원본 보관과 열린 프로세스가 없음을
+  확인한 뒤 풀어 놓은 중복 48,774,143바이트와 초기 후보·다운로드 중복 34,001,614바이트 정리.
 
 공개 컴파일러 후보를 깨끗하게 checkout한 뒤 Go1.27.1로 빌드합니다.
 현재 설치본으로 원본을 읽는 경우 새 추론 없이 검사할 수 있습니다.

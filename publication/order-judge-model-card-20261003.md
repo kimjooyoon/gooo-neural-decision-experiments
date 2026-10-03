@@ -431,6 +431,26 @@ resources and retain uncontrolled cache/scheduling effects. Weights were unchang
 Original TDD, fixture and collector failures remain in the
 [raw body records](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/raw-body-usability-20261003).
 
+## Optional current-request wall phases
+
+The [compiler diagnostics experiment](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/body-wall-phases-20261003)
+adds `body-path-run --timing` and `--verify-timing --out` in candidate b6f577c3.
+The source-fixed candidate and its earlier d360355b observation together made
+192 generations, 96 actual predictions and 384 native runs on the same two
+known KO/EN ordering fixtures. All 24,576 finite expectations and generated Go
+bytes matched the earlier results. No weights, optimizer updates or intent tasks
+were added. The original Go1.27.1 modernizer failure is retained.
+
+The final candidate's warm plain/timed response medians were 64.77/64.71ms,
+current-child CPU sums 13.56/13.74ms and maximum single-current-child RSS medians
+4.42/4.42MB. Timed phases identify Go-file hashing (14.40ms), source replay
+(3.16ms), the two native invocations (9.61/9.36ms) and original-file save/binding
+(2.68/0.73ms). Saving is outside response time. Initial input/model loading,
+timing-sidecar/summary writes, stdout and cleanup are outside phase capture.
+These noisy local observations identify costs; they do not establish a recorder
+speedup, inference-only latency, model RAM or whole-host CPU utilization.
+Sixteen separate read-only checks passed with zero additional model/native work.
+
 ## Reproduce body candidates and feedback in Go
 
 The companion language curriculum now has a Go1.27.1 replay path, merged in
