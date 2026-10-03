@@ -216,10 +216,29 @@ A [source-order counterexample](https://github.com/kimjooyoon/gooo-neural-decisi
 reverses the source assignments while keeping the instruction fixed. The two
 correct source-relative choices are opposite, but the local root-order model
 inputs are identical. Both calls choose reverse: native outcomes are 8/8 and 0/8.
-The shared local judge lacks a distinction needed for this pair. The next input
-prototype must preserve the operations of the permitted source alternatives
-before further contrast training. These observations leave the released weights
-unchanged and retain bounded deterministic TDD as the working completion path.
+The shared local judge lacks a distinction needed for this pair. These observations
+leave the released weights unchanged and retain bounded deterministic TDD as the
+working completion path.
+
+The [source-order preflight](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/f663ed3061fdb000e74a1346623d86e92bb38aaa/publication/source-order-preflight-20261003)
+now describes two source-derived assignment operations in **48 bytes per
+alternative**. Compiler `ba00850f` exposes its validated plan through the explicit
+`body-context --include-plan` option in [PR1174](https://github.com/kimjooyoon/meta-ontology-go/pull/1174).
+Across 48 exports from four authored families, the new description distinguishes
+24/24 source-reversal pairs that have identical existing V3 local root inputs.
+Renaming locals and commuting operands each preserve 16/16 description pairs.
+Korean/English intent changes preserve 24/24 source-description pairs; this last
+check measures the source channel, not language understanding.
+
+Five M4/Go1.27.1 samples measure 28.02–29.31 ns/op and zero allocations for the
+descriptor alone. The complete context exports take a median 6.119 ms per fresh
+process; parsing, binding and validation remain separate costs. These observations
+add no model predictions, native runs or training updates. The new representation
+is isolated from released V3/V4 weights, and its trained-model quality is still
+unmeasured. It covers two simple integer updates; nested expressions and branches
+require further work. The initial collector digest-format failure is retained and
+covered by a regression. The next learning study must evaluate actual assembled
+bodies and additional attempts with the same deterministic-search budget.
 
 Our aim is to make intent, construction and observed behavior travel together
 as a program evolves. We measure complete finite behavior, partial coverage,
