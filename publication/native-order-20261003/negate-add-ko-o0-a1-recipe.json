@@ -1,0 +1,38 @@
+{
+  "choices": [
+    {
+      "id": "order",
+      "intent": "단계: 부호를 반대로 바꾼다. 단계: 4를 더한다. 단계: 끝.",
+      "kind": "root_order",
+      "occurrence": 1
+    },
+    {
+      "id": "first-operands",
+      "intent": "선언된 피연산자 순서를 유지한다.",
+      "kind": "operand_order",
+      "occurrence": 0
+    },
+    {
+      "id": "second-operands",
+      "intent": "선언된 피연산자 순서를 유지한다.",
+      "kind": "operand_order",
+      "occurrence": 1
+    }
+  ],
+  "max_attempts": 1,
+  "schema": "gooo/source-typed-path-recipe/v1",
+  "test_cases": [
+    {
+      "expected": 6,
+      "input": -2
+    },
+    {
+      "expected": 4,
+      "input": 0
+    },
+    {
+      "expected": 1,
+      "input": 3
+    }
+  ]
+}
