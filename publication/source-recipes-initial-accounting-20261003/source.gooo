@@ -1,0 +1,6 @@
+package recipe
+namespace recipe
+entity Integer id "recipe://integer"
+activity Compose(Integer) -> Integer computes "let a = (input - 1); let b = (a - 3); return (b - 9)"
+activity Expected(Integer) -> Integer computes "return (7 - input)"
+activity Unrelated(Integer) -> Integer computes "return input"

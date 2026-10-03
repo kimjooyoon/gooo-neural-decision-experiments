@@ -8,6 +8,11 @@ training tools and original evidence behind that process.
 
 ## Start here — 2026-10-03
 
+- [Small recipes derived from Gooo source](publication/source-recipes-20261003):
+  24 generations and 48 compiled runs; 12 recipe/full-document pairs match.
+  Authored JSON shrinks by 63%. Oracle arms meet 72/72 runtime expectations;
+  single-example controls meet 12/72. Added source expansion has measurable cost.
+  [한국어 설명](docs/source-recipes-20261003.ko.md).
 - [A 128-byte clue about instruction order](publication/intent-order-preflight-20261003):
   32 controlled pairs have identical old-model predictions; directed clause
   counters distinguish them and retain a repeated-operation counterexample.

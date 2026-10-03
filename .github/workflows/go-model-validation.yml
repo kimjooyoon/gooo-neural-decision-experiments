@@ -42,6 +42,13 @@ jobs:
           jq 'map(.Views |= map(del(.prediction_ns)))' \
             "$RUNNER_TEMP/path-observation-readings/order/records.json" > "$RUNNER_TEMP/replayed-order.json"
           cmp "$RUNNER_TEMP/frozen-order.json" "$RUNNER_TEMP/replayed-order.json"
+      - name: Independently read source recipe construction and retained accounting failure
+        run: |
+          (cd publication/source-recipes-20261003 && sha256sum -c SHA256SUMS)
+          (cd publication/source-recipes-initial-accounting-20261003 && sha256sum -c SHA256SUMS)
+          go run ./cmd/source-recipe-read > "$RUNNER_TEMP/path-observation-readings/recipes.json"
+          cmp publication/source-recipes-20261003/independent-reading.json \
+            "$RUNNER_TEMP/path-observation-readings/recipes.json"
       - uses: actions/upload-artifact@v7
         with:
           name: path-observation-independent-readings
