@@ -37,7 +37,7 @@ func main() {
 		}
 		prefix, _, _ := strings.Cut(f.Name, "/")
 		if prefix != "candidate-native" && prefix != "candidate-controls" && prefix != "installed-native" &&
-			prefix != "installed-controls" &&
+			prefix != "installed-controls" && prefix != "readme-quickstart" && prefix != "quickstart-prepared-inputs" &&
 			prefix != "inputs" && prefix != "expected" {
 			panic("unexpected archive root")
 		}

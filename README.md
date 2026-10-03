@@ -6,6 +6,29 @@ model suggests which permitted construction to try next. Failed examples become
 context for another bounded attempt. This repository holds the experiments,
 training tools and original evidence behind that process.
 
+## Try a local construction
+
+From this repository's root, use Go1.27.1 and put Go's executable install
+directory in PATH. This pins the compiler to the source used in the latest
+installed study; the small model is already included here.
+
+```sh
+GOTOOLCHAIN=go1.27.1 go install github.com/kimjooyoon/meta-ontology-go/cmd/gooo@01d21e9260b2c0f1d02f8029824f3dda41631e9d
+GOTOOLCHAIN=go1.27.1 go run ./examples/file-body-run examples/whole-candidate-order file-body-inputs
+gooo body-path-run --source file-body-inputs/ko-source.gooo \
+  --activity AssembleKorean --path-plan file-body-inputs/ko-recipe.json \
+  --cases file-body-inputs/cases-128.json \
+  --model publication/order-judge-initial-20261003/model.json \
+  --repeat 2 --timing --out korean-body-results
+gooo body-path-run --verify-timing --out korean-body-results
+```
+
+Use fresh input/output directory names. Omit `--model` for deterministic
+construction. The example declares a pure `Integer -> Integer` body and 128
+caller expectations. Read its generated Go and actual runtime outputs in the
+result directory. `unobserved` means no usable output was measured; `0/128`
+means measured outputs missed every expectation. [Full usage and next actions](https://github.com/kimjooyoon/meta-ontology-go/wiki/File-Based-Body-Run).
+
 ## Start here — 2026-10-04
 
 - [Distinguish unobserved expectations from actual measured zero](publication/finite-observation-display-20261004):
@@ -28,8 +51,8 @@ training tools and original evidence behind that process.
   controls kept 12,288/12,288 expectations and all frozen Go in 96 constructions,
   48 judgments and 192 runs; warm medians 21.54/22.07ms overlap. Dev #1198 passed
   canonical checks and an independent source proof, then merged. Main #1199 also
-  passed its own source-bound proof/promotion checks and merged. Current clean
-  that study installed main `93fa2742`: eight successes/four predictions/16 runs kept
+  passed its own source-bound proof/promotion checks and merged. That study
+  installed main `93fa2742`: eight successes/four predictions/16 runs kept
   1,024/1,024; the installed FIFO failed promptly in 19.665ms total CLI time.
   The direct variable/condition quickstart additionally kept 6/6 over two
   deterministic constructions/four native runs. Original failures remain public.

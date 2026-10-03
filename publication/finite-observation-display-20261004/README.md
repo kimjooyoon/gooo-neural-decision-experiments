@@ -76,6 +76,21 @@
 macOS arm64/Apple M4/Go1.27.1의 기존 과제 반복입니다. 이번 변화의 부모·모델
 단독 RAM과 호스트 CPU 사용률은 미관측입니다.
 
+## README 첫 실행 예제를 직접 확인하기
+
+저장소 README 맨 앞에 현재 컴파일러 소스를 고정한 준비·생성·실행·저장 기록
+확인 명령을 추가했습니다. 준비 도구의 레시피·128개 기대값 JSON 세 파일은 기존
+입력과 byte 단위로 같았습니다. 한영 Gooo 두 파일은 같은 바디의 문자열을 백틱
+대신 쌍따옴표로 표시했습니다. 처음 파일 대조의 차이는 원본 diff로 보존했습니다.
+
+실제로 준비한 파일에서 별도 생성 8회·자체 모델 판단 4회·바디 실행 16회로
+**1,024/1,024**와 고정 생성 Go 8개를 유지했습니다. 모델 재사용 한국어·영어
+24.334166·23.132542ms, 최초 814.103542·533.757500ms를 기록했습니다.
+같은 두 의도·128개 입력의 다른 문자열 표기 확인입니다. 새 의도·학습 갱신은
+0개이며 앞선 설치 집계에 합치지 않습니다. 추가 공구 조회 실패는 미관측 128개,
+종료 1·판단/실행 0회로 보존했습니다. 기록 읽기 전용 확인 다섯 회도 통과했습니다.
+`readme-quickstart-native.zip`에 실제 준비 파일·출력·이전 생성 Go가 있습니다.
+
 ## 자동 지표에서 읽는 순서
 
 `summary.json`의 `passed`와 `total`은 원래 충족 수와 **선언한 기대값 수**입니다.
@@ -109,6 +124,14 @@ runtime의 별도 읽기 전용 확인입니다. 명시적인 null 필드의 존
   `installed-quickstart-verified.json`: 새 설치에서 직접 확인한 별도 범위별 집계.
 - `dev-proof-verification.json`, `main-proof-verification.json`, `main-merge.json`:
   각 제출 소스에 결속된 필수 CI 증거와 정상 병합 기록.
+- `main-postmerge-ci-terminal.json`, `installed-publication-ci-terminal.json`:
+  병합 뒤 main의 CI와 설치 기록 공개 소스 `04e2f34a`의 19개 검사 완료 통과.
+- `installed-public-readback.json`, `hf-final-readback.json`:
+  공개 ZIP 전체 파일·위키 다섯 페이지·HF 설명·변경 없는 가중치의 외부 대조.
+- `readme-quickstart-summary.json`, `quickstart-preparation-readback.json`:
+  README 준비 도구가 만든 입력의 별도 실제 생성·실행과 원래 파일 차이.
+- `cleanup-candidate.json`: 열린 프로세스·파일 hash 확인 뒤 종료된 중간 컴파일러
+  한 개, 20,676,146바이트 정리. 소스·원본 실패·설치본·롤백은 보존했습니다.
 - `first-tests.raw`: 실제 실행 전 실패와 형식 거부가 `0/N`으로 보이던 원래 실패.
 - `corrected-tests.raw`, `race-tests.raw`, `cli-tests.raw`, `vet.raw`, `modernizer.raw`:
   소스 단위/race/CLI/전체 vet/Go1.27.1 고정점의 실제 검사.
