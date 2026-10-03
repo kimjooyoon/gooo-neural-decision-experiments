@@ -1,4 +1,4 @@
-package decision
+package intentorder
 
 import (
 	"errors"
@@ -9,22 +9,19 @@ import (
 
 const IntentOrderSketchVersion = "semantic_intent_clause_edges_experiment_v1"
 const IntentOrderSketchDim = 64
+const InputMaxBytes = 512
 
 // IntentOrderSketch is an experimental auxiliary channel. Existing model input
 // dimensions, features and loaders are unchanged. Counts preserve some ordered
 // clause transitions; hashing and clause boundaries can still lose distinctions.
 type IntentOrderSketch [IntentOrderSketchDim]uint16
 
-// SemanticIntentOrderSketchInto consumes a complete bounded semantic input and
-// commits caller storage only after validation. Punctuation-separated clauses
-// produce directed edges, including explicit beginning and ending boundaries.
-func SemanticIntentOrderSketchInto(text string, output *IntentOrderSketch) error {
-	if output == nil || len(text) == 0 || len(text) > InputMaxBytes || !utf8.ValidString(text) {
+// Into consumes complete bounded intention text and commits caller storage only
+// after validation. Callers separately bind source context; this feature module
+// has no model or source-framing dependency. Clause edges include both boundaries.
+func Into(intent string, output *IntentOrderSketch) error {
+	if output == nil || len(intent) == 0 || len(intent) > InputMaxBytes || !utf8.ValidString(intent) {
 		return errors.New("bounded valid order-sketch input and output required")
-	}
-	_, intent, err := decodeSemanticContext(text)
-	if err != nil {
-		return err
 	}
 	var candidate IntentOrderSketch
 	previous := uint64(0x243f6a8885a308d3)

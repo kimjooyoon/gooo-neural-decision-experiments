@@ -6,11 +6,14 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"reflect"
+	"strings"
 	"time"
 
 	"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/decision"
+	"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/intentorder"
 	"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/jointdecision"
 )
 
@@ -26,7 +29,7 @@ type view struct {
 	GoooBody     string                        `json:"reference_gooo_body"`
 	Expected     [3]int64                      `json:"reference_outputs"`
 	InputSHA     string                        `json:"input_sha256"`
-	Order        decision.IntentOrderSketch    `json:"experimental_order_sketch"`
+	Order        intentorder.IntentOrderSketch `json:"experimental_order_sketch"`
 	Prediction   jointdecision.ThreePrediction `json:"frozen_bag_model_prediction"`
 	PredictionNS int64                         `json:"prediction_ns"`
 }
@@ -44,6 +47,13 @@ func main() {
 	flag.Parse()
 	if *output == "" || len(*revision) != 40 {
 		panic("new output and exact source revision required")
+	}
+	head, err := exec.Command("git", "rev-parse", "HEAD").Output()
+	must(err)
+	dirty, err := exec.Command("git", "status", "--porcelain").Output()
+	must(err)
+	if strings.TrimSpace(string(head)) != *revision || len(dirty) != 0 {
+		panic("exact clean collector source required")
 	}
 	if _, err := os.Stat(*output); !os.IsNotExist(err) {
 		panic("output must not exist")
@@ -74,7 +84,7 @@ func main() {
 	write(filepath.Join(*output, "records.json"), records)
 	write(filepath.Join(*output, "report.json"), map[string]any{
 		"schema": "gooo/intent-order-feature-preflight/v1", "collector_source": *revision,
-		"feature_version": decision.IntentOrderSketchVersion, "model_metadata_sha256": model.MetadataSHA256(),
+		"feature_version": intentorder.IntentOrderSketchVersion, "model_metadata_sha256": model.MetadataSHA256(),
 		"model_weights_sha256": model.WeightsSHA256(), "authored_operator_families": 4,
 		"language_views": 2, "wrappers": 4, "permutation_pairs": len(records),
 		"bag_identical_pairs": aliases, "order_sketch_separated_pairs": separated,
@@ -109,7 +119,7 @@ func collect(t task, wrapper string, model *jointdecision.ThreeModel) record {
 		v := view{Intent: intent, GoooBody: t.Bodies[i], Expected: t.Expected[i], InputSHA: hash([]byte(text))}
 		must(decision.SemanticContextBagFeaturesInto(text, &bag[i]))
 		must(decision.SemanticContextFeaturesInto(text, &positioned[i]))
-		must(decision.SemanticIntentOrderSketchInto(text, &v.Order))
+		must(intentorder.Into(intent, &v.Order))
 		joint, err := jointdecision.EncodeThree([3]string{text, text, text})
 		must(err)
 		var work jointdecision.ThreeWorkspace
@@ -154,13 +164,9 @@ func tasks() []task {
 
 func remainingCollision() map[string]any {
 	texts := [2]string{"A. B. A. C. A. D.", "A. C. A. B. A. D."}
-	var fields [decision.SplitContextDim]byte
-	fields[4], fields[5] = 128, 128
-	var sketches [2]decision.IntentOrderSketch
+	var sketches [2]intentorder.IntentOrderSketch
 	for i, intent := range texts {
-		text, err := decision.EncodeSemanticContextInput(fields, intent)
-		must(err)
-		must(decision.SemanticIntentOrderSketchInto(text, &sketches[i]))
+		must(intentorder.Into(intent, &sketches[i]))
 	}
 	return map[string]any{"intents": texts, "sketches_equal": sketches[0] == sketches[1], "reason": "Directed edge multisets can lose the order of repeated excursions; finite hashes add other possible collisions."}
 }

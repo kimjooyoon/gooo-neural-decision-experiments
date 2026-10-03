@@ -34,7 +34,7 @@ jobs:
       - name: Replay the small order-feature preflight and real frozen-model controls
         run: |
           (cd publication/intent-order-preflight-20261003 && sha256sum -c SHA256SUMS)
-          go test ./internal/decision ./tools/audit-intent-order
+          go test ./internal/intentorder ./tools/audit-intent-order
           go run ./tools/audit-intent-order --source-revision "$GITHUB_SHA" \
             --output "$RUNNER_TEMP/path-observation-readings/order"
           jq 'map(.Views |= map(del(.prediction_ns)))' \

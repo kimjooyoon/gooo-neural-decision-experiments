@@ -3,7 +3,7 @@
 This experiment asks whether 64 directed clause-edge counters can distinguish
 some operation orders that the frozen global fragment representation aliases.
 The counters use 128 bytes per intention, retain beginning/end edges and consume
-every clause rune. Source framing is validated. Full original text is retained
+every clause rune. The collector validates source framing separately. Full original text is retained
 by the caller; old V3/V4 features, model dimensions and loading contracts stay
 unchanged. The new feature is an auxiliary experimental API with no trained head.
 
@@ -34,7 +34,7 @@ Run from a clean source revision, with a new output directory:
 go run ./tools/audit-intent-order \
   --source-revision "$(git rev-parse HEAD)" \
   --output publication/a-new-intent-order-run
-go test ./internal/decision -run '^TestOrderSketch' \
+go test ./internal/intentorder -run '^TestOrderSketch' \
   -bench '^BenchmarkSemanticIntentOrderSketch$' -benchmem -count 3
 ```
 
@@ -42,3 +42,10 @@ An adoption decision will use finite separation, remaining collisions, memory
 and observed cost. Any later training comparison will keep old features as a
 control and evaluate completed Gooo bodies. This is a small representation
 experiment motivated by Gooo's existing operation-order counterexample.
+
+The implementation now lives in `internal/intentorder` and takes raw bounded
+UTF-8 intention text. The collector uses the unchanged semantic encoder for its
+separate source header. This isolates an untrained experiment from the frozen
+model's computation package. The original publication pins its earlier source
+and wrapped-input benchmark. Existing records remain unchanged; CI compares every
+counter and frozen-model output after moving the experiment.
