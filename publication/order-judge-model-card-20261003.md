@@ -36,6 +36,11 @@ fits. Equal pieces can reuse an earlier measurement.
 - The released Go SDK v0.2.19 and direct in-compiler generation are available.
   The [native collection](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/order-judge-native-20261003)
   uses compiler commit `9d570ab1` in [PR #1176](https://github.com/kimjooyoon/meta-ontology-go/pull/1176).
+- [Main PR #1177](https://github.com/kimjooyoon/meta-ontology-go/pull/1177) is merged
+  as `98701e473bc4084a422c5fa7acaa6631118779e4`. The clean installed compiler
+  reproduced eight existing Korean/English requests in 16 generations, 8 model
+  calls and 32 compiled executions: 128/128 finite expectations passed.
+  [Installation and CI evidence](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/order-judge-installed-main-20261003).
 
 The runtime is in the
 [Go SDK v0.2.19](https://github.com/kimjooyoon/gooo-decision-runtime/tree/v0.2.19-experimental/orderjudge),
@@ -123,6 +128,11 @@ Within the supported profile, pass `--path-model /path/to/model.json` to
 Place this model's `weights.bin` beside the metadata. Omit `--path-model` for
 deterministic generation. Explicit seeds, batching and feedback are unsupported
 by this first model route and produce recorded errors before prediction.
+
+The [runnable Korean example](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/examples/whole-candidate-order)
+includes the Gooo source, recipe, finite cases and commands for generation and
+compiled execution. It asks for multiplication before addition while the original
+body uses the opposite order.
 
 ## Run the evidence replay
 

@@ -73,8 +73,10 @@ the next bounded performance experiment; the initial weights remain fixed.
 - Go SDK: [v0.2.19-experimental](https://github.com/kimjooyoon/gooo-decision-runtime/releases/tag/v0.2.19-experimental), [cross-platform replay](../order-judge-sdk-20261003).
 - Model: [gooo-order-judge-tiny-v1](https://huggingface.co/asketeddy/gooo-order-judge-tiny-v1), original weights SHA256 `cf00ccc83d17d28ed73fcb869366151a48ffccd3aa8ca8e635aabf19810b9e78`.
 
-This collection uses the exact feature branch above. Main promotion and installed
-compiler checks are recorded separately when completed. Model sampling, batch
+This collection uses the exact feature branch above. The subsequent main merge
+and [clean installed replay](../order-judge-installed-main-20261003) are recorded
+separately: 16 generations, 8 predictions, 32 compiled executions and 128/128
+finite expectations. Model sampling, batch
 feedback and bodies outside the declared profile return explicit errors; omit
 `--path-model` to use ordinary deterministic generation.
 
