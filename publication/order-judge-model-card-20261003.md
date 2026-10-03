@@ -214,7 +214,7 @@ The clean installed main reproduced four generations, two model predictions,
 eight compiled runs and 32/32 expectations, including second-request preparation
 reuse. [Installation evidence and runnable instructions](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/body-stream-installed-main-20261003).
 
-The next compiler change reuses an original checked projection within recipe
+The compiler now reuses an original checked projection within recipe
 expansion, retaining current-source and fallback checks. With these same weights,
 512 additional generations and 1,024 native executions preserved the original
 selection, ranking and finite outcomes, including partial results. A historical
@@ -223,6 +223,33 @@ measured 8,192 fresh decodes: median decoder interval 0.3714→0.2921 ms and
 allocated bytes per decode 728,580→571,800. All 4,096 document/plan pairs matched;
 751 timing pairs were slower. These are compiler preparation costs; weights and
 training are unchanged. [Every observation and scope](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/source-recipe-projection-reuse-20261003).
+
+[Main #1183](https://github.com/kimjooyoon/meta-ontology-go/pull/1183) passed canonical
+CI and independent proof verification and is merged and installed as
+`3bee55daf8063b0daee3d543e57a528975bc63ee`. Existing English/Korean tasks, the
+integrated stream and the Go example completed 24 generations, 12 model calls,
+48 compiled executions and 192/192 finite expectations. All source/selection
+comparisons matched. [Installation evidence](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/recipe-projection-installed-main-20261003).
+
+### Run generation and execution together
+
+The [Go example](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/examples/whole-candidate-order)
+reads a Gooo source, short recipe and finite execution cases, sends one request
+to the integrated stream, executes its response immediately, then sends the next
+request with input still open. `go run ./cmd/order-example --model ... --out ...`
+uses this model; omitting `--model` uses deterministic construction. It saves
+every response, generation and runtime report, including finite failures.
+
+Local and Linux collections each completed four generations, two actual model
+calls and eight compiled executions with 32/32 expectations. Local model
+response times were 51.39 ms initially and 2.06 ms on the repeat; native command
+times were 655.81/309.06 ms. The first response can include worker setup. Linux
+native times were 5,351.99/182.90 ms; that long first interval is retained.
+These are two known sequential requests per route, with uncontrolled cache and
+platform differences. [All observations, CPU/RSS and stage costs](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/order-example-immediate-20261003).
+The new example's race, vet and actual Linux execution checks passed. No model
+weights or training changed. A retained-executable comparison is a published
+next protocol with no completed results yet.
 
 ## Research acknowledgments
 

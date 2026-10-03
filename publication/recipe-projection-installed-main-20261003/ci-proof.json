@@ -1,0 +1,276 @@
+{
+  "schema": "gooo/ci-proof/v5",
+  "repository": "kimjooyoon/meta-ontology-go",
+  "event": "pull_request",
+  "pr_number": 1183,
+  "base_ref": "main",
+  "base_sha": "cb2892cb583e693190bd68f75eb4df223819f053",
+  "head_sha": "629882f4b02430f5aa3e401d13c3a8091f4ec9fb",
+  "head_ref": "agent/main-promotion-snapshot-f3fb64910eb181bf3cfb9cceb8ea1331ae008703",
+  "ref": "refs/pull/1183/merge",
+  "event_ref": "refs/pull/1183/merge",
+  "checkout_ref": "629882f4b02430f5aa3e401d13c3a8091f4ec9fb",
+  "run_id": 37106995282,
+  "run_attempt": 1,
+  "workflow_sha": "3fb76f54f64e1bd01e428e8188d90ccc759a0852",
+  "jobs": [
+    {
+      "id": 111157358149,
+      "name": "gofmt",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "629882f4b02430f5aa3e401d13c3a8091f4ec9fb",
+      "run_id": 37106995282,
+      "run_attempt": 1
+    },
+    {
+      "id": 111157358167,
+      "name": "go vet",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "629882f4b02430f5aa3e401d13c3a8091f4ec9fb",
+      "run_id": 37106995282,
+      "run_attempt": 1
+    },
+    {
+      "id": 111157358171,
+      "name": "go test",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "629882f4b02430f5aa3e401d13c3a8091f4ec9fb",
+      "run_id": 37106995282,
+      "run_attempt": 1
+    },
+    {
+      "id": 111157358129,
+      "name": "go test -race",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "629882f4b02430f5aa3e401d13c3a8091f4ec9fb",
+      "run_id": 37106995282,
+      "run_attempt": 1
+    },
+    {
+      "id": 111157357964,
+      "name": "Semantic conformance",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "629882f4b02430f5aa3e401d13c3a8091f4ec9fb",
+      "run_id": 37106995282,
+      "run_attempt": 1
+    },
+    {
+      "id": 111159085627,
+      "name": "CI policy",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "629882f4b02430f5aa3e401d13c3a8091f4ec9fb",
+      "run_id": 37106995282,
+      "run_attempt": 1
+    }
+  ],
+  "actors": {
+    "actor": "kimjooyoon",
+    "builder": "kimjooyoon",
+    "gate": "CI policy"
+  },
+  "domain_evidence": {
+    "schema": "gooo/domain-evidence/v2",
+    "repository": "kimjooyoon/meta-ontology-go",
+    "event": "pull_request",
+    "base_ref": "main",
+    "base_sha": "cb2892cb583e693190bd68f75eb4df223819f053",
+    "head_sha": "629882f4b02430f5aa3e401d13c3a8091f4ec9fb",
+    "event_ref": "refs/pull/1183/merge",
+    "checkout_ref": "629882f4b02430f5aa3e401d13c3a8091f4ec9fb",
+    "run_id": 37106995282,
+    "run_attempt": 1,
+    "workflow_sha": "3fb76f54f64e1bd01e428e8188d90ccc759a0852",
+    "cli": {
+      "command": "go run ./cmd/gooo check examples/billing/main.gooo",
+      "fixture": "examples/billing/main.gooo",
+      "status": "verified",
+      "available": true,
+      "output": "ok: examples/billing/main.gooo\n",
+      "output_sha256": "40c6b6033f6b1826c829d1e22df88dfe1b4eaac0ada8e8ed1e73c2a95cd461cf"
+    },
+    "graph": {
+      "command": "go run ./cmd/gooo graph dump examples/billing/main.gooo",
+      "status": "deferred",
+      "available": false,
+      "reason": "GRAPH_OBSERVER_NOT_RUN",
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "observation": {
+        "state": "UNKNOWN",
+        "stage": "DOMAIN_EVIDENCE",
+        "step": "GRAPH_DUMP",
+        "reason": "GRAPH_OBSERVER_NOT_RUN",
+        "unknown_class": "DIRECT_MISSING",
+        "next_operation": "RUN_GRAPH_DUMP_OBSERVER",
+        "blocked_by": []
+      }
+    },
+    "observer_receipt_refs": [],
+    "observer_status": "unavailable",
+    "protection_status": "unavailable",
+    "provenance_status": "not_applicable",
+    "digests": {
+      "source_sha256": "03f4ccbce0d7c1aed0ccdc6b86cbbe1a4d01edb8ab0caae29c4c1cc54988b7c6",
+      "ir_sha256": "c4d1e51193ecab793edd572fdde2db64a630983f6009c4293a89933781382b4d",
+      "generated_output_sha256": "1549f1542c8983f504575228c2106d676ac25fba42ca13490d78c9e380c820d0",
+      "bundle_sha256": "3f935c69e664d76289de3184bad39faa740e235f302ce586afbf3ac292a8759b",
+      "domain_sha256": "ef087e95181d2ff9777f10670813f5700d4954b5da0300aa0ccab7c9b8a307e1"
+    },
+    "missing_reasons": {
+      "protection": "domain_protection_observer_unavailable"
+    }
+  },
+  "artifact_provenance": {
+    "schema_version": "gooo/meta-artifact-provenance/v1",
+    "base_sha": "cb2892cb583e693190bd68f75eb4df223819f053",
+    "head_sha": "629882f4b02430f5aa3e401d13c3a8091f4ec9fb",
+    "plan_digest": "0cf9ecc97d317c84000d945bd607fa2de37064b4f81ffd1e9760a50dce3f3310",
+    "execution_manifest_digest": "4a5c47e5280c1a588415f4f82963bbad8d7a747ec1ab76715c1689c5257a7467",
+    "receipt_report_digest": "c6ec912d82bfae4f06bb78c66f76b41900cd7aeb0a611997974e2cf1d8485322",
+    "indicator_decision_ledger_digest": "sha256:4a871ca3b1abafa170b506fc3dd0bd9822bb1a355aa4d3f6a0248a366fa04d68",
+    "indicator_decision_ledger_count": 30648,
+    "input_digest": "d0335327c04b98b14f12fc3f6daabb97caa86be49044e2ac6e195d535ac5e0dd",
+    "decision": "BOUND",
+    "reason": "ARTIFACT_PROVENANCE_BOUND",
+    "indicators": [
+      {
+        "id": "coherence.execution-ledger",
+        "route": "COHERENCE",
+        "verdict": "PASS",
+        "evidence_digest": "d6e07e95da647fd7f5e7c498e7aee03c230fa906f626d924a11312e24188b99f"
+      },
+      {
+        "id": "coherence.receipt-ledger",
+        "route": "COHERENCE",
+        "verdict": "PASS",
+        "evidence_digest": "75f40b80521068d0c7cc0a725f11503a137d3279386aa4ca34aac8baf973cdb6"
+      },
+      {
+        "id": "foundation.plan-ledger",
+        "route": "FOUNDATION",
+        "verdict": "PASS",
+        "evidence_digest": "2c70e46eea2af69c081b61ca4ea416ef89efc687345616dc365add917284fef0"
+      },
+      {
+        "id": "regression.canonical-replay",
+        "route": "REGRESSION",
+        "verdict": "PASS",
+        "evidence_digest": "367b8f48897db2d26180bcb73d0ca7409b4950be4eaeeb27858f20d5bf1b1bd6"
+      }
+    ],
+    "summary": {
+      "pass": 4,
+      "fail": 0,
+      "unknown": 0
+    },
+    "promotion_authorized": false,
+    "envelope_digest": "da742ff82303c90dc632d70aa553fbb73125811de7b60799a715c413a2aa80eb",
+    "replay_digest": "9e1430e707b25b79857821e7458037141d01b7d0942211aab93ba4403a06d26b"
+  },
+  "scope": {
+    "decision": "passed",
+    "status": "verified"
+  },
+  "fixtures": {
+    "paths": [
+      "examples/billing/main.gooo"
+    ],
+    "status": "verified",
+    "source_status": "verified",
+    "semantic_status": "verified",
+    "provenance_status": "verified"
+  },
+  "artifacts": [
+    {
+      "id": 11268661894,
+      "name": "ci-evidence-37106995282-1",
+      "size_bytes": 3000,
+      "expired": false,
+      "digest": "sha256:d65435888829127b0524caf5bebfebc4c85880dd0a1d2a092b205cc27579b92e",
+      "run_id": 37106995282,
+      "run_attempt": 1
+    }
+  ],
+  "cache": {
+    "cache_key": "none",
+    "outcome": "not_run",
+    "status": "not_applicable",
+    "artifact_kind": "",
+    "semantic_closure_digest": "",
+    "dependency_root": "",
+    "direct_dependencies": null,
+    "policy_digest": "",
+    "schema_digest": "",
+    "toolchain_digest": "",
+    "target_digest": "",
+    "build_tags": null,
+    "evidence_refs": null,
+    "producer_host": "",
+    "content_size": 0,
+    "hit_content_size": 0,
+    "predecessor": ""
+  },
+  "digests": {
+    "source_sha256": "03f4ccbce0d7c1aed0ccdc6b86cbbe1a4d01edb8ab0caae29c4c1cc54988b7c6",
+    "semantic_sha256": "c4d1e51193ecab793edd572fdde2db64a630983f6009c4293a89933781382b4d",
+    "provenance_sha256": "9d3156c01eff4520018e51b8e38d2ea4e4df72d38f9b6e0b14c8c9edd9d5ae48",
+    "projection_sha256": "1549f1542c8983f504575228c2106d676ac25fba42ca13490d78c9e380c820d0",
+    "build_sha256": "001b7f70b6d93ed28ad92438248270074c0aea50451c6a31c8617fe546d900a0",
+    "policy_sha256": "1d07ebc7c446ff15e05b42533dd4e368739bb92ccf6666d08f0424d739126268",
+    "schema_sha256": "3726421add2183911786d29455d9610b43326334cde888ba7fa3abae2657f061",
+    "toolchain_sha256": "38ab9dca8107e227b6b33b5f4346ce4328ec598c7cce64f2730776d4eaa4a9d7",
+    "target_sha256": "f9c3bde8f1655aded279157dc3e0b6580b5b632b2fe060381c60e995e8cf8f95",
+    "bundle_sha256": "8142ac38397c0629f95e8dd332995398d7f3e8c6b1518c1e7d13d4e8a38a28ae"
+  },
+  "write_effect": "none",
+  "decision": "PASS",
+  "no_write_outside_generated": true,
+  "rejections": [],
+  "predecessors": [],
+  "missing_reasons": {
+    "protection": "domain_protection_observer_unavailable"
+  },
+  "promotion_observation": {
+    "repository": "kimjooyoon/meta-ontology-go",
+    "pr_number": 1183,
+    "action": "opened",
+    "promotion_mode": "DEV_TREE_SNAPSHOT",
+    "state": "open",
+    "draft": false,
+    "merged": false,
+    "mergeable": true,
+    "mergeable_state": "unstable",
+    "base_repo": "kimjooyoon/meta-ontology-go",
+    "base_ref": "main",
+    "base_sha": "cb2892cb583e693190bd68f75eb4df223819f053",
+    "head_repo": "kimjooyoon/meta-ontology-go",
+    "head_ref": "agent/main-promotion-snapshot-f3fb64910eb181bf3cfb9cceb8ea1331ae008703",
+    "head_sha": "629882f4b02430f5aa3e401d13c3a8091f4ec9fb",
+    "head_parent_sha": "cb2892cb583e693190bd68f75eb4df223819f053",
+    "head_tree_sha": "c3c109eab504504898897472c927c88dde284f15",
+    "live_dev_sha": "f3fb64910eb181bf3cfb9cceb8ea1331ae008703",
+    "live_dev_tree_sha": "c3c109eab504504898897472c927c88dde284f15",
+    "live_main_sha": "cb2892cb583e693190bd68f75eb4df223819f053",
+    "topology": {
+      "status": "ahead",
+      "ahead_by": 1,
+      "behind_by": 0,
+      "merge_base_sha": "cb2892cb583e693190bd68f75eb4df223819f053"
+    }
+  },
+  "promotion_authorization": {
+    "decision": "PASS",
+    "code": null,
+    "operation": "fast_forward",
+    "source": "dev",
+    "target": "main",
+    "base_sha": "cb2892cb583e693190bd68f75eb4df223819f053",
+    "head_sha": "629882f4b02430f5aa3e401d13c3a8091f4ec9fb",
+    "proof_digest": "8142ac38397c0629f95e8dd332995398d7f3e8c6b1518c1e7d13d4e8a38a28ae"
+  }
+}

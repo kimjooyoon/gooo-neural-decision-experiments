@@ -8,6 +8,10 @@ training tools and original evidence behind that process.
 
 ## Start here — 2026-10-03
 
+- [Recipe projection reuse is merged and installed](publication/recipe-projection-installed-main-20261003):
+  main `3bee55da`, SDK v0.2.20. Existing English/Korean tasks, integrated stream
+  and the one-command example complete 24 generations, 12 model calls,
+  48 compiled executions and 192/192 finite expectations with unchanged weights.
 - [Generate and execute the Korean example with one Go command](examples/whole-candidate-order):
   `go run ./cmd/order-example --model ... --out ...` reads source, recipe and
   finite cases, executes each body immediately and saves complete receipts.
