@@ -162,6 +162,29 @@ reached the same successful source. All failed attempts and process records are
 retained. The result informs where a small model helps and where ordinary
 language machinery is already sufficient.
 
+### Condition chains using the same model
+
+The [condition-chain pilot](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/855ae1c318160a8134494bfb4650ea557220fe91/publication/condition-chain-recipes-20261003)
+extends source recipes to `if ... else if ... else`. Compiler development source
+`bf51d65a` lowers that form into existing typed nested branches, retaining
+condition order, local scope and source binding. Its branch is public; main
+deployment is tracked separately in the [compiler wiki](https://github.com/kimjooyoon/meta-ontology-go/wiki/Current-Status).
+
+One authored clamp, one bilingual intention and three repeats per arm give six
+generations and twelve compiled runs. All 42 finite expectations match, including
+24 selection-disjoint expectations and both int64 endpoints. The frozen own
+model makes three actual joint predictions; training updates are zero. Both arms
+choose the first candidate and emit equal source. Seven of eight declared
+combinations remain unattempted per request.
+
+Deterministic/model generation medians are 7.958/9.227 ms, process peak RSS
+17.45/17.91 MiB and one-core-relative CPU 90.64/91.58%. Prediction median is
+7.917 microseconds. The first deterministic process takes 367.183 ms; all samples
+are public and its cause was not isolated. Cache state and whole-host CPU change
+were not instrumented. This already complete body favors deterministic assembly.
+The useful result is that a common source form now reaches both construction
+routes using the existing small runtime and unchanged weights.
+
 An [instruction-order feature preflight](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/intent-order-preflight-20261003)
 uses this frozen judge for 64 actual predictions. Four authored arithmetic pairs,
 two languages and four wrapper forms produce 32 pairs with identical V4 features
