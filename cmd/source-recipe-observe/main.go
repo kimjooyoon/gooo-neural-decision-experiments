@@ -161,7 +161,8 @@ func observe(compiler, goBin, out, kind string, useModel, resolve bool, repeat i
 	if r.Total != 6 || resolve && (r.ModelCalls != 0 || r.Passed != 6) {
 		panic("finite resolution contract failed")
 	}
-	if useModel && !resolve && r.ModelCalls != 3 {
+	// This pinned head ranks all three choices in one joint prediction.
+	if useModel && !resolve && r.ModelCalls != 1 {
 		panic("own-model predictions not observed")
 	}
 	return r
