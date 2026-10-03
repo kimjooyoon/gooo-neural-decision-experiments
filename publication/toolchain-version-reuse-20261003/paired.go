@@ -98,7 +98,7 @@ func main() {
 		before[path] = hash(path)
 	}
 	write(filepath.Join(out, "input-hashes-before.json"), before)
-	write(filepath.Join(out, "protocol.json"), object{"source_scope": "two earlier clamp-wrapped ordering fixtures; repetitions are not new intent tasks", "window_order": []string{"baseline", "candidate", "candidate", "baseline"}, "conditions": []string{"ko-model", "ko-deterministic", "en-model", "en-deterministic"}, "repetitions_per_window": 6, "finite_cases_per_request": 128, "response_scope": "CLI response_ms excludes initial setup and saving; current children only for CPU/RSS", "whole_host_cpu": "unobserved", "compiler_sources": object{"baseline": "eb8477d51f58131e0dc3b7126c547bde2c5d0e5f", "candidate": "a7fe6d4f9bc3a846dbad6fbff8e90f8bc7c309ae"}})
+	write(filepath.Join(out, "protocol.json"), object{"source_scope": "two earlier multiplication/addition ordering fixtures; repetitions are not new intent tasks", "window_order": []string{"baseline", "candidate", "candidate", "baseline"}, "conditions": []string{"ko-model", "ko-deterministic", "en-model", "en-deterministic"}, "repetitions_per_window": 6, "finite_cases_per_request": 128, "response_scope": "CLI response_ms excludes initial setup and saving; current children only for CPU/RSS", "whole_host_cpu": "unobserved", "compiler_sources": object{"baseline": "eb8477d51f58131e0dc3b7126c547bde2c5d0e5f", "candidate": "a7fe6d4f9bc3a846dbad6fbff8e90f8bc7c309ae"}})
 	records := []object{}
 	for _, lang := range []string{"ko", "en"} {
 		for _, mode := range []string{"model", "deterministic"} {

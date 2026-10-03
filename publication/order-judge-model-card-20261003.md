@@ -172,7 +172,7 @@ the full current Go file, checked embedded release/platform, replayed source and
 ran the compiled body twice. Shell wrappers received fresh version processes.
 
 Four EN/KO model/deterministic conditions used baseline→candidate→candidate→baseline
-windows of six requests. The two existing clamp-wrapped fixtures produced 96
+windows of six requests. The two existing multiplication/addition ordering fixtures produced 96
 generations, 48 actual predictions and 192 native runs, with 12,288/12,288 finite
 expectations and every generated source unchanged. Warm response median over
 40 requests per version was 79.91→63.69ms; current-child CPU was 31.21→13.37ms.
