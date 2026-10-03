@@ -8,6 +8,13 @@ training tools and original evidence behind that process.
 
 ## Start here — 2026-10-03
 
+- [Keep one verified executable while running current inputs](publication/retained-native-execution-20261003):
+  512 fresh generations/predictions and 1,024 native runs retain every original
+  outcome, including partial failures. Warm execution median 294→29ms, current
+  child CPU 215→9.8ms; 128/128 paired calls faster on macOS. `--retain-native` in
+  the Go example uses immediate stream execution; omitting the model stays
+  deterministic. Full records, first failed launch and exact measurement scope
+  are public. Compiler CI/promotion status is linked in the report.
 - [Recipe projection reuse is merged and installed](publication/recipe-projection-installed-main-20261003):
   main `3bee55da`, SDK v0.2.20. Existing English/Korean tasks, integrated stream
   and the one-command example complete 24 generations, 12 model calls,

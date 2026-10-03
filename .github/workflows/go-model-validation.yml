@@ -10,6 +10,65 @@ permissions:
   contents: read
 
 jobs:
+  owned-native-example:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      GOTOOLCHAIN: local
+      GOWORK: "off"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.27.1'
+          cache: false
+      - name: Check and build the Go example
+        run: |
+          go test -race ./cmd/order-example
+          go build -trimpath -o "$RUNNER_TEMP/order-example" ./cmd/order-example
+          sha256sum -c publication/retained-native-execution-20261003/SHA256SUMS
+          unzip -q publication/retained-native-execution-20261003/raw.zip -d "$RUNNER_TEMP/retained-records"
+          go run ./cmd/retained-native-summary "$RUNNER_TEMP/retained-records/records.json" > "$RUNNER_TEMP/recalculated-summary.json"
+          jq -S . "$RUNNER_TEMP/recalculated-summary.json" > "$RUNNER_TEMP/recalculated-sorted.json"
+          jq -S . publication/retained-native-execution-20261003/summary.json > "$RUNNER_TEMP/published-sorted.json"
+          cmp "$RUNNER_TEMP/recalculated-sorted.json" "$RUNNER_TEMP/published-sorted.json"
+      - uses: actions/checkout@v7
+        with:
+          repository: kimjooyoon/meta-ontology-go
+          ref: bb6820327317584d6c8a10dda1dd79f771abcb23
+          path: .owned-native-compiler
+      - name: Build the exact owned-execution compiler
+        run: |
+          cd .owned-native-compiler
+          go build -trimpath -o "$RUNNER_TEMP/gooo" ./cmd/gooo
+      - name: Execute and reuse current model and deterministic bodies
+        run: |
+          "$RUNNER_TEMP/order-example" --retain-native --compiler "$RUNNER_TEMP/gooo" \
+            --go-bin "$(command -v go)" --out "$RUNNER_TEMP/owned-model" \
+            --model publication/order-judge-initial-20261003/model.json
+          "$RUNNER_TEMP/order-example" --retain-native --compiler "$RUNNER_TEMP/gooo" \
+            --go-bin "$(command -v go)" --out "$RUNNER_TEMP/owned-deterministic"
+          for arm in model deterministic; do
+            jq -e 'length==2 and all(.[]; .passed==8 and .total==8 and .native_runs==2 and .response_includes_execution) and .[0].native_artifact_reused==false and .[1].native_artifact_reused==true' "$RUNNER_TEMP/owned-$arm/summary.json"
+            for number in 1 2; do
+              jq -S .source "$RUNNER_TEMP/owned-$arm/order-$number-generation.json" > "$RUNNER_TEMP/current-source.json"
+              jq -S .source "publication/retained-native-execution-20261003/$arm-example/order-$number-generation.json" > "$RUNNER_TEMP/reference-source.json"
+              cmp "$RUNNER_TEMP/current-source.json" "$RUNNER_TEMP/reference-source.json"
+              jq -e '.observation.producer_source_sha=="bb6820327317584d6c8a10dda1dd79f771abcb23" and .observation.runtime_replayed' "$RUNNER_TEMP/owned-$arm/order-$number-runtime.json"
+            done
+          done
+          jq -e 'all(.[]; .model_predictions==1)' "$RUNNER_TEMP/owned-model/summary.json"
+          jq -e 'all(.[]; .model_predictions==0)' "$RUNNER_TEMP/owned-deterministic/summary.json"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: owned-native-example
+          path: |
+            ${{ runner.temp }}/owned-model
+            ${{ runner.temp }}/owned-deterministic
+            ${{ runner.temp }}/recalculated-summary.json
+          if-no-files-found: error
+
   order-example:
     runs-on: ubuntu-latest
     timeout-minutes: 5
