@@ -33,13 +33,14 @@ fits. Equal pieces can reuse an earlier measurement.
 - The 128-byte prediction workspace excludes feature arrays, preparation,
   artifact loading, program objects and receipts.
 - CPU fit and local Go inference. This architecture currently has FP32 weights.
-- Current installed compiler: main `05746e4ae712cfcdcc22aa9fb463d0c88ee90dd5`,
-  with direct file construction, immediate execution and owned runtime comparison.
-  The new installation made two actual model predictions/two generations/four
-  native runs and passed 256/256 finite expectations; conditional assembly
-  separately passed 6/6. Earlier file CLI installation arms passed 1,024/1,024
-  expectations in eight generations/four predictions/16 runs.
-  [Current reader installation and original failures](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/owned-runtime-comparison-20261003).
+- Current installed compiler: main `eb8477d51f58131e0dc3b7126c547bde2c5d0e5f`,
+  with direct file construction, immediate execution, owned runtime comparison
+  and literal multiline bodies. Fresh installation replay made eight generations,
+  four actual predictions and 16 native runs: 1,024/1,024 finite expectations and
+  all eight earlier generated Go sources match. Separate raw clamp cases pass
+  8/8. Warm responses including execution were 77–94ms; the earlier development
+  sample was 28–33ms. Original slow and fast observations are both retained.
+  [Current installation and original failures](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/raw-body-usability-20261003).
 - The released Go SDK v0.2.20 adds preparation reuse to the existing direct
   in-compiler generation route.
   The [native collection](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/order-judge-native-20261003)
@@ -360,7 +361,7 @@ responses including execution were 31.297/31.455ms. Changed resource units and
 
 ### Writing bodies on multiple lines
 
-[Experimental PR #1190](https://github.com/kimjooyoon/meta-ontology-go/pull/1190)
+[Dev PR #1190](https://github.com/kimjooyoon/meta-ontology-go/pull/1190)
 adds backtick strings for Gooo `computes` bodies. Canonical formatting preserves
 the decoded content and stable IDs; literal whitespace can affect source digests
 and generated layout. Local syntax/body-codegen race and whole-module vet pass.
@@ -368,8 +369,16 @@ The clean experimental compiler used this unchanged model on raw Korean/English
 bodies: eight generations/four actual predictions/16 native runs, 1,024/1,024
 finite expectations and all eight original generated Go sources matched.
 Model-on warm responses were 32.719/31.766ms, first responses 487.173/477.383ms.
-This syntax has pending canonical CI/proof and is not installed yet. Original
-TDD, fixture and collector failures remain in the
+Dev and [main #1191](https://github.com/kimjooyoon/meta-ontology-go/pull/1191)
+passed their own six canonical checks and independently verified immutable proofs,
+then merged. Clean main `eb8477d5` is installed. Its fresh eight generations,
+four actual predictions and 16 native runs pass 1,024/1,024; all generated sources
+match. Installed model warm responses were 82.580/81.439ms, first responses
+957.629/826.189ms. Deterministic warm responses were 93.576/76.820ms. Current-child
+CPU sums were 27.163–34.796ms and maximum single-current-child RSS
+14,172,160–14,385,152 bytes. These exclude parent compiler/model-only/whole-host
+resources and retain uncontrolled cache/scheduling effects. Weights were unchanged.
+Original TDD, fixture and collector failures remain in the
 [raw body records](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/raw-body-usability-20261003).
 
 ## Research acknowledgments

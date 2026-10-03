@@ -2,8 +2,9 @@
 
 2026-10-03. [컴파일러 PR #1190](https://github.com/kimjooyoon/meta-ontology-go/pull/1190),
 측정 소스 [`ad87b510`](https://github.com/kimjooyoon/meta-ontology-go/commit/ad87b5104c464312ec05a6c9d08a84d3caabf95b).
-로컬 race/vet와 실제 모델·실행 확인을 마쳤고 정규 CI·증거·병합은 진행 중입니다.
-현재 설치본은 owned runtime 비교까지 반영한 main `05746e4a`입니다.
+개발 #1190과 [main #1191](https://github.com/kimjooyoon/meta-ontology-go/pull/1191)의
+필수 여섯 검사·불변 증거를 독립 확인해 병합했습니다. 깨끗한 main
+`eb8477d51f58131e0dc3b7126c547bde2c5d0e5f`를 Go1.27.1로 빌드해 설치했습니다.
 
 ## 줄바꿈과 따옴표를 직접 쓰기
 
@@ -64,3 +65,41 @@ if accepted {
 
 `raw-computes-public.zip`은 원본 입력·생성 Go·생성/실행 기록·요약을 담습니다.
 각 검사와 초기 실패, 초기 요약·수정된 요약을 함께 공개합니다.
+
+## 설치한 main에서 다시 사용하기
+
+설치한 `gooo`로 다음 명령을 실행할 수 있습니다.
+
+```sh
+gooo body-codegen --activity ClampBelowZero \
+  examples/body-codegen/raw-computes.gooo.fixture
+```
+
+원본 파일에는 package·namespace·Integer 선언까지 들어 있습니다. 지역 변수,
+대입과 조건을 줄바꿈으로 작성하고 Go 함수를 생성합니다. 설치본에서 이 바디를
+별도로 컴파일·실행해 int64 양 끝값을 포함한 8/8 기대값을 확인했습니다.
+잘못된 UTF-8을 넣은 raw 바디는 6:1–6:2에서 생성 전에 거부했습니다.
+기존 quoted 바디·타입 경로 예제와 기본 명령 다섯 개도 확인했습니다.
+
+같은 모델·결정론 네 조건을 main에서 다시 조립해 새로 8회 생성·실제 판단 4회·
+실제 실행 16회·1,024/1,024 기대값과 생성 Go 여덟 파일의 일치를 확인했습니다.
+반복 응답은 모델 한영 82.580·81.439ms, 결정론 93.576·76.820ms였습니다.
+최초 모델 응답 957.629·826.189ms도 남겼습니다.
+
+이번 반복 응답은 위 개발 소스 관측의 27.684–32.719ms보다 느렸습니다.
+반복의 현재 자식 CPU 합은 27.163–34.796ms, 최대 단일 자식 RSS는
+14,172,160–14,385,152바이트입니다. 모델 자체·부모 컴파일러·호스트 전체 자원은
+별도로 관측해야 합니다. 입력/출력과 과제는 일치했으며, 캐시·스케줄링·다른 작업이
+통제되지 않은 한 장비의 시간 관측을 그대로 보존합니다.
+한국어 모델 반복의 바디 생성은 3.591ms였고 `go version` 자식만 21.568ms였습니다.
+후보 판단 이후의 검증·실행 비용을 따로 살펴볼 근거입니다.
+
+저장된 생성→실행 기록은 `PARENT_RUNTIME_CONTINUATION`, 실행 두 기록은
+`SAME_MEASUREMENT_SCOPE`로 읽었습니다. 현재 자식 자원의 분모 4→3은 단위도
+바뀌므로 숫자 개선을 계산하지 않습니다. 추가 학습은 0회입니다.
+
+`installed-main-native.zip`은 새 설치본의 원본·생성 Go·결과·비교·clamp 테스트를
+담습니다. 기본 구조 생성의 로컬 출력 위치만 공개 stdout에서 가렸고 경로를 담은
+manifest는 제외했습니다. 원본 파일은 로컬에 보존했습니다.
+`installation.json`, `installed-summary.json`, `installed-costs.json`과 개발/main
+증거 검증 결과도 공개합니다.

@@ -18,8 +18,11 @@ training tools and original evidence behind that process.
   raw backtick literals preserve decoded text, line endings and source diagnostics.
   Local syntax/body-codegen race and whole-module vet pass. Eight generations,
   four actual own-model predictions and 16 native runs retain 1,024/1,024 finite
-  expectations and all eight original generated sources. PR #1190 canonical CI
-  and proof are pending; this syntax is not installed yet.
+  expectations and all eight original generated sources. Dev #1190/main #1191
+  passed canonical CI and independent proofs, then merged. Clean main `eb8477d5`
+  is installed and freshly reproduces 1,024/1,024 with four predictions/16 runs.
+  Separate raw clamp cases pass 8/8; malformed UTF-8 is rejected. The new warm
+  responses are 77–94ms and retain the slowdown from the earlier 28–33ms sample.
 - [Read owned runtime records in completeness comparisons](publication/owned-runtime-comparison-20261003):
   dev #1188/main #1189 passed their own six canonical checks and independently
   verified immutable proofs, and clean main `05746e4a` is installed. New own-model
@@ -123,9 +126,11 @@ training tools and original evidence behind that process.
   the workshop metaphor, current capabilities, intended differences and next work.
 - [Go inference runtime](https://github.com/kimjooyoon/gooo-decision-runtime):
   fixed tensor arrays, caller workspaces, path ranking and finite feedback search.
-- [Current Hugging Face model](https://huggingface.co/asketeddy/gooo-shared-judgment-tiny-v1):
-  independently initialized shared judges, FP32/PTQ/QAT weights and evidence.
-- [Current model card source](publication/shared-judgment-model-card-20261003.md):
+- [Current whole-candidate Hugging Face model](https://huggingface.co/asketeddy/gooo-order-judge-tiny-v1):
+  independently initialized 4,096-parameter judge, Go inference and evidence.
+- [Earlier shared judges](https://huggingface.co/asketeddy/gooo-shared-judgment-tiny-v1):
+  FP32/PTQ/QAT weights and their separate contracts and measurements.
+- [Current model card source](publication/order-judge-model-card-20261003.md):
   model usage, full comparison table, lineage and research acknowledgments.
 
 The shared judge has **2,072 trainable parameters** and reuses a small local
