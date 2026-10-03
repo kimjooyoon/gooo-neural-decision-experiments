@@ -7,7 +7,7 @@ import (
 	"io"
 	"os"
 	"runtime"
-	"sort"
+	"slices"
 	"syscall"
 	"time"
 )
@@ -56,7 +56,7 @@ func hash(path string, buffer []byte) (string, int64) {
 	return fmt.Sprintf("%x", h.Sum(nil)), n
 }
 func median(v []int64) int64 {
-	sort.Slice(v, func(i, j int) bool { return v[i] < v[j] })
+	slices.Sort(v)
 	return (v[(len(v)-1)/2] + v[len(v)/2]) / 2
 }
 func main() {

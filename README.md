@@ -8,6 +8,16 @@ training tools and original evidence behind that process.
 
 ## Start here — 2026-10-04
 
+- [Handle a stalled executable FIFO and read failed expectations](publication/nonregular-tool-20261004):
+  Unix opens without waiting for a FIFO writer and validates the opened file kind.
+  The candidate rejected an actual FIFO in 604.14ms total CLI time, with no
+  native/model work and 128 unobserved expectations. Original interrupted blocking
+  observation, failing tests and compile failure are retained. Same-window ABBA
+  controls kept 12,288/12,288 expectations and all frozen Go in 96 constructions,
+  48 judgments and 192 runs; warm medians 21.54/22.07ms overlap. Dev #1198 passed
+  canonical checks and an independent source proof, then merged. Main #1199 has
+  its own CI in progress; current installation remains the verified main below.
+
 - [Reduce repeated hash allocations and read missing timing stages](publication/owned-hash-reader-20261004):
   a lazily owned 32 KiB buffer, released on close/cancellation, retains current
   whole-file hashes and both native runs. The warm hash benchmark allocated
@@ -15,8 +25,11 @@ training tools and original evidence behind that process.
   48 own-model judgments and 192 runs: 12,288/12,288 finite expectations and
   all frozen generated sources match. Warm responses were 64.13→65.88ms;
   these overlapping one-device observations establish no speed improvement.
-  Missing stderr phases now read `unobserved`. Dev #1196 is under canonical CI;
-  installed main remains `041c8bbf`. Weights, training and intent scope are unchanged.
+  Missing stderr phases now read `unobserved`. Dev #1196/main #1197 passed their
+  own canonical CI and independent proofs, then merged. Clean main `93c6463d`
+  is installed: eight fresh successes, four predictions, 16 runs and 1,024/1,024
+  finite expectations; a separate missing-tool failure retains 128 unobserved
+  expectations and zero runs. Weights, training and intent scope are unchanged.
 
 - [Read body construction, validation, native execution and saving costs](publication/body-wall-phases-20261003):
   optional compiler phase sidecars and read-only file-binding checks. Two clean

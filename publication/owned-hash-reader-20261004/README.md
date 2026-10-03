@@ -5,6 +5,12 @@
 `041c8bbf3420f83e885f66100868f87fa438bcac`와 번갈아 실행했습니다.
 이 기록을 처음 공개할 때 필수 CI는 진행 중이고, 설치본은 이전 main입니다.
 
+현재 개발 [#1196](https://github.com/kimjooyoon/meta-ontology-go/pull/1196)과
+main [#1197](https://github.com/kimjooyoon/meta-ontology-go/pull/1197)은 각각 필수 여섯
+검사와 내려받은 증거의 독립 검증 뒤 정상 병합했습니다. main 승격의 현재 개발
+트리·단일 main 부모·증거 지문도 확인했습니다. 깨끗한 main
+`93c6463d6a34713eb907a3fb46287bb2869fed80`를 Go1.27.1로 빌드·설치했습니다.
+
 ## 사용하면서 달라지는 것
 
 실행기는 처음 파일을 확인할 때 32KiB 배열 하나를 만들고 같은 실행기의 다음
@@ -70,6 +76,23 @@ Go로 공구 실행파일과 이전 설치 Gooo 파일을 여섯 방식으로 �
 
 ## 원본과 재실행
 
+[다음 작은 실험 계획](NEXT.md)은 순수 바디의 반복 실행 비용과 자체 작은 행렬의
+세 값 저장을 다룹니다. 현재 관측에서 구간을 좁힌 후보이며 결과는 이후 실험에서 확인합니다.
+
+설치본에서도 8회 생성·실제 모델 판단 4회·바디 실행 16회로 1,024/1,024와 고정 생성
+Go를 확인했습니다. 모델 재사용 응답은 한영 69.42·62.53ms, 결정론 65.49·60.34ms입니다.
+최초 응답 826.23·906.86·651.75·635.28ms도 원본에 보존합니다. 별도의 공구 조회
+실패 한 요청은 모델 판단·바디 실행 0회, 128개 기대값 미관측으로 원래 종료 코드 1과
+`native unobserved`를 보존했습니다. 저장 기록 확인은 성공·실패를 합쳐 5회 통과했습니다.
+새 학습·의도 과제는 0개입니다.
+
+실행 도구에 쓰기 상대가 없는 FIFO를 지정하면, 일반 파일 확인 전에 열기를 기다리는
+문제도 발견했습니다. 검사 컨트롤러가 중단된 원본과 60초를 넘겨 살아 있던 해당
+프로세스의 관측을 별도로 보존하고 종료했습니다. 일반 파일의 설치 실행 위 수치는
+유지합니다. [후속 FIFO 수정과 실제 비교](../nonregular-tool-20261004)는 개발 #1198을
+병합하고 main #1199의 자체 검사를 진행합니다. 후보의 실제 FIFO는 0.60초에 오류를
+남기고 종료했으며, 새 같은 시간창의 일반 실행 비교에서도 유한 기대값을 유지했습니다.
+
 - `paired-native.zip`: 96개 실제 결과와 계측·프로세스 기록, 원본·고정 생성 Go.
 - `native-summary.json`, `native-protocol.json`, `paired.raw`: 조건별 전체 수와 최소·중앙값·최대.
 - `paired/main.go`: 두 깨끗한 컴파일러를 번갈아 쓰는 Go 수집기.
@@ -78,6 +101,11 @@ Go로 공구 실행파일과 이전 설치 Gooo 파일을 여섯 방식으로 �
 - `first-tests.raw`, `first-display-tests.raw`: 구현 전의 컴파일 실패·실패 표시 원본.
 - `packages-tests.raw`, `race-tests.raw`, `final-cancellation-tests.raw`, `vet.raw`: 실제 로컬 검사.
 - `local-archive-readback.json`: ZIP의 모든 파일이 보관 원본과 같고 누락이 없는지 확인한 결과.
+- `installed-native.zip`, `installed-smoke/main.go`, `installed-smoke-summary.json`:
+  실제 설치 main의 새 성공 8회와 공구 조회 실패 한 회, Go 수집기와 원본.
+- `main-proof-verification.json`, `main-merge.json`, `installed-buildinfo.txt`:
+  정확한 소스 검사·정상 병합·깨끗한 설치 생산자 결속.
+- `cleanup.json`: 익명 읽기로 결속을 확인한 중복 측정 파일 24,876,370바이트 정리.
 
 ```sh
 unzip paired-native.zip -d saved
