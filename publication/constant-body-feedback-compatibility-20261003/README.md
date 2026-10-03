@@ -26,8 +26,15 @@ complete new manifest with this versioned file. It additionally checks that
 substituting the original body-source digest reproduces every original manifest
 field. Thus changes to rows, targets, other source files, counts or scope still
 fail. The generated Linux manifest is retained in the
-`feedback-curriculum-revised-source` artifact. Linux confirmation of this follow-up
-is pending at this document's initial publication.
+`feedback-curriculum-revised-source` artifact.
+
+Linux [run 37091975068](https://github.com/kimjooyoon/gooo-neural-decision-experiments/actions/runs/37091975068)
+at `9786b591f47ab705231e141221a0b97f15323820` passed `runtime-and-artifacts`,
+including the exact dataset and new manifest comparisons and the original-field
+compatibility check. Downloaded artifact `11262771495` has the same manifest
+bytes as this directory. Fifteen jobs passed; the historical
+`full-input-initial-replay` numerical comparison remains the workflow's one
+failure. The earlier failed run is preserved.
 
 This is a source compatibility observation for the existing authored corpus.
 The new constant-body behavior has separate SDK/compiler regressions and an

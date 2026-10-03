@@ -1,0 +1,10 @@
+{
+  "schema": "gooo/source-typed-path-recipe/v1",
+  "choices": [
+    {"id":"lower-branch","kind":"branch_layout","occurrence":0,"intent":"음수이면 0을 반환한다. Return zero when input is negative."},
+    {"id":"upper-comparison","kind":"operand_order","occurrence":1,"intent":"입력이 10보다 작은지 확인한다. Check whether input is below ten."},
+    {"id":"middle-branch","kind":"branch_layout","occurrence":1,"intent":"중간 범위는 입력을 반환하고 그 이상은 10을 반환한다. Return input in the middle range, otherwise ten."}
+  ],
+  "test_cases": [{"input":-1,"expected":0},{"input":5,"expected":5},{"input":11,"expected":10}],
+  "max_attempts":8
+}
