@@ -33,7 +33,8 @@ fits. Equal pieces can reuse an earlier measurement.
 - The 128-byte prediction workspace excludes feature arrays, preparation,
   artifact loading, program objects and receipts.
 - CPU fit and local Go inference. This architecture currently has FP32 weights.
-- The released Go SDK v0.2.19 and direct in-compiler generation are available.
+- The released Go SDK v0.2.20 adds preparation reuse to the existing direct
+  in-compiler generation route.
   The [native collection](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/order-judge-native-20261003)
   uses compiler commit `9d570ab1` in [PR #1176](https://github.com/kimjooyoon/meta-ontology-go/pull/1176).
 - [Main PR #1177](https://github.com/kimjooyoon/meta-ontology-go/pull/1177) is merged
@@ -43,7 +44,7 @@ fits. Equal pieces can reuse an earlier measurement.
   [Installation and CI evidence](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/order-judge-installed-main-20261003).
 
 The runtime is in the
-[Go SDK v0.2.19](https://github.com/kimjooyoon/gooo-decision-runtime/tree/v0.2.19-experimental/orderjudge),
+[Go SDK v0.2.20](https://github.com/kimjooyoon/gooo-decision-runtime/tree/v0.2.20-experimental/orderjudge),
 extracted from the separately pinned
 [research implementation](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/8a41bb0f825dfd3f950101b33491581492c740f6/internal/orderjudge).
 The compiler can export its source-bound expanded plan with `body-context --include-plan`.
@@ -162,9 +163,32 @@ separate scoped experiments. Finite completeness is tied to the listed inputs;
 ranking probabilities are uncalibrated. There is no fresh general-language
 benchmark or measured 1.58-bit version for this architecture.
 
-The current development focus is reusing prepared candidates and reducing loading
-and recording costs in Gooo's source-bind → rank → test → generate pipeline. Existing
-V3/V4 models and their historical numerical comparisons remain preserved.
+The Go SDK now provides `orderprepared.NewRuntime` and `Runtime.Prepare` as two
+explicit preparation steps, followed by repeated `Prepared.Search` calls. The
+runtime captures a private immutable model; each prepared plan holds eight checked
+programs and their fixed features. Each search predicts and checks its current
+finite cases. The SDK has no global cache. Compiler integration retains at most
+one complete plan per generator and binds source again before reuse.
+
+On 64 already observed requests, 3,840 SDK searches and 1,920 model predictions
+matched the original complete selection records, with zero further training.
+Budget-8 model search medians were 356.98 µs for the original wrapper, 244.04 µs
+for capture + preparation + search per call, and 4.83 µs for retained preparation.
+Three observed live-heap deltas for 64 prepared plans and one model were about
+1.7 MB. The [full SDK observations](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/order-prepared-sdk-20261003)
+include the initial memory-measurement correction and Linux replay. These numbers
+measure SDK intervals; compiler generation and native execution have separate costs.
+Existing V3/V4 models and their historical numerical comparisons remain preserved.
+
+The [compiler API follow-up](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/order-prepared-native-20261003)
+completed 512 generations, 512 fresh predictions and 1,024 immediate native runs.
+At budget 8, second-call Generate medians are 1.017 ms for a fresh owner and
+0.693 ms for a retained owner; including recipe expansion and constructor gives
+2.225 versus 1.627 ms. Both retain the original 64/64 complete requests. Budget-1
+outcomes remain 52/64, with every original failure preserved. This compares API
+ownership patterns within one compiler revision, with the original weights.
+The compiler change is in [PR #1178](https://github.com/kimjooyoon/meta-ontology-go/pull/1178),
+awaiting CI and promotion. The installed main revision above remains v0.2.19.
 
 ## Research acknowledgments
 
