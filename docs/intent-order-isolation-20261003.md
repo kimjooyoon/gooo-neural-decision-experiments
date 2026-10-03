@@ -27,3 +27,12 @@ prediction duration. The repeated-excursion collision remains an explicit test.
 This change keeps an untrained feature experiment separate from a released model
 contract. Adding it to a trained model still requires a new explicit input
 contract, training evidence and generated-program observations.
+
+Local verification at clean source `684620c2527e3b783f2c918121f8a5ab2bd8990b`
+replayed all 32 preflight pairs with 64 real old-model predictions. Every counter,
+reference and prediction matched the published values after removing timings.
+A fresh arithmetic collection then made 73,728 predictions over 18,432 inputs
+under its four existing model/layout lanes. Comparison with the original arm64
+archive passed, including exact computation source/model/protocol identity and
+zero changed rankings or logits. This is a same-platform repair check; Linux
+replay is tracked in the next CI run. No training updates were performed.
