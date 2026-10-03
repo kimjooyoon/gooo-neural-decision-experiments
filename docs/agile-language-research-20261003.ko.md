@@ -18,6 +18,26 @@
 9월 논문들은 공개된 초기 연구 결과로 읽었다. 여기의 구현 선택은 Gooo에 대한 우리의 설계 판단이다.
 논문의 성과 수치를 Gooo의 성과로 옮겨 적지 않는다.
 
+### 추가로 확인한 문맥 관리와 조립법
+
+[Meta의 9월 2일 개발 기록](https://engineering.fb.com/2026/09/02/ml-applications/organizational-second-brain-ai-learns-from-experts/)은
+지식 파일과 절차를 분리하고, 각 단계에 필요한 자료를 불러오는 조립식 절차를 설명한다.
+Gooo에는 타입·허용 연산·기대값을 데이터로 두고, 조건부 보정·범위 제한·두 연산의 순서를
+매개변수 조립법으로 재사용하는 원리를 가져온다. 이 시스템은 사람의 피드백과 검토를 사용한다.
+Gooo에서 자동 수집할 개선 근거는 선언된 기준 함수와 실행 결과다.
+
+긱뉴스에서 찾은 [Context Language Models](https://arxiv.org/abs/2609.37725v1)는
+9월 29일 공개됐고, 모델이 다음 호출의 문맥을 파일처럼 편집하는 방식을 연구한다.
+Gooo에 적용할 작은 질문은 **다음 선택에 필요한 실행 사실을 얼마나 작게 유지할 수 있는가**다.
+원본 의도와 관측 이력은 보존하고, 현재 남은 후보·구별되는 입력·실패 원인을 제한된 작업
+배열에 정리하는 방식을 우선한다. 논문의 접미 캐시 재사용은 이전 문맥에서 계산한 상태를
+쓰는 근사법이므로, Gooo의 정확한 후보 출력 재사용과 비용을 따로 비교해야 한다.
+
+두 자료가 제시한 실행 환경을 통째로 붙이는 대신, 다음 작은 기능의 판단 기준으로 쓴다.
+세 조립법으로 같은 입력·대안·실행 결과를 더 짧게 표현할 수 있는지 먼저 관측한다.
+학습 업데이트 0회인 경로와 기존 자체 모델을 연결한 경로를 함께 유지한다.
+조립법 선택, 내부 경로 선택, 최종 실행 충족률을 각각 기록하면 어디에 학습이 필요한지 보인다.
+
 ### 해커뉴스·긱뉴스에서 찾은 단서
 
 [HN의 Laya 사용 토론](https://news.ycombinator.com/item?id=49848537)은 복잡한 질문과 공개·비공개
@@ -149,6 +169,8 @@ SDK API·실행 예제에 이어 컴파일러 CLI의 `--path-observation`에도 
 과거 실험이다. 그때의 컴파일러·모델·과제 범위를 유지해 읽는다. SDK v0.2.15를 연결한
 컴파일러 변경은 [#1159](https://github.com/kimjooyoon/meta-ontology-go/pull/1159)로 main에 병합되었고,
 당시 로컬 실행 파일도 해당 `fc0e99c4` 리비전에서 빌드했다. 이후 관측 루프는
-main `a4f9c1c7`에 반영했고, 출력 재사용은 dev `09ab91a1`에 병합해
-[#1163](https://github.com/kimjooyoon/meta-ontology-go/pull/1163)에서 main 승격을 진행한다.
+main `a4f9c1c7`에 반영했고, 출력 재사용은
+[#1163](https://github.com/kimjooyoon/meta-ontology-go/pull/1163)으로 main `ec76ed7f`에 반영했다.
+유일 후보 직접 조립은 dev `96820915`에 병합했고
+[#1165](https://github.com/kimjooyoon/meta-ontology-go/pull/1165)에서 main 승격을 진행한다.
 현재 배포 상태는 [위키](https://github.com/kimjooyoon/meta-ontology-go/wiki/Current-Status)에서 갱신한다.

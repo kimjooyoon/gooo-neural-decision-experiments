@@ -36,3 +36,19 @@ under its four existing model/layout lanes. Comparison with the original arm64
 archive passed, including exact computation source/model/protocol identity and
 zero changed rankings or logits. This is a same-platform repair check; Linux
 replay is tracked in the next CI run. No training updates were performed.
+
+The subsequent [Linux run 37087469678](https://github.com/kimjooyoon/gooo-neural-decision-experiments/actions/runs/37087469678)
+at source `75d3c30e7598a266a9dbed433759f497eebb7687` passed both
+`separate-arithmetic-replay` and `path-observation-evidence`. The downloaded
+arithmetic artifact confirms identical computation inventories and zero explicit
+hidden/logit/probability/ranking/outcome differences over 18,432 paired inputs.
+It retains 272 differing legacy rankings. The downloaded order records also
+match every original value after excluding prediction durations. Collection made
+73,728 arithmetic predictions and 64 order-control predictions; comparison adds
+zero predictions. No weights changed.
+
+The compact [artifact receipt and original comparison](../publication/intent-order-isolation-20261003)
+bind these observations to the run and source. The separate historical
+`full-input-initial-replay` job still fails on the previously documented legacy
+platform difference. This repair restores the experiment's source boundary;
+it does not make that older whole-workflow result green.
