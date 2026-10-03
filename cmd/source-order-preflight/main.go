@@ -116,31 +116,39 @@ func observe(compiler, out string, f family, language string, order int, present
 	}
 	var e exported
 	must(json.Unmarshal(output.Bytes(), &e))
-	encoded, err := json.Marshal(e.Plan)
-	must(err)
-	if e.Schema != "gooo/compiler-path-input-export/v2" || !e.SourceBinding.Equivalent || e.SourceSHA != hash(src) ||
-		e.Context.PlanSHA != hash(encoded) || e.ModelPredictions != 0 || e.CandidateTests != 0 || e.SelectedEmission || e.RepositoryWrites != 0 {
-		panic("context identity or observation-only contract differs")
-	}
+	must(validateExport(e, src))
 	facts, err := orderfacts.Alternatives(e.Plan, "order")
 	must(err)
 	r := record{ID: id, Family: f.id, Language: language, Presentation: presentation, SourceOrder: order,
 		SourceSHA: e.SourceSHA, PlanSHA: e.Context.PlanSHA, ExportMS: float64(elapsed) / 1e6}
 	for _, input := range e.Inputs {
 		if input.ID == "order" {
-			if hash([]byte(input.Text)) != input.InputSHA {
+			if "sha256:"+hash([]byte(input.Text)) != input.InputSHA {
 				panic("legacy input hash differs")
 			}
 			r.LegacyRootInputSHA, r.LegacyRootFeatureSHA = input.InputSHA, input.FeatureSHA
 		}
 	}
-	if len(r.LegacyRootInputSHA) != 64 || len(r.LegacyRootFeatureSHA) != 64 {
+	if len(r.LegacyRootInputSHA) != 71 || len(r.LegacyRootFeatureSHA) != 71 {
 		panic("root input missing")
 	}
 	for i := range facts {
 		r.Signatures[i] = hex.EncodeToString(facts[i][:])
 	}
 	return r
+}
+
+func validateExport(e exported, source []byte) error {
+	encoded, err := json.Marshal(e.Plan)
+	if err != nil {
+		return err
+	}
+	// Compiler receipts prefix byte digests; SDK plan identities are bare hex.
+	if e.Schema != "gooo/compiler-path-input-export/v2" || !e.SourceBinding.Equivalent || e.SourceSHA != "sha256:"+hash(source) ||
+		e.Context.PlanSHA != hash(encoded) || e.ModelPredictions != 0 || e.CandidateTests != 0 || e.SelectedEmission || e.RepositoryWrites != 0 {
+		return fmt.Errorf("context identity or observation-only contract differs")
+	}
+	return nil
 }
 
 func summary(rows []record) map[string]int {
