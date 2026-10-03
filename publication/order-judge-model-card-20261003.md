@@ -164,6 +164,29 @@ nil model for deterministic operation. Its caller supplies a deadline, a typed
 plan, finite cases and an attempt budget. Compiler source binding remains the
 compiler caller's responsibility.
 
+### Repeated native toolchain checks
+
+With these unchanged 16,384-byte weights, a later compiler experiment kept the
+first actual Go version check in an owned executor. Each request still hashed
+the full current Go file, checked embedded release/platform, replayed source and
+ran the compiled body twice. Shell wrappers received fresh version processes.
+
+Four EN/KO model/deterministic conditions used baseline→candidate→candidate→baseline
+windows of six requests. The two existing clamp-wrapped fixtures produced 96
+generations, 48 actual predictions and 192 native runs, with 12,288/12,288 finite
+expectations and every generated source unchanged. Warm response median over
+40 requests per version was 79.91→63.69ms; current-child CPU was 31.21→13.37ms.
+Initial response medians were 659.25→630.17ms over eight requests per version.
+Host scheduling/cache variation remains; no new intent task or training update
+is counted. CPU/RSS describe current children, excluding parent/model-only/host
+utilization. Maximum single-child RSS changes do not measure total request RAM.
+
+Runtime v3 preserves the first process/output while excluding it from current
+costs. Eight old v2 comparison pairs stay byte-identical; cross-profile changes
+have no numeric completeness delta. The
+[full original observations and replay method](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/toolchain-version-reuse-20261003)
+include the final source's eight-generation/1,024-expectation confirmation.
+
 ## Reading the limits
 
 The feature projection is narrow and lossy. Long instructions, branching,

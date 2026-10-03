@@ -8,6 +8,13 @@ training tools and original evidence behind that process.
 
 ## Start here — 2026-10-03
 
+- [Reuse the first native Go version check during repeated body execution](publication/toolchain-version-reuse-20261003):
+  unchanged source replay, current Go-file hashes and two native runs per request.
+  Paired macOS observations on the same two known EN/KO fixtures: warm response
+  median 79.91→63.69ms, current-child CPU 31.21→13.37ms; 96 generations,
+  48 own-model predictions, 192 native runs and 12,288/12,288 finite expectations.
+  Original check/output stays in runtime v3; old v2 comparisons remain identical.
+  Model weights and the number of distinct intent tasks are unchanged.
 - [Replay saved IR baselines with Go](publication/go-baseline-replay-20261003):
   an explicit source-version repair preserves the original freeze and current
   Go1.27.1 scripts. A stdlib Go tool binds all 142 frozen inputs, then replays
@@ -137,8 +144,9 @@ training tools and original evidence behind that process.
 - [Current model card source](publication/order-judge-model-card-20261003.md):
   model usage, full comparison table, lineage and research acknowledgments.
 
-The shared judge has **2,072 trainable parameters** and reuses a small local
-network across three decisions. Gooo supplies eight complete candidate paths.
+The current whole-candidate judge has **4,096 trainable parameters** and 16 KiB
+of FP32 weights. Earlier shared judges use 2,072 parameters across three
+decisions. Gooo supplies eight complete candidate paths.
 The research asks whether this division of work can reduce search cost while
 preserving source meaning and making incomplete behavior easy to inspect.
 
