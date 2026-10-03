@@ -2,7 +2,12 @@
 
 2026-10-03. [공개 소스와 PR #19](https://github.com/kimjooyoon/gooo-metaprogramming-experiments/pull/19),
 측정 소스 `acfeaab2937cfaaba384129895f06a655238b3f4`.
-로컬 race/vet와 실제 재실행이 통과했고 해당 소스의 Linux CI는 진행 중입니다.
+로컬 race/vet와 실제 재실행 및 해당 소스의
+[Linux 기본 재현 CI](https://github.com/kimjooyoon/gooo-metaprogramming-experiments/actions/runs/37120308246)가
+통과했습니다. 별도의
+[revision-2 후보 재현](https://github.com/kimjooyoon/gooo-metaprogramming-experiments/actions/runs/37120308264)은
+옛 고정 파일 해시에서 실패해 PR #19가 열려 있습니다. 이 경로의 물리 Go1.27.0 요구와
+추가 준비 스크립트의 버전 결속도 함께 복구할 항목입니다.
 
 ## 고친 사용상의 문제
 
@@ -61,5 +66,4 @@ int64 경계값을 정수로 그대로 읽고, 누락된 지표를 성공한 0�
 34.12초, 최대 RSS는 96,452,608바이트입니다. 생성기·모델의 자원 지표와 별도로
 현재 재현 프로세스와 자식들의 관측 범위를 기록했습니다.
 
-이 자료를 공개하면서 컴파일러 기능이나 모델 가중치를 바꾸지는 않았습니다.
 저장된 결과를 확인할 수 있는 경로를 복구한 작업입니다.

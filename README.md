@@ -13,7 +13,8 @@ training tools and original evidence behind that process.
   Go1.27.1 scripts. A stdlib Go tool binds all 142 frozen inputs, then replays
   52 saved modules and 96 candidate packages, including the three expected
   compile failures. Source hashes, original failures and unknown denominators
-  are retained. Public PR #19 has local race/vet/replay PASS; Linux CI is pending.
+  are retained. Public PR #19 has local race/vet/replay and Linux baseline PASS;
+  the separate revision-2 source/toolchain-version mismatch is still being repaired.
 - [Write body statements directly on multiple lines](publication/raw-body-usability-20261003):
   raw backtick literals preserve decoded text, line endings and source diagnostics.
   Local syntax/body-codegen race and whole-module vet pass. Eight generations,
