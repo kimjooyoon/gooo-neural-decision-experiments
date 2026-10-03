@@ -13,6 +13,8 @@ training tools and original evidence behind that process.
   finite cases, executes each body immediately and saves complete receipts.
   Omit the model for deterministic construction. Sequential open-input requests
   expose preparation reuse and separate response from native execution time.
+  [Local and Linux receipts](publication/order-example-immediate-20261003):
+  each collection completes four generations, eight native runs and 32/32 cases.
 - [Reuse a checked source projection inside recipe expansion](publication/source-recipe-projection-reuse-20261003):
   512 generations and 1,024 native executions retain original outcomes. Paired
   decoder measurement: 8,192 decodes, all document/plan pairs match, median

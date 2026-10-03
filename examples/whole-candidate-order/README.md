@@ -41,6 +41,9 @@ go run ./cmd/order-example --out "$out_root/deterministic"
 처리량 측정과 일반화 평가는 별도 실험에서 다룹니다. Linux·macOS에서는 취소 시
 자식 프로세스 그룹을 함께 종료합니다. 전체 예제의 제한 시간은 90초입니다.
 
+[로컬·Linux의 원본, 실제 응답 시간과 실행 비용](../../publication/order-example-immediate-20261003)을
+공개했습니다. 두 환경 각각 4회 생성·8회 실제 실행·32/32 기대값을 확인했습니다.
+
 ## 생성과 실행을 나눠 보기
 
 ```sh
