@@ -10,7 +10,10 @@
 272건 달랐고 새 규칙에서는 모두 일치했습니다. 중간 계산값과 확률도 정확히
 일치했습니다. 첫 선택의 완성도와 완성까지 필요한 추가 시도 수는 유지됐습니다.
 이번 작업은 모델의 실행을 재현하기 위한 진전이며, 검증 범위는 이미 관측한
-개발 입력과 Go 1.27.1의 두 환경입니다. SDK·컴파일러 적용은 다음 단계입니다.
+개발 입력과 Go 1.27.1의 두 환경입니다. 이후 SDK v0.2.15와 컴파일러에 연결했고,
+[실제 생성·실행 관측](full-input-native-results-20261003.md)에서 400회 생성과
+800회 실행, 9,600/9,600 유한 기대값을 확인했습니다. 현재 설치본은 SDK
+v0.2.20-experimental을 사용합니다.
 
 ## Controlled comparison
 
@@ -93,11 +96,15 @@ Use the matching research runtime and
 contract. Expanded artifacts live under `models/expanded/`.
 [SDK v0.2.15](https://github.com/kimjooyoon/gooo-decision-runtime/releases/tag/v0.2.15-experimental)
 now supports these contracts; its [complete replay reports](../publication/full-input-sdk-replay-20261003/README.md)
-record exact agreement on both platforms. The native compiler currently uses
-SDK v0.2.14 and its earlier V3 contract. Its next integration stage carries
-feature/arithmetic identity through actual generated-Go execution.
+record exact agreement on both platforms. The subsequent
+[native integration](full-input-native-results-20261003.md) carried the V3/V4
+feature/arithmetic identities through actual generated-Go execution using SDK
+v0.2.15. Current installed main `ed2c2cac` uses SDK v0.2.20-experimental.
 
-The original legacy CI comparator remains exact and continues to report its
-known platform failure. The new arithmetic has its own paired acceptance check.
+The original legacy comparator remains exact and retains its known platform
+failure. The [historical replay contract](legacy-platform-replay-protocol-20261003.md)
+checks each new row against the frozen observation for its actual platform and
+retains the complete original mismatch. The new arithmetic has its own paired
+acceptance check.
 Further input forms and splits, representation collisions, unseen tasks,
 resource measurements, and language discovery/completeness work remain open.

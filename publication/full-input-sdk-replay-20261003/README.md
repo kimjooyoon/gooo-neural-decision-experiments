@@ -25,10 +25,14 @@ artifact contains the original Linux report.
 This stage measures numerical transfer into the public SDK on previously observed
 tasks. Collection wall time includes loading, journal decoding and comparison;
 it requires separate experiments to estimate inference latency or process RAM.
-The compiler currently uses SDK v0.2.14. Native V4 generation and execution are
-planned in the
+At this SDK replay stage the compiler used SDK v0.2.14. Native V4 generation and
+execution were planned in the
 [registered integration protocol](https://github.com/kimjooyoon/gooo-neural-decision-experiments/blob/daecfea3583614e006c960de263448a1645a9190/docs/full-input-sdk-native-protocol-20261003.md).
-The protocol's 400 generations and 800 executions are planned quantities.
+The later [native integration results](../../docs/full-input-native-results-20261003.md)
+completed those 400 generations and 800 executions, with 816 model predictions
+and 9,600/9,600 finite expectations. Current installed main `ed2c2cac` uses SDK
+v0.2.20-experimental. The original SDK reports below retain their own v0.2.15
+source and prediction counts.
 
 Frozen model/data reference:
 [complete arithmetic appendix](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/600dc282fb059918c0fd6588d955d3a56c380b58/publication/full-input-separate-arithmetic-20261003),

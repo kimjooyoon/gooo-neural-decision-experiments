@@ -5,14 +5,22 @@ Status: the original platform difference is retained below. The subsequent
 passes all 18,432 paired rows, including complete rankings and intermediate
 arrays. SDK v0.2.15 now reproduces those observations on both platforms;
 [the complete SDK reports](../publication/full-input-sdk-replay-20261003/README.md)
-record 36,864 calls per platform. Native compiler adoption remains next.
+record 36,864 calls per platform. The later
+[native compiler integration](full-input-native-results-20261003.md) completed
+400 generations, 816 model predictions and 800 compiled runs, with 9,600/9,600
+finite generation/case expectations matching. Current installed main `ed2c2cac`
+uses SDK v0.2.20-experimental; the original integration used v0.2.15.
 Optimizer updates for both follow-ups and the SDK replay: zero.
 
 The original full-input model comparison is retained in
 [the initial report](full-input-judgment-initial-results-20261003.md). Its Linux
 replay passed the archive, source-target, training-journal, export-tolerance and
 expanded/compact checks. Comparing the complete development summaries then found
-different partial-completion curves. The exact comparator remains a failure.
+different partial-completion curves. The original cross-platform comparator
+retains that failure. The [legacy replay follow-up](legacy-platform-replay-protocol-20261003.md)
+requires every new observation to match its frozen platform archive, while
+retaining all original summary differences and changed rankings. Explicit
+arithmetic keeps its separate cross-platform acceptance check.
 
 ## What the retained observations establish
 
