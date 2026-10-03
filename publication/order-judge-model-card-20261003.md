@@ -204,11 +204,22 @@ intervals include native execution of preceding responses and do not measure
 parallel speedup.
 
 For easier integration, [PR #1180](https://github.com/kimjooyoon/meta-ontology-go/pull/1180)
-adds `gooo body-path-stream` using the same runner as `gooo-body-worker`.
+adds `gooo body-path-stream` using the same runner as `gooo-body-worker` and is
+merged to dev as `e9d1fd0f87fc1aa95756fd55293421051f6f3650` after canonical CI.
 An explicit `--model` retains this model in one process; omission uses
 deterministic construction. Local dogfooding passed four generations, eight
-compiled runs and 32/32 finite expectations. CI and branch promotion are tracked
-by that PR. [Instructions and source-bound observations](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/body-stream-cli-20261003).
+compiled runs and 32/32 finite expectations. [Main promotion #1181](https://github.com/kimjooyoon/meta-ontology-go/pull/1181)
+is undergoing CI. [Instructions and source-bound observations](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/body-stream-cli-20261003).
+
+The next compiler change reuses an original checked projection within recipe
+expansion, retaining current-source and fallback checks. With these same weights,
+512 additional generations and 1,024 native executions preserved the original
+selection, ranking and finite outcomes, including partial results. A historical
+timing comparison showed no wall improvement. Four paired process trials then
+measured 8,192 fresh decodes: median decoder interval 0.3714→0.2921 ms and
+allocated bytes per decode 728,580→571,800. All 4,096 document/plan pairs matched;
+751 timing pairs were slower. These are compiler preparation costs; weights and
+training are unchanged. [Every observation and scope](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/source-recipe-projection-reuse-20261003).
 
 ## Research acknowledgments
 

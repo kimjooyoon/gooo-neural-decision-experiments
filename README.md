@@ -8,11 +8,17 @@ training tools and original evidence behind that process.
 
 ## Start here — 2026-10-03
 
+- [Reuse a checked source projection inside recipe expansion](publication/source-recipe-projection-reuse-20261003):
+  512 generations and 1,024 native executions retain original outcomes. Paired
+  decoder measurement: 8,192 decodes, all document/plan pairs match, median
+  0.371→0.292 ms and allocated bytes 729→572 KB. Includes the prior timing
+  comparison with no improvement and all 751 slower paired observations.
 - [Repeated construction through one Gooo command](publication/body-stream-cli-20261003):
   `gooo body-path-stream` accepts source recipes as JSON lines and emits each
   result when ready. Model omission is deterministic. Local dogfooding: four
   generated bodies, eight native executions, 32/32 expectations. Compiler
-  [PR #1180](https://github.com/kimjooyoon/meta-ontology-go/pull/1180) is in CI.
+  [PR #1180](https://github.com/kimjooyoon/meta-ontology-go/pull/1180) merged to dev;
+  [main #1181](https://github.com/kimjooyoon/meta-ontology-go/pull/1181) is in CI.
 - [Prepared candidates are merged and installed](publication/order-prepared-installed-main-20261003):
   SDK v0.2.20, main `8117fbae`, 16 generated bodies and 32 native executions,
   128/128 expectations. The [512-generation API comparison](publication/order-prepared-native-20261003)
