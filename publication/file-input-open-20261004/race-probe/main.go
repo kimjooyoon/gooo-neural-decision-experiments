@@ -1,0 +1,134 @@
+//go:build unix
+
+// Native CLI pathname-swap probe. A successful FIFO writer open and subsequent
+// joined regular-file rejection establish the wait; a timeout alone does not.
+package main
+
+import (
+	"bytes"
+	"context"
+	"encoding/json"
+	"fmt"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"strconv"
+	"strings"
+	"sync/atomic"
+	"syscall"
+	"time"
+)
+
+func must(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+func write(path string, value any) {
+	b, err := json.MarshalIndent(value, "", "  ")
+	must(err)
+	must(os.WriteFile(path, append(b, '\n'), 0600))
+}
+func main() {
+	if len(os.Args) != 5 {
+		panic("usage: probe compiler inputs output max-attempts")
+	}
+	compiler, inputs, out := os.Args[1], os.Args[2], os.Args[3]
+	budget, err := strconv.Atoi(os.Args[4])
+	must(err)
+	if budget < 1 || budget > 64 {
+		panic("attempt budget")
+	}
+	must(os.Mkdir(out, 0700))
+	root, err := os.MkdirTemp("", "gooo-source-swap-")
+	must(err)
+	defer os.RemoveAll(root)
+	regular, fifo, alias := filepath.Join(root, "regular"), filepath.Join(root, "fifo"), filepath.Join(root, "source")
+	source, err := os.ReadFile(filepath.Join(inputs, "ko-source.gooo"))
+	must(err)
+	must(os.WriteFile(regular, source, 0600))
+	must(syscall.Mkfifo(fifo, 0600))
+	must(os.Symlink(regular, alias))
+	var records []map[string]any
+	confirmed := 0
+	for attempt := 1; attempt <= budget; attempt++ {
+		label := fmt.Sprintf("attempt-%02d", attempt)
+		dest := filepath.Join(out, label+"-results")
+		args := []string{"body-path-run", "--source", alias, "--activity", "AssembleKorean", "--path-plan", filepath.Join(inputs, "ko-recipe.json"), "--cases", filepath.Join(inputs, "cases-128.json"), "--go-bin", os.Getenv("GOOO_LOCAL_GO"), "--repeat", "1", "--out", dest, "--timing"}
+		ctx, cancel := context.WithTimeout(context.Background(), 6*time.Second)
+		c := exec.CommandContext(ctx, compiler, args...)
+		c.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
+		c.Cancel = func() error { return syscall.Kill(-c.Process.Pid, syscall.SIGKILL) }
+		c.WaitDelay = time.Second
+		var stdout, stderr bytes.Buffer
+		c.Stdout, c.Stderr = &stdout, &stderr
+		started := time.Now()
+		must(c.Start())
+		joined := make(chan error, 1)
+		go func() { joined <- c.Wait() }()
+		stop, toggled := make(chan struct{}), make(chan error, 1)
+		var swaps atomic.Int64
+		go func() {
+			next := filepath.Join(root, "next")
+			for {
+				for _, target := range []string{regular, fifo} {
+					select {
+					case <-stop:
+						toggled <- nil
+						return
+					default:
+					}
+					if e := os.Symlink(target, next); e != nil {
+						toggled <- e
+						return
+					}
+					if e := os.Rename(next, alias); e != nil {
+						toggled <- e
+						return
+					}
+					swaps.Add(1)
+				}
+			}
+		}()
+		var waitErr error
+		var released bool
+		select {
+		case waitErr = <-joined:
+		case <-time.After(500 * time.Millisecond):
+			// Only this child reads the owned FIFO. ENXIO means no FIFO reader;
+			// success establishes a reader waiting before the file-kind check.
+			writer, e := os.OpenFile(fifo, os.O_WRONLY|syscall.O_NONBLOCK, 0)
+			if e == nil {
+				released = true
+				must(writer.Close())
+			}
+			waitErr = <-joined
+		}
+		close(stop)
+		must(<-toggled)
+		elapsed, timedOut := time.Since(started).Nanoseconds(), ctx.Err() != nil
+		cancel()
+		must(os.WriteFile(filepath.Join(out, label+".stdout"), stdout.Bytes(), 0600))
+		must(os.WriteFile(filepath.Join(out, label+".stderr"), stderr.Bytes(), 0600))
+		_, outErr := os.Stat(dest)
+		preOutput := os.IsNotExist(outErr)
+		message := ""
+		if waitErr != nil {
+			message = waitErr.Error()
+		}
+		kindRejected := strings.Contains(stderr.String(), alias+": input must be nonempty and within 131072 bytes") ||
+			strings.Contains(stderr.String(), alias+": input must be a regular file")
+		blocked := released && !timedOut && c.ProcessState.ExitCode() == 1 && preOutput && stdout.Len() == 0 && kindRejected
+		row := map[string]any{"attempt": attempt, "elapsed_ns": elapsed, "exit_code": c.ProcessState.ExitCode(), "error": message, "timeout": timedOut, "process_joined": true, "swaps": swaps.Load(), "writer_released_fifo_reader": released, "output_directory_absent": preOutput, "confirmed_wait_before_validation": blocked, "args": args}
+		write(filepath.Join(out, label+"-process.json"), row)
+		records = append(records, row)
+		if blocked {
+			confirmed++
+			break
+		}
+		if timedOut {
+			break
+		}
+	}
+	write(filepath.Join(out, "summary.json"), map[string]any{"scope": "actual CLI atomic symlink swap; timeout alone is inconclusive", "attempts": len(records), "confirmed_fifo_waits": confirmed, "records": records, "new_intent_tasks": 0, "training_updates": 0, "model_requested": false})
+}

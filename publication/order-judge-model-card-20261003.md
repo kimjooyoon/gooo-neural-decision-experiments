@@ -24,6 +24,16 @@ fits. Equal pieces can reuse an earlier measurement.
 
 ## Artifact and integration status
 
+- Dev #1202 is checking descriptor-first Unix input reads on candidate `1a47cb16`.
+  The installed source-path swap waited before model preparation until its sole
+  FIFO writer was opened. Candidate 64-swap controls have zero writer releases
+  and timeouts; 32 regular completions keep prior Go and 4,096/4,096 observations.
+  A separate actual own-model/deterministic smoke keeps 1,024/1,024 in eight
+  constructions/four judgments/16 native runs. Model warm responses were
+  26.759375/26.896542ms; the original first responses are retained. These are
+  existing authored tasks with unchanged weights/fit. Current installation is
+  the proved main below. [Original wait, controls and Go readers](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/file-input-open-20261004).
+
 - Clearer terminal expectation states are installed on clean main `01d21e92`.
   Dev #1200 and main #1201 passed their own canonical CI and independent
   source proofs, then merged through normal expected-head merges. Fresh

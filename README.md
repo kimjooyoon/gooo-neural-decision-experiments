@@ -31,6 +31,14 @@ means measured outputs missed every expectation. [Full usage and next actions](h
 
 ## Start here — 2026-10-04
 
+- [Avoid waiting before input-file validation](publication/file-input-open-20261004):
+  an actual source-path swap held the installed CLI before output creation until
+  its sole FIFO writer was opened. Candidate descriptor-first nonblocking reads
+  completed 64 swaps with zero writer releases/timeouts. The 32 regular-file
+  completions keep all earlier Go and 4,096/4,096 observations; 32 file errors
+  remain before construction. Separate own-model/deterministic smoke keeps
+  1,024/1,024. Dev #1202 is in canonical CI; installation remains `01d21e92`.
+
 - [Distinguish unobserved expectations from actual measured zero](publication/finite-observation-display-20261004):
   installed terminal summaries use current case observations and replay state.
   Eight ordinary constructions/four own-model judgments/16 runs keep 1,024/1,024
