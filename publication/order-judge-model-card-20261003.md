@@ -33,6 +33,11 @@ fits. Equal pieces can reuse an earlier measurement.
 - The 128-byte prediction workspace excludes feature arrays, preparation,
   artifact loading, program objects and receipts.
 - CPU fit and local Go inference. This architecture currently has FP32 weights.
+- Current installed compiler: main `3bee55daf8063b0daee3d543e57a528975bc63ee`,
+  integrated body stream and within-request recipe projection reuse. Known
+  English/Korean tasks and the Go example passed 192/192 finite expectations
+  in 24 generations and 48 compiled executions with this unchanged model.
+  [Current installation evidence](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/recipe-projection-installed-main-20261003).
 - The released Go SDK v0.2.20 adds preparation reuse to the existing direct
   in-compiler generation route.
   The [native collection](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/order-judge-native-20261003)
