@@ -40,6 +40,9 @@ func main() {
 	mode := flag.String("mode", "verify", "package or verify")
 	output := flag.String("output", "publication/full-input-initial-study-20261003", "fresh public bundle")
 	replay := flag.String("compare-audit", "", "compare a fresh Go audit to the published observations")
+	platformReplay := flag.String("compare-platform-audit", "", "compare every fresh legacy observation to its frozen platform archive")
+	revision := flag.String("replay-revision", "", "exact clean source of the fresh legacy audit")
+	comparisonOutput := flag.String("comparison-output", "", "fresh same-platform replay result; original cross-platform differences retained")
 	flag.Parse()
 	var err error
 	switch *mode {
@@ -56,6 +59,9 @@ func main() {
 	}
 	if err == nil && *replay != "" {
 		err = compareAudit(filepath.Join(*output, "report.json"), *replay)
+	}
+	if err == nil && *platformReplay != "" {
+		err = verifyLegacyReplay(*platformReplay, *revision, *comparisonOutput)
 	}
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)

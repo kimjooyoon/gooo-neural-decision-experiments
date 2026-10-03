@@ -240,7 +240,9 @@ jobs:
           go-version: '1.27.1'
           cache: false
       - name: Verify all public and decoded evidence bytes
-        run: go run ./tools/package-full-input-study --mode verify
+        run: |
+          go test ./tools/package-full-input-study
+          go run ./tools/package-full-input-study --mode verify
       - name: Reconstruct source targets and replay all initial Go observations
         run: |
           unzip -q publication/full-input-initial-study-20261003/training.zip -d "$RUNNER_TEMP/full-input-training"
@@ -252,12 +254,20 @@ jobs:
             --output runs/own-three-full-input-ci-replay \
             --source-revision "$(git rev-parse HEAD)"
           go run ./tools/package-full-input-study --mode verify \
-            --compare-audit runs/own-three-full-input-ci-replay/report.json
+            --compare-platform-audit runs/own-three-full-input-ci-replay \
+            --replay-revision "$GITHUB_SHA" \
+            --comparison-output "$RUNNER_TEMP/legacy-platform-replay.json"
       - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: full-input-initial-linux-replay
           path: runs/own-three-full-input-ci-replay
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: legacy-platform-replay
+          path: ${{ runner.temp }}/legacy-platform-replay.json
           if-no-files-found: error
   bilingual-wrapper-replay:
     runs-on: ubuntu-latest
