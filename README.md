@@ -8,6 +8,13 @@ training tools and original evidence behind that process.
 
 ## Start here — 2026-10-03
 
+- [Use source/recipe/case files directly](publication/body-path-file-cli-20261003):
+  experimental `gooo body-path-run` saves generated Go and current native
+  observations without constructing input JSON lines. Named EN/KO activities,
+  eight generations, four actual model calls, 16 native runs and 1,024/1,024
+  finite expectations on 128 integer inputs. Sparse-example failures and a
+  Gooo-oracle candidate resolution are preserved separately. PR #1186 is open;
+  canonical proof, merge and installation are pending.
 - [Keep one verified executable while running current inputs](publication/retained-native-execution-20261003):
   512 fresh generations/predictions and 1,024 native runs retain every original
   outcome, including partial failures. Warm execution median 294→29ms, current

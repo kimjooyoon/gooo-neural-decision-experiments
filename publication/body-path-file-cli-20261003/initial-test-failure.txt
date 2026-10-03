@@ -1,0 +1,10 @@
+Initial local test failed on the original sparse recipe fixture:
+--- FAIL: TestFilesNamedActivitiesAndActualNativeReuse (1.32s)
+    files_test.go:87: row={Sequence:1 Status:completed ResponseMS:497.335875 ResponseFile:run-1-response.json GenerationFile:run-1-generation.json RuntimeFile:run-1-runtime.json NativeRuns:2 Passed:0 Total:2 ArtifactReused:false} result=
+FAIL github.com/kimjooyoon/meta-ontology-go/internal/bodypathstream 2.202s
+ok github.com/kimjooyoon/meta-ontology-go/cmd/gooo 0.842s
+
+The original selection example was input=10, expected=-3. Both input-13 and
+7-input satisfy it. Separate expectations for inputs 2 and -4 remained 5 and 11.
+The regression now explicitly declares a second selection example input=0,
+expected=7, keeping those independent runtime expectations unchanged.
