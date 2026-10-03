@@ -8,6 +8,19 @@ training tools and original evidence behind that process.
 
 ## Start here — 2026-10-03
 
+- [Repeated construction through one Gooo command](publication/body-stream-cli-20261003):
+  `gooo body-path-stream` accepts source recipes as JSON lines and emits each
+  result when ready. Model omission is deterministic. Local dogfooding: four
+  generated bodies, eight native executions, 32/32 expectations. Compiler
+  [PR #1180](https://github.com/kimjooyoon/meta-ontology-go/pull/1180) is in CI.
+- [Prepared candidates are merged and installed](publication/order-prepared-installed-main-20261003):
+  SDK v0.2.20, main `8117fbae`, 16 generated bodies and 32 native executions,
+  128/128 expectations. The [512-generation API comparison](publication/order-prepared-native-20261003)
+  measures second-call generation medians of 1.017 → 0.693 ms with unchanged weights.
+- [Existing retained-worker observations](publication/prepared-worker-native-20261003):
+  96 generations, 48 predictions, 192 native executions and 768/768 expectations.
+  Sequential repeats reuse preparation; alternating plans expose the one-plan
+  cache's limits. Full sources, measurements and a two-request example are public.
 - [Runnable Korean order-assembly example](examples/whole-candidate-order):
   source, short recipe, eight execution cases and two CLI commands. The model
   selects actual operations for `input * 2 + 1` inside Gooo code generation.
