@@ -1,0 +1,2 @@
+def median:sort|length as $n|if $n%2==1 then .[($n/2|floor)] else (.[($n/2)-1]+.[($n/2)])/2 end;
+{generations:length,calls:(map(.Calls)|add),runs:(map(.NativeRuns)|add),passed:(map(.Passed)|add),total:(map(.Total)|add),reuses:(map(select(.Reused))|length),groups:(group_by([.Arm,.Workers,.Phase,.Trial])|map({arm:.[0].Arm,workers:.[0].Workers,phase:.[0].Phase,trial:.[0].Trial,n:length,reuses:(map(select(.Reused))|length),median_response_ms:(map(.ResponseNS/1000000)|median),min_response_ms:(map(.ResponseNS/1000000)|min),max_response_ms:(map(.ResponseNS/1000000)|max)}))}

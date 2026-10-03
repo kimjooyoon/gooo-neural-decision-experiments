@@ -41,3 +41,27 @@ return value
 실행 결과의 `observation.cases`는 여덟 입력의 실제 값과 기대값을 보여줍니다.
 예를 들어 입력 3의 기대값은 7입니다. 모델 옵션을 빼면 같은 예시와 예산 안에서
 결정론적으로 조립합니다. 이 예제의 성공 범위는 선언한 연산과 유한 입력 집합입니다.
+
+## 같은 프로세스에서 두 번 조립하기
+
+컴파일러 저장소에서 `go build -o gooo-body-worker ./cmd/gooo-body-worker`로 워커를
+빌드하고 PATH에 둡니다. [#1178](https://github.com/kimjooyoon/meta-ontology-go/pull/1178)의
+후보 준비 재사용을 포함한 버전에서는 아래 두 번째 요청의 `reused`가 `true`가 됩니다.
+연구 저장소 루트에서 실행합니다.
+
+```sh
+gooo-body-worker --workers 1 \
+  --model publication/order-judge-initial-20261003/model.json \
+  < examples/whole-candidate-order/worker-requests.jsonl \
+  > /tmp/gooo-order-worker-results.jsonl
+
+jq '{id:.correlation_id,status,preparation:.response.report.body_paths.whole_candidate_preparation}' \
+  /tmp/gooo-order-worker-results.jsonl
+
+jq -s '.[1].response' /tmp/gooo-order-worker-results.jsonl > /tmp/gooo-order-generation.json
+```
+
+마지막 생성 파일에 앞 절의 `body-execute` 명령을 그대로 사용할 수 있습니다.
+각 줄의 `response.source`는 생성된 Go 코드입니다. 모델은 매 요청 새로 판단하고,
+워커 시작 시 준비한 가중치와 같은 계획의 후보를 재사용합니다. `--model`을 생략하면
+결정론적으로 진행합니다. [실제 워커·즉시 실행 관측](../../publication/prepared-worker-native-20261003).
