@@ -33,11 +33,13 @@ means measured outputs missed every expectation. [Full usage and next actions](h
 
 - [Avoid waiting before input-file validation](publication/file-input-open-20261004):
   an actual source-path swap held the installed CLI before output creation until
-  its sole FIFO writer was opened. Candidate descriptor-first nonblocking reads
-  completed 64 swaps with zero writer releases/timeouts. The 32 regular-file
-  completions keep all earlier Go and 4,096/4,096 observations; 32 file errors
-  remain before construction. Separate own-model/deterministic smoke keeps
-  1,024/1,024. Dev #1202 is in canonical CI; installation remains `01d21e92`.
+  its sole FIFO writer was opened; metadata and weights reproduced the same wait.
+  Current candidate `0eb69e5f` shares the nonblocking opener across these boundaries.
+  Its 64 swaps have zero writer releases/timeouts; 25 regular completions keep
+  earlier Go and 3,200/3,200 observations, while 39 file errors occur before construction.
+  Two model FIFO requests return without a writer. Separate own-model/deterministic
+  smoke keeps 1,024/1,024. Initial candidate observations remain archived separately.
+  Dev #1202 is in its new-head CI; installation remains `01d21e92`.
 
 - [Distinguish unobserved expectations from actual measured zero](publication/finite-observation-display-20261004):
   installed terminal summaries use current case observations and replay state.

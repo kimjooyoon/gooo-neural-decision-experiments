@@ -24,13 +24,16 @@ fits. Equal pieces can reuse an earlier measurement.
 
 ## Artifact and integration status
 
-- Dev #1202 is checking descriptor-first Unix input reads on candidate `1a47cb16`.
-  The installed source-path swap waited before model preparation until its sole
-  FIFO writer was opened. Candidate 64-swap controls have zero writer releases
-  and timeouts; 32 regular completions keep prior Go and 4,096/4,096 observations.
+- Dev #1202 is checking source inputs, structural metadata and whole-candidate
+  weights through a shared nonblocking Unix opener on candidate `0eb69e5f`.
+  Actual installed source/model FIFO waits and their controlled writer releases
+  are retained. Current 64-swap controls have zero writer releases/timeouts;
+  25 regular completions keep prior Go and 3,200/3,200 observations. Both model
+  FIFO requests return a file error without a writer or output directory.
   A separate actual own-model/deterministic smoke keeps 1,024/1,024 in eight
   constructions/four judgments/16 native runs. Model warm responses were
-  26.759375/26.896542ms; the original first responses are retained. These are
+  25.321709/27.571583ms; first responses of 298.670458/485.046083ms are retained.
+  The first metadata error's total 528.789584ms is retained too. These are
   existing authored tasks with unchanged weights/fit. Current installation is
   the proved main below. [Original wait, controls and Go readers](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/file-input-open-20261004).
 

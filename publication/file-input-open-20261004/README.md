@@ -1,8 +1,43 @@
 # 생성 전 입력 파일의 대기 줄이기
 
-2026-10-04 KST. 후보 `1a47cb16b0abb9fe7faaaace158612f9b77ee504`의
-[개발 #1202](https://github.com/kimjooyoon/meta-ontology-go/pull/1202)가 필수 CI를
-진행합니다. 현재 설치는 앞선 main `01d21e92`이며, 이 페이지의 수정 후보와 구분합니다.
+2026-10-04 KST. [개발 #1202](https://github.com/kimjooyoon/meta-ontology-go/pull/1202)의
+현재 후보는 `0eb69e5f15ce40a2b07050ae747fe1552d5a9f46`입니다.
+[해당 소스의 CI](https://github.com/kimjooyoon/meta-ontology-go/actions/runs/37162902304)가
+진행 중이며 설치는 main `01d21e92`입니다. 아래 초기 후보 `1a47cb16`의 기록도 보존합니다.
+초기 후보 CI는 성공했지만 현재 소스의 병합 근거는 현재 소스의 별도 증거로 확인합니다.
+
+## 현재 후보: 모델 파일까지 같은 읽기 경계 적용
+
+추가 조사에서 모델 정보 JSON과 자체 order-judge의 `weights.bin`도 쓰기 상대 없는
+FIFO일 때 파일 열기에서 기다리는 것을 실제 CLI로 재현했습니다. 원래 설치본의
+두 요청은 500ms 뒤 컨트롤러가 쓰기 쪽을 열자 파일 종류 오류와 종료 1을 반환했습니다.
+현재 후보는 소스 입력·모델 정보·order-judge 가중치에 같은 Unix 비차단 열기를 사용합니다.
+열린 파일의 종류와 기존 크기·형식·가중치 검증을 계속 적용합니다.
+
+| 현재 후보의 별도 관측 | 결과 |
+| --- | --- |
+| 소스 경로 교체 64회 | 일반 파일 완료 25회, 생성 전 파일 오류 39회 |
+| 외부 FIFO 해제·시간 초과 | 각각 0회; 모든 프로세스 종료 확인 |
+| 위 25회 실제 바디 실행 | 50회, 3,200/3,200 기대값, 고정 Go 25개 일치 |
+| 모델 정보·가중치 FIFO | 모두 해제 없이 파일 오류, 결과 폴더 생성 전 종료 |
+| 별도 한영 모델·결정론 실행 | 생성 8회, 자체 판단 4회, 바디 실행 16회, 1,024/1,024 |
+
+모델 정보 FIFO 첫 요청은 총 528.789584ms, 가중치 FIFO는 7.274167ms였습니다.
+첫 요청의 시간을 생략하지 않으며 일반 처리 속도 개선율로 환산하지 않습니다.
+별도 정상 모델 요청의 첫/재사용 응답은 한국어 298.670458/25.321709ms,
+영어 485.046083/27.571583ms였습니다. 결정론 첫/재사용은
+307.617500/26.578709ms와 305.768084/26.236875ms입니다.
+새 의도·학습·가중치 갱신은 0개이며 CPU 사용률과 모델 단독 RAM은 미관측입니다.
+
+모델 정보는 64KiB 이내이고 order-judge 가중치는 정확히 16,384바이트입니다.
+다른 모델 프로필의 후속 아티팩트 읽기는 각 기존 로더가 담당합니다.
+Unix 실행 증거와 Windows arm64 교차 컴파일 증거를 구분합니다.
+
+현재 후보 원본은 `revision2-native-observations.zip`에 별도로 보관했습니다.
+622개 파일·8,879,667 regular bytes, SHA256
+`0dd3d0e451099532cb3c211088060227aefb29042be68c2abbb1b933c053ebcb`입니다.
+`revision2-swap-readback.json`과 `model-io-readback.json`은 원본 결과의 읽기 전용 확인입니다.
+초기 ZIP을 덮어쓰지 않습니다.
 
 ## 실제로 발견한 대기
 
@@ -16,7 +51,7 @@
 이 500ms는 컨트롤러의 해제 시점입니다. 원래의 자연 종료 시간으로 해석하지 않습니다.
 모든 원본 stdout/stderr·프로세스 결과를 남겼고 시간 초과만으로 문제를 판정하지 않았습니다.
 
-## 후보의 변경
+## 초기 후보 `1a47cb16`의 변경과 원본 관측
 
 Unix는 파일을 비차단으로 연 뒤 열린 파일 자체의 종류·크기를 검사합니다.
 소스·레시피·기대값·옵션에 같은 읽기 함수가 적용됩니다. 일반 파일의 심볼릭
@@ -37,7 +72,7 @@ Unix는 파일을 비차단으로 연 뒤 열린 파일 자체의 종류·크기
 기존 한국어 원본·128개 입력을 반복하며 모델 판단 0회입니다. 생성 전 파일 오류에는
 runtime 관측의 기대값 분모를 붙이지 않습니다. 새 의도·학습 갱신은 0개입니다.
 
-## 자체 모델로 계속 개발하기
+## 초기 후보의 자체 모델 실행
 
 별도 한영 모델·결정론 네 조건을 각각 두 번 사용했습니다. 생성 8회·실제 자체
 모델 판단 4회·바디 실행 16회에서 **1,024/1,024**와 고정 생성 Go 8개가 같았습니다.
@@ -62,12 +97,15 @@ ZIP SHA256은 `23bb0c253a9c136074e2dfa6df36d40e26610f4755ba9e5eb1867e0d9c2e0f2e`
 unzip native-observations.zip -d saved
 go run ./archive-readback native-observations.zip saved
 go run ./swap-readback saved saved/inputs saved/expected
+unzip revision2-native-observations.zip -d saved
+go run ./swap-readback saved saved/inputs saved/expected revision2
+go run ./model-io-readback saved
 GOOO_LOCAL_GO=/path/to/go1.27.1/bin/go go run ./race-probe \
   /path/to/clean-gooo saved/inputs fresh-swap-output 64
 ```
 
 새 경로 교체 실행은 스케줄링에 따라 다른 완료/오류 목록을 만듭니다.
-`swap-readback`은 보관한 원래 14/64회 자료를 확인합니다. `race-probe`는 Unix에서
+`swap-readback`은 보관한 원래 14/64회 자료와 선택한 현재 후보 64회 자료를 확인합니다. `race-probe`는 Unix에서
 자신이 만든 FIFO만 해제하고 모든 실제 프로세스·교체 루프를 종료한 뒤 제거합니다.
 
 원래 `os.Open`을 그대로 추출한 경계의 단위 테스트도 1초 대기를 재현하고
