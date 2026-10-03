@@ -187,6 +187,12 @@ have no numeric completeness delta. The
 [full original observations and replay method](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/toolchain-version-reuse-20261003)
 include the final source's eight-generation/1,024-expectation confirmation.
 
+The research workflow at source `2b30367b` retains a FAIL in the earlier shared
+model's numerical replay: 101 summary leaves differ from its frozen reference.
+The current whole-candidate judge and separate-arithmetic replay jobs pass; 18
+of 19 jobs pass. Original failures and exact differences are linked in the same
+publication. The whole research workflow is not reported as passing.
+
 ## Reading the limits
 
 The feature projection is narrow and lossy. Long instructions, branching,

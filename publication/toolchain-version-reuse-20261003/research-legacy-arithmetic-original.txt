@@ -1,0 +1,376 @@
+﻿2026-10-03T12:46:39.4357089Z Current runner version: '2.337.0'
+2026-10-03T12:46:39.4383955Z ##[group]Runner Image Provisioner
+2026-10-03T12:46:39.4385020Z Hosted Compute Agent
+2026-10-03T12:46:39.4386104Z Version: 20260901.588
+2026-10-03T12:46:39.4386842Z Commit: f88ec8081b781fac6c440065ac7ff9e710ce3d0b
+2026-10-03T12:46:39.4388095Z Build Date: 2026-09-01T19:56:44Z
+2026-10-03T12:46:39.4388876Z Worker ID: {6610d638-1c25-4383-8d68-5dbfd60e5d9d}
+2026-10-03T12:46:39.4389661Z Azure Region: eastus
+2026-10-03T12:46:39.4390344Z ##[endgroup]
+2026-10-03T12:46:39.4391976Z ##[group]Operating System
+2026-10-03T12:46:39.4392753Z Ubuntu
+2026-10-03T12:46:39.4393321Z 24.04.5
+2026-10-03T12:46:39.4393877Z LTS
+2026-10-03T12:46:39.4394446Z ##[endgroup]
+2026-10-03T12:46:39.4395007Z ##[group]Runner Image
+2026-10-03T12:46:39.4395612Z Image: ubuntu-24.04
+2026-10-03T12:46:39.4396532Z Version: 20260927.320.1
+2026-10-03T12:46:39.4397868Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260927.320/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-03T12:46:39.4399571Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260927.320
+2026-10-03T12:46:39.4401322Z ##[endgroup]
+2026-10-03T12:46:39.4402704Z ##[group]GITHUB_TOKEN Permissions
+2026-10-03T12:46:39.4405026Z Contents: read
+2026-10-03T12:46:39.4405680Z Metadata: read
+2026-10-03T12:46:39.4406504Z ##[endgroup]
+2026-10-03T12:46:39.4409112Z Secret source: Actions
+2026-10-03T12:46:39.4410144Z Cache mode: write
+2026-10-03T12:46:39.4411184Z Prepare workflow directory
+2026-10-03T12:46:39.4811166Z Prepare all required actions
+2026-10-03T12:46:39.4860975Z Getting action download info
+2026-10-03T12:46:39.7145432Z Download action repository 'actions/checkout@v7' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-10-03T12:46:39.8369661Z Download action repository 'actions/setup-go@v7' (SHA:b7ad1dad31e06c5925ef5d2fc7ad053ef454303e)
+2026-10-03T12:46:40.0668108Z Download action repository 'actions/upload-artifact@v7' (SHA:043fb46d1a93c77aae656e7c1c64a875d1fc6a0a)
+2026-10-03T12:46:40.2890637Z Complete job name: full-input-initial-replay
+2026-10-03T12:46:40.3677534Z ##[group]Run actions/checkout@v7
+2026-10-03T12:46:40.3678792Z with:
+2026-10-03T12:46:40.3679387Z   repository: kimjooyoon/gooo-neural-decision-experiments
+2026-10-03T12:46:40.3683481Z   token: ***
+2026-10-03T12:46:40.3683919Z   ssh-strict: true
+2026-10-03T12:46:40.3684381Z   ssh-user: git
+2026-10-03T12:46:40.3684829Z   persist-credentials: true
+2026-10-03T12:46:40.3685323Z   clean: true
+2026-10-03T12:46:40.3686031Z   sparse-checkout-cone-mode: true
+2026-10-03T12:46:40.3686589Z   fetch-depth: 1
+2026-10-03T12:46:40.3687029Z   fetch-tags: false
+2026-10-03T12:46:40.3687481Z   show-progress: true
+2026-10-03T12:46:40.3687931Z   lfs: false
+2026-10-03T12:46:40.3688346Z   submodules: false
+2026-10-03T12:46:40.3688797Z   set-safe-directory: true
+2026-10-03T12:46:40.3689308Z   allow-unsafe-pr-checkout: false
+2026-10-03T12:46:40.3690178Z env:
+2026-10-03T12:46:40.3690612Z   GOTOOLCHAIN: local
+2026-10-03T12:46:40.3691072Z   GOWORK: off
+2026-10-03T12:46:40.3691516Z ##[endgroup]
+2026-10-03T12:46:40.4841729Z Syncing repository: kimjooyoon/gooo-neural-decision-experiments
+2026-10-03T12:46:40.4845068Z ##[group]Getting Git version info
+2026-10-03T12:46:40.4846999Z Working directory is '/home/runner/work/gooo-neural-decision-experiments/gooo-neural-decision-experiments'
+2026-10-03T12:46:40.4849173Z [command]/usr/bin/git version
+2026-10-03T12:46:40.4941733Z git version 2.55.0
+2026-10-03T12:46:40.4989957Z ##[endgroup]
+2026-10-03T12:46:40.4999188Z Temporarily overriding HOME='/home/runner/work/_temp/1cf0c303-fe32-4de7-a9e6-61d5a6528efc' before making global git config changes
+2026-10-03T12:46:40.5001761Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-03T12:46:40.5004423Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/gooo-neural-decision-experiments/gooo-neural-decision-experiments
+2026-10-03T12:46:40.5042912Z Deleting the contents of '/home/runner/work/gooo-neural-decision-experiments/gooo-neural-decision-experiments'
+2026-10-03T12:46:40.5046700Z ##[group]Determining repository object format
+2026-10-03T12:46:40.5048421Z ##[endgroup]
+2026-10-03T12:46:40.5049642Z ##[group]Initializing the repository
+2026-10-03T12:46:40.5054862Z [command]/usr/bin/git init /home/runner/work/gooo-neural-decision-experiments/gooo-neural-decision-experiments
+2026-10-03T12:46:40.5183529Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-03T12:46:40.5185419Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-03T12:46:40.5187471Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-03T12:46:40.5188858Z hint: call:
+2026-10-03T12:46:40.5189666Z hint:
+2026-10-03T12:46:40.5190735Z hint: 	git config --global init.defaultBranch <name>
+2026-10-03T12:46:40.5191959Z hint:
+2026-10-03T12:46:40.5193116Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-03T12:46:40.5197172Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-03T12:46:40.5198699Z hint:
+2026-10-03T12:46:40.5199636Z hint: 	git branch -m <name>
+2026-10-03T12:46:40.5200666Z hint:
+2026-10-03T12:46:40.5201889Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-03T12:46:40.5204343Z Initialized empty Git repository in /home/runner/work/gooo-neural-decision-experiments/gooo-neural-decision-experiments/.git/
+2026-10-03T12:46:40.5208977Z [command]/usr/bin/git remote add origin https://github.com/kimjooyoon/gooo-neural-decision-experiments
+2026-10-03T12:46:40.5295159Z ##[endgroup]
+2026-10-03T12:46:40.5296406Z ##[group]Disabling automatic garbage collection
+2026-10-03T12:46:40.5300000Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-03T12:46:40.5336461Z ##[endgroup]
+2026-10-03T12:46:40.5337950Z ##[group]Setting up auth
+2026-10-03T12:46:40.5343763Z Removing SSH command configuration
+2026-10-03T12:46:40.5347097Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-03T12:46:40.5388819Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-03T12:46:40.5816769Z Removing HTTP extra header
+2026-10-03T12:46:40.5822677Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-03T12:46:40.5860663Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-03T12:46:40.6082781Z Removing includeIf entries pointing to credentials config files
+2026-10-03T12:46:40.6088148Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-03T12:46:40.6132175Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-03T12:46:40.6369029Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-caebf308-7d83-4c4a-865b-e6af551830f4.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-03T12:46:40.6415172Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/gooo-neural-decision-experiments/gooo-neural-decision-experiments/.git.path /home/runner/work/_temp/git-credentials-caebf308-7d83-4c4a-865b-e6af551830f4.config
+2026-10-03T12:46:40.6451093Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/gooo-neural-decision-experiments/gooo-neural-decision-experiments/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-caebf308-7d83-4c4a-865b-e6af551830f4.config
+2026-10-03T12:46:40.6491267Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-caebf308-7d83-4c4a-865b-e6af551830f4.config
+2026-10-03T12:46:40.6528398Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-caebf308-7d83-4c4a-865b-e6af551830f4.config
+2026-10-03T12:46:40.6563220Z ##[endgroup]
+2026-10-03T12:46:40.6564450Z ##[group]Fetching the repository
+2026-10-03T12:46:40.6570276Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +2b30367b7861bb2da95faaf0fc330a9734afd72c:refs/remotes/origin/main
+2026-10-03T12:46:48.9872007Z From https://github.com/kimjooyoon/gooo-neural-decision-experiments
+2026-10-03T12:46:48.9873960Z  * [new ref]         2b30367b7861bb2da95faaf0fc330a9734afd72c -> origin/main
+2026-10-03T12:46:48.9880622Z [command]/usr/bin/git branch --list --remote origin/main
+2026-10-03T12:46:48.9910053Z   origin/main
+2026-10-03T12:46:48.9919687Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+2026-10-03T12:46:48.9946837Z 2b30367b7861bb2da95faaf0fc330a9734afd72c
+2026-10-03T12:46:48.9951971Z ##[endgroup]
+2026-10-03T12:46:48.9953548Z ##[group]Determining the checkout info
+2026-10-03T12:46:48.9955956Z ##[endgroup]
+2026-10-03T12:46:48.9957293Z [command]/usr/bin/git sparse-checkout disable
+2026-10-03T12:46:49.0009451Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-03T12:46:49.0043150Z ##[group]Checking out the ref
+2026-10-03T12:46:49.0046635Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-10-03T12:46:50.1732336Z Updating files:   9% (2620/29100)
+2026-10-03T12:46:50.2027281Z Updating files:  10% (2910/29100)
+2026-10-03T12:46:50.2869147Z Updating files:  11% (3201/29100)
+2026-10-03T12:46:50.4004681Z Updating files:  12% (3492/29100)
+2026-10-03T12:46:50.4121284Z Updating files:  13% (3783/29100)
+2026-10-03T12:46:50.4242120Z Updating files:  14% (4074/29100)
+2026-10-03T12:46:50.4379713Z Updating files:  15% (4365/29100)
+2026-10-03T12:46:50.4496563Z Updating files:  16% (4656/29100)
+2026-10-03T12:46:50.4633331Z Updating files:  17% (4947/29100)
+2026-10-03T12:46:50.4746982Z Updating files:  18% (5238/29100)
+2026-10-03T12:46:50.4865294Z Updating files:  19% (5529/29100)
+2026-10-03T12:46:50.4992513Z Updating files:  20% (5820/29100)
+2026-10-03T12:46:50.5109359Z Updating files:  21% (6111/29100)
+2026-10-03T12:46:50.5240696Z Updating files:  22% (6402/29100)
+2026-10-03T12:46:50.5357206Z Updating files:  23% (6693/29100)
+2026-10-03T12:46:50.5489065Z Updating files:  24% (6984/29100)
+2026-10-03T12:46:50.5603086Z Updating files:  25% (7275/29100)
+2026-10-03T12:46:50.5741890Z Updating files:  26% (7566/29100)
+2026-10-03T12:46:50.5853932Z Updating files:  27% (7857/29100)
+2026-10-03T12:46:50.5986801Z Updating files:  28% (8148/29100)
+2026-10-03T12:46:50.6100192Z Updating files:  29% (8439/29100)
+2026-10-03T12:46:50.6214364Z Updating files:  30% (8730/29100)
+2026-10-03T12:46:50.6338790Z Updating files:  31% (9021/29100)
+2026-10-03T12:46:50.6454300Z Updating files:  32% (9312/29100)
+2026-10-03T12:46:50.6582832Z Updating files:  33% (9603/29100)
+2026-10-03T12:46:50.6700800Z Updating files:  34% (9894/29100)
+2026-10-03T12:46:50.7673623Z Updating files:  35% (10185/29100)
+2026-10-03T12:46:50.7877370Z Updating files:  36% (10476/29100)
+2026-10-03T12:46:50.7994339Z Updating files:  37% (10767/29100)
+2026-10-03T12:46:50.8112576Z Updating files:  38% (11058/29100)
+2026-10-03T12:46:50.8241317Z Updating files:  39% (11349/29100)
+2026-10-03T12:46:50.8360348Z Updating files:  40% (11640/29100)
+2026-10-03T12:46:50.8496523Z Updating files:  41% (11931/29100)
+2026-10-03T12:46:50.8612099Z Updating files:  42% (12222/29100)
+2026-10-03T12:46:50.8745669Z Updating files:  43% (12513/29100)
+2026-10-03T12:46:50.8860290Z Updating files:  44% (12804/29100)
+2026-10-03T12:46:50.8990689Z Updating files:  45% (13095/29100)
+2026-10-03T12:46:50.9104341Z Updating files:  46% (13386/29100)
+2026-10-03T12:46:50.9237584Z Updating files:  47% (13677/29100)
+2026-10-03T12:46:50.9352512Z Updating files:  48% (13968/29100)
+2026-10-03T12:46:50.9470070Z Updating files:  49% (14259/29100)
+2026-10-03T12:46:50.9599385Z Updating files:  50% (14550/29100)
+2026-10-03T12:46:50.9717182Z Updating files:  51% (14841/29100)
+2026-10-03T12:46:50.9847071Z Updating files:  52% (15132/29100)
+2026-10-03T12:46:50.9963766Z Updating files:  53% (15423/29100)
+2026-10-03T12:46:51.0220490Z Updating files:  54% (15714/29100)
+2026-10-03T12:46:51.0296759Z Updating files:  55% (16005/29100)
+2026-10-03T12:46:51.0348897Z Updating files:  55% (16207/29100)
+2026-10-03T12:46:51.0489150Z Updating files:  56% (16296/29100)
+2026-10-03T12:46:51.0601127Z Updating files:  57% (16587/29100)
+2026-10-03T12:46:51.0717040Z Updating files:  58% (16878/29100)
+2026-10-03T12:46:51.0853120Z Updating files:  59% (17169/29100)
+2026-10-03T12:46:51.0966994Z Updating files:  60% (17460/29100)
+2026-10-03T12:46:51.1093191Z Updating files:  61% (17751/29100)
+2026-10-03T12:46:51.1206224Z Updating files:  62% (18042/29100)
+2026-10-03T12:46:51.1331760Z Updating files:  63% (18333/29100)
+2026-10-03T12:46:51.1445421Z Updating files:  64% (18624/29100)
+2026-10-03T12:46:51.1572366Z Updating files:  65% (18915/29100)
+2026-10-03T12:46:51.1719335Z Updating files:  66% (19206/29100)
+2026-10-03T12:46:51.1853280Z Updating files:  67% (19497/29100)
+2026-10-03T12:46:51.1986546Z Updating files:  68% (19788/29100)
+2026-10-03T12:46:51.2101876Z Updating files:  69% (20079/29100)
+2026-10-03T12:46:51.2228171Z Updating files:  70% (20370/29100)
+2026-10-03T12:46:51.2342234Z Updating files:  71% (20661/29100)
+2026-10-03T12:46:51.2612722Z Updating files:  72% (20952/29100)
+2026-10-03T12:46:51.2849464Z Updating files:  73% (21243/29100)
+2026-10-03T12:46:51.3043247Z Updating files:  74% (21534/29100)
+2026-10-03T12:46:51.3265567Z Updating files:  75% (21825/29100)
+2026-10-03T12:46:51.3452734Z Updating files:  76% (22116/29100)
+2026-10-03T12:46:51.3629914Z Updating files:  77% (22407/29100)
+2026-10-03T12:46:51.3858144Z Updating files:  78% (22698/29100)
+2026-10-03T12:46:51.4052407Z Updating files:  79% (22989/29100)
+2026-10-03T12:46:51.4234741Z Updating files:  80% (23280/29100)
+2026-10-03T12:46:51.4417841Z Updating files:  81% (23571/29100)
+2026-10-03T12:46:51.4625493Z Updating files:  82% (23862/29100)
+2026-10-03T12:46:51.4816431Z Updating files:  83% (24153/29100)
+2026-10-03T12:46:51.4993977Z Updating files:  84% (24444/29100)
+2026-10-03T12:46:51.5179684Z Updating files:  85% (24735/29100)
+2026-10-03T12:46:51.5406286Z Updating files:  86% (25026/29100)
+2026-10-03T12:46:51.5608833Z Updating files:  87% (25317/29100)
+2026-10-03T12:46:51.6203577Z Updating files:  88% (25608/29100)
+2026-10-03T12:46:51.6371592Z Updating files:  89% (25899/29100)
+2026-10-03T12:46:51.6615932Z Updating files:  90% (26190/29100)
+2026-10-03T12:46:51.6958177Z Updating files:  91% (26481/29100)
+2026-10-03T12:46:51.7089513Z Updating files:  92% (26772/29100)
+2026-10-03T12:46:51.7221008Z Updating files:  93% (27063/29100)
+2026-10-03T12:46:51.7578868Z Updating files:  94% (27354/29100)
+2026-10-03T12:46:51.8290798Z Updating files:  95% (27645/29100)
+2026-10-03T12:46:51.8519557Z Updating files:  96% (27936/29100)
+2026-10-03T12:46:51.8731516Z Updating files:  97% (28227/29100)
+2026-10-03T12:46:51.8921049Z Updating files:  98% (28518/29100)
+2026-10-03T12:46:51.9114014Z Updating files:  99% (28809/29100)
+2026-10-03T12:46:51.9114924Z Updating files: 100% (29100/29100)
+2026-10-03T12:46:51.9115429Z Updating files: 100% (29100/29100), done.
+2026-10-03T12:46:51.9447799Z Switched to a new branch 'main'
+2026-10-03T12:46:51.9453425Z branch 'main' set up to track 'origin/main'.
+2026-10-03T12:46:51.9541811Z ##[endgroup]
+2026-10-03T12:46:51.9591120Z [command]/usr/bin/git log -1 --format=%H
+2026-10-03T12:46:51.9619690Z 2b30367b7861bb2da95faaf0fc330a9734afd72c
+2026-10-03T12:46:51.9936544Z ##[group]Run actions/setup-go@v7
+2026-10-03T12:46:51.9937032Z with:
+2026-10-03T12:46:51.9937236Z   go-version: 1.27.1
+2026-10-03T12:46:51.9937465Z   cache: false
+2026-10-03T12:46:51.9937675Z   check-latest: false
+2026-10-03T12:46:51.9940210Z   token: ***
+2026-10-03T12:46:51.9940408Z env:
+2026-10-03T12:46:51.9940596Z   GOTOOLCHAIN: local
+2026-10-03T12:46:51.9940809Z   GOWORK: off
+2026-10-03T12:46:51.9941002Z ##[endgroup]
+2026-10-03T12:46:52.1090859Z Setup go version spec 1.27.1
+2026-10-03T12:46:52.1099601Z Attempting to download 1.27.1...
+2026-10-03T12:46:52.5687202Z matching 1.27.1...
+2026-10-03T12:46:52.5716417Z Acquiring 1.27.1 from https://github.com/actions/go-versions/releases/download/1.27.1-33583469715/go-1.27.1-linux-x64.tar.gz
+2026-10-03T12:46:52.9862543Z Extracting Go...
+2026-10-03T12:46:53.0019510Z [command]/usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/9e17395a-8bf3-41a2-b550-b94fbb69e55c -f /home/runner/work/_temp/38ddf090-cff6-4c7f-97bc-60bb1bda4972
+2026-10-03T12:46:54.7282866Z Successfully extracted go to /home/runner/work/_temp/9e17395a-8bf3-41a2-b550-b94fbb69e55c
+2026-10-03T12:46:54.7290139Z Adding to the cache ...
+2026-10-03T12:47:00.7137114Z Successfully cached go to /opt/hostedtoolcache/go/1.27.1/x64
+2026-10-03T12:47:00.7139906Z Added go to the path
+2026-10-03T12:47:00.7142373Z Successfully set up Go version 1.27.1
+2026-10-03T12:47:00.7354838Z go version go1.27.1 linux/amd64
+2026-10-03T12:47:00.7355186Z 
+2026-10-03T12:47:00.7355673Z ##[group]go env
+2026-10-03T12:47:01.3907775Z AR='ar'
+2026-10-03T12:47:01.3908180Z CC='gcc'
+2026-10-03T12:47:01.3908971Z CGO_CFLAGS='-O2 -g'
+2026-10-03T12:47:01.3909353Z CGO_CPPFLAGS=''
+2026-10-03T12:47:01.3909736Z CGO_CXXFLAGS='-O2 -g'
+2026-10-03T12:47:01.3910107Z CGO_ENABLED='1'
+2026-10-03T12:47:01.3910450Z CGO_FFLAGS='-O2 -g'
+2026-10-03T12:47:01.3910826Z CGO_LDFLAGS='-O2 -g'
+2026-10-03T12:47:01.3911175Z CXX='g++'
+2026-10-03T12:47:01.3911495Z GCCGO='gccgo'
+2026-10-03T12:47:01.3911873Z GO111MODULE=''
+2026-10-03T12:47:01.3912211Z GOAMD64='v1'
+2026-10-03T12:47:01.3912413Z GOARCH='amd64'
+2026-10-03T12:47:01.3912609Z GOAUTH='netrc'
+2026-10-03T12:47:01.3912864Z GOBIN='/home/runner/go/bin'
+2026-10-03T12:47:01.3913135Z GOCACHE='/home/runner/.cache/go-build'
+2026-10-03T12:47:01.3913413Z GOCACHEPROG=''
+2026-10-03T12:47:01.3914722Z GODEBUG=''
+2026-10-03T12:47:01.3915157Z GOENV='/home/runner/.config/go/env'
+2026-10-03T12:47:01.3915667Z GOEXE=''
+2026-10-03T12:47:01.3916261Z GOEXPERIMENT=''
+2026-10-03T12:47:01.3916634Z GOFIPS140='off'
+2026-10-03T12:47:01.3917020Z GOFLAGS=''
+2026-10-03T12:47:01.3918190Z GOGCCFLAGS='-fPIC -m64 -pthread -Wl,--no-gc-sections -fmessage-length=0 -ffile-prefix-map=/tmp/go-build4097035387=/tmp/go-build -gno-record-gcc-switches'
+2026-10-03T12:47:01.3919434Z GOHOSTARCH='amd64'
+2026-10-03T12:47:01.3919847Z GOHOSTOS='linux'
+2026-10-03T12:47:01.3920203Z GOINSECURE=''
+2026-10-03T12:47:01.3920981Z GOMOD='/home/runner/work/gooo-neural-decision-experiments/gooo-neural-decision-experiments/go.mod'
+2026-10-03T12:47:01.3921885Z GOMODCACHE='/home/runner/go/pkg/mod'
+2026-10-03T12:47:01.3922325Z GONOPROXY=''
+2026-10-03T12:47:01.3922650Z GONOSUMDB=''
+2026-10-03T12:47:01.3922969Z GOOS='linux'
+2026-10-03T12:47:01.3923301Z GOPACKAGESDRIVER=''
+2026-10-03T12:47:01.3923539Z GOPATH='/home/runner/go'
+2026-10-03T12:47:01.3923773Z GOPRIVATE=''
+2026-10-03T12:47:01.3924268Z GOPROXY='https://proxy.golang.org,direct'
+2026-10-03T12:47:01.3924874Z GOROOT='/opt/hostedtoolcache/go/1.27.1/x64'
+2026-10-03T12:47:01.3925437Z GOSUMDB='sum.golang.org'
+2026-10-03T12:47:01.3926114Z GOTELEMETRY='local'
+2026-10-03T12:47:01.3926597Z GOTELEMETRYDIR='/home/runner/.config/go/telemetry'
+2026-10-03T12:47:01.3927148Z GOTMPDIR=''
+2026-10-03T12:47:01.3927493Z GOTOOLCHAIN='local'
+2026-10-03T12:47:01.3928091Z GOTOOLDIR='/opt/hostedtoolcache/go/1.27.1/x64/pkg/tool/linux_amd64'
+2026-10-03T12:47:01.3928748Z GOVCS=''
+2026-10-03T12:47:01.3929114Z GOVERSION='go1.27.1'
+2026-10-03T12:47:01.3929515Z GOWORK='off'
+2026-10-03T12:47:01.3930225Z PKG_CONFIG='pkg-config'
+2026-10-03T12:47:01.3930510Z 
+2026-10-03T12:47:01.3931165Z ##[endgroup]
+2026-10-03T12:47:01.4105604Z ##[group]Run go run ./tools/package-full-input-study --mode verify
+2026-10-03T12:47:01.4106546Z [36;1mgo run ./tools/package-full-input-study --mode verify[0m
+2026-10-03T12:47:01.4372234Z shell: /usr/bin/bash -e {0}
+2026-10-03T12:47:01.4372541Z env:
+2026-10-03T12:47:01.4372765Z   GOTOOLCHAIN: local
+2026-10-03T12:47:01.4373008Z   GOWORK: off
+2026-10-03T12:47:01.4373458Z ##[endgroup]
+2026-10-03T12:47:12.9772328Z {"status":"PASS","public_files":58,"archive_members":925,"decoded_bytes":446222995,"public_bytes":56951001}
+2026-10-03T12:47:13.0326115Z ##[group]Run unzip -q publication/full-input-initial-study-20261003/training.zip -d "$RUNNER_TEMP/full-input-training"
+2026-10-03T12:47:13.0327071Z [36;1munzip -q publication/full-input-initial-study-20261003/training.zip -d "$RUNNER_TEMP/full-input-training"[0m
+2026-10-03T12:47:13.0327877Z [36;1munzip -q publication/full-input-initial-study-20261003/sources.zip -d "$RUNNER_TEMP/full-input-sources"[0m
+2026-10-03T12:47:13.0328508Z [36;1mgo run ./tools/audit-own-three-models --full-input-experiment \[0m
+2026-10-03T12:47:13.0328945Z [36;1m  --models "$RUNNER_TEMP/full-input-training" \[0m
+2026-10-03T12:47:13.0329367Z [36;1m  --dataset "$RUNNER_TEMP/full-input-sources/dataset.jsonl" \[0m
+2026-10-03T12:47:13.0329852Z [36;1m  --teacher-curriculum "$RUNNER_TEMP/full-input-sources/teacher" \[0m
+2026-10-03T12:47:13.0330320Z [36;1m  --output runs/own-three-full-input-ci-replay \[0m
+2026-10-03T12:47:13.0330691Z [36;1m  --source-revision "$(git rev-parse HEAD)"[0m
+2026-10-03T12:47:13.0331096Z [36;1mgo run ./tools/package-full-input-study --mode verify \[0m
+2026-10-03T12:47:13.0331560Z [36;1m  --compare-audit runs/own-three-full-input-ci-replay/report.json[0m
+2026-10-03T12:47:13.0397901Z shell: /usr/bin/bash -e {0}
+2026-10-03T12:47:13.0398154Z env:
+2026-10-03T12:47:13.0398356Z   GOTOOLCHAIN: local
+2026-10-03T12:47:13.0398572Z   GOWORK: off
+2026-10-03T12:47:13.0398765Z ##[endgroup]
+2026-10-03T12:47:33.0593269Z {"status":"PASS","public_files":58,"archive_members":925,"decoded_bytes":446222995,"public_bytes":56951001}
+2026-10-03T12:47:33.0765976Z audit number differs: /models/positioned-original/ptq_ternary/development_conditions/complete-suffix/families/chained_operands/static_ranked_best_passing_cases_by_budget
+2026-10-03T12:47:33.0840665Z {"differences":[{"path":"/models/bag-original/ptq_ternary/development_conditions/original/counts/static_ranked_best_passing_cases_by_budget[4]","expected":7560,"actual":7563},{"path":"/models/bag-original/ptq_ternary/development_conditions/original/families/chained_operands/static_ranked_best_passing_cases_by_budget[4]","expected":742,"actual":745},{"path":"/models/bag-original/ptq_ternary/development_conditions/original/languages/ko/static_ranked_best_passing_cases_by_budget[4]","expected":3800,"actual":3803},{"path":"/models/bag-original/qat_ternary/development_conditions/complete-suffix/counts/static_ranked_best_passing_cases_by_budget[1]","expected":7590,"actual":7591},{"path":"/models/bag-original/qat_ternary/development_conditions/complete-suffix/families/chained_operands/static_ranked_best_passing_cases_by_budget[1]","expected":815,"actual":816},{"path":"/models/bag-original/qat_ternary/development_conditions/complete-suffix/languages/ko/static_ranked_best_passing_cases_by_budget[1]","expected":3768,"actual":3769},{"path":"/models/bag-original/qat_ternary/development_conditions/task-prefix/counts/static_ranked_best_passing_cases_by_budget[1]","expected":7300,"actual":7299},{"path":"/models/bag-original/qat_ternary/development_conditions/task-prefix/counts/static_ranked_best_passing_cases_by_budget[5]","expected":8134,"actual":8135},{"path":"/models/bag-original/qat_ternary/development_conditions/task-prefix/families/chained_operands/static_ranked_best_passing_cases_by_budget[1]","expected":692,"actual":691},{"path":"/models/bag-original/qat_ternary/development_conditions/task-prefix/families/chained_operands/static_ranked_best_passing_cases_by_budget[5]","expected":966,"actual":967},{"path":"/models/bag-original/qat_ternary/development_conditions/task-prefix/languages/en/static_ranked_best_passing_cases_by_budget[5]","expected":4038,"actual":4039},{"path":"/models/bag-original/qat_ternary/development_conditions/task-prefix/languages/ko/static_ranked_best_passing_cases_by_budget[1]","expected":3827,"actual":3826},{"path":"/models/bag-varied/fp32/development_conditions/complete-suffix/counts/static_ranked_best_passing_cases_by_budget[1]","expected":5502,"actual":5504},{"path":"/models/bag-varied/fp32/development_conditions/complete-suffix/families/chained_operands/static_ranked_best_passing_cases_by_budget[1]","expected":316,"actual":318},{"path":"/models/bag-varied/fp32/development_conditions/complete-suffix/languages/ko/static_ranked_best_passing_cases_by_budget[1]","expected":3192,"actual":3194},{"path":"/models/bag-varied/fp32/development_conditions/original/counts/static_ranked_best_passing_cases_by_budget[1]","expected":7199,"actual":7198},{"path":"/models/bag-varied/fp32/development_conditions/original/families/chained_operands/static_ranked_best_passing_cases_by_budget[1]","expected":673,"actual":672},{"path":"/models/bag-varied/fp32/development_conditions/original/languages/en/static_ranked_best_passing_cases_by_budget[1]","expected":3365,"actual":3363},{"path":"/models/bag-varied/fp32/development_conditions/original/languages/ko/static_ranked_best_passing_cases_by_budget[1]","expected":3834,"actual":3835},{"path":"/models/bag-varied/fp32/development_conditions/task-prefix/counts/static_ranked_best_passing_cases_by_budget[1]","expected":6838,"actual":6834},{"path":"/models/bag-varied/fp32/development_conditions/task-prefix/counts/static_ranked_best_passing_cases_by_budget[5]","expected":8030,"actual":8029},{"path":"/models/bag-varied/fp32/development_conditions/task-prefix/families/chained_operands/static_ranked_best_passing_cases_by_budget[1]","expected":560,"actual":556},{"path":"/models/bag-varied/fp32/development_conditions/task-prefix/families/chained_operands/static_ranked_best_passing_cases_by_budget[5]","expected":862,"actual":861},{"path":"/models/bag-varied/fp32/development_conditions/task-prefix/languages/en/static_ranked_best_passing_cases_by_budget[1]","expected":2960,"actual":2956},{"path":"/models/bag-varied/fp32/development_conditions/task-prefix/languages/en/static_ranked_best_passing_cases_by_budget[5]","expected":3934,"actual":3933},{"path":"/models/bag-varied/ptq_ternary/development_conditions/original/counts/static_ranked_best_passing_cases_by_budget[1]","expected":4952,"actual":4954},{"path":"/models/bag-varied/ptq_ternary/development_conditions/original/families/chained_operands/static_ranked_best_passing_cases_by_budget[1]","expected":294,"actual":296},{"path":"/models/bag-varied/ptq_ternary/development_conditions/original/languages/en/static_ranked_best_passing_cases_by_budget[1]","expected":2481,"actual":2483},{"path":"/models/positioned-original/fp32/development_conditions/complete-suffix/counts/static_ranked_best_passing_cases_by_budget[4]","expected":7443,"actual":7445},{"path":"/models/positioned-original/fp32/development_conditions/complete-suffix/counts/static_ranked_best_passing_cases_by_budget[5]","expected":7849,"actual":7850},{"path":"/models/positioned-original/fp32/development_conditions/complete-suffix/families/chained_operands/static_ranked_best_passing_cases_by_budget[4]","expected":789,"actual":791},{"path":"/models/positioned-original/fp32/development_conditions/complete-suffix/families/chained_operands/static_ranked_best_passing_cases_by_budget[5]","expected":894,"actual":895},{"path":"/models/positioned-original/fp32/development_conditions/complete-suffix/languages/ko/static_ranked_best_passing_cases_by_budget[4]","expected":3434,"actual":3436},{"path":"/models/positioned-original/fp32/development_conditions/complete-suffix/languages/ko/static_ranked_best_passing_cases_by_budget[5]","expected":3769,"actual":3770},{"path":"/models/positioned-original/fp32/development_conditions/original/counts/static_ranked_best_passing_cases_by_budget[1]","expected":3918,"actual":3917},{"path":"/models/positioned-original/fp32/development_conditions/original/families/chained_operands/static_ranked_best_passing_cases_by_budget[1]","expected":526,"actual":525},{"path":"/models/positioned-original/fp32/development_conditions/original/languages/en/static_ranked_best_passing_cases_by_budget[1]","expected":1860,"actual":1859},{"path":"/models/positioned-original/fp32/development_conditions/task-prefix/counts/static_ranked_best_passing_cases_by_budget[1]","expected":4158,"actual":4162},{"path":"/models/positioned-original/fp32/development_conditions/task-prefix/counts/static_ranked_best_passing_cases_by_budget[4]","expected":6780,"actual":6778},{"path":"/models/positioned-original/fp32/development_conditions/task-prefix/counts/static_ranked_best_passing_cases_by_budget[5]","expected":7352,"actual":7353},{"path":"/models/positioned-original/fp32/development_conditions/task-prefix/families/chained_operands/static_ranked_best_passing_cases_by_budget[1]","expected":380,"actual":384},{"path":"/models/positioned-original/fp32/development_conditions/task-prefix/families/chained_operands/static_ranked_best_passing_cases_by_budget[4]","expected":809,"actual":807},{"path":"/models/positioned-original/fp32/development_conditions/task-prefix/families/chained_operands/static_ranked_best_passing_cases_by_budget[5]","expected":812,"actual":813},{"path":"/models/positioned-original/fp32/development_conditions/task-prefix/languages/en/static_ranked_best_passing_cases_by_budget[4]","expected":3386,"actual":3384},{"path":"/models/positioned-original/fp32/development_conditions/task-prefix/languages/ko/static_ranked_best_passing_cases_by_budget[1]","expected":2092,"actual":2096},{"path":"/models/positioned-original/fp32/development_conditions/task-prefix/languages/ko/static_ranked_best_passing_cases_by_budget[5]","expected":3679,"actual":3680},{"path":"/models/positioned-original/ptq_ternary/development_conditions/complete-suffix/counts/static_ranked_best_passing_cases_by_budget[4]","expected":7327,"actual":7326},{"path":"/models/positioned-original/ptq_ternary/development_conditions/complete-suffix/families/chained_operands/static_ranked_best_passing_cases_by_budget[4]","expected":764,"actual":763},{"path":"/models/positioned-original/ptq_ternary/development_conditions/complete-suffix/languages/en/static_ranked_best_passing_cases_by_budget[4]","expected":3826,"actual":3825},{"path":"/models/positioned-original/ptq_ternary/development_conditions/task-prefix/counts/static_ranked_best_passing_cases_by_budget[1]","expected":3788,"actual":3784},{"path":"/models/positioned-original/ptq_ternary/development_conditions/task-prefix/families/chained_operands/static_ranked_best_passing_cases_by_budget[1]","expected":274,"actual":270},{"path":"/models/positioned-original/ptq_ternary/development_conditions/task-prefix/languages/ko/static_ranked_best_passing_cases_by_budget[1]","expected":2019,"actual":2015},{"path":"/models/positioned-original/qat_ternary/development_conditions/complete-suffix/counts/static_ranked_best_passing_cases_by_budget[4]","expected":7237,"actual":7235},{"path":"/models/positioned-original/qat_ternary/development_conditions/complete-suffix/families/chained_operands/static_ranked_best_passing_cases_by_budget[4]","expected":705,"actual":703},{"path":"/models/positioned-original/qat_ternary/development_conditions/complete-suffix/languages/ko/static_ranked_best_passing_cases_by_budget[4]","expected":3314,"actual":3312},{"path":"/models/positioned-original/qat_ternary/development_conditions/task-prefix/counts/static_ranked_best_passing_cases_by_budget[5]","expected":7338,"actual":7339},{"path":"/models/positioned-original/qat_ternary/development_conditions/task-prefix/families/chained_operands/static_ranked_best_passing_cases_by_budget[5]","expected":718,"actual":719},{"path":"/models/positioned-original/qat_ternary/development_conditions/task-prefix/languages/ko/static_ranked_best_passing_cases_by_budget[5]","expected":3648,"actual":3649},{"path":"/models/positioned-varied/fp32/development_conditions/complete-suffix/counts/static_ranked_best_passing_cases_by_budget[1]","expected":6004,"actual":6008},{"path":"/models/positioned-varied/fp32/development_conditions/complete-suffix/counts/static_ranked_best_passing_cases_by_budget[2]","expected":6947,"actual":6948},{"path":"/models/positioned-varied/fp32/development_conditions/complete-suffix/counts/static_ranked_best_passing_cases_by_budget[4]","expected":7865,"actual":7866},{"path":"/models/positioned-varied/fp32/development_conditions/complete-suffix/families/chained_operands/static_ranked_best_passing_cases_by_budget[1]","expected":475,"actual":479},{"path":"/models/positioned-varied/fp32/development_conditions/complete-suffix/families/chained_operands/static_ranked_best_passing_cases_by_budget[2]","expected":520,"actual":521},{"path":"/models/positioned-varied/fp32/development_conditions/complete-suffix/families/chained_operands/static_ranked_best_passing_cases_by_budget[4]","expected":837,"actual":838},{"path":"/models/positioned-varied/fp32/development_conditions/complete-suffix/languages/en/static_ranked_best_passing_cases_by_budget[2]","expected":3421,"actual":3422},{"path":"/models/positioned-varied/fp32/development_conditions/complete-suffix/languages/en/static_ranked_best_passing_cases_by_budget[4]","expected":3872,"actual":3873},{"path":"/models/positioned-varied/fp32/development_conditions/complete-suffix/languages/ko/static_ranked_best_passing_cases_by_budget[1]","expected":3084,"actual":3088},{"path":"/models/positioned-varied/fp32/development_conditions/original/counts/static_ranked_best_passing_cases_by_budget[1]","expected":6582,"actual":6583},{"path":"/models/positioned-varied/fp32/development_conditions/original/families/chained_operands/static_ranked_best_passing_cases_by_budget[1]","expected":422,"actual":423},{"path":"/models/positioned-varied/fp32/development_conditions/original/languages/ko/static_ranked_best_passing_cases_by_budget[1]","expected":3636,"actual":3637},{"path":"/models/positioned-varied/fp32/development_conditions/task-prefix/counts/static_ranked_best_passing_cases_by_budget[1]","expected":4258,"actual":4254},{"path":"/models/positioned-varied/fp32/development_conditions/task-prefix/counts/static_ranked_best_passing_cases_by_budget[2]","expected":5330,"actual":5329},{"path":"/models/positioned-varied/fp32/development_conditions/task-prefix/counts/static_ranked_best_passing_cases_by_budget[4]","expected":6989,"actual":6991},{"path":"/models/positioned-varied/fp32/development_conditions/task-prefix/families/chained_operands/static_ranked_best_passing_cases_by_budget[1]","expected":322,"actual":318},{"path":"/models/positioned-varied/fp32/development_conditions/task-prefix/families/chained_operands/static_ranked_best_passing_cases_by_budget[2]","expected":441,"actual":440},{"path":"/models/positioned-varied/fp32/development_conditions/task-prefix/families/chained_operands/static_ranked_best_passing_cases_by_budget[4]","expected":731,"actual":733},{"path":"/models/positioned-varied/fp32/development_conditions/task-prefix/languages/en/static_ranked_best_passing_cases_by_budget[2]","expected":2735,"actual":2734},{"path":"/models/positioned-varied/fp32/development_conditions/task-prefix/languages/en/static_ranked_best_passing_cases_by_budget[4]","expected":3602,"actual":3603},{"path":"/models/positioned-varied/fp32/development_conditions/task-prefix/languages/ko/static_ranked_best_passing_cases_by_budget[1]","expected":1983,"actual":1979},{"path":"/models/positioned-varied/fp32/development_conditions/task-prefix/languages/ko/static_ranked_best_passing_cases_by_budget[4]","expected":3387,"actual":3388},{"path":"/models/positioned-varied/ptq_ternary/development_conditions/complete-suffix/counts/static_ranked_best_passing_cases_by_budget[1]","expected":4087,"actual":4089},{"path":"/models/positioned-varied/ptq_ternary/development_conditions/complete-suffix/counts/static_ranked_best_passing_cases_by_budget[2]","expected":5675,"actual":5676},{"path":"/models/positioned-varied/ptq_ternary/development_conditions/complete-suffix/families/chained_operands/static_ranked_best_passing_cases_by_budget[1]","expected":297,"actual":299},{"path":"/models/positioned-varied/ptq_ternary/development_conditions/complete-suffix/families/chained_operands/static_ranked_best_passing_cases_by_budget[2]","expected":417,"actual":418},{"path":"/models/positioned-varied/ptq_ternary/development_conditions/complete-suffix/languages/en/static_ranked_best_passing_cases_by_budget[1]","expected":2195,"actual":2197},{"path":"/models/positioned-varied/ptq_ternary/development_conditions/complete-suffix/languages/ko/static_ranked_best_passing_cases_by_budget[2]","expected":2748,"actual":2749},{"path":"/models/positioned-varied/ptq_ternary/development_conditions/original/counts/static_ranked_best_passing_cases_by_budget[5]","expected":7670,"actual":7673},{"path":"/models/positioned-varied/ptq_ternary/development_conditions/original/families/chained_operands/static_ranked_best_passing_cases_by_budget[5]","expected":795,"actual":798},{"path":"/models/positioned-varied/ptq_ternary/development_conditions/original/languages/en/static_ranked_best_passing_cases_by_budget[5]","expected":3888,"actual":3891},{"path":"/models/positioned-varied/ptq_ternary/development_conditions/task-prefix/counts/static_ranked_best_passing_cases_by_budget[4]","expected":7337,"actual":7335},{"path":"/models/positioned-varied/ptq_ternary/development_conditions/task-prefix/families/chained_operands/static_ranked_best_passing_cases_by_budget[4]","expected":716,"actual":714},{"path":"/models/positioned-varied/ptq_ternary/development_conditions/task-prefix/languages/en/static_ranked_best_passing_cases_by_budget[4]","expected":3879,"actual":3877},{"path":"/models/positioned-varied/qat_ternary/development_conditions/complete-suffix/counts/static_ranked_best_passing_cases_by_budget[4]","expected":7793,"actual":7797},{"path":"/models/positioned-varied/qat_ternary/development_conditions/complete-suffix/families/chained_operands/static_ranked_best_passing_cases_by_budget[4]","expected":814,"actual":818},{"path":"/models/positioned-varied/qat_ternary/development_conditions/complete-suffix/languages/en/static_ranked_best_passing_cases_by_budget[4]","expected":3989,"actual":3992},{"path":"/models/positioned-varied/qat_ternary/development_conditions/complete-suffix/languages/ko/static_ranked_best_passing_cases_by_budget[4]","expected":3804,"actual":3805},{"path":"/models/positioned-varied/qat_ternary/development_conditions/original/counts/static_ranked_best_passing_cases_by_budget[4]","expected":7829,"actual":7828},{"path":"/models/positioned-varied/qat_ternary/development_conditions/original/families/chained_operands/static_ranked_best_passing_cases_by_budget[4]","expected":750,"actual":749},{"path":"/models/positioned-varied/qat_ternary/development_conditions/original/languages/en/static_ranked_best_passing_cases_by_budget[4]","expected":3840,"actual":3839},{"path":"/models/positioned-varied/qat_ternary/development_conditions/task-prefix/languages/en/static_ranked_best_passing_cases_by_budget[4]","expected":3744,"actual":3745},{"path":"/models/positioned-varied/qat_ternary/development_conditions/task-prefix/languages/ko/static_ranked_best_passing_cases_by_budget[4]","expected":3540,"actual":3539}],"scope":"Exact outcome differences remain failures; preserve the complete replay artifact for diagnosis.","status":"MISMATCH"}
+2026-10-03T12:47:33.0899632Z exit status 1
+2026-10-03T12:47:33.0909657Z ##[error]Process completed with exit code 1.
+2026-10-03T12:47:33.0993715Z ##[group]Run actions/upload-artifact@v7
+2026-10-03T12:47:33.0994027Z with:
+2026-10-03T12:47:33.0994256Z   name: full-input-initial-linux-replay
+2026-10-03T12:47:33.0994570Z   path: runs/own-three-full-input-ci-replay
+2026-10-03T12:47:33.0994865Z   if-no-files-found: error
+2026-10-03T12:47:33.0995103Z   compression-level: 6
+2026-10-03T12:47:33.0995322Z   overwrite: false
+2026-10-03T12:47:33.0995543Z   include-hidden-files: false
+2026-10-03T12:47:33.0996108Z   archive: true
+2026-10-03T12:47:33.0996319Z env:
+2026-10-03T12:47:33.0996507Z   GOTOOLCHAIN: local
+2026-10-03T12:47:33.0996722Z   GOWORK: off
+2026-10-03T12:47:33.0996912Z ##[endgroup]
+2026-10-03T12:47:33.2596223Z With the provided path, there will be 61 files uploaded
+2026-10-03T12:47:33.2597122Z Artifact name is valid!
+2026-10-03T12:47:33.2597556Z Root directory input is valid!
+2026-10-03T12:47:33.4624562Z Uploading artifact: full-input-initial-linux-replay.zip
+2026-10-03T12:47:33.4673970Z Beginning upload of artifact content to blob storage
+2026-10-03T12:47:33.7893701Z Uploaded bytes 3094390
+2026-10-03T12:47:33.8053728Z Finished uploading artifact content to blob storage!
+2026-10-03T12:47:33.8054966Z SHA256 digest of uploaded artifact is fe15fba1b34ac27e2d17c21b149b6482807eb023668999f7af2302ec1e0d3f43
+2026-10-03T12:47:33.8056178Z Finalizing artifact upload
+2026-10-03T12:47:34.0304370Z Artifact full-input-initial-linux-replay successfully finalized. Artifact ID 11274013854
+2026-10-03T12:47:34.0305922Z Artifact full-input-initial-linux-replay has been successfully uploaded! Final size is 3094390 bytes. Artifact ID is 11274013854
+2026-10-03T12:47:34.0308900Z Artifact download URL: https://github.com/kimjooyoon/gooo-neural-decision-experiments/actions/runs/37123966071/artifacts/11274013854
+2026-10-03T12:47:34.0515517Z Post job cleanup.
+2026-10-03T12:47:34.1362909Z [command]/usr/bin/git version
+2026-10-03T12:47:34.1409571Z git version 2.55.0
+2026-10-03T12:47:34.1457987Z Temporarily overriding HOME='/home/runner/work/_temp/a1efdf67-8abd-4b88-a3d2-e37b2bccbd09' before making global git config changes
+2026-10-03T12:47:34.1459525Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-03T12:47:34.1462628Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/gooo-neural-decision-experiments/gooo-neural-decision-experiments
+2026-10-03T12:47:34.1496611Z Removing SSH command configuration
+2026-10-03T12:47:34.1503454Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-03T12:47:34.1541014Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-03T12:47:34.1827380Z Removing HTTP extra header
+2026-10-03T12:47:34.1833915Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-03T12:47:34.1880306Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-03T12:47:34.2159107Z Removing includeIf entries pointing to credentials config files
+2026-10-03T12:47:34.2165337Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-03T12:47:34.2196176Z includeif.gitdir:/home/runner/work/gooo-neural-decision-experiments/gooo-neural-decision-experiments/.git.path
+2026-10-03T12:47:34.2198220Z includeif.gitdir:/home/runner/work/gooo-neural-decision-experiments/gooo-neural-decision-experiments/.git/worktrees/*.path
+2026-10-03T12:47:34.2199869Z includeif.gitdir:/github/workspace/.git.path
+2026-10-03T12:47:34.2200924Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-03T12:47:34.2228596Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/gooo-neural-decision-experiments/gooo-neural-decision-experiments/.git.path
+2026-10-03T12:47:34.2246241Z /home/runner/work/_temp/git-credentials-caebf308-7d83-4c4a-865b-e6af551830f4.config
+2026-10-03T12:47:34.2259473Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/gooo-neural-decision-experiments/gooo-neural-decision-experiments/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-caebf308\-7d83\-4c4a\-865b\-e6af551830f4\.config
+2026-10-03T12:47:34.2300650Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/gooo-neural-decision-experiments/gooo-neural-decision-experiments/.git/worktrees/*.path
+2026-10-03T12:47:34.2329221Z /home/runner/work/_temp/git-credentials-caebf308-7d83-4c4a-865b-e6af551830f4.config
+2026-10-03T12:47:34.2342897Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/gooo-neural-decision-experiments/gooo-neural-decision-experiments/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-caebf308\-7d83\-4c4a\-865b\-e6af551830f4\.config
+2026-10-03T12:47:34.2384884Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-03T12:47:34.2411985Z /github/runner_temp/git-credentials-caebf308-7d83-4c4a-865b-e6af551830f4.config
+2026-10-03T12:47:34.2419726Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-caebf308\-7d83\-4c4a\-865b\-e6af551830f4\.config
+2026-10-03T12:47:34.2455382Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-03T12:47:34.2481642Z /github/runner_temp/git-credentials-caebf308-7d83-4c4a-865b-e6af551830f4.config
+2026-10-03T12:47:34.2489958Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-caebf308\-7d83\-4c4a\-865b\-e6af551830f4\.config
+2026-10-03T12:47:34.2528072Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-03T12:47:34.2784415Z Removing credentials config '/home/runner/work/_temp/git-credentials-caebf308-7d83-4c4a-865b-e6af551830f4.config'
+2026-10-03T12:47:34.2929021Z Cleaning up orphan processes
