@@ -209,7 +209,10 @@ merged to dev as `e9d1fd0f87fc1aa95756fd55293421051f6f3650` after canonical CI.
 An explicit `--model` retains this model in one process; omission uses
 deterministic construction. Local dogfooding passed four generations, eight
 compiled runs and 32/32 finite expectations. [Main promotion #1181](https://github.com/kimjooyoon/meta-ontology-go/pull/1181)
-is undergoing CI. [Instructions and source-bound observations](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/body-stream-cli-20261003).
+passed CI and independent proof verification, and is merged as `cb2892cb583e693190bd68f75eb4df223819f053`.
+The clean installed main reproduced four generations, two model predictions,
+eight compiled runs and 32/32 expectations, including second-request preparation
+reuse. [Installation evidence and runnable instructions](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/body-stream-installed-main-20261003).
 
 The next compiler change reuses an original checked projection within recipe
 expansion, retaining current-source and fallback checks. With these same weights,
