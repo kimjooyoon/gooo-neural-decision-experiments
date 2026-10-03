@@ -14,6 +14,8 @@ training tools and original evidence behind that process.
   complete search latency remains slightly higher. Includes weights, sources,
   all failures and 480 follow-up model calls. Native integration of this new
   architecture is the next stage.
+  [Hugging Face model](https://huggingface.co/asketeddy/gooo-order-judge-tiny-v1) ·
+  [Linux replay and full record comparison](publication/order-judge-linux-20261003).
 - [Small recipes derived from Gooo source](publication/source-recipes-20261003):
   24 generations and 48 compiled runs; 12 recipe/full-document pairs match.
   Authored JSON shrinks by 63%. Oracle arms meet 72/72 runtime expectations;
