@@ -13,8 +13,11 @@ training tools and original evidence behind that process.
   Go1.27.1 scripts. A stdlib Go tool binds all 142 frozen inputs, then replays
   52 saved modules and 96 candidate packages, including the three expected
   compile failures. Source hashes, original failures and unknown denominators
-  are retained. Public PR #19 has local race/vet/replay and Linux baseline PASS;
-  the separate revision-2 source/toolchain-version mismatch is still being repaired.
+  are retained. Local and Linux replay pass; public PR #19 is merged.
+- [Fresh candidate and feedback replay in Go](publication/go-revision2-replay-20261003):
+  93 original and 96 repaired candidate packages execute in temporary copies;
+  all 189 fresh result files match frozen evidence. The same 32 intentions,
+  96 provider plans and 32 feedback sets are checked with zero model calls.
 - [Write body statements directly on multiple lines](publication/raw-body-usability-20261003):
   raw backtick literals preserve decoded text, line endings and source diagnostics.
   Local syntax/body-codegen race and whole-module vet pass. Eight generations,

@@ -6,8 +6,10 @@
 [Linux 기본 재현 CI](https://github.com/kimjooyoon/gooo-metaprogramming-experiments/actions/runs/37120308246)가
 통과했습니다. 별도의
 [revision-2 후보 재현](https://github.com/kimjooyoon/gooo-metaprogramming-experiments/actions/runs/37120308264)은
-옛 고정 파일 해시에서 실패해 PR #19가 열려 있습니다. 이 경로의 물리 Go1.27.0 요구와
-추가 준비 스크립트의 버전 결속도 함께 복구할 항목입니다.
+옛 고정 파일 해시에서 실패했습니다. 이후 Go 도구에 물리 Go1.27.1 경로와 추가
+준비 스크립트의 버전 결속을 연결했습니다. 새 로컬·Linux 후보 재현이 통과해
+PR #19는 병합됐습니다. [새 실행 원본·후보별 충족 수](../go-revision2-replay-20261003).
+아래 표와 여덟 파일의 소스 결속은 최초 `acfeaab` 측정을 그대로 설명합니다.
 
 ## 고친 사용상의 문제
 
