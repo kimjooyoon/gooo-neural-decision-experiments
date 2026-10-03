@@ -31,6 +31,17 @@ jobs:
             go run ./cmd/path-observation-read --dir "$root" \
               > "$RUNNER_TEMP/path-observation-readings/${study}.json"
           done
+      - name: Replay the small order-feature preflight and real frozen-model controls
+        run: |
+          (cd publication/intent-order-preflight-20261003 && sha256sum -c SHA256SUMS)
+          go test ./internal/decision ./tools/audit-intent-order
+          go run ./tools/audit-intent-order --source-revision "$GITHUB_SHA" \
+            --output "$RUNNER_TEMP/path-observation-readings/order"
+          jq 'map(.Views |= map(del(.prediction_ns)))' \
+            publication/intent-order-preflight-20261003/records.json > "$RUNNER_TEMP/frozen-order.json"
+          jq 'map(.Views |= map(del(.prediction_ns)))' \
+            "$RUNNER_TEMP/path-observation-readings/order/records.json" > "$RUNNER_TEMP/replayed-order.json"
+          cmp "$RUNNER_TEMP/frozen-order.json" "$RUNNER_TEMP/replayed-order.json"
       - uses: actions/upload-artifact@v7
         with:
           name: path-observation-independent-readings

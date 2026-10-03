@@ -8,6 +8,10 @@ training tools and original evidence behind that process.
 
 ## Start here — 2026-10-03
 
+- [A 128-byte clue about instruction order](publication/intent-order-preflight-20261003):
+  32 controlled pairs have identical old-model predictions; directed clause
+  counters distinguish them and retain a repeated-operation counterexample.
+  This is an untrained feature experiment with 64 real frozen-model calls.
 - [Direct projection after a unique observation](publication/path-observation-resolution-20261003):
   120 generations and 240 compiled runs; resolved arms skip model/search and meet
   144/144 finite expectations. Model-requested codegen median is 8.27 ms versus

@@ -118,6 +118,18 @@ The model supplies a preference when choices remain, and a resolved source
 observation can complete this narrow construction without another prediction.
 
 The language carries the plan, and the model supplies small local judgments.
+
+An [instruction-order feature preflight](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/intent-order-preflight-20261003)
+uses this frozen judge for 64 actual predictions. Four authored arithmetic pairs,
+two languages and four wrapper forms produce 32 pairs with identical V4 features
+and identical model predictions despite different requested operation orders.
+An experimental 128-byte directed-clause sketch distinguishes those 32 pairs;
+a repeated-clause counterexample still aliases and is retained. The feature
+kernel measures 372–619 ns/op with zero heap allocations on M4 / Go 1.27.1.
+It has no trained model head or new accuracy score, and this preflight includes
+zero optimizer updates or native Gooo executions. The current weights and input
+ABI remain attached to their original experiments.
+
 Our aim is to make intent, construction and observed behavior travel together
 as a program evolves. We measure complete finite behavior, partial coverage,
 extra attempts, unresolved obligations, time and memory. These measurements
