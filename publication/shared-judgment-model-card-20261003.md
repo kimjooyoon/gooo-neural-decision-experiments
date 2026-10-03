@@ -117,6 +117,30 @@ unchanged weights; host utilization change and broader speedup remain unmeasured
 The model supplies a preference when choices remain, and a resolved source
 observation can complete this narrow construction without another prediction.
 
+### Smaller source-derived assembly recipes
+
+The [source-recipe pilot](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/82afdff/publication/source-recipes-20261003)
+uses the unchanged `compact/bag-original/fp32` full-input export in actual native
+construction. Gooo derives the typed base from its source body; a small recipe
+names the permitted structural choices. Compiler
+[`3a52232d`, PR 1168](https://github.com/kimjooyoon/meta-ontology-go/pull/1168)
+adds that input form and is undergoing CI at this update.
+
+Across 24 generations and 48 compiled runs, all 12 recipe/full-document pairs
+have equal expanded plans and emitted code. Compact authored JSON falls from
+1,538 to 569 bytes (63.0%). Six real joint predictions each judge three choices;
+there are no training updates. Oracle/resolution arms satisfy 72/72 independent
+runtime expectations; sparse single-example controls satisfy 12/72, making the
+complete comparison 84/144. One authored subtraction task and repeated requests
+define this finite scope.
+
+Own-model search has median whole-process generation time 8.143 ms for the full
+document and 8.598 ms for the recipe, including expansion. Peak RSS medians are
+17.33 and 17.64 MiB; CPU relative to one core is 86.78% and 86.53%. Each cell has
+three samples. Whole-host utilization change and broader task accuracy are
+unmeasured. The pilot reduces authored representation while retaining the added
+processing cost. Initial collector accounting failure and all controls are public.
+
 The language carries the plan, and the model supplies small local judgments.
 
 An [instruction-order feature preflight](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/intent-order-preflight-20261003)
@@ -135,7 +159,7 @@ as a program evolves. We measure complete finite behavior, partial coverage,
 extra attempts, unresolved obligations, time and memory. These measurements
 help decide which language features and model changes to develop next.
 
-For the latest study, a first path is complete when it satisfies all 16 supplied
+For the full-input learning study, a first path is complete when it satisfies all 16 supplied
 examples for that input. A result of 368/512 therefore describes that specific
 authored task collection. Larger programs, broader types and reusable learned
 constructions are the next language questions.
