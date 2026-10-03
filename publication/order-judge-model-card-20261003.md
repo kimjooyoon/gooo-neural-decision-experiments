@@ -33,11 +33,12 @@ fits. Equal pieces can reuse an earlier measurement.
 - The 128-byte prediction workspace excludes feature arrays, preparation,
   artifact loading, program objects and receipts.
 - CPU fit and local Go inference. This architecture currently has FP32 weights.
-- Current installed compiler: main `3bee55daf8063b0daee3d543e57a528975bc63ee`,
-  integrated body stream and within-request recipe projection reuse. Known
-  English/Korean tasks and the Go example passed 192/192 finite expectations
-  in 24 generations and 48 compiled executions with this unchanged model.
-  [Current installation evidence](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/recipe-projection-installed-main-20261003).
+- Current installed compiler: main `fc854ef49be02644006c956c652e60cc8d1d06bf`,
+  with `body-path-run` for direct source/recipe/case files and immediate execution.
+  Known English/Korean arithmetic arms passed 1,024/1,024 finite expectations
+  in eight generations, four actual predictions and 16 compiled executions.
+  Conditional assembly and original unmet outcomes are also preserved separately.
+  [Current installation evidence and complete costs](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/body-path-file-cli-20261003).
 - The released Go SDK v0.2.20 adds preparation reuse to the existing direct
   in-compiler generation route.
   The [native collection](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/order-judge-native-20261003)
@@ -293,7 +294,7 @@ change historical full-workflow arithmetic failures.
 
 Dev #1184 and [main #1185](https://github.com/kimjooyoon/meta-ontology-go/pull/1185)
 passed six canonical checks and independently verified immutable proofs, and are
-merged. Clean main `8c6ec01c4931186460244f3a2975013edda62325` is locally installed.
+merged. At that stage, clean main `8c6ec01c4931186460244f3a2975013edda62325` was locally installed.
 Four generations, two predictions and eight compiled runs matched 32/32 finite
 expectations and preceding generated sources. Both repeat calls reused their
 executable; responses including execution were 30.72/29.52 ms. The first model
@@ -301,6 +302,57 @@ response of 1,267.64 ms is retained. Changed expectations produced a new 1/2
 result and an omitted expectation was rejected before generation. Installation,
 exact proof archives and all observations are linked in the report. Weights
 remain unchanged.
+
+### Direct file construction and current installation
+
+Dev #1186 and [main #1187](https://github.com/kimjooyoon/meta-ontology-go/pull/1187)
+passed their own six canonical checks and independently verified immutable proofs.
+Clean main `fc854ef4` is installed with Go1.27.1. Source files, a named activity,
+full typed plans or short recipes and finite expectations can now be passed
+directly to one compiler command. It saves generated Go, original inputs, each
+generation/runtime record and an incremental summary before the next request.
+
+With that compiler in PATH and Go1.27.1 available, from the research repository:
+
+```sh
+gooo body-path-run --source examples/whole-candidate-order/source.gooo \
+  --activity Compose --path-plan examples/whole-candidate-order/recipe.json \
+  --cases examples/whole-candidate-order/cases.json \
+  --model publication/order-judge-initial-20261003/model.json \
+  --repeat 2 --out order-file-results
+```
+
+Use a fresh output path. `--go-bin` can select the local Go1.27.1 binary. Omit
+`--model` for deterministic construction. The installed compiler ran this exact
+source/recipe/case example: two generations, two actual predictions, four native
+runs and 16/16 supplied expectations. The larger named EN/KO 128-input collection
+separately completed eight generations/four predictions/16 runs and 1,024/1,024
+expectations, with four executable reuses and unchanged generated sources.
+Model-on warm response including construction/execution was 33.092ms Korean and
+32.415ms English; first responses were 496.269/474.290ms. Current-child CPU across
+all four warm arms was 8.829..10.957ms; maximum single-current-child RSS was
+14,237,696..14,417,920 bytes. These costs exclude the earlier retained build and
+do not measure model-only memory or whole-host CPU utilization. Startup/cache
+conditions remain uncontrolled.
+
+The initial sparse-example fixture retained two valid selection candidates and
+missed all supplied separate runtime expectations. A source Gooo oracle added a
+discriminating observation and resolved one candidate; selection/probe-disjoint
+runtime inputs then passed 4/4 across two requests. Actual predictions in the
+resolved oracle arm were zero, including when this model was loaded. Original
+failures, unchanged weights and exact denominators remain in the
+[public records](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/body-path-file-cli-20261003).
+CI feedback requires a supporting model profile and explicit step/round budgets;
+this whole-candidate model currently uses ordinary bounded search and rejects
+feedback/batching options.
+
+The installed completeness-delta reader still rejects owned runtime v2 records.
+A [separate correction #1188](https://github.com/kimjooyoon/meta-ontology-go/pull/1188)
+passed local race/vet and read 12 historical comparisons, then used this unchanged
+model for two new generations/four native runs and 256/256 finite expectations.
+Its canonical CI, proof and installation are pending. Changed resource units and
+4→3 denominators retain both observations without a numerical improvement.
+[Reader correction sources, failures and original records](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/owned-runtime-comparison-20261003).
 
 ## Research acknowledgments
 

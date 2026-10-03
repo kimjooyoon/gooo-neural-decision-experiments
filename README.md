@@ -19,8 +19,10 @@ training tools and original evidence behind that process.
   eight generations, four actual model calls, 16 native runs and 1,024/1,024
   finite expectations on 128 integer inputs. Sparse-example failures and a
   Gooo-oracle candidate resolution are preserved separately. Dev #1186 passed
-  canonical CI and independent proof and is merged. Main #1187 is in CI;
-  main proof, merge and installation remain pending.
+  canonical CI and independent proof and is merged. Main #1187 also passed,
+  merged and is locally installed as `fc854ef4`; all eight bodies and 1,024/1,024
+  finite expectations match. Conditional assembly and original unmet outcomes
+  remain preserved. Warm response including execution: 29–33ms on this device.
 - [Keep one verified executable while running current inputs](publication/retained-native-execution-20261003):
   512 fresh generations/predictions and 1,024 native runs retain every original
   outcome, including partial failures. Warm execution median 294→29ms, current
