@@ -8,6 +8,14 @@ training tools and original evidence behind that process.
 
 ## Start here — 2026-10-04
 
+- [Distinguish unobserved expectations from actual measured zero](publication/finite-observation-display-20261004):
+  candidate terminal summaries use current case observations and replay state.
+  Eight ordinary constructions/four own-model judgments/16 runs keep 1,024/1,024
+  and all frozen Go. Five separate CLI controls retain three original errors and
+  two deliberately changed expectation sets, preserving actual 0/256 observations.
+  Nine synthetic display states are counted separately from native execution.
+  Dev #1200 is in canonical CI; installation remains the proved main below.
+
 - [Handle a stalled executable FIFO and read failed expectations](publication/nonregular-tool-20261004):
   Unix opens without waiting for a FIFO writer and validates the opened file kind.
   The candidate rejected an actual FIFO in 604.14ms total CLI time, with no

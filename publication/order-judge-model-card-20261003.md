@@ -24,6 +24,16 @@ fits. Equal pieces can reuse an earlier measurement.
 
 ## Artifact and integration status
 
+- Dev #1200 is testing clearer terminal expectation states on clean candidate
+  `472db874`: eight ordinary constructions/four actual own-model judgments/16
+  native runs keep 1,024/1,024 finite expectations and all earlier generated Go.
+  Separate missing-tool, invalid-expectation and FIFO controls display unobserved
+  expectations; two deliberately changed-expectation requests retain actual 0/256.
+  Nine synthetic formatter states are recorded separately from native work.
+  The original JSON/status/exit and runtime contracts are preserved. This candidate
+  is in canonical CI; current installation is identified below. Weights and fit
+  are unchanged. [Sources, original failures and scope](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/finite-observation-display-20261004).
+
 - One 128×32 bilinear matrix: **4,096 parameters, 16,384 FP32 bytes**.
 - Full UTF-8 instruction up to 512 bytes, positional byte-bigram/trigram features.
 - Eight complete candidates, each described by two ordered integer operations.
