@@ -1,4 +1,5 @@
-// Observe a constant Gooo body assembled with and without the frozen own model.
+// Observe declared Gooo recipes with and without the frozen own model.
+// The original constant-body profile remains the default.
 package main
 
 import (
@@ -88,11 +89,11 @@ func fixtures(out string) {
 	}
 	save(filepath.Join(out, "cases.json"), map[string]any{"schema": "gooo/body-runtime-cases/v1", "cases": cases})
 }
-func observe(compiler, goBin, out string, useModel bool, repeat int) record {
+func observe(compiler, goBin, out, activity string, expectedCases int, useModel bool, repeat int) record {
 	id := fmt.Sprintf("model%t-r%d", useModel, repeat)
 	source, plan := filepath.Join(out, "source.gooo"), filepath.Join(out, "recipe.json")
 	gen, execution := filepath.Join(out, id+"-generation.json"), filepath.Join(out, id+"-runtime.json")
-	args := []string{"body-codegen", "--json", "--activity", "Compose", "--path-plan", plan}
+	args := []string{"body-codegen", "--json", "--activity", activity, "--path-plan", plan}
 	if useModel {
 		args = append(args, "--path-model", model)
 	}
@@ -131,8 +132,8 @@ func observe(compiler, goBin, out string, useModel bool, repeat int) record {
 			r.Passed++
 		}
 	}
-	if result.Observation.Stage != "COMPLETE" || len(result.Observation.Runs) != 2 || r.Total != 6 || r.Passed != 6 {
-		panic("native constant body did not pass")
+	if result.Observation.Stage != "COMPLETE" || len(result.Observation.Runs) != 2 || r.Total != expectedCases || r.Passed != expectedCases {
+		panic("native recipe body did not pass")
 	}
 	return r
 }
@@ -141,8 +142,10 @@ func main() {
 	revision := flag.String("compiler-sha", "", "exact compiler source")
 	goBin := flag.String("go-bin", "go", "Go 1.27.1 executable")
 	out := flag.String("out", "publication/constant-recipes-20261003", "fresh output directory")
+	profile := flag.String("profile", "constant", "constant or condition-chain")
+	sourceRoot := flag.String("compiler-source", "", "compiler repository for pinned condition-chain fixtures")
 	flag.Parse()
-	if flag.NArg() != 0 || *compiler == "" || len(*revision) != 40 {
+	if flag.NArg() != 0 || *compiler == "" || len(*revision) != 40 || (*profile != "constant" && *profile != "condition-chain") || (*profile == "condition-chain" && *sourceRoot == "") {
 		panic("compiler and revision required")
 	}
 	build, err := exec.Command(*goBin, "version", "-m", *compiler).Output()
@@ -154,7 +157,16 @@ func main() {
 		panic("fresh output required")
 	}
 	must(os.MkdirAll(*out, 0755))
-	fixtures(*out)
+	activity, expectedCases := "Compose", 6
+	schema := "gooo/constant-recipe-pilot/v1"
+	scope := "One authored constant three-choice body, one bilingual intention, three repeats per arm. Finite native cases include both int64 endpoints. Process CPU is one-core-relative, not host CPU increase. No generalization or speed claim."
+	if *profile == "condition-chain" {
+		conditionFixtures(*sourceRoot, *revision, *out)
+		activity, expectedCases, schema = "Clamp", 7, "gooo/condition-chain-recipe-pilot/v1"
+		scope = "One authored three-region clamp, one bilingual intention, three repeats per arm. Seven finite native cases include int64 endpoints and range boundaries. Process CPU is one-core-relative, not host CPU increase. No generalization or speed claim."
+	} else {
+		fixtures(*out)
+	}
 	var rows []record
 	calls, passed, total := 0, 0, 0
 	for repeat := range 3 {
@@ -163,17 +175,17 @@ func main() {
 			order = []bool{true, false}
 		}
 		for _, use := range order {
-			r := observe(*compiler, *goBin, *out, use, repeat)
+			r := observe(*compiler, *goBin, *out, activity, expectedCases, use, repeat)
 			rows = append(rows, r)
 			calls += r.Calls
 			passed += r.Passed
 			total += r.Total
 			if r.EmittedSHA != rows[0].EmittedSHA {
-				panic("constant output differs")
+				panic("emitted recipe body differs")
 			}
 			save(filepath.Join(*out, "processes.json"), rows)
 		}
 	}
-	save(filepath.Join(*out, "manifest.json"), map[string]any{"schema": "gooo/constant-recipe-pilot/v1", "compiler_sha": *revision, "compiler_binary_sha256": hash(read(*compiler)), "collector_sha256": hash(read("cmd/constant-recipe-observe/main.go")), "model_metadata_sha256": hash(read(model)), "model_weights_sha256": hash(read(filepath.Join(filepath.Dir(model), "weights.bin"))), "generations": len(rows), "compiled_runs": 2 * len(rows), "model_predictions": calls, "passed": passed, "total": total, "training_updates": 0, "os": runtime.GOOS, "arch": runtime.GOARCH, "go_version": runtime.Version(), "scope": "One authored constant three-choice body, one bilingual intention, three repeats per arm. Finite native cases include both int64 endpoints. Process CPU is one-core-relative, not host CPU increase. No generalization or speed claim."})
-	fmt.Println("six generations, twelve compiled runs, three model predictions, 36/36 finite expectations")
+	save(filepath.Join(*out, "manifest.json"), map[string]any{"schema": schema, "profile": *profile, "compiler_sha": *revision, "compiler_binary_sha256": hash(read(*compiler)), "collector_sha256": hash(read("cmd/constant-recipe-observe/main.go")), "collector_files_sha256": collectorFiles(), "model_metadata_sha256": hash(read(model)), "model_weights_sha256": hash(read(filepath.Join(filepath.Dir(model), "weights.bin"))), "generations": len(rows), "compiled_runs": 2 * len(rows), "model_predictions": calls, "passed": passed, "total": total, "training_updates": 0, "os": runtime.GOOS, "arch": runtime.GOARCH, "go_version": runtime.Version(), "scope": scope})
+	fmt.Printf("%d generations, %d compiled runs, %d model predictions, %d/%d finite expectations\n", len(rows), 2*len(rows), calls, passed, total)
 }
