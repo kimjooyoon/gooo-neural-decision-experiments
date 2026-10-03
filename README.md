@@ -15,6 +15,9 @@ training tools and original evidence behind that process.
   48 own-model predictions, 192 native runs and 12,288/12,288 finite expectations.
   Original check/output stays in runtime v3; old v2 comparisons remain identical.
   Model weights and the number of distinct intent tasks are unchanged.
+  Dev #1192/main #1193 passed canonical CI and independent immutable proofs,
+  then merged. Clean main `ed2c2cac` is installed; fresh replay made eight
+  generations/four predictions/16 runs with 1,024/1,024 expectations unchanged.
 - [Replay saved IR baselines with Go](publication/go-baseline-replay-20261003):
   an explicit source-version repair preserves the original freeze and current
   Go1.27.1 scripts. A stdlib Go tool binds all 142 frozen inputs, then replays

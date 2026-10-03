@@ -33,14 +33,18 @@ fits. Equal pieces can reuse an earlier measurement.
 - The 128-byte prediction workspace excludes feature arrays, preparation,
   artifact loading, program objects and receipts.
 - CPU fit and local Go inference. This architecture currently has FP32 weights.
-- Current installed compiler: main `eb8477d51f58131e0dc3b7126c547bde2c5d0e5f`,
+- Current installed compiler: main `ed2c2cac856d020b88fbf51c1a4d1a9cc223f9b5`,
   with direct file construction, immediate execution, owned runtime comparison
   and literal multiline bodies. Fresh installation replay made eight generations,
   four actual predictions and 16 native runs: 1,024/1,024 finite expectations and
   all eight earlier generated Go sources match. Separate raw clamp cases pass
-  8/8. Warm responses including execution were 77–94ms; the earlier development
-  sample was 28–33ms. Original slow and fast observations are both retained.
-  [Current installation and original failures](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/raw-body-usability-20261003).
+  8/8 in the earlier raw-body installation. Runtime v3 also retains the first
+  native Go version check, verifies current tool bytes/context and excludes
+  historical checks from current resources. Dev #1192/main #1193 passed their
+  own six canonical checks and independent immutable proofs, then merged.
+  Fresh installed warm responses were 76.82/74.07ms with the model and
+  66.31/63.95ms deterministically; original cold/slow observations remain public.
+  [Current installation and original failures](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/toolchain-version-reuse-20261003).
 - The released Go SDK v0.2.20 adds preparation reuse to the existing direct
   in-compiler generation route.
   The [native collection](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/order-judge-native-20261003)
@@ -186,12 +190,19 @@ costs. Eight old v2 comparison pairs stay byte-identical; cross-profile changes
 have no numeric completeness delta. The
 [full original observations and replay method](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/toolchain-version-reuse-20261003)
 include the final source's eight-generation/1,024-expectation confirmation.
+Main #1193 passed its own canonical checks and independently verified proof,
+then merged. Clean main `ed2c2cac` is installed and freshly passes 1,024/1,024
+in eight generations/four predictions/16 runs. All generated sources match;
+first version checks are preserved and repeated requests execute two current
+native children. Installed warm model responses are 76.82ms Korean and 74.07ms
+English; these later observations retain host/cache variation separately from
+the paired timing study.
 
 The research workflow at source `2b30367b` retains a FAIL in the earlier shared
 model's numerical replay: 101 summary leaves differ from its frozen reference.
 The current whole-candidate judge and separate-arithmetic replay jobs pass; 18
 of 19 jobs pass. Original failures and exact differences are linked in the same
-publication. The whole research workflow is not reported as passing.
+publication. The whole research workflow records FAIL.
 
 ## Reading the limits
 
@@ -400,7 +411,7 @@ finite expectations and all eight original generated Go sources matched.
 Model-on warm responses were 32.719/31.766ms, first responses 487.173/477.383ms.
 Dev and [main #1191](https://github.com/kimjooyoon/meta-ontology-go/pull/1191)
 passed their own six canonical checks and independently verified immutable proofs,
-then merged. Clean main `eb8477d5` is installed. Its fresh eight generations,
+then merged. Clean main `eb8477d5` was installed at that step. Its fresh eight generations,
 four actual predictions and 16 native runs pass 1,024/1,024; all generated sources
 match. Installed model warm responses were 82.580/81.439ms, first responses
 957.629/826.189ms. Deterministic warm responses were 93.576/76.820ms. Current-child
