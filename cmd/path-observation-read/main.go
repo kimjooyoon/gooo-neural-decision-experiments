@@ -2,6 +2,7 @@
 package main
 
 import (
+	"bytes"
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/hex"
@@ -29,6 +30,9 @@ type aggregate struct {
 	RuntimeCases        int       `json:"runtime_cases"`
 	Predictions         int       `json:"model_predictions"`
 	Attempts            int       `json:"search_attempts"`
+	ProbeEvaluations    int       `json:"probe_evaluations"`
+	CachedComparisons   int       `json:"cached_comparisons"`
+	ReusedProbeValues   int       `json:"reused_probe_values"`
 	CodegenMS           []float64 `json:"codegen_ms_samples"`
 	CPU                 []float64 `json:"cpu_one_core_percent_samples"`
 	RSS                 []float64 `json:"rss_mib_samples"`
@@ -125,7 +129,20 @@ func evaluate(mask int, input int64) int64 {
 	return v
 }
 
-func observations(p object, mode string) []finiteCase {
+func firstRankingSHA(raw []byte) string {
+	for _, key := range []string{"report", "body_paths", "observation", "rounds"} {
+		var fields map[string]json.RawMessage
+		check(json.Unmarshal(raw, &fields) == nil, "ranking container")
+		raw = fields[key]
+	}
+	var rounds []map[string]json.RawMessage
+	check(json.Unmarshal(raw, &rounds) == nil && len(rounds) > 0, "initial ranking")
+	var compact bytes.Buffer
+	check(json.Compact(&compact, rounds[0]["ranking"]) == nil, "ranking JSON")
+	return sha(compact.Bytes())
+}
+
+func observations(p object, mode, initialSHA string) []finiteCase {
 	cases := []finiteCase{{10, -3}}
 	check(p["test_suite_sha256"] == "sha256:"+sha(canonical(cases)), "initial suite digest")
 	if mode == "none" {
@@ -135,8 +152,10 @@ func observations(p object, mode string) []finiteCase {
 	o := obj(p["observation"])
 	rounds := list(o["rounds"])
 	check(o["source_sha256"] == p["original_source_sha256"], "oracle source binding")
-	check(len(rounds) == 1 || mode == "oracle" && len(rounds) == 2, "round bound")
-	for _, item := range rounds {
+	oracle := mode == "oracle" || mode == "oracle_reuse"
+	check(len(rounds) == 1 || oracle && len(rounds) == 2, "round bound")
+	check((obj(o["options"])["reuse_probe_outputs"] == true) == (mode == "oracle_reuse"), "reuse mode")
+	for index, item := range rounds {
 		r := obj(item)
 		q := obj(r["ranking"])
 		check(q["cases_sha256"] == sha(canonical(cases)) && num(q["model_predictions"]) == 0, "probe suite/model count")
@@ -152,6 +171,20 @@ func observations(p object, mode string) []finiteCase {
 			}
 		}
 		check(string(canonical(survivors)) == string(canonical(q["surviving_masks"])), "survivors differ")
+		wantEvaluations := 8*len(cases) + 3*len(survivors)
+		if mode == "oracle_reuse" {
+			reused := obj(r["reuse"])
+			values, comparisons := 0, 0
+			if index > 0 {
+				wantEvaluations, values, comparisons = 0, 3*len(survivors), 2
+			}
+			check(num(reused["revision"]) == index && reused["initial_ranking_sha256"] == initialSHA &&
+				num(reused["reused_probe_values"]) == values && num(reused["cached_comparisons"]) == comparisons &&
+				num(reused["total_cached_comparisons"]) == comparisons && num(reused["total_evaluation_attempts"]) == 14, "reuse accounting")
+		} else {
+			check(r["reuse"] == nil, "unexpected reuse record")
+		}
+		check(num(q["evaluation_attempts"]) == wantEvaluations, "probe evaluation count")
 		for i, pv := range list(q["probes"]) {
 			probe := obj(pv)
 			input := int64(num(probe["input"]))
@@ -171,7 +204,7 @@ func observations(p object, mode string) []finiteCase {
 		}
 	}
 	check(o["effective_cases_sha256"] == "sha256:"+sha(canonical(cases)) && num(o["effective_cases"]) == len(cases), "effective suite")
-	if mode == "oracle" {
+	if oracle {
 		check(o["status"] == "ONE_SURVIVING_CANDIDATE" && len(cases) == 2 && num(o["oracle_evaluations"]) == 2, "oracle status")
 	} else {
 		check(o["status"] == "ORACLE_UNAVAILABLE" && len(cases) == 1, "unresolved oracle")
@@ -187,7 +220,18 @@ func main() {
 	if e := json.Unmarshal(read(filepath.Join(*dir, "processes.json")), &rows); e != nil {
 		panic(e)
 	}
-	check(len(rows) == 24, "fixed pilot request count")
+	repeats := num(manifest["repetitions"])
+	if repeats == 0 {
+		repeats = 2
+	}
+	check(repeats >= 2 && repeats <= 20, "repetition bound")
+	modes := []string{"none", "rank_only", "oracle"}
+	if manifest["include_reuse"] == true {
+		modes = append(modes, "oracle_reuse")
+	}
+	wantRequests := 4 * len(modes) * repeats
+	check(len(rows) == wantRequests && num(manifest["generations"]) == wantRequests &&
+		num(manifest["compiled_runs"]) == 2*wantRequests, "fixed pilot request count")
 	sourceSHA := "sha256:" + sha(read(filepath.Join(*dir, "source.gooo")))
 	groups := map[string]*aggregate{}
 	seen := map[string]bool{}
@@ -196,7 +240,8 @@ func main() {
 		id := row["id"].(string)
 		check(!seen[id] && !strings.ContainsAny(id, "/\\"), "duplicate or invalid ID")
 		seen[id] = true
-		g := decode(read(filepath.Join(*dir, id+"-generation.json")))
+		generationRaw := read(filepath.Join(*dir, id+"-generation.json"))
+		g := decode(generationRaw)
 		r := obj(g["report"])
 		p := obj(r["body_paths"])
 		s := obj(p["search"])
@@ -204,7 +249,11 @@ func main() {
 		check(r["generated_digest"] == "sha256:"+sha([]byte(g["source"].(string))), "generated bytes")
 		mode := row["mode"].(string)
 		useModel := row["model"].(bool)
-		cases := observations(p, mode)
+		initialSHA := ""
+		if mode == "oracle_reuse" {
+			initialSHA = firstRankingSHA(generationRaw)
+		}
+		cases := observations(p, mode, initialSHA)
 		check(num(p["declared_test_cases"]) == 1 && num(s["training_cases"]) == len(cases), "selection denominator")
 		for _, av := range list(s["attempts"]) {
 			a := obj(av)
@@ -263,6 +312,16 @@ func main() {
 		a.RuntimeCases += 6
 		a.Predictions += calls
 		a.Attempts += len(list(s["attempts"]))
+		if mode != "none" {
+			for _, rv := range list(obj(p["observation"])["rounds"]) {
+				round := obj(rv)
+				a.ProbeEvaluations += num(obj(round["ranking"])["evaluation_attempts"])
+				if round["reuse"] != nil {
+					a.CachedComparisons += num(obj(round["reuse"])["cached_comparisons"])
+					a.ReusedProbeValues += num(obj(round["reuse"])["reused_probe_values"])
+				}
+			}
+		}
 		cost := obj(row["generation"])
 		a.CodegenMS = append(a.CodegenMS, cost["wall_ms"].(float64))
 		a.CPU = append(a.CPU, cost["cpu_one_core_percent"].(float64))
@@ -275,6 +334,15 @@ func main() {
 		predictions += calls
 		passed += count
 		attempts += len(list(s["attempts"]))
+	}
+	for repeat := range repeats {
+		for _, lang := range []string{"ko", "en"} {
+			for _, mode := range modes {
+				for _, model := range []bool{false, true} {
+					check(seen[fmt.Sprintf("%s-%s-model%t-r%d", lang, mode, model, repeat)], "missing declared arm")
+				}
+			}
+		}
 	}
 	var keys []string
 	for k := range groups {
@@ -290,7 +358,7 @@ func main() {
 		a.MedianObservationMS = median(a.ObservationMS)
 		table = append(table, a)
 	}
-	result := object{"schema": "gooo/path-observation-pilot-reading/v1", "status": "PASS", "requests": 24, "compiled_runs": 48, "runtime_passed": passed, "runtime_cases": 144, "model_predictions": predictions, "search_attempts": attempts, "groups": table, "reader_model_calls": 0, "reader_program_executions": 0, "scope": "Independent arithmetic and accounting checks of one fixed authored pilot; timing samples are observations, not a causal benchmark."}
+	result := object{"schema": "gooo/path-observation-pilot-reading/v1", "status": "PASS", "requests": wantRequests, "compiled_runs": 2 * wantRequests, "runtime_passed": passed, "runtime_cases": 6 * wantRequests, "model_predictions": predictions, "search_attempts": attempts, "groups": table, "reader_model_calls": 0, "reader_program_executions": 0, "scope": "Independent arithmetic and accounting checks of one fixed authored pilot; timing samples are observations, not a causal benchmark."}
 	output, e := json.MarshalIndent(result, "", "  ")
 	if e != nil {
 		panic(e)

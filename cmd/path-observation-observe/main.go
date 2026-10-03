@@ -78,7 +78,7 @@ func run(binary, out string, args ...string) process {
 	return p
 }
 
-func fixtures(dir string) {
+func fixtures(dir string, includeReuse bool) {
 	source := "package observation\nnamespace observation\nentity Integer id \"observation://integer\"\n" +
 		"activity Assemble(Integer) -> Integer computes \"let a = (input - 1); let b = (a - 3); return (b - 9)\"\n" +
 		"activity Expected(Integer) -> Integer computes \"return (7 - input)\"\n" +
@@ -100,10 +100,17 @@ func fixtures(dir string) {
 		doc["path_plan"].(map[string]any)["decisions"] = choices
 		writeJSON(filepath.Join(dir, "plan-"+lang+".json"), doc)
 	}
-	for _, mode := range []string{"rank_only", "oracle"} {
+	modes := []string{"rank_only", "oracle"}
+	if includeReuse {
+		modes = append(modes, "oracle_reuse")
+	}
+	for _, mode := range modes {
 		request := map[string]any{"schema": "gooo/path-observation-request/v1", "inputs": []int{0, 3, -1}, "max_candidates": 8, "max_rounds": 2}
-		if mode == "oracle" {
+		if mode == "oracle" || mode == "oracle_reuse" {
 			request["oracle_activity"] = "Expected"
+		}
+		if mode == "oracle_reuse" {
+			request["reuse_probe_outputs"] = true
 		}
 		writeJSON(filepath.Join(dir, mode+".json"), request)
 	}
@@ -119,26 +126,36 @@ func main() {
 	compilerSHA := flag.String("compiler-sha", "", "full compiler commit")
 	goBin := flag.String("go-bin", "go", "Go 1.27.1 executable")
 	out := flag.String("out", "publication/path-observation-loop-20261003", "new result directory")
+	includeReuse := flag.Bool("include-reuse", false, "add the paired oracle output-reuse arm")
+	repeats := flag.Int("repeats", 2, "bounded repetitions per language/model/mode (2..20)")
 	flag.Parse()
 	if *compiler == "" || len(*compilerSHA) != 40 {
 		panic("explicit compiler and commit required")
+	}
+	if *repeats < 2 || *repeats > 20 {
+		panic("repetitions must be between 2 and 20")
 	}
 	if _, err := os.Stat(*out); !os.IsNotExist(err) {
 		panic("output must be a new directory; previous observations are immutable")
 	}
 	must(os.MkdirAll(*out, 0755))
-	fixtures(*out)
+	fixtures(*out, *includeReuse)
 	var rows []row
 	started := time.Now()
-	for repeat := 0; repeat < 2; repeat++ {
+	for repeat := range *repeats {
 		for _, lang := range []string{"ko", "en"} {
 			modes := []string{"none", "rank_only", "oracle"}
-			if repeat == 1 {
-				modes = []string{"oracle", "rank_only", "none"}
+			if *includeReuse {
+				modes = append(modes, "oracle_reuse")
+			}
+			if repeat%2 == 1 {
+				for i, j := 0, len(modes)-1; i < j; i, j = i+1, j-1 {
+					modes[i], modes[j] = modes[j], modes[i]
+				}
 			}
 			for _, mode := range modes {
 				models := []bool{false, true}
-				if repeat == 1 {
+				if repeat%2 == 1 {
 					models = []bool{true, false}
 				}
 				for _, useModel := range models {
@@ -169,5 +186,6 @@ func main() {
 		"compiler_binary_sha256": sha(*compiler), "model_metadata_sha256": sha(model), "model_weights_sha256": sha(filepath.Join(filepath.Dir(model), "weights.bin")),
 		"os": runtime.GOOS, "arch": runtime.GOARCH, "go_version": runtime.Version(), "elapsed_ms": float64(time.Since(started)) / 1e6,
 		"generations": len(rows), "compiled_runs": 2 * len(rows), "training_updates": 0,
-		"scope": "One authored three-choice task, two language views, two repetitions, model on/off and no probes/rank-only/oracle. Finite mechanism pilot, not unseen-task accuracy or speedup proof."})
+		"include_reuse": *includeReuse, "repetitions": *repeats,
+		"scope": "One authored three-choice task, two language views, model on/off and no probes/rank-only/oracle with optional cached oracle arm. Finite mechanism pilot; task generalization and causal speedup remain unmeasured."})
 }
