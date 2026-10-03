@@ -8,6 +8,10 @@ training tools and original evidence behind that process.
 
 ## Start here — 2026-10-03
 
+- [Direct projection after a unique observation](publication/path-observation-resolution-20261003):
+  120 generations and 240 compiled runs; resolved arms skip model/search and meet
+  144/144 finite expectations. Model-requested codegen median is 8.27 ms versus
+  9.49 ms for cached observations followed by search, on one authored task.
 - [Candidate-output reuse in the compiler](publication/path-observation-reuse-20261003):
   96 generations with 120 actual tiny-model predictions; probe evaluations fall
   from 33 to 14 per oracle request. Full codegen latency still needs improvement.

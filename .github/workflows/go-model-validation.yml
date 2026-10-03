@@ -10,6 +10,33 @@ permissions:
   contents: read
 
 jobs:
+  path-observation-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GOTOOLCHAIN: local
+      GOWORK: "off"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.27.1'
+          cache: false
+      - name: Read frozen observations, reuse and direct resolution
+        run: |
+          mkdir -p "$RUNNER_TEMP/path-observation-readings"
+          for study in loop reuse resolution; do
+            root="publication/path-observation-${study}-20261003"
+            (cd "$root" && sha256sum -c SHA256SUMS)
+            go run ./cmd/path-observation-read --dir "$root" \
+              > "$RUNNER_TEMP/path-observation-readings/${study}.json"
+          done
+      - uses: actions/upload-artifact@v7
+        with:
+          name: path-observation-independent-readings
+          path: ${{ runner.temp }}/path-observation-readings
+          if-no-files-found: error
+
   separate-arithmetic-replay:
     runs-on: ubuntu-latest
     timeout-minutes: 15

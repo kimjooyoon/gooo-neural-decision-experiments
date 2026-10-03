@@ -95,9 +95,27 @@ while complete codegen changes from 9.213 to 9.372 ms. Both oracle modes have
 18.83 MiB median peak RSS. Process CPU changes from 92.35% to 93.02% of one core;
 whole-host utilization change is unmeasured. Reuse saves candidate evaluations;
 the end-to-end latency result is slightly slower in this collection. The compiler
-still searches after a single candidate remains, which guides the next change.
+in that experiment still searches after a single candidate remains.
 [PR 1162](https://github.com/kimjooyoon/meta-ontology-go/pull/1162) tracks this
 opt-in integration. The existing model weights are preserved.
+
+The [next direct-projection experiment](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/path-observation-resolution-20261003)
+completes **120 generations and 240 compiled executions**, with **120 actual
+model predictions in control arms**. Complete observation can now select the
+single surviving candidate before model loading or search. Resolved arms make
+zero predictions, meet 144/144 finite expectations and match all 24 corresponding
+cached-search bodies and runtime results. All oracle arms meet 432/432; the full
+comparison including sparse-case controls is 540/720. Compiler
+[`9158c3cd`, PR 1164](https://github.com/kimjooyoon/meta-ontology-go/pull/1164)
+adds this optional route with explicit source replay and skipped-work records.
+
+For model-requested fresh processes, cached search vs direct projection has
+9.491 vs 8.267 ms median codegen, 18.77 vs 17.29 MiB peak RSS, and 92.45% vs
+88.01% CPU relative to one core. All samples are retained, including a slow
+initial control. This is one task, two language views and six repetitions with
+unchanged weights; host utilization change and broader speedup remain unmeasured.
+The model supplies a preference when choices remain, and a resolved source
+observation can complete this narrow construction without another prediction.
 
 The language carries the plan, and the model supplies small local judgments.
 Our aim is to make intent, construction and observed behavior travel together
