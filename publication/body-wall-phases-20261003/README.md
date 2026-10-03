@@ -6,8 +6,10 @@
 `b6f577c3c840928da07663b5cd4da0a64ca281b7`에서도 같은 번갈아 실행을 새로 완료했습니다.
 개발 #1194는 필수 여섯 검사와 내려받은 정확한 소스 증거의 독립 검증 뒤
 `69aebdb5c87f1be02d5bd59c9b0e8b961dd51d56`으로 정상 병합했습니다.
-[main #1195](https://github.com/kimjooyoon/meta-ontology-go/pull/1195)는 이 개발 tree와
-현재 main 부모에 결속한 승격 검사를 진행 중입니다. 현재 설치본은 앞선 ed2c2cac입니다.
+[main #1195](https://github.com/kimjooyoon/meta-ontology-go/pull/1195)도 필수 여섯 검사,
+내려받은 증거의 독립 검증과 현재 개발·main 부모·승격 결속을 확인해 정상 병합했습니다.
+깨끗한 main `041c8bbf3420f83e885f66100868f87fa438bcac`를 Go1.27.1로 빌드하고
+로컬 설치·새 모델/결정론 실행을 완료했습니다. 측정은 2026-10-03, 설치 확인은 2026-10-04 KST입니다.
 
 ## 사용할 수 있는 기능
 
@@ -96,8 +98,18 @@ gooo body-path-run --verify-timing --out fresh-run
 
 ## 원본과 재실행
 
+설치 main에서 한영 모델·결정론 네 경로를 두 번씩 다시 구성했습니다.
+8회 생성·실제 모델 판단 4회·실행 16회, 1,024/1,024와 원래 생성 Go 일치를
+확인했고, 파일 결속 읽기도 네 번 새로 통과했습니다. 모델의 재사용 응답은
+한국어 66.81ms·영어 64.48ms, 결정론은 67.18·63.34ms였습니다. 최초 응답
+1,240.08·783.29·623.77·625.37ms도 `installed-smoke-summary.json`에 보존합니다.
+이 설치 관측은 앞선 번갈아 비교 표와 별도로 읽습니다. 추가 학습·의도 과제는 0개입니다.
+
 - `paired.zip`: 96개 결과, 48개 계측 기록, 원래 입력·기대 생성 Go와 실제 프로세스 기록.
 - `final-native.zip`: 현대화 수정 뒤의 새 96개 결과와 48개 계측 기록.
+- `installed-native.zip`, `installed-smoke/main.go`: 실제 설치 main의 새 원본과 Go 실행기.
+- `main-proof-verification.json`, `main-merge.json`, `installed-buildinfo.txt`, `installed-sha256.txt`:
+  main 검사·정상 병합·깨끗한 생산자 소스·실제 설치 파일 결속.
 - `summary.json`: 원본으로 계산한 최초·재사용, 조건별 최소·중앙값·최대.
 - `paired.go`: Go만 사용하는 번갈아 실행 수집기. 공개 초기 모델을 그대로 사용합니다.
 - `first-tests.raw`: 구현 전 새 테스트의 실제 컴파일 실패.

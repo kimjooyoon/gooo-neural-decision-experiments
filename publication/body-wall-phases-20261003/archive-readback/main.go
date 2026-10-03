@@ -36,7 +36,8 @@ func main() {
 			panic("invalid member")
 		}
 		prefix := strings.SplitN(f.Name, "/", 2)[0]
-		if prefix != "paired" && prefix != "paired-final" && prefix != "inputs" && prefix != "expected" {
+		if prefix != "paired" && prefix != "paired-final" && prefix != "installed-native" &&
+			prefix != "inputs" && prefix != "expected" {
 			panic("unexpected archive root")
 		}
 		roots[prefix] = true

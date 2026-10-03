@@ -16,6 +16,9 @@ training tools and original evidence behind that process.
   64.77/64.71ms; whole Go-file hashing took 14.40ms. These observations identify
   costs without establishing a recorder speedup. Original CI modernizer failure
   and source revisions are retained; weights and intent scope are unchanged.
+  Dev #1194/main #1195 passed their own six canonical checks and independent
+  exact-source proofs, then merged. Clean main `041c8bbf` is installed; eight fresh
+  generations, four predictions and 16 runs kept 1,024/1,024 finite expectations.
 - [Reproduce historical model results and retain the original platform differences](publication/legacy-platform-replay-20261003):
   new macOS/Linux audits each reproduce all 18,432 development rows and 24 compact
   files from their fixed platform archives. The original 101 summary differences
