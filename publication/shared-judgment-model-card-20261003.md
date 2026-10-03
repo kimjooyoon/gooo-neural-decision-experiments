@@ -196,6 +196,31 @@ It has no trained model head or new accuracy score, and this preflight includes
 zero optimizer updates or native Gooo executions. The current weights and input
 ABI remain attached to their original experiments.
 
+The [native order follow-up](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/eaeca70c8f6b4068089804d387faf31feea43ead/publication/native-order-20261003)
+uses main compiler `729482ed` with four operation pairs, Korean/English views and
+both requested orders. Across 96 generations, 192 compiled runs and 64 actual
+predictions, first-attempt functional completion is 8/16 requests for deterministic
+construction and 6/16 for each frozen positioned/bag model. With up to eight
+candidate attempts, all three arms complete 16/16 requests and 128/128 finite
+expectations each. All controls together meet 554/768 expectations. Training
+updates are zero, and the two models also have different learned weights.
+
+The positioned model distinguishes all eight reversed-instruction pairs in its
+features and probability distributions, while its first masks remain unchanged.
+Bounded-search generation medians are 8.129 ms deterministic, 9.352 ms positioned
+and 8.861 ms bag; total candidate evaluations are 24, 53 and 46. The first
+deterministic process took 574.741 ms and is retained. These are one sample per
+authored request, with process costs and limits in the raw publication.
+
+A [source-order counterexample](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/7400a97d4b14f76fabefdfefa82f82a1ef297faa/publication/root-order-source-alias-20261003)
+reverses the source assignments while keeping the instruction fixed. The two
+correct source-relative choices are opposite, but the local root-order model
+inputs are identical. Both calls choose reverse: native outcomes are 8/8 and 0/8.
+The shared local judge lacks a distinction needed for this pair. The next input
+prototype must preserve the operations of the permitted source alternatives
+before further contrast training. These observations leave the released weights
+unchanged and retain bounded deterministic TDD as the working completion path.
+
 Our aim is to make intent, construction and observed behavior travel together
 as a program evolves. We measure complete finite behavior, partial coverage,
 extra attempts, unresolved obligations, time and memory. These measurements
