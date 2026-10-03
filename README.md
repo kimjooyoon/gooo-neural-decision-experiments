@@ -16,6 +16,8 @@ training tools and original evidence behind that process.
   CI jobs passed before PR #1 merged as `87c6f219`. Weights and expectations are
   unchanged. The reader makes zero predictions; each audit records 25,824 runtime
   predictions on known inputs. Original comparator and local failures are public.
+  [Anonymous Hugging Face readback](publication/legacy-platform-hf-readback-20261003.json)
+  verifies all 24 appendix files, both model cards and unchanged example weights.
 - [Reuse the first native Go version check during repeated body execution](publication/toolchain-version-reuse-20261003):
   unchanged source replay, current Go-file hashes and two native runs per request.
   Paired macOS observations on the same two known EN/KO fixtures: warm response
