@@ -1,0 +1,38 @@
+{
+  "choices": [
+    {
+      "id": "order",
+      "intent": "Step: subtract three. Step: multiply by two. Step: end.",
+      "kind": "root_order",
+      "occurrence": 1
+    },
+    {
+      "id": "first-operands",
+      "intent": "Keep the declared operand order.",
+      "kind": "operand_order",
+      "occurrence": 0
+    },
+    {
+      "id": "second-operands",
+      "intent": "Keep the declared operand order.",
+      "kind": "operand_order",
+      "occurrence": 1
+    }
+  ],
+  "max_attempts": 1,
+  "schema": "gooo/source-typed-path-recipe/v1",
+  "test_cases": [
+    {
+      "expected": -10,
+      "input": -2
+    },
+    {
+      "expected": -6,
+      "input": 0
+    },
+    {
+      "expected": 0,
+      "input": 3
+    }
+  ]
+}
