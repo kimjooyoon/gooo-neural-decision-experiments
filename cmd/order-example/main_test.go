@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"slices"
 	"strings"
 	"testing"
 	"time"
@@ -41,43 +42,51 @@ func TestInputBound(t *testing.T) {
 }
 
 func TestImmediateExecutionAndFiniteFailure(t *testing.T) {
-	for _, fail := range []bool{false, true} {
-		t.Run(map[bool]string{false: "complete", true: "partial"}[fail], func(t *testing.T) {
-			dir := t.TempDir()
-			for name, b := range map[string][]byte{"source": []byte("public source"), "recipe": []byte(`{}`), "cases": []byte(`[]`)} {
-				if err := os.WriteFile(filepath.Join(dir, name), b, 0644); err != nil {
+	for _, retained := range []bool{false, true} {
+		for _, fail := range []bool{false, true} {
+			t.Run(map[bool]string{false: "complete", true: "partial"}[fail]+map[bool]string{false: "-separate", true: "-retained"}[retained], func(t *testing.T) {
+				dir := t.TempDir()
+				for name, b := range map[string][]byte{"source": []byte("public source"), "recipe": []byte(`{}`), "cases": []byte(`[]`)} {
+					if err := os.WriteFile(filepath.Join(dir, name), b, 0644); err != nil {
+						t.Fatal(err)
+					}
+				}
+				o := options{compiler: filepath.Join(dir, "output"), out: filepath.Join(dir, "output"),
+					source: filepath.Join(dir, "source"), recipe: filepath.Join(dir, "recipe"), cases: filepath.Join(dir, "cases"), repeat: 2, retainNative: retained}
+				if fail {
+					o.goBin = "partial"
+				}
+				o.command = func(ctx context.Context, binary string, args ...string) *exec.Cmd {
+					if retained && args[0] != "body-path-stream" {
+						t.Fatal("retained execution launched a separate command")
+					}
+					c := exec.CommandContext(ctx, os.Args[0], append([]string{"-test.run=TestExampleProcess", "--", binary}, args...)...)
+					c.Env = append(os.Environ(), "GOOO_EXAMPLE_PROCESS=1")
+					return c
+				}
+				ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+				defer cancel()
+				var output bytes.Buffer
+				err := run(ctx, o, &output, io.Discard)
+				if (err != nil) != fail {
+					t.Fatalf("partial=%v: %v", fail, err)
+				}
+				b, err := os.ReadFile(filepath.Join(o.out, "summary.json"))
+				if err != nil {
 					t.Fatal(err)
 				}
-			}
-			o := options{compiler: filepath.Join(dir, "output"), out: filepath.Join(dir, "output"),
-				source: filepath.Join(dir, "source"), recipe: filepath.Join(dir, "recipe"), cases: filepath.Join(dir, "cases"), repeat: 2}
-			if fail {
-				o.goBin = "partial"
-			}
-			o.command = func(ctx context.Context, binary string, args ...string) *exec.Cmd {
-				c := exec.CommandContext(ctx, os.Args[0], append([]string{"-test.run=TestExampleProcess", "--", binary}, args...)...)
-				c.Env = append(os.Environ(), "GOOO_EXAMPLE_PROCESS=1")
-				return c
-			}
-			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-			defer cancel()
-			var output bytes.Buffer
-			err := run(ctx, o, &output, io.Discard)
-			if (err != nil) != fail {
-				t.Fatalf("partial=%v: %v", fail, err)
-			}
-			b, err := os.ReadFile(filepath.Join(o.out, "summary.json"))
-			if err != nil {
-				t.Fatal(err)
-			}
-			var rows []receipt
-			if err := json.Unmarshal(b, &rows); err != nil || len(rows) != 2 || rows[1].NativeRuns != 2 {
-				t.Fatalf("receipts: %s: %v", b, err)
-			}
-			if err := run(ctx, o, io.Discard, io.Discard); err == nil {
-				t.Fatal("reused an existing output directory")
-			}
-		})
+				var rows []receipt
+				if err := json.Unmarshal(b, &rows); err != nil || len(rows) != 2 || rows[1].NativeRuns != 2 {
+					t.Fatalf("receipts: %s: %v", b, err)
+				}
+				if retained && (rows[1].NativeArtifactReused == nil || !*rows[1].NativeArtifactReused || !rows[1].ResponseIncludesExecution) {
+					t.Fatal("missing retained execution accounting")
+				}
+				if err := run(ctx, o, io.Discard, io.Discard); err == nil {
+					t.Fatal("reused an existing output directory")
+				}
+			})
+		}
 	}
 }
 
@@ -117,23 +126,31 @@ func TestExampleProcess(t *testing.T) {
 		}
 	}
 	if args[1] == "body-path-stream" {
+		retained, passed := slices.Contains(args, "--execute"), !slices.Contains(args, "partial")
 		d := json.NewDecoder(os.Stdin)
 		for sequence := 1; ; sequence++ {
 			var request struct {
-				CorrelationID string `json:"correlation_id"`
+				CorrelationID string          `json:"correlation_id"`
+				Cases         json.RawMessage `json:"execution_cases"`
 			}
 			if err := d.Decode(&request); err == io.EOF {
 				os.Exit(0)
 			} else if err != nil {
 				os.Exit(3)
 			}
-			if sequence > 1 {
+			if retained && len(request.Cases) == 0 {
+				os.Exit(9)
+			}
+			if sequence > 1 && !retained {
 				if _, err := os.Stat(filepath.Join(args[0], "executed")); err != nil {
 					os.Exit(4)
 				}
 			}
 			b := map[string]any{"schema": "gooo/native-body-stream-result/v1", "status": "completed",
 				"correlation_id": request.CorrelationID, "sequence": sequence, "response": map[string]any{"source": "return input"}}
+			if retained {
+				b["execution"] = map[string]any{"observation": map[string]any{"stage": "COMPLETE", "runs": []any{map[string]any{}, map[string]any{}}, "cases": []any{map[string]any{"passed": passed}, map[string]any{"passed": true}}, "artifact": map[string]any{"reused": sequence > 1}}}
+			}
 			if err := json.NewEncoder(os.Stdout).Encode(b); err != nil {
 				os.Exit(5)
 			}

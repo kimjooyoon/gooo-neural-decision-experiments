@@ -22,6 +22,7 @@ import (
 type options struct {
 	compiler, goBin, model, source, recipe, cases, out string
 	repeat                                             int
+	retainNative                                       bool
 	command                                            func(context.Context, string, ...string) *exec.Cmd
 }
 
@@ -42,17 +43,20 @@ type result struct {
 	Sequence       int
 	Response       json.RawMessage
 	Error          string
+	Execution      json.RawMessage
 }
 
 type receipt struct {
-	ID                string  `json:"id"`
-	ResponseMS        float64 `json:"response_ms"`
-	ExecutionMS       float64 `json:"execution_ms"`
-	ModelPredictions  int     `json:"model_predictions"`
-	PreparationReused bool    `json:"preparation_reused"`
-	NativeRuns        int     `json:"native_runs"`
-	Passed            int     `json:"passed"`
-	Total             int     `json:"total"`
+	ID                        string  `json:"id"`
+	ResponseMS                float64 `json:"response_ms"`
+	ExecutionMS               float64 `json:"execution_ms"`
+	ModelPredictions          int     `json:"model_predictions"`
+	PreparationReused         bool    `json:"preparation_reused"`
+	NativeRuns                int     `json:"native_runs"`
+	Passed                    int     `json:"passed"`
+	Total                     int     `json:"total"`
+	ResponseIncludesExecution bool    `json:"response_includes_execution,omitempty"`
+	NativeArtifactReused      *bool   `json:"native_artifact_reused,omitempty"`
 }
 
 func readInput(path string) ([]byte, error) {
@@ -104,20 +108,33 @@ func execute(ctx context.Context, o options, generation string, stderr io.Writer
 	if err != nil {
 		return r, err
 	}
+	parsed, err := parseNative(b)
+	parsed.ExecutionMS = r.ExecutionMS
+	return parsed, err
+}
+
+func parseNative(b []byte) (receipt, error) {
+	var r receipt
 	var n struct {
 		Observation struct {
-			Stage string
-			Runs  []json.RawMessage
-			Cases []struct{ Passed bool }
+			Stage     string
+			Runs      []json.RawMessage
+			Cases     []struct{ Passed bool }
+			ElapsedNS int64 `json:"elapsed_ns"`
+			Artifact  *struct{ Reused bool }
 		}
 	}
 	if err := json.Unmarshal(b, &n); err != nil {
 		return r, err
 	}
-	if n.Observation.Stage != "COMPLETE" || len(n.Observation.Runs) == 0 || len(n.Observation.Cases) == 0 {
+	if n.Observation.Stage != "COMPLETE" || len(n.Observation.Runs) != 2 || len(n.Observation.Cases) == 0 {
 		return r, errors.New("native execution is incomplete; inspect retained report")
 	}
 	r.NativeRuns, r.Total = len(n.Observation.Runs), len(n.Observation.Cases)
+	r.ExecutionMS = float64(n.Observation.ElapsedNS) / float64(time.Millisecond)
+	if n.Observation.Artifact != nil {
+		r.NativeArtifactReused = &n.Observation.Artifact.Reused
+	}
 	for _, c := range n.Observation.Cases {
 		if c.Passed {
 			r.Passed++
@@ -150,6 +167,9 @@ func run(ctx context.Context, o options, stdout, stderr io.Writer) error {
 		}
 	}
 	args := []string{"body-path-stream", "--workers", "1"}
+	if o.retainNative {
+		args = append(args, "--execute", "--go-bin", o.goBin)
+	}
 	if o.model != "" {
 		args = append(args, "--model", o.model)
 	}
@@ -181,8 +201,12 @@ func run(ctx context.Context, o options, stdout, stderr io.Writer) error {
 	for i := range o.repeat {
 		id := fmt.Sprintf("order-%d", i+1)
 		start := time.Now()
-		err := encoder.Encode(map[string]any{"schema": "gooo/native-body-stream-request/v1", "correlation_id": id,
-			"source": string(inputs[0]), "activity": "Compose", "document": json.RawMessage(inputs[1])})
+		request := map[string]any{"schema": "gooo/native-body-stream-request/v1", "correlation_id": id,
+			"source": string(inputs[0]), "activity": "Compose", "document": json.RawMessage(inputs[1])}
+		if o.retainNative {
+			request["execution_cases"] = json.RawMessage(inputs[2])
+		}
+		err := encoder.Encode(request)
 		if err != nil {
 			return err
 		}
@@ -195,6 +219,17 @@ func run(ctx context.Context, o options, stdout, stderr io.Writer) error {
 		if err := os.WriteFile(filepath.Join(o.out, id+"-response.json"), scanner.Bytes(), 0644); err != nil {
 			return err
 		}
+		var embedded result
+		if o.retainNative {
+			if err := json.Unmarshal(scanner.Bytes(), &embedded); err != nil {
+				return err
+			}
+			if len(embedded.Execution) > 0 {
+				if err := os.WriteFile(filepath.Join(o.out, id+"-runtime.json"), embedded.Execution, 0644); err != nil {
+					return err
+				}
+			}
+		}
 		body, err := decodeResult(scanner.Bytes(), id, i+1)
 		if err != nil {
 			return err
@@ -202,7 +237,13 @@ func run(ctx context.Context, o options, stdout, stderr io.Writer) error {
 		if err := os.WriteFile(generation, body, 0644); err != nil {
 			return err
 		}
-		r, err := execute(ctx, o, generation, stderr)
+		var r receipt
+		if o.retainNative {
+			r, err = parseNative(embedded.Execution)
+			r.ResponseIncludesExecution = true
+		} else {
+			r, err = execute(ctx, o, generation, stderr)
+		}
 		if err != nil {
 			return err
 		}
@@ -262,6 +303,7 @@ func main() {
 	flag.StringVar(&o.cases, "cases", "examples/whole-candidate-order/cases.json", "independent finite execution cases")
 	flag.StringVar(&o.out, "out", "", "fresh output directory")
 	flag.IntVar(&o.repeat, "repeat", 2, "sequential requests with stdin kept open (1..16)")
+	flag.BoolVar(&o.retainNative, "retain-native", false, "use stream --execute and one owned executable; requires the new compiler entrypoint")
 	flag.Parse()
 	interruptCtx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()

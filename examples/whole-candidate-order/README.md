@@ -46,6 +46,14 @@ go run ./cmd/order-example --out "$out_root/deterministic"
 
 ## 생성과 실행을 나눠 보기
 
+새 컴파일러의 `body-path-stream --execute`를 쓰면 실행파일 한 개도 보관할 수 있습니다.
+앞 명령에 `--retain-native`를 추가합니다. 첫 요청은 빌드하고, 같은 바디의 다음
+요청은 원본과 기대값을 새로 검증한 뒤 현재 입력을 두 번 실행합니다.
+`native_artifact_reused`가 실제 재사용 여부를 보여줍니다. 이 모드의 `response_ms`는
+생성과 실행을 모두 포함한 왕복 시간이고, `execution_ms`는 그 안의 실행 관측 시간입니다.
+두 값을 더하지 않습니다. 개별 생성·빌드·실행 시간과 실제 출력은 보관한 원본에서
+읽을 수 있습니다. 모델을 빼면 같은 실행 구조를 결정론적으로 사용할 수 있습니다.
+
 ```sh
 gooo body-codegen --json --activity Compose \
   --path-plan examples/whole-candidate-order/recipe.json \
