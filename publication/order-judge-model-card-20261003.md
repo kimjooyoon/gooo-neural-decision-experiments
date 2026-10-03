@@ -37,11 +37,12 @@ fits. Equal pieces can reuse an earlier measurement.
   in-compiler generation route.
   The [native collection](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/order-judge-native-20261003)
   uses compiler commit `9d570ab1` in [PR #1176](https://github.com/kimjooyoon/meta-ontology-go/pull/1176).
-- [Main PR #1177](https://github.com/kimjooyoon/meta-ontology-go/pull/1177) is merged
-  as `98701e473bc4084a422c5fa7acaa6631118779e4`. The clean installed compiler
+- [Main PR #1179](https://github.com/kimjooyoon/meta-ontology-go/pull/1179) is merged
+  as `8117fbaefac490a28e78c956bf1d40aed1372608`, with SDK v0.2.20 preparation reuse.
+  The clean installed compiler
   reproduced eight existing Korean/English requests in 16 generations, 8 model
   calls and 32 compiled executions: 128/128 finite expectations passed.
-  [Installation and CI evidence](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/order-judge-installed-main-20261003).
+  [Installation and CI evidence](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/order-prepared-installed-main-20261003).
 
 The runtime is in the
 [Go SDK v0.2.20](https://github.com/kimjooyoon/gooo-decision-runtime/tree/v0.2.20-experimental/orderjudge),
@@ -127,7 +128,7 @@ retain all partial outcomes: 1,706/2,048 finite cases across both budgets/routes
 Within the supported profile, pass `--path-model /path/to/model.json` to
 `gooo body-codegen --json --activity Compose --path-plan recipe.json source.gooo`.
 Place this model's `weights.bin` beside the metadata. Omit `--path-model` for
-deterministic generation. Explicit seeds, batching and feedback are unsupported
+deterministic generation. Explicit seeds, model-level batching and feedback are unsupported
 by this first model route and produce recorded errors before prediction.
 
 The [runnable Korean example](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/examples/whole-candidate-order)
@@ -188,7 +189,26 @@ At budget 8, second-call Generate medians are 1.017 ms for a fresh owner and
 outcomes remain 52/64, with every original failure preserved. This compares API
 ownership patterns within one compiler revision, with the original weights.
 The compiler change is in [PR #1178](https://github.com/kimjooyoon/meta-ontology-go/pull/1178),
-awaiting CI and promotion. The installed main revision above remains v0.2.19.
+merged to dev as `9fc2634720f0a43ca7d72bac46aacba5c77822ce` after canonical CI.
+[Main promotion #1179](https://github.com/kimjooyoon/meta-ontology-go/pull/1179)
+also passed its checks and source-bound proof, and is merged and installed.
+The installed revision and independent execution observations are linked above.
+
+The [retained worker follow-up](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/prepared-worker-native-20261003)
+ran 96 generations, 48 model predictions and 192 native executions, matching
+768/768 declared expectations. Responses arrived before input EOF. All 16
+sequential second model calls reused preparation; alternating two plans in
+four-request batches produced no reuse in that collection. Only the latest plan
+is retained. These are known examples, with one or four worker slots; batch
+intervals include native execution of preceding responses and do not measure
+parallel speedup.
+
+For easier integration, [PR #1180](https://github.com/kimjooyoon/meta-ontology-go/pull/1180)
+adds `gooo body-path-stream` using the same runner as `gooo-body-worker`.
+An explicit `--model` retains this model in one process; omission uses
+deterministic construction. Local dogfooding passed four generations, eight
+compiled runs and 32/32 finite expectations. CI and branch promotion are tracked
+by that PR. [Instructions and source-bound observations](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/body-stream-cli-20261003).
 
 ## Research acknowledgments
 
