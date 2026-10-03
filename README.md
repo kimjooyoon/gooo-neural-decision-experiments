@@ -8,13 +8,19 @@ training tools and original evidence behind that process.
 
 ## Start here — 2026-10-03
 
+- [Read owned runtime records in completeness comparisons](publication/owned-runtime-comparison-20261003):
+  local correction in PR #1188 reads 12 original record comparisons, then dogfoods
+  the unchanged own model in two generations/four native runs with 256/256 finite
+  expectations. Changed resource units/denominators have no numerical improvement.
+  Canonical CI, proof, merge and installation remain pending for this correction.
 - [Use source/recipe/case files directly](publication/body-path-file-cli-20261003):
   experimental `gooo body-path-run` saves generated Go and current native
   observations without constructing input JSON lines. Named EN/KO activities,
   eight generations, four actual model calls, 16 native runs and 1,024/1,024
   finite expectations on 128 integer inputs. Sparse-example failures and a
-  Gooo-oracle candidate resolution are preserved separately. PR #1186 is open;
-  canonical proof, merge and installation are pending.
+  Gooo-oracle candidate resolution are preserved separately. Dev #1186 passed
+  canonical CI and independent proof and is merged. Main #1187 is in CI;
+  main proof, merge and installation remain pending.
 - [Keep one verified executable while running current inputs](publication/retained-native-execution-20261003):
   512 fresh generations/predictions and 1,024 native runs retain every original
   outcome, including partial failures. Warm execution median 294→29ms, current
