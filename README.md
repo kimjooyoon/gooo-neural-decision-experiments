@@ -6,7 +6,17 @@ model suggests which permitted construction to try next. Failed examples become
 context for another bounded attempt. This repository holds the experiments,
 training tools and original evidence behind that process.
 
-## Start here — 2026-10-03
+## Start here — 2026-10-04
+
+- [Reduce repeated hash allocations and read missing timing stages](publication/owned-hash-reader-20261004):
+  a lazily owned 32 KiB buffer, released on close/cancellation, retains current
+  whole-file hashes and both native runs. The warm hash benchmark allocated
+  about 33.5→0.8kB/call. Fresh old/new ABBA construction made 96 generations,
+  48 own-model judgments and 192 runs: 12,288/12,288 finite expectations and
+  all frozen generated sources match. Warm responses were 64.13→65.88ms;
+  these overlapping one-device observations establish no speed improvement.
+  Missing stderr phases now read `unobserved`. Dev #1196 is under canonical CI;
+  installed main remains `041c8bbf`. Weights, training and intent scope are unchanged.
 
 - [Read body construction, validation, native execution and saving costs](publication/body-wall-phases-20261003):
   optional compiler phase sidecars and read-only file-binding checks. Two clean
