@@ -8,12 +8,19 @@ training tools and original evidence behind that process.
 
 ## Start here — 2026-10-03
 
+- [The new 16 KiB judge now runs inside Gooo codegen](publication/order-judge-native-20261003):
+  256 generations, 128 direct model predictions, 512 immediately compiled runs.
+  On 64 observed development requests, first-attempt completion is 32 → 52;
+  budget-8 completion is 64/64 in both routes, with 96 → 76 body evaluations.
+  Generation wall median rises from 8.58 to 9.26 ms. All partial outcomes and
+  CPU/memory costs are published; further training updates are zero.
+  [Released Go SDK and full Linux/arm64 replay](publication/order-judge-sdk-20261003).
 - [Whole-candidate tiny judge: 16 KiB, 64 training requests](publication/order-judge-initial-20261003):
   first finite completion 48/96 → 82/96 on authored development contrasts.
   Real search plus exact equal-body reuse uses 110 versus 144 body evaluations;
   complete search latency remains slightly higher. Includes weights, sources,
-  all failures and 480 follow-up model calls. Native integration of this new
-  architecture is the next stage.
+  all failures and 480 follow-up model calls. The native integration follow-up
+  above retains these initial weights and observations.
   [Hugging Face model](https://huggingface.co/asketeddy/gooo-order-judge-tiny-v1) ·
   [Linux replay and full record comparison](publication/order-judge-linux-20261003).
 - [Small recipes derived from Gooo source](publication/source-recipes-20261003):

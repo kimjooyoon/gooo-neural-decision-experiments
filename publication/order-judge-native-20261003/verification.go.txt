@@ -1,0 +1,44 @@
+package main
+
+import (
+	"crypto/sha256"
+	"encoding/json"
+	"fmt"
+	"os"
+	"path/filepath"
+)
+
+type row struct {
+	ID, Request, SourceSHA, EmittedSHA, GenerationSHA, RuntimeSHA string
+	Calls, NativeRuns int
+	Outcome struct{ Passed, Total int }
+}
+
+func read(p string) []byte { b,e:=os.ReadFile(p); if e!=nil {panic(e)}; return b }
+func sum(b []byte) string { return fmt.Sprintf("%x",sha256.Sum256(b)) }
+func assert(b bool) { if !b {panic("evidence mismatch")} }
+
+func main() {
+	dir:=os.Args[1]
+	var rows []row
+	if e:=json.Unmarshal(read(filepath.Join(dir,"records.json")),&rows);e!=nil {panic(e)}
+	seen:=map[string]bool{}
+	calls,runs,passed,total:=0,0,0,0
+	for _,r:=range rows {
+		assert(!seen[r.ID]);seen[r.ID]=true
+		g:=read(filepath.Join(dir,r.ID+"-generation.json"))
+		n:=read(filepath.Join(dir,r.ID+"-runtime.json"))
+		s:=read(filepath.Join(dir,r.Request+".gooo"))
+		assert(sum(g)==r.GenerationSHA && sum(n)==r.RuntimeSHA && "sha256:"+sum(s)==r.SourceSHA)
+		var emitted struct{Source string}
+		assert(json.Unmarshal(g,&emitted)==nil && sum([]byte(emitted.Source))==r.EmittedSHA)
+		var native struct{Observation struct{Stage string;Runs []json.RawMessage;Cases []struct{Expected,Actual int64;Passed bool}}}
+		assert(json.Unmarshal(n,&native)==nil && native.Observation.Stage=="COMPLETE" && len(native.Observation.Runs)==r.NativeRuns)
+		p:=0
+		for _,c:=range native.Observation.Cases {assert(c.Passed==(c.Expected==c.Actual));if c.Passed {p++}}
+		assert(p==r.Outcome.Passed && len(native.Observation.Cases)==r.Outcome.Total)
+		calls+=r.Calls;runs+=r.NativeRuns;passed+=p;total+=r.Outcome.Total
+	}
+	assert(len(rows)==256 && calls==128 && runs==512 && passed==1706 && total==2048)
+	fmt.Printf("PASS: %d unique generations, %d bound source/emitted/generation/runtime digests, %d model calls, %d native runs, %d/%d finite cases\n",len(rows),len(rows)*4,calls,runs,passed,total)
+}

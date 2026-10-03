@@ -33,11 +33,14 @@ fits. Equal pieces can reuse an earlier measurement.
 - The 128-byte prediction workspace excludes feature arrays, preparation,
   artifact loading, program objects and receipts.
 - CPU fit and local Go inference. This architecture currently has FP32 weights.
-- Experimental research runtime and actual typed-interpreter search are available.
-  **In-compiler native invocation of this new model is the next integration stage.**
+- The released Go SDK v0.2.19 and direct in-compiler generation are available.
+  The [native collection](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/order-judge-native-20261003)
+  uses compiler commit `9d570ab1` in [PR #1176](https://github.com/kimjooyoon/meta-ontology-go/pull/1176).
 
 The runtime is in the
-[research repository at the publication revision](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/8a41bb0f825dfd3f950101b33491581492c740f6/internal/orderjudge).
+[Go SDK v0.2.19](https://github.com/kimjooyoon/gooo-decision-runtime/tree/v0.2.19-experimental/orderjudge),
+extracted from the separately pinned
+[research implementation](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/8a41bb0f825dfd3f950101b33491581492c740f6/internal/orderjudge).
 The compiler can export its source-bound expanded plan with `body-context --include-plan`.
 The separately published [shared judge](https://huggingface.co/asketeddy/gooo-shared-judgment-tiny-v1)
 has earlier native integration and different feature/weight contracts.
@@ -79,7 +82,8 @@ It is explicitly a development experiment on an already observed cohort.
 The initial collector made 320 post-fit predictions. A separate replay made
 **480 actual predictions and 960 actual bounded searches**, plus 320 baseline
 SDK searches. It reconstructed the first observations exactly and recorded every
-candidate evaluation. Native compiler runs for this new architecture are zero.
+candidate evaluation. A later SDK replay reproduces the complete records on
+Linux amd64 and macOS arm64, with only the two timing fields excluded.
 
 On M4/macOS arm64, Go1.27.1:
 
@@ -94,6 +98,31 @@ Prediction timing excludes feature extraction and model loading. Process memory
 includes the collector and associated work. These measurements show fewer body
 evaluations, while preparation and bookkeeping still make learned search slower
 in this small cohort. No peak system CPU utilization claim is made.
+
+### Direct compiler follow-up
+
+With the same weights and zero further training, the compiler completed **256
+generations, 128 actual predictions and 512 immediately compiled executions** on
+the 64 existing new-template/new-constants requests. Budget-1 complete requests
+are 32/64 deterministic and 52/64 learned (28/32 English, 24/32 Korean). At budget
+8 both routes complete 64/64 requests and 512/512 listed expectations. The model
+with exact descriptor reuse evaluates 76 bodies versus the ordinary deterministic
+route's 96. All outcomes and full predictions reproduce the frozen study.
+
+Median budget-8 generation wall time is 8.579 ms deterministic versus 9.256 ms
+with the model; maximum RSS medians are 17.56 versus 18.60 MiB. OS-reported
+per-command CPU usage corresponds to 88.14% versus 92.50% of one core. Model
+prediction alone takes 2.75 µs. Each generation starts a fresh compiler process;
+native compilation and two runs take another roughly 310 ms. These are process
+measurements with a fixed observed development cohort. The
+[raw evidence and cost breakdown](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/order-judge-native-20261003)
+retain all partial outcomes: 1,706/2,048 finite cases across both budgets/routes.
+
+Within the supported profile, pass `--path-model /path/to/model.json` to
+`gooo body-codegen --json --activity Compose --path-plan recipe.json source.gooo`.
+Place this model's `weights.bin` beside the metadata. Omit `--path-model` for
+deterministic generation. Explicit seeds, batching and feedback are unsupported
+by this first model route and produce recorded errors before prediction.
 
 ## Run the evidence replay
 
@@ -123,8 +152,8 @@ separate scoped experiments. Finite completeness is tied to the listed inputs;
 ranking probabilities are uncalibrated. There is no fresh general-language
 benchmark or measured 1.58-bit version for this architecture.
 
-The current development focus is reusing prepared candidates and connecting this
-judge directly to Gooo's source-bind → rank → test → generate pipeline. Existing
+The current development focus is reusing prepared candidates and reducing loading
+and recording costs in Gooo's source-bind → rank → test → generate pipeline. Existing
 V3/V4 models and their historical numerical comparisons remain preserved.
 
 ## Research acknowledgments
@@ -142,5 +171,7 @@ Gooo가 만든 여덟 가지 코드 후보에서 무엇을 먼저 시도할지 �
 64개 한영 요청으로 짧게 학습했고, 개발 집합 96건의 첫 선택 완성은 48건에서 82건으로
 늘었습니다. 같은 기능의 중복 후보를 다시 실행하지 않으면 실제 후보 평가가 144회에서
 110회로 줄었습니다. 전체 탐색 시간은 조금 늘어서 준비·기록 비용을 줄이는 작업을
-이어갑니다. 원본 과제·가중치·실패·비용을 공개했고, 새 모델의 컴파일러 내부 연결은
-다음 단계입니다.
+이어갑니다. 컴파일러 내부 연결도 완료해 추가 학습 없이 256회 생성과 512회 컴파일된
+실행을 관측했습니다. 기존 개발 과제 64건에서 첫 시도 완성은 32→52건, 최대 여덟 번
+시도하면 양쪽 모두 64건을 완성했습니다. 실제 생성 중앙값은 8.58→9.26ms였고,
+원본 과제·가중치·실패·비용을 함께 공개했습니다.

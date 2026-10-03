@@ -1,0 +1,368 @@
+{
+  "schema": "gooo/order-judge-native-costs/v1",
+  "scope": "Observed development cohort, one cold compiler CLI process per generation. Median averages the central pair; p95 is nearest rank. Child command CPU is OS-reported user+system time / wall time, expressed as one-core percent, not global CPU utilization. Native timing includes compilation and two executions. Prediction timing excludes preparation/loading. No warm-process benchmark.",
+  "groups": [
+    {
+      "arm": "deterministic",
+      "budget": 1,
+      "requests": 64,
+      "complete": 32,
+      "passed": 264,
+      "total": 512,
+      "attempts": 64,
+      "aliases": 0,
+      "model_calls": 0,
+      "native_runs": 128,
+      "prediction_ns": {
+        "min": 0,
+        "median": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "internal_codegen_ms": {
+        "min": 0.499333,
+        "median": 0.6876045,
+        "p95": 0.855417,
+        "max": 0.913625
+      },
+      "generation_wall_ms": {
+        "min": 6.893208,
+        "median": 8.4431875,
+        "p95": 9.255916,
+        "max": 459.141333
+      },
+      "generation_cpu_ms": {
+        "min": 5.865,
+        "median": 7.406000000000001,
+        "p95": 8.136,
+        "max": 23.926
+      },
+      "generation_one_core_cpu_percent": {
+        "min": 5.211031610608666,
+        "median": 87.79068510572702,
+        "p95": 92.12270693667442,
+        "max": 92.70133798347973
+      },
+      "generation_peak_rss_mib": {
+        "min": 17.21875,
+        "median": 17.4921875,
+        "p95": 17.609375,
+        "max": 17.6875
+      },
+      "native_wall_ms": {
+        "min": 295.915667,
+        "median": 311.266229,
+        "p95": 503.519875,
+        "max": 547.874417
+      },
+      "native_cpu_ms": {
+        "min": 221.521,
+        "median": 233.902,
+        "p95": 262.095,
+        "max": 280.095
+      },
+      "native_one_core_cpu_percent": {
+        "min": 48.32476052627951,
+        "median": 74.96412483071558,
+        "p95": 77.87136145295985,
+        "max": 79.1306188666046
+      },
+      "native_peak_rss_mib": {
+        "min": 81.046875,
+        "median": 82.0234375,
+        "p95": 83.359375,
+        "max": 84
+      }
+    },
+    {
+      "arm": "deterministic",
+      "budget": 8,
+      "requests": 64,
+      "complete": 64,
+      "passed": 512,
+      "total": 512,
+      "attempts": 96,
+      "aliases": 0,
+      "model_calls": 0,
+      "native_runs": 128,
+      "prediction_ns": {
+        "min": 0,
+        "median": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "internal_codegen_ms": {
+        "min": 0.500167,
+        "median": 0.701875,
+        "p95": 0.891542,
+        "max": 0.909875
+      },
+      "generation_wall_ms": {
+        "min": 7.364584,
+        "median": 8.579458500000001,
+        "p95": 9.28075,
+        "max": 9.63525
+      },
+      "generation_cpu_ms": {
+        "min": 6.39,
+        "median": 7.5794999999999995,
+        "p95": 8.253,
+        "max": 8.328
+      },
+      "generation_one_core_cpu_percent": {
+        "min": 84.34630213810024,
+        "median": 88.1372895873707,
+        "p95": 92.57998729460174,
+        "max": 95.58115800592691
+      },
+      "generation_peak_rss_mib": {
+        "min": 17.203125,
+        "median": 17.5625,
+        "p95": 17.6875,
+        "max": 17.734375
+      },
+      "native_wall_ms": {
+        "min": 295.698084,
+        "median": 309.7843545,
+        "p95": 323.275375,
+        "max": 359.042084
+      },
+      "native_cpu_ms": {
+        "min": 222.36,
+        "median": 233.244,
+        "p95": 239.71,
+        "max": 246.036
+      },
+      "native_one_core_cpu_percent": {
+        "min": 65.44330329811699,
+        "median": 75.01559391422776,
+        "p95": 77.5667276670608,
+        "max": 78.96173050447803
+      },
+      "native_peak_rss_mib": {
+        "min": 81.0625,
+        "median": 82.2734375,
+        "p95": 83.171875,
+        "max": 83.796875
+      }
+    },
+    {
+      "arm": "model",
+      "budget": 1,
+      "requests": 64,
+      "complete": 52,
+      "passed": 418,
+      "total": 512,
+      "attempts": 64,
+      "aliases": 0,
+      "model_calls": 64,
+      "native_runs": 128,
+      "prediction_ns": {
+        "min": 2500,
+        "median": 2750,
+        "p95": 4917,
+        "max": 5167
+      },
+      "internal_codegen_ms": {
+        "min": 1.067084,
+        "median": 1.3769375,
+        "p95": 1.633208,
+        "max": 15.483291
+      },
+      "generation_wall_ms": {
+        "min": 7.898542,
+        "median": 9.5158125,
+        "p95": 10.463792,
+        "max": 32.454166
+      },
+      "generation_cpu_ms": {
+        "min": 7.353,
+        "median": 8.9535,
+        "p95": 9.951,
+        "max": 11.655
+      },
+      "generation_one_core_cpu_percent": {
+        "min": 35.91218458671839,
+        "median": 92.6784357075095,
+        "p95": 100.3643063523303,
+        "max": 102.73630623133782
+      },
+      "generation_peak_rss_mib": {
+        "min": 17.890625,
+        "median": 18.7109375,
+        "p95": 19.484375,
+        "max": 19.609375
+      },
+      "native_wall_ms": {
+        "min": 298.325875,
+        "median": 310.2948955,
+        "p95": 368.767209,
+        "max": 500.167417
+      },
+      "native_cpu_ms": {
+        "min": 220.934,
+        "median": 233.709,
+        "p95": 252.844,
+        "max": 269.471
+      },
+      "native_one_core_cpu_percent": {
+        "min": 53.46889679541041,
+        "median": 74.82027881207117,
+        "p95": 77.43399977144102,
+        "max": 80.89833335896475
+      },
+      "native_peak_rss_mib": {
+        "min": 80.859375,
+        "median": 82.2734375,
+        "p95": 83.421875,
+        "max": 83.90625
+      }
+    },
+    {
+      "arm": "model",
+      "budget": 8,
+      "requests": 64,
+      "complete": 64,
+      "passed": 512,
+      "total": 512,
+      "attempts": 76,
+      "aliases": 24,
+      "model_calls": 64,
+      "native_runs": 128,
+      "prediction_ns": {
+        "min": 2541,
+        "median": 2750,
+        "p95": 4875,
+        "max": 5041
+      },
+      "internal_codegen_ms": {
+        "min": 1.049625,
+        "median": 1.3417295,
+        "p95": 1.602375,
+        "max": 1.778583
+      },
+      "generation_wall_ms": {
+        "min": 8.170416,
+        "median": 9.255771,
+        "p95": 10.372167,
+        "max": 10.451958
+      },
+      "generation_cpu_ms": {
+        "min": 7.204,
+        "median": 8.628499999999999,
+        "p95": 9.699,
+        "max": 10.667
+      },
+      "generation_one_core_cpu_percent": {
+        "min": 82.91449698570554,
+        "median": 92.49781565409103,
+        "p95": 98.06781999627243,
+        "max": 102.10831119726231
+      },
+      "generation_peak_rss_mib": {
+        "min": 17.9375,
+        "median": 18.6015625,
+        "p95": 19.40625,
+        "max": 19.515625
+      },
+      "native_wall_ms": {
+        "min": 298.787833,
+        "median": 311.23339599999997,
+        "p95": 499.243542,
+        "max": 508.403667
+      },
+      "native_cpu_ms": {
+        "min": 223.594,
+        "median": 234.985,
+        "p95": 268.005,
+        "max": 273.76
+      },
+      "native_one_core_cpu_percent": {
+        "min": 52.04540164936941,
+        "median": 75.5732353999384,
+        "p95": 77.57107523041628,
+        "max": 78.44867096549201
+      },
+      "native_peak_rss_mib": {
+        "min": 80.1875,
+        "median": 82.03125,
+        "p95": 83.234375,
+        "max": 83.328125
+      }
+    }
+  ],
+  "languages": [
+    {
+      "language": "en",
+      "arm": "deterministic",
+      "budget": 1,
+      "requests": 32,
+      "complete": 16,
+      "passed": 132,
+      "total": 256
+    },
+    {
+      "language": "en",
+      "arm": "deterministic",
+      "budget": 8,
+      "requests": 32,
+      "complete": 32,
+      "passed": 256,
+      "total": 256
+    },
+    {
+      "language": "en",
+      "arm": "model",
+      "budget": 1,
+      "requests": 32,
+      "complete": 28,
+      "passed": 226,
+      "total": 256
+    },
+    {
+      "language": "en",
+      "arm": "model",
+      "budget": 8,
+      "requests": 32,
+      "complete": 32,
+      "passed": 256,
+      "total": 256
+    },
+    {
+      "language": "ko",
+      "arm": "deterministic",
+      "budget": 1,
+      "requests": 32,
+      "complete": 16,
+      "passed": 132,
+      "total": 256
+    },
+    {
+      "language": "ko",
+      "arm": "deterministic",
+      "budget": 8,
+      "requests": 32,
+      "complete": 32,
+      "passed": 256,
+      "total": 256
+    },
+    {
+      "language": "ko",
+      "arm": "model",
+      "budget": 1,
+      "requests": 32,
+      "complete": 24,
+      "passed": 192,
+      "total": 256
+    },
+    {
+      "language": "ko",
+      "arm": "model",
+      "budget": 8,
+      "requests": 32,
+      "complete": 32,
+      "passed": 256,
+      "total": 256
+    }
+  ]
+}
