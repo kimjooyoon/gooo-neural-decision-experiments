@@ -24,15 +24,26 @@ fits. Equal pieces can reuse an earlier measurement.
 
 ## Artifact and integration status
 
-- Dev #1200 is testing clearer terminal expectation states on clean candidate
-  `472db874`: eight ordinary constructions/four actual own-model judgments/16
+- Clearer terminal expectation states are installed on clean main `01d21e92`.
+  Dev #1200 and main #1201 passed their own canonical CI and independent
+  source proofs, then merged through normal expected-head merges. Fresh
+  installed replay made eight ordinary constructions/four own-model judgments/16
   native runs keep 1,024/1,024 finite expectations and all earlier generated Go.
   Separate missing-tool, invalid-expectation and FIFO controls display unobserved
   expectations; two deliberately changed-expectation requests retain actual 0/256.
   Nine synthetic formatter states are recorded separately from native work.
-  The original JSON/status/exit and runtime contracts are preserved. This candidate
-  is in canonical CI; current installation is identified below. Weights and fit
-  are unchanged. [Sources, original failures and scope](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/finite-observation-display-20261004).
+  The original JSON/status/exit and runtime contracts are preserved. Current
+  compiler source is `01d21e9260b2c0f1d02f8029824f3dda41631e9d`; installed binary
+  SHA256 is `3d1e7ba724961bb7ad8e1866e6588bbe6212ceeee6bc93a4c888a62e2e1594cc`.
+  Installed KO/EN model warm responses were 29.644083/24.497167ms; deterministic
+  responses were 30.934083/24.965833ms. First responses 834.644792/477.573250ms
+  and 324.127917/299.734458ms are retained. This display study has no matched
+  speed comparison. The variable/condition quickstart separately made two
+  deterministic constructions/four native runs, keeping 6/6 and both earlier
+  generated sources. Read-only saved receipt checks retain UNKNOWN for no output
+  and PROGRESS for actual zero, original units/profiles/decisions and explicit
+  null aggregate scores. Weights and fit are unchanged.
+  [Sources, original failures and scope](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/finite-observation-display-20261004).
 
 - One 128×32 bilinear matrix: **4,096 parameters, 16,384 FP32 bytes**.
 - Full UTF-8 instruction up to 512 bytes, positional byte-bigram/trigram features.
@@ -53,7 +64,7 @@ fits. Equal pieces can reuse an earlier measurement.
   #1197 passed their own canonical CI and independent source proofs, then merged.
   [Original records, failures and Go collectors](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/owned-hash-reader-20261004).
 - CPU fit and local Go inference. This architecture currently has FP32 weights.
-- Current installed compiler: main `93fa2742e2f681c86546ee6fc459a76bae640913`,
+- Earlier installation study: main `93fa2742e2f681c86546ee6fc459a76bae640913`,
   with direct file construction, immediate execution, owned runtime comparison
   and literal multiline bodies. Fresh installation replay made eight generations,
   four actual predictions and 16 native runs: 1,024/1,024 finite expectations and

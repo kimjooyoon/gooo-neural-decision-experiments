@@ -9,12 +9,16 @@ training tools and original evidence behind that process.
 ## Start here — 2026-10-04
 
 - [Distinguish unobserved expectations from actual measured zero](publication/finite-observation-display-20261004):
-  candidate terminal summaries use current case observations and replay state.
+  installed terminal summaries use current case observations and replay state.
   Eight ordinary constructions/four own-model judgments/16 runs keep 1,024/1,024
   and all frozen Go. Five separate CLI controls retain three original errors and
   two deliberately changed expectation sets, preserving actual 0/256 observations.
   Nine synthetic display states are counted separately from native execution.
-  Dev #1200 is in canonical CI; installation remains the proved main below.
+  Dev #1200 and main #1201 passed canonical CI and independent source proofs,
+  then merged. Clean main `01d21e92` is installed. Fresh model warm responses
+  were 29.64/24.50ms; the original first responses are also retained. The small
+  variable/condition quickstart separately keeps 6/6. Saved receipts distinguish
+  UNKNOWN from actual observed zero and retain a null aggregate score.
 
 - [Handle a stalled executable FIFO and read failed expectations](publication/nonregular-tool-20261004):
   Unix opens without waiting for a FIFO writer and validates the opened file kind.
@@ -25,7 +29,7 @@ training tools and original evidence behind that process.
   48 judgments and 192 runs; warm medians 21.54/22.07ms overlap. Dev #1198 passed
   canonical checks and an independent source proof, then merged. Main #1199 also
   passed its own source-bound proof/promotion checks and merged. Current clean
-  main `93fa2742` is installed: eight successes/four predictions/16 runs kept
+  that study installed main `93fa2742`: eight successes/four predictions/16 runs kept
   1,024/1,024; the installed FIFO failed promptly in 19.665ms total CLI time.
   The direct variable/condition quickstart additionally kept 6/6 over two
   deterministic constructions/four native runs. Original failures remain public.
