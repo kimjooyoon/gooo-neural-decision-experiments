@@ -124,7 +124,8 @@ uses the unchanged `compact/bag-original/fp32` full-input export in actual nativ
 construction. Gooo derives the typed base from its source body; a small recipe
 names the permitted structural choices. Compiler
 [`3a52232d`, PR 1168](https://github.com/kimjooyoon/meta-ontology-go/pull/1168)
-adds that input form and is undergoing CI at this update.
+adds that input form and merged to dev as `79e7e20c`. Its main promotion is
+tracked in [PR 1169](https://github.com/kimjooyoon/meta-ontology-go/pull/1169).
 
 Across 24 generations and 48 compiled runs, all 12 recipe/full-document pairs
 have equal expanded plans and emitted code. Compact authored JSON falls from
@@ -142,6 +143,24 @@ unmeasured. The pilot reduces authored representation while retaining the added
 processing cost. Initial collector accounting failure and all controls are public.
 
 The language carries the plan, and the model supplies small local judgments.
+
+The [constant-body follow-up](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/de2b2e8/publication/constant-recipes-20261003)
+uses the same frozen model with SDK v0.2.18 and compiler `b742ba75` in
+[PR 1170](https://github.com/kimjooyoon/meta-ontology-go/pull/1170). It repairs a
+language gap: bodies that never read their declared input can now use typed
+recipe construction. Six generations and twelve compiled runs met 36/36 finite
+expectations, including both integer endpoints, with three actual predictions
+and zero training updates. Three repeats per arm cover one authored body.
+
+For that constant body, deterministic generation took a median 9.209 ms and
+17.42 MiB peak RSS; model-connected generation took 9.731 ms and 19.31 MiB.
+Process CPU medians were 90.56% and 97.96% of one core; host utilization change
+was unmeasured. Isolated prediction median was 7.708 microseconds. Model ranking
+increased evaluated candidates from five to seven, so this task favors the
+deterministic route. The first proposed body failed in both arms; finite search
+reached the same successful source. All failed attempts and process records are
+retained. The result informs where a small model helps and where ordinary
+language machinery is already sufficient.
 
 An [instruction-order feature preflight](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/intent-order-preflight-20261003)
 uses this frozen judge for 64 actual predictions. Four authored arithmetic pairs,
