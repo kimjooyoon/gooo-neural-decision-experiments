@@ -80,6 +80,25 @@ integration and deployment; the pilot pins compiler `2f02d244` and SDK v0.2.16.
 Model artifacts and the existing task scores below remain attached to their
 original observations.
 
+An [additional paired compiler experiment](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/path-observation-reuse-20261003)
+uses the same frozen judge with SDK v0.2.17 and compiler `87d8afae`:
+**96 generations, 120 actual model predictions and 192 compiled executions**.
+The compiler can retain candidate outputs and compare new reference observations
+against them. Probe evaluations fall from 33 to 14 per oracle request, and all
+24 fresh/reuse pairs preserve generated source, choices and runtime values.
+Both oracle modes together meet 288/288 finite expectations; the full control
+comparison is 396/576. This remains one authored task with Korean/English views,
+six repetitions and zero training updates.
+
+With the model enabled, observation-phase median falls from 0.603 to 0.333 ms,
+while complete codegen changes from 9.213 to 9.372 ms. Both oracle modes have
+18.83 MiB median peak RSS. Process CPU changes from 92.35% to 93.02% of one core;
+whole-host utilization change is unmeasured. Reuse saves candidate evaluations;
+the end-to-end latency result is slightly slower in this collection. The compiler
+still searches after a single candidate remains, which guides the next change.
+[PR 1162](https://github.com/kimjooyoon/meta-ontology-go/pull/1162) tracks this
+opt-in integration. The existing model weights are preserved.
+
 The language carries the plan, and the model supplies small local judgments.
 Our aim is to make intent, construction and observed behavior travel together
 as a program evolves. We measure complete finite behavior, partial coverage,

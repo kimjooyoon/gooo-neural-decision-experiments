@@ -8,6 +8,9 @@ training tools and original evidence behind that process.
 
 ## Start here — 2026-10-03
 
+- [Candidate-output reuse in the compiler](publication/path-observation-reuse-20261003):
+  96 generations with 120 actual tiny-model predictions; probe evaluations fall
+  from 33 to 14 per oracle request. Full codegen latency still needs improvement.
 - [최근 연구와 다음 작은 언어 기능](docs/agile-language-research-20261003.ko.md):
   Laya, LAVOIR, OpenAI, Meta and current community discussions; a bounded Go
   implementation that proposes the next useful execution input without training.
