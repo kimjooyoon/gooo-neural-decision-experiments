@@ -10,9 +10,12 @@ existing own-model PTQ and QAT weights are unchanged; no training is included.
 | PTQ ternary | 18,752 | 39.708µs | 7 | 15/15 | 14/14 |
 | QAT ternary | 18,752 | 35.834µs | 8 | 15/15 | 14/14 |
 
-The FP32 cohort uses 74,624 resident tensor bytes. Ternary tensors here use
-**2-bit packing**; 1.58 bits is the theoretical information content of three
-states. The model tensor reduction is about 74.9%. Prediction workspaces, Go
+The FP32 cohort uses 74,624 resident tensor bytes. The actual `ternary_base3_5`
+matrices pack five trits per byte, approximately **1.6 stored bits per matrix
+weight**. Each complete weight file is 3,854 bytes including FP32 biases. The
+earlier 2-bit description is corrected from these metadata/files; 1.58 bits is
+the theoretical information content of three states. The decoded model tensor
+reduction is about 74.9%. Prediction workspaces, Go
 runtime, source analysis, native build and process memory have separate costs.
 There is one request per profile; these timings and candidate counts describe
 this pilot, with cross-source model quality and broad speed improvement still

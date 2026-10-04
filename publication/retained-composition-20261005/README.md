@@ -60,8 +60,11 @@ observations remain in the data. These costs depend on the local cache/device.
 
 One fresh PTQ and one QAT request also retain the same generated program and
 finite results. Each has 18,752 resident tensor bytes versus FP32's 74,624.
-Prediction observations are 19.041µs/19.000µs. Actual storage is 2-bit packing;
-1.58 bits describes ternary information content. Weights and training are
+Prediction observations are 19.041µs/19.000µs. The `ternary_base3_5` matrices pack
+five trits per byte, approximately 1.6 stored bits per matrix weight. Each weight
+file is 3,854 bytes including FP32 biases; decoded tensor residency is the
+separate 18,752-byte count. The earlier 2-bit wording is corrected here from the
+actual metadata and files. 1.58 bits describes ternary information content. Weights and training are
 unchanged. Equal finite results on this shape leave broader model quality open.
 
 ## Try the source and read the current result
