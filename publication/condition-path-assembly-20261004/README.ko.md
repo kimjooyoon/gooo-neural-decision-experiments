@@ -1,6 +1,6 @@
 # Gooo의 조건식과 본문 조립
 
-2026-10-04, macOS arm64와 Go 1.27.1에서 관측했습니다. 컴파일러 후보는 소스 `a7dfad39f10ba6591ea013763d2c1e87f8e50322`, SDK `v0.2.21-experimental`로 빌드했습니다.
+2026-10-04, macOS arm64와 Go 1.27.1에서 관측했습니다. 컴파일러 후보는 소스 `a7dfad39f10ba6591ea013763d2c1e87f8e50322`, SDK `v0.2.21-experimental`로 빌드했습니다. 이 SHA256은 측정에 쓴 dev 빌드의 지문입니다. 이후 main [`7da0972`](https://github.com/kimjooyoon/meta-ontology-go/commit/7da097229caf39aa64a277fdc2c200256c834b9c)은 같은 소스 트리를 담고 있습니다.
 
 이 실험은 범위를 좁혀 두 가지를 확인합니다. 작은 로컬 모델이 타입이 정해진 Gooo 본문 경로 중 하나를 고르는 데 도움이 되는지, 첫 선택이 틀렸을 때 유한 테스트가 올바른 경로를 찾는지입니다.
 
@@ -13,7 +13,7 @@
 - `a != b` → `(a == b) == false`
 - `!condition` → `condition == false`
 
-Gooo SDK 연산은 추가하지 않았습니다. 예제 본문은 조건식, 지역값, 대입, 분기와 반환을 함께 구성합니다. 자세한 내용은 [소스 경로 레시피 가이드](https://github.com/kimjooyoon/meta-ontology-go/blob/main/docs/source-path-recipes.md)와 [기능 PR #1210](https://github.com/kimjooyoon/meta-ontology-go/pull/1210)을 참고하세요. 동일한 dev 트리를 [PR #1212](https://github.com/kimjooyoon/meta-ontology-go/pull/1212)에서 `main`으로 승격 중입니다.
+Gooo SDK 연산은 추가하지 않았습니다. 예제 본문은 조건식, 지역값, 대입, 분기와 반환을 함께 구성합니다. 자세한 내용은 [소스 경로 레시피 가이드](https://github.com/kimjooyoon/meta-ontology-go/blob/main/docs/source-path-recipes.md)와 [기능 PR #1210](https://github.com/kimjooyoon/meta-ontology-go/pull/1210)을 참고하세요. 동일한 dev 트리를 [PR #1212](https://github.com/kimjooyoon/meta-ontology-go/pull/1212)로 `main`에 병합했습니다. 독립 증거 검증은 통과했습니다.
 
 ## 선택 실험
 
