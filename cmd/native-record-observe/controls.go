@@ -152,12 +152,25 @@ func checkPartial(raw []byte, sha string) error {
 		return err
 	}
 	r := current.Runtime
-	if current.GeneratedNow || r.Stage != "COMPLETE" || r.Failure != "" || !r.Replayed || r.Passed != 35 || r.Total != 36 || r.Calls != 0 || len(r.Traces) != 6 || len(r.Runs) != 2 {
+	if current.GeneratedNow || current.Composition.Stage != "COMPLETE" || len(current.Composition.Steps) != 6 || r.Stage != "COMPLETE" || r.Failure != "" || !r.Replayed || r.Passed != 35 || r.Total != 36 || r.Calls != 0 || len(r.Traces) != 6 || len(r.Runs) != 2 {
 		return fmt.Errorf("partial completeness observation differs")
 	}
 	for _, step := range current.Composition.Steps {
 		if step.Generation.Report.Compiler != sha {
 			return fmt.Errorf("partial compiler source differs")
+		}
+	}
+	for _, run := range r.Runs {
+		if !run.Completed || run.Exit == nil || *run.Exit != 0 {
+			return fmt.Errorf("partial native execution incomplete")
+		}
+	}
+	if err := checkPlan(current.Composition.Plan.Activities, current.Composition.Plan.Records); err != nil {
+		return err
+	}
+	for _, trace := range r.Traces {
+		if len(trace.Deliveries) != 6 {
+			return fmt.Errorf("partial trace incomplete")
 		}
 	}
 	d := r.Traces[0].Deliveries[1]
@@ -167,6 +180,17 @@ func checkPartial(raw []byte, sha string) error {
 	var actual, expected map[string]string
 	if json.Unmarshal(d.Actual, &actual) != nil || json.Unmarshal(d.Expected, &expected) != nil || actual["state"] != "ready" || expected["state"] != "wait" || actual["title"] != expected["title"] {
 		return fmt.Errorf("partial record difference missing")
+	}
+	// Repair only the deliberately changed oracle in a temporary view; verify all
+	// other outputs, producer values and field observations with the normal checker.
+	passed := true
+	current.Runtime.Traces[0].Deliveries[1].Expected = d.Actual
+	current.Runtime.Traces[0].Deliveries[1].Passed = &passed
+	var row summary
+	for _, trace := range current.Runtime.Traces {
+		if err := checkTrace(trace.Deliveries, current.Composition.Plan.Activities, current.Composition.Plan.Records, &row); err != nil {
+			return err
+		}
 	}
 	return nil
 }
