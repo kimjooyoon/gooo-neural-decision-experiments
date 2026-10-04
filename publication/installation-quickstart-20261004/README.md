@@ -43,6 +43,14 @@ remains main `4f6c7566` / SDK v0.2.21; these separate probes do not overwrite it
 
 ## Read the retained results
 
+The first publication source `1bbbc6d4` failed the `runtime-and-artifacts` vet
+job in [CI37170200886](https://github.com/kimjooyoon/gooo-neural-decision-experiments/actions/runs/37170200886).
+Two retained `Compose` Go files in each `results` directory were discovered as
+one package. The original [three errors](original-ci-failure.jsonl) remain.
+The data directories are now `_results`, which Go package discovery skips.
+Every retained program and observation keeps its original bytes; timing still
+binds the original relative filenames. The reader explicitly consumes the data.
+
 All three lanes retain their full source, recipe, expectations, generated Go,
 response, construction, runtime, timing and original stdout/stderr. The two
 build-information JSON files record observed binary hashes, Go/module/SDK versions

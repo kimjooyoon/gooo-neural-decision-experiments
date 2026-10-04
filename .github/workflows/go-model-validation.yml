@@ -724,6 +724,12 @@ jobs:
           cache: false
       - name: Require formatted Go
         run: test -z "$(gofmt -l cmd internal tools decision)"
+      - name: Read retained installation observations and timing bindings
+        run: |
+          sha256sum -c publication/installation-quickstart-20261004/SHA256SUMS
+          go run ./publication/installation-quickstart-20261004/readback \
+            publication/installation-quickstart-20261004 > "$RUNNER_TEMP/installation-readback.json"
+          cmp publication/installation-quickstart-20261004/readback.json "$RUNNER_TEMP/installation-readback.json"
       - name: Go vet
         run: go vet ./...
       - name: Runtime and publication regression tests

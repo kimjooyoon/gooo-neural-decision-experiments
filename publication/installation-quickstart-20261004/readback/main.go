@@ -118,7 +118,7 @@ func main() {
 	checkBuild(root, "checkout", true)
 	var rows []map[string]any
 	for _, lane := range []string{"module-default-tool", "module-explicit-tool", "checkout-explicit-tool"} {
-		dir := filepath.Join(root, lane, "results")
+		dir := filepath.Join(root, lane, "_results")
 		bound, completed := lane == "checkout-explicit-tool", lane != "module-default-tool"
 		wantSource := "UNBOUND_LOCAL_SOURCE"
 		if bound {

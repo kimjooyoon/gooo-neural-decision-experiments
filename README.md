@@ -26,11 +26,13 @@ GOTOOLCHAIN=local GOWORK=off "$gooo_go_bin" -C "$gooo_compiler_dir" build -o "$P
   --activity Compose --path-plan examples/whole-candidate-order/recipe.json \
   --cases examples/whole-candidate-order/cases.json \
   --model publication/order-judge-initial-20261003/model.json \
-  --go-bin "$gooo_go_bin" --repeat 2 --timing --out order-body-results
-./gooo body-path-run --verify-timing --out order-body-results
+  --go-bin "$gooo_go_bin" --repeat 2 --timing --out _order-body-results
+./gooo body-path-run --verify-timing --out _order-body-results
 ```
 
-Use a fresh output directory name. Omit `--model` for deterministic
+Use a fresh output directory name. A leading underscore keeps these independent
+program snapshots out of Go package discovery when saving them inside a Go module.
+Omit `--model` for deterministic
 construction. The example declares a pure `Integer -> Integer` body and eight
 caller expectations. Read its generated Go and actual runtime outputs in the
 result directory. `unobserved` means no usable output was measured; `0/128`
@@ -44,6 +46,13 @@ original tool mismatch](publication/installation-quickstart-20261004) retain
 their results separately.
 
 ## Start here — 2026-10-04
+
+- [Read executable identity and native Go selection](publication/build-identity-20261004):
+  candidate PR1208 reports actual source/Go/SDK metadata and retains unbound
+  source states. Its own-model/deterministic requests keep 32/32 with identical
+  Go; a separate actual Go1.26.5 error retains eight unobserved expectations
+  and an executable-selection hint. The candidate has its own CI; the current
+  main installation remains `4f6c7566`.
 
 - [Direct construction and selective model download](publication/direct-body-quickstart-20261004):
   source, recipe and expectations can run in one compiler command. Model and
