@@ -1,6 +1,6 @@
 # Typed condition and body assembly in Gooo
 
-Observed on 2026-10-04 with Go 1.27.1 on darwin/arm64. The compiler candidate was built from feature source `a7dfad39f10ba6591ea013763d2c1e87f8e50322`, SDK `v0.2.21-experimental`. Its SHA256 was `9992cbc47a48e02a123032df810941d173b4ea360b9707a6076636cebf5eb84b`.
+Observed on 2026-10-04 with Go 1.27.1 on darwin/arm64. The compiler candidate was built from feature source `a7dfad39f10ba6591ea013763d2c1e87f8e50322`, SDK `v0.2.21-experimental`. Its SHA256 was `9992cbc47a48e02a123032df810941d173b4ea360b9707a6076636cebf5eb84b`. This candidate binary hash describes the measured dev build; the later main build is commit `7da097229caf39aa64a277fdc2c200256c834b9c` with the same source tree.
 
 This study asks a narrow question: can a small local model help choose among typed Gooo body paths, and does finite validation recover when its first choice is wrong?
 
@@ -13,7 +13,7 @@ The source recipe accepts common conditions written with `>`, `>=`, `!=`, and bo
 - `a != b` becomes `(a == b) == false`
 - `!condition` becomes `condition == false`
 
-The Gooo SDK operation set does not change. The public compiler example combines conditions, local values, assignment, branches and return. See the compiler [source-path recipe guide](https://github.com/kimjooyoon/meta-ontology-go/blob/main/docs/source-path-recipes.md) and [feature PR #1210](https://github.com/kimjooyoon/meta-ontology-go/pull/1210). The exact dev tree is being promoted to `main` in [PR #1212](https://github.com/kimjooyoon/meta-ontology-go/pull/1212).
+The Gooo SDK operation set does not change. The public compiler example combines conditions, local values, assignment, branches and return. See the compiler [source-path recipe guide](https://github.com/kimjooyoon/meta-ontology-go/blob/main/docs/source-path-recipes.md) and [feature PR #1210](https://github.com/kimjooyoon/meta-ontology-go/pull/1210). The exact dev tree was promoted to `main` by [PR #1212](https://github.com/kimjooyoon/meta-ontology-go/pull/1212), at [`7da0972`](https://github.com/kimjooyoon/meta-ontology-go/commit/7da097229caf39aa64a277fdc2c200256c834b9c); both commits have tree `0e1438d352a7720cbec3f4fbfa5fe35f202928a5`.
 
 ## Choice experiment
 

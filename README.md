@@ -19,7 +19,7 @@ gooo_go_bin="$(GOTOOLCHAIN=go1.27.1 go env GOROOT)/bin/go"
 gooo_compiler_dir="$(mktemp -d)"
 git -C "$gooo_compiler_dir" init --quiet
 git -C "$gooo_compiler_dir" remote add origin https://github.com/kimjooyoon/meta-ontology-go.git
-git -C "$gooo_compiler_dir" fetch --depth 1 origin 4f6c7566dd4390b04a48589c82eb2d9eea3a6589
+git -C "$gooo_compiler_dir" fetch --depth 1 origin 7da097229caf39aa64a277fdc2c200256c834b9c
 git -C "$gooo_compiler_dir" switch --detach FETCH_HEAD
 GOTOOLCHAIN=local GOWORK=off "$gooo_go_bin" -C "$gooo_compiler_dir" build -o "$PWD/gooo" ./cmd/gooo
 ./gooo body-path-run --source examples/whole-candidate-order/source.gooo \
@@ -47,12 +47,21 @@ their results separately.
 
 ## Start here — 2026-10-04
 
+- [Compose typed body paths with conditions](publication/condition-path-assembly-20261004):
+  source recipes accept `>`, `>=`, `!=` and boolean `!`, normalized into the existing
+  typed comparisons. Dev #1210 and main #1212 merged; current main `7da09722` is installed
+  with Go1.27.1. In one nondefault-choice fixture, model and deterministic paths reached
+  the same body, passed 5/5 selection cases and 11/11 separate compiled cases. The model
+  guessed the wrong default first and evaluated one extra candidate; direct codegen medians
+  were 11.087ms with the model and 8.981ms deterministically. The report keeps the finite
+  scope and the initial corrected oracle visible.
+
 - [Read executable identity and native Go selection](publication/build-identity-20261004):
   candidate PR1208 reports actual source/Go/SDK metadata and retains unbound
   source states. Its own-model/deterministic requests keep 32/32 with identical
   Go; a separate actual Go1.26.5 error retains eight unobserved expectations
-  and an executable-selection hint. The candidate has its own CI; the current
-  main installation remains `4f6c7566`.
+  and an executable-selection hint. The experiment snapshot preceded main
+  PR1209; the current installation now uses main `7da09722` after PR1212.
 
 - [Direct construction and selective model download](publication/direct-body-quickstart-20261004):
   source, recipe and expectations can run in one compiler command. Model and
