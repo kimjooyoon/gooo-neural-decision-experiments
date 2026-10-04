@@ -32,8 +32,8 @@ matched GitHub's metadata. Independent local consumption of every Linux row
 also passed. All 18,432 explicit observations retain zero value, ranking or
 finite-outcome differences. Legacy arithmetic keeps its original **272 ranking
 differences and 38 finite-outcome differences**, with unchanged first masks.
-The broader workflow's jobs have their own status; this evidence covers the
-completed arithmetic job and source `695f5bc8`.
+The whole source-bound workflow subsequently finished SUCCESS. This arithmetic
+archive independently covers its completed arithmetic job and source `695f5bc8`.
 
 `linux.zip` preserves the complete retrieved Linux collection, its original
 CI comparison and model files. `linux-independent-comparison.json` records the

@@ -5,7 +5,7 @@
 An older model loader checks a regular file, then opens its pathname again.
 If the pathname becomes a FIFO between those operations, Unix open can wait
 before descriptor validation. This matters when another local process replaces
-a model bundle during a Gooo request. The current installed compiler
+a model bundle during a Gooo request. At the original baseline observation, compiler
 `d1bfd273ab4e21d0191548b066a27bcb77d7ed86` uses SDK v0.2.20; its common initial
 metadata dispatch and whole-candidate judge opener are already nonblocking.
 The later shared-model SDK read still carries this gap.
@@ -45,8 +45,9 @@ tree equals the submitted candidate tree. Its complete arithmetic replay matches
 updates. This metric covers agreement with the frozen arithmetic observations.
 [SDK v0.2.21-experimental](https://github.com/kimjooyoon/gooo-decision-runtime/releases/tag/v0.2.21-experimental)
 extracts 69 exact source/test files, retaining the previous provenance inventory.
-Compiler adoption passed its own dev CI and source proof; main promotion and a
-freshly installed comparison are follow-up stages at this checkpoint.
+Compiler adoption passed its own dev CI and source proof. The earlier checkpoint
+below retains the candidate observations; the fresh main installation section
+records the completed main promotion and installed comparison.
 
 ## Compiler candidate and original timings
 
@@ -153,6 +154,16 @@ go run ./publication/legacy-model-open-20261004/native-readback /tmp/gooo-sdk21-
 go run ./publication/legacy-model-open-20261004/worker-readback /tmp/gooo-sdk21-installed /tmp/gooo-sdk21-installed installed
 go run ./publication/direct-body-quickstart-20261004/readback /tmp/gooo-sdk21-installed installed
 ```
+
+## Published model card
+
+The shared model's [Hub card](https://huggingface.co/asketeddy/gooo-shared-judgment-tiny-v1)
+was updated at immutable revision `e6fc9ad69d1d4bb7f2de02ef5c453d6b0ddae1e0`.
+Only `README.md` was uploaded. Anonymous readback matched the exact saved
+[card bytes](HFModelCard.md), and the complete repository filename inventory
+was unchanged. Metadata and the 8,288-byte weights retained their original
+SHA256 values. [Readback](hf-readback.json) records the revision, hashes and
+installed source/SDK. No training or weight updates occurred in this publication.
 
 ## Read the earlier saved evidence
 

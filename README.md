@@ -8,18 +8,26 @@ training tools and original evidence behind that process.
 
 ## Try a local construction
 
-From this repository's root, use Go1.27.1 and put Go's executable install
-directory in PATH. This pins the compiler to the source used in the latest
-installed study; the small model is already included here.
+From this repository's root, select the actual Go1.27.1 executable, then build
+the compiler from a clean, shallow checkout. This retains the exact source
+revision in its construction and execution receipts. The small model is already
+included here.
 
 ```sh
-GOTOOLCHAIN=go1.27.1 go install github.com/kimjooyoon/meta-ontology-go/cmd/gooo@4f6c7566dd4390b04a48589c82eb2d9eea3a6589
-gooo body-path-run --source examples/whole-candidate-order/source.gooo \
+gooo_go_bin="$(GOTOOLCHAIN=go1.27.1 go env GOROOT)/bin/go"
+"$gooo_go_bin" version
+gooo_compiler_dir="$(mktemp -d)"
+git -C "$gooo_compiler_dir" init --quiet
+git -C "$gooo_compiler_dir" remote add origin https://github.com/kimjooyoon/meta-ontology-go.git
+git -C "$gooo_compiler_dir" fetch --depth 1 origin 4f6c7566dd4390b04a48589c82eb2d9eea3a6589
+git -C "$gooo_compiler_dir" switch --detach FETCH_HEAD
+GOTOOLCHAIN=local GOWORK=off "$gooo_go_bin" -C "$gooo_compiler_dir" build -o "$PWD/gooo" ./cmd/gooo
+./gooo body-path-run --source examples/whole-candidate-order/source.gooo \
   --activity Compose --path-plan examples/whole-candidate-order/recipe.json \
   --cases examples/whole-candidate-order/cases.json \
   --model publication/order-judge-initial-20261003/model.json \
-  --repeat 2 --timing --out order-body-results
-gooo body-path-run --verify-timing --out order-body-results
+  --go-bin "$gooo_go_bin" --repeat 2 --timing --out order-body-results
+./gooo body-path-run --verify-timing --out order-body-results
 ```
 
 Use a fresh output directory name. Omit `--model` for deterministic
@@ -27,6 +35,13 @@ construction. The example declares a pure `Integer -> Integer` body and eight
 caller expectations. Read its generated Go and actual runtime outputs in the
 result directory. `unobserved` means no usable output was measured; `0/128`
 means measured outputs missed every expectation. [Full usage and next actions](https://github.com/kimjooyoon/meta-ontology-go/wiki/File-Based-Body-Run).
+
+Building with Go1.27.1 does not replace another `go` already on PATH. The explicit
+`--go-bin` avoids that mismatch during native execution. A module-style
+`go install ...@revision` keeps its module version, but the observed binary lacks
+the VCS source fields used by Gooo receipts. [Both installation paths and the
+original tool mismatch](publication/installation-quickstart-20261004) retain
+their results separately.
 
 ## Start here — 2026-10-04
 
