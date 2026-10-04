@@ -1,0 +1,16 @@
+package source_assembly
+namespace source_assembly
+entity Integer id "source-assembly://integer"
+
+activity Qualified(Integer) -> Integer computes `let first = input + 2
+let second = input * 2
+let chosen = first
+let eligible = input >= 0 && input != 2
+if eligible && !(input > 4) {
+    chosen = chosen + 3
+} else {
+    chosen = chosen - 3
+}
+return chosen + (first + second)`
+
+activity Clamp(Integer) -> Integer computes "if input < 0 { return 0 } else if input < 10 { return input } else { return 10 }"

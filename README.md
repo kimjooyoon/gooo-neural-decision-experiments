@@ -1,5 +1,12 @@
 # Gooo neural decision experiments
 
+Recent language work lets activities carry assembly intent, typed choices, finite
+cases and a budget in Gooo `assembling` declarations. The
+[source authoring comparison](publication/source-assembly-20261004) records 32
+constructions and 288 independent runtime expectations with unchanged own weights.
+It also records worse initial model ranking on the two tasks and the extra cost
+of checking the embedded contract.
+
 We are developing small local models that help **Gooo assemble programs from
 declared choices**. The compiler provides the plan and checks the result; the
 model suggests which permitted construction to try next. Failed examples become
