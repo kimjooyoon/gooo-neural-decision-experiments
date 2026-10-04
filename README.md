@@ -13,7 +13,7 @@ directory in PATH. This pins the compiler to the source used in the latest
 installed study; the small model is already included here.
 
 ```sh
-GOTOOLCHAIN=go1.27.1 go install github.com/kimjooyoon/meta-ontology-go/cmd/gooo@01d21e9260b2c0f1d02f8029824f3dda41631e9d
+GOTOOLCHAIN=go1.27.1 go install github.com/kimjooyoon/meta-ontology-go/cmd/gooo@d1bfd273ab4e21d0191548b066a27bcb77d7ed86
 GOTOOLCHAIN=go1.27.1 go run ./examples/file-body-run examples/whole-candidate-order file-body-inputs
 gooo body-path-run --source file-body-inputs/ko-source.gooo \
   --activity AssembleKorean --path-plan file-body-inputs/ko-recipe.json \
@@ -30,6 +30,16 @@ result directory. `unobserved` means no usable output was measured; `0/128`
 means measured outputs missed every expectation. [Full usage and next actions](https://github.com/kimjooyoon/meta-ontology-go/wiki/File-Based-Body-Run).
 
 ## Start here — 2026-10-04
+
+- [Close the remaining legacy model-file wait](publication/legacy-model-open-20261004):
+  an actual shared-model request on installed `d1bfd273` reproduced a metadata
+  open wait under an owned hardlink replacement. Its sole writer releases after
+  a deliberate 500ms hold. The 104 attempts include 36 normal completions with
+  36 model judgments and 4,608/4,608 supplied expectations. Research `ddcd1002`
+  adds a bounded Unix nonblocking/no-follow reader for these SDK profiles.
+  The original failing regressions and complete saved observations are retained.
+  [SDK PR6](https://github.com/kimjooyoon/gooo-decision-runtime/pull/6) precedes
+  compiler adoption; installed results still describe SDK v0.2.20.
 
 - [Avoid waiting before input-file validation](publication/file-input-open-20261004):
   an actual source-path swap held the installed CLI before output creation until

@@ -1,0 +1,229 @@
+//go:build unix
+
+// Each child and pathname swap belongs to this probe. A successful writer open
+// followed by a joined descriptor rejection, rather than a timeout, proves wait.
+package main
+
+import (
+	"bytes"
+	"context"
+	"crypto/sha256"
+	"encoding/json"
+	"fmt"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"strconv"
+	"strings"
+	"sync/atomic"
+	"syscall"
+	"time"
+)
+
+func must(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+func raw(path string) []byte { b, e := os.ReadFile(path); must(e); return b }
+func digest(b []byte) string { return fmt.Sprintf("%x", sha256.Sum256(b)) }
+func save(path string, v any) {
+	b, e := json.MarshalIndent(v, "", "  ")
+	must(e)
+	must(os.WriteFile(path, append(b, '\n'), 0600))
+}
+
+type totals struct {
+	Predictions int `json:"actual_model_predictions"`
+	Native      int `json:"native_runs"`
+	Passed      int `json:"finite_passed"`
+	Cases       int `json:"finite_total"`
+}
+
+func observe(dir string) totals {
+	var generation struct {
+		Report struct {
+			BodyPaths struct {
+				Search struct {
+					Selection struct {
+						Predictions int `json:"local_model_predictions"`
+					} `json:"selection"`
+				} `json:"search"`
+			} `json:"body_paths"`
+		} `json:"report"`
+	}
+	must(json.Unmarshal(raw(filepath.Join(dir, "run-1-generation.json")), &generation))
+	var runtime struct {
+		Observation struct {
+			Cases []struct {
+				Input    int64 `json:"input"`
+				Expected int64 `json:"expected"`
+				Actual   int64 `json:"actual"`
+				Passed   bool  `json:"passed"`
+			} `json:"cases"`
+			Runs []struct {
+				Started   bool `json:"started"`
+				Completed bool `json:"completed"`
+				Exit      int  `json:"exit_code"`
+			} `json:"runs"`
+			Projection bool `json:"projection_replayed"`
+			Runtime    bool `json:"runtime_replayed"`
+		} `json:"observation"`
+	}
+	must(json.Unmarshal(raw(filepath.Join(dir, "run-1-runtime.json")), &runtime))
+	if !runtime.Observation.Projection || !runtime.Observation.Runtime {
+		panic("missing replay")
+	}
+	result := totals{Predictions: generation.Report.BodyPaths.Search.Selection.Predictions, Cases: len(runtime.Observation.Cases)}
+	for _, c := range runtime.Observation.Cases {
+		if !c.Passed || c.Actual != c.Expected {
+			panic("finite expectation mismatch")
+		}
+		result.Passed++
+	}
+	for _, r := range runtime.Observation.Runs {
+		if !r.Started || !r.Completed || r.Exit != 0 {
+			panic("native failure")
+		}
+		result.Native++
+	}
+	if result.Cases != 128 || result.Native != 2 || result.Predictions != 1 {
+		panic("regular model control accounting")
+	}
+	return result
+}
+func main() {
+	if len(os.Args) != 6 {
+		panic("usage: compiler inputs model-dir fresh-output budget")
+	}
+	compiler, inputs, model, out := os.Args[1], os.Args[2], os.Args[3], os.Args[4]
+	budget, e := strconv.Atoi(os.Args[5])
+	must(e)
+	if budget < 1 || budget > 64 {
+		panic("budget")
+	}
+	goTool := os.Getenv("GOOO_LOCAL_GO")
+	if goTool == "" {
+		panic("GOOO_LOCAL_GO")
+	}
+	compilerHash := digest(raw(compiler))
+	metadataHash := digest(raw(filepath.Join(model, "model.json")))
+	weightsHash := digest(raw(filepath.Join(model, "weights.bin")))
+	must(os.Mkdir(out, 0700))
+	root, e := os.MkdirTemp("", "gooo-owned-model-swap-")
+	must(e)
+	defer os.RemoveAll(root)
+	var rows []map[string]any
+	confirmed, total := 0, totals{}
+	for _, condition := range []string{"metadata", "weights"} {
+		dir := filepath.Join(root, condition)
+		must(os.Mkdir(dir, 0700))
+		for _, name := range []string{"model.json", "weights.bin"} {
+			must(os.WriteFile(filepath.Join(dir, name), raw(filepath.Join(model, name)), 0600))
+		}
+		name := "model.json"
+		if condition == "weights" {
+			name = "weights.bin"
+		}
+		alias, regular, fifo, next := filepath.Join(dir, name), filepath.Join(dir, "regular"), filepath.Join(dir, "fifo"), filepath.Join(dir, "next")
+		must(os.Rename(alias, regular))
+		must(syscall.Mkfifo(fifo, 0600))
+		must(os.Link(regular, alias))
+		for attempt := 1; attempt <= budget; attempt++ {
+			label := fmt.Sprintf("%s-%02d", condition, attempt)
+			dest := filepath.Join(out, label+"-results")
+			args := []string{"body-path-run", "--source", filepath.Join(inputs, "ko-source.gooo"), "--activity", "AssembleKorean", "--path-plan", filepath.Join(inputs, "ko-recipe.json"), "--cases", filepath.Join(inputs, "cases-128.json"), "--model", filepath.Join(dir, "model.json"), "--go-bin", goTool, "--out", dest, "--repeat", "1", "--timing"}
+			ctx, cancel := context.WithTimeout(context.Background(), 6*time.Second)
+			cmd := exec.CommandContext(ctx, compiler, args...)
+			cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
+			cmd.Cancel = func() error { return syscall.Kill(-cmd.Process.Pid, syscall.SIGKILL) }
+			cmd.WaitDelay = time.Second
+			var stdout, stderr bytes.Buffer
+			cmd.Stdout, cmd.Stderr = &stdout, &stderr
+			started := time.Now()
+			must(cmd.Start())
+			joined := make(chan error, 1)
+			go func() { joined <- cmd.Wait() }()
+			stop, flipped := make(chan struct{}), make(chan error, 1)
+			var swaps atomic.Int64
+			go func() {
+				for {
+					for _, target := range []string{regular, fifo} {
+						select {
+						case <-stop:
+							flipped <- nil
+							return
+						default:
+						}
+						if err := os.Link(target, next); err != nil {
+							flipped <- err
+							return
+						}
+						if err := os.Rename(next, alias); err != nil {
+							flipped <- err
+							return
+						}
+						// POSIX rename is a no-op when both hardlinks already name
+						// the same inode; its owned staging link then still exists.
+						if err := os.Remove(next); err != nil && !os.IsNotExist(err) {
+							flipped <- err
+							return
+						}
+						swaps.Add(1)
+					}
+				}
+			}()
+			var waitErr error
+			released := false
+			releaseErr := ""
+			select {
+			case waitErr = <-joined:
+			case <-time.After(500 * time.Millisecond):
+				writer, err := os.OpenFile(fifo, os.O_WRONLY|syscall.O_NONBLOCK, 0)
+				if err == nil {
+					released = true
+					must(writer.Close())
+				} else {
+					releaseErr = err.Error()
+				}
+				waitErr = <-joined
+			}
+			close(stop)
+			must(<-flipped)
+			elapsed, timedOut := time.Since(started).Nanoseconds(), ctx.Err() != nil
+			cancel()
+			must(os.WriteFile(filepath.Join(out, label+".stdout"), stdout.Bytes(), 0600))
+			must(os.WriteFile(filepath.Join(out, label+".stderr"), stderr.Bytes(), 0600))
+			_, statErr := os.Stat(dest)
+			absent := os.IsNotExist(statErr)
+			blocked := released && !timedOut && cmd.ProcessState.ExitCode() == 1 && absent && stdout.Len() == 0 && strings.Contains(stderr.String(), "joint model file changed during bounded open")
+			observed := totals{}
+			if waitErr == nil {
+				observed = observe(dest)
+				total.Predictions += observed.Predictions
+				total.Native += observed.Native
+				total.Passed += observed.Passed
+				total.Cases += observed.Cases
+			}
+			message := ""
+			if waitErr != nil {
+				message = waitErr.Error()
+			}
+			row := map[string]any{"condition": condition, "attempt": attempt, "elapsed_ns": elapsed, "writer_release_after_ms": 500, "exit_code": cmd.ProcessState.ExitCode(), "error": message, "timeout": timedOut, "process_joined": true, "swapper_joined": true, "swaps": swaps.Load(), "writer_released_fifo_reader": released, "writer_error": releaseErr, "output_directory_absent": absent, "stdout_bytes": stdout.Len(), "stderr": stderr.String(), "confirmed_wait_before_validation": blocked, "observed": observed, "args": args}
+			save(filepath.Join(out, label+"-process.json"), row)
+			rows = append(rows, row)
+			if timedOut {
+				panic("timeout is inconclusive; all owned children joined")
+			}
+			if blocked {
+				confirmed++
+				break
+			}
+		}
+	}
+	if digest(raw(compiler)) != compilerHash || digest(raw(filepath.Join(model, "model.json"))) != metadataHash || digest(raw(filepath.Join(model, "weights.bin"))) != weightsHash {
+		panic("caller artifact mutation")
+	}
+	save(filepath.Join(out, "summary.json"), map[string]any{"scope": "actual installed CLI; atomic owned hardlink replacement; successful writer release and subsequent joined descriptor rejection establish wait; deliberate 500ms hold is not natural latency", "compiler_sha256": compilerHash, "metadata_sha256": metadataHash, "weights_sha256": weightsHash, "attempts": len(rows), "confirmed_fifo_waits": confirmed, "regular_observations": total, "records": rows, "new_intent_tasks": 0, "training_updates": 0, "model_requested": true})
+	fmt.Printf("attempts=%d confirmed_waits=%d predictions=%d native=%d finite=%d/%d\n", len(rows), confirmed, total.Predictions, total.Native, total.Passed, total.Cases)
+}
