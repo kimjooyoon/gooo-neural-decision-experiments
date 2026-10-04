@@ -64,7 +64,24 @@ func main() {
 	compiler := flag.String("compiler", "", "explicit clean Gooo executable")
 	sourceRevision := flag.String("compiler-source", "", "exact compiler source revision")
 	limit := flag.Int("limit", 768, "development cap; training requires all 768")
+	prepared := flag.String("audit-prepared", "", "audit existing source/feature preparation")
+	models := flag.String("models", "", "record-specific model variant directory")
+	nativePrepared := flag.String("native-prepared", "", "execute existing source views on fresh runtime inputs")
+	oldModel := flag.String("frozen-model", "", "explicit frozen ordinal model control")
+	verifyNative := flag.String("verify-native", "", "recount captured native observations against current inputs")
 	flag.Parse()
+	if *verifyNative != "" {
+		verifyNativeDirectory(*prepared, *verifyNative, *output)
+		return
+	}
+	if *nativePrepared != "" {
+		nativeStudy(*nativePrepared, *models, *compiler, *sourceRevision, *oldModel, *output)
+		return
+	}
+	if *prepared != "" {
+		audit(*prepared, *models, *output)
+		return
+	}
 	if *output == "" || *compiler == "" || len(*sourceRevision) != 40 || *limit < 1 || *limit > 768 {
 		panic("explicit output, compiler, source and bounded row count required")
 	}

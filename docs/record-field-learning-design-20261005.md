@@ -1,7 +1,9 @@
 # Small model for source-owned record fields
 
-Status: source and protocol prepared before optimization. No record model has
-been trained in this source commit.
+Protocol and trainer were published before optimization at research source
+`4441c221dfa1b13230d9469d56974b5d7742b174`. The executed 480-update pilot and
+its Go/native evaluation are retained in
+[the result report](../publication/record-field-learning-20261005).
 
 The next language step replaces the integer ordinal proxy with actual field
 alternatives and Korean/English intent. Gooo still declares the enclosing

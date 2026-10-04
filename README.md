@@ -1,5 +1,15 @@
 # Gooo neural decision experiments
 
+[Source-aware field learning](publication/record-field-learning-20261005) now
+uses the actual Gooo field expressions and paired Korean/English intent.
+Fresh initialization and 480 local MPS updates produce FP32/PTQ/QAT models;
+Go performs inference and native construction. The 192 held-out source views
+rank the complete mask first in 192/70/134 cases respectively. A separate
+100-construction study retains successful fields, partial results and changed
+intent failures. The new models follow three authored field roles; the report
+shows exactly where more intent diversity is needed. Ordinary `if` without
+`else`, early returns and nested assignment now participate in these experiments.
+
 [Retained graph execution](publication/retained-composition-20261005) applies new
 inputs and expectations to one compiled Gooo graph. Main `7acccf56` is merged and
 installed after complete CI. [Fresh installed controls](publication/retained-composition-20261005/installed)
@@ -22,7 +32,8 @@ Compiler main `f6da667e` is now installed. [Separate installed controls](publica
 retain the same 30 program identities and finite results; fresh prediction median
 is 31.625µs and whole-command medians are about 323ms/324ms. The Go completeness
 reader also lists the remaining selection fields. [Frozen ternary pilots](publication/record-field-assembly-20261004/quantized-pilot)
-use 18,752 resident tensor bytes per profile. Field-specific training is subsequent work.
+use 18,752 resident tensor bytes per profile. The source-aware pilot above adds
+separate field-specific training and its counter-intent measurements.
 
 [Native record values](publication/native-record-values-20261004) let a Gooo body
 construct a `Candidate`, read its title/state, and pass it into a `Review` body.
