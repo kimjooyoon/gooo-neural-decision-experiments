@@ -1,5 +1,11 @@
 # Gooo neural decision experiments
 
+[Reusable source checkpoints](publication/source-realization-20261004) now carry
+the selected body, original baseline and picked paths into the next generation.
+Two tasks across twelve constructions retained their source/Go/plan identities
+and passed 108 independent runtime expectations. Six unchanged-own-model calls
+guided generation; realization replay made zero model calls.
+
 Recent language work lets activities carry assembly intent, typed choices, finite
 cases and a budget in Gooo `assembling` declarations. The
 [source authoring comparison](publication/source-assembly-20261004) records 32
