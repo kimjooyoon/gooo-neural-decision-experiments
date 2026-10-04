@@ -93,17 +93,10 @@ func observe(dir string) totals {
 	return result
 }
 func main() {
-	if len(os.Args) != 6 && len(os.Args) != 7 {
-		panic("usage: compiler inputs model-dir fresh-output budget [installed|candidate]")
+	if len(os.Args) != 6 {
+		panic("usage: compiler inputs model-dir fresh-output budget")
 	}
 	compiler, inputs, model, out := os.Args[1], os.Args[2], os.Args[3], os.Args[4]
-	role := "caller-supplied"
-	if len(os.Args) == 7 {
-		role = os.Args[6]
-		if role != "installed" && role != "candidate" {
-			panic("compiler role")
-		}
-	}
 	budget, e := strconv.Atoi(os.Args[5])
 	must(e)
 	if budget < 1 || budget > 64 {
@@ -231,6 +224,6 @@ func main() {
 	if digest(raw(compiler)) != compilerHash || digest(raw(filepath.Join(model, "model.json"))) != metadataHash || digest(raw(filepath.Join(model, "weights.bin"))) != weightsHash {
 		panic("caller artifact mutation")
 	}
-	save(filepath.Join(out, "summary.json"), map[string]any{"scope": "actual supplied CLI; atomic owned hardlink replacement; writer release and joined descriptor rejection establish wait; elapsed interval includes any deliberate hold", "compiler_role": role, "compiler_sha256": compilerHash, "metadata_sha256": metadataHash, "weights_sha256": weightsHash, "attempts": len(rows), "confirmed_fifo_waits": confirmed, "regular_observations": total, "records": rows, "new_intent_tasks": 0, "training_updates": 0, "model_requested": true})
+	save(filepath.Join(out, "summary.json"), map[string]any{"scope": "actual installed CLI; atomic owned hardlink replacement; successful writer release and subsequent joined descriptor rejection establish wait; deliberate 500ms hold is not natural latency", "compiler_sha256": compilerHash, "metadata_sha256": metadataHash, "weights_sha256": weightsHash, "attempts": len(rows), "confirmed_fifo_waits": confirmed, "regular_observations": total, "records": rows, "new_intent_tasks": 0, "training_updates": 0, "model_requested": true})
 	fmt.Printf("attempts=%d confirmed_waits=%d predictions=%d native=%d finite=%d/%d\n", len(rows), confirmed, total.Predictions, total.Native, total.Passed, total.Cases)
 }

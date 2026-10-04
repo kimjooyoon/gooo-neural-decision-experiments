@@ -50,7 +50,7 @@ func check(ok bool, s string) {
 }
 func raw(p string) []byte    { b, e := os.ReadFile(p); must(e); return b }
 func decode(p string, v any) { must(json.Unmarshal(raw(p), v)) }
-func observe(dir string, cases []caseValue, expectedGo []byte) totals {
+func observe(dir string, cases []caseValue, expectedGo []byte, source string) totals {
 	var g struct {
 		Report struct {
 			BodyPaths struct {
@@ -65,8 +65,9 @@ func observe(dir string, cases []caseValue, expectedGo []byte) totals {
 	decode(filepath.Join(dir, "run-1-generation.json"), &g)
 	var r struct {
 		Observation struct {
-			Cases []caseValue `json:"cases"`
-			Runs  []struct {
+			Source string      `json:"producer_source_sha"`
+			Cases  []caseValue `json:"cases"`
+			Runs   []struct {
 				Started   bool `json:"started"`
 				Completed bool `json:"completed"`
 				Exit      int  `json:"exit_code"`
@@ -76,6 +77,7 @@ func observe(dir string, cases []caseValue, expectedGo []byte) totals {
 		} `json:"observation"`
 	}
 	decode(filepath.Join(dir, "run-1-runtime.json"), &r)
+	check(r.Observation.Source == source, "runtime source binding")
 	check(r.Observation.Projection && r.Observation.Runtime, "replay missing")
 	check(len(r.Observation.Cases) == len(cases), "case extent")
 	result := totals{Predictions: g.Report.BodyPaths.Search.Selection.Predictions, Total: len(cases)}
@@ -92,8 +94,19 @@ func observe(dir string, cases []caseValue, expectedGo []byte) totals {
 	return result
 }
 func main() {
-	check(len(os.Args) == 2, "usage readback saved-root")
+	check(len(os.Args) == 2 || len(os.Args) == 3, "usage readback saved-root [baseline|candidate]")
 	root := os.Args[1]
+	variant := "baseline"
+	if len(os.Args) == 3 {
+		variant = os.Args[2]
+	}
+	check(variant == "baseline" || variant == "candidate", "variant")
+	name, attempts, wantMetadata, wantRegular, wantWait := "installed-model-swap-v2", 104, 40, 36, 1
+	source := "d1bfd273ab4e21d0191548b066a27bcb77d7ed86"
+	if variant == "candidate" {
+		name, attempts, wantMetadata, wantRegular, wantWait = "candidate-model-swap", 128, 64, 34, 0
+		source = "2420ad198480ca4592306df7db630a82de6d9ed4"
+	}
 	var input struct {
 		Schema string      `json:"schema"`
 		Cases  []caseValue `json:"cases"`
@@ -104,7 +117,7 @@ func main() {
 	check(len(cases) == 128, "input cases")
 	control := filepath.Join(root, "regular-control")
 	expectedGo := raw(filepath.Join(control, "run-1-generated.go"))
-	controlWork := observe(control, cases, expectedGo)
+	controlWork := observe(control, cases, expectedGo, "d1bfd273ab4e21d0191548b066a27bcb77d7ed86")
 	var s struct {
 		Attempts       int    `json:"attempts"`
 		Confirmed      int    `json:"confirmed_fifo_waits"`
@@ -114,9 +127,9 @@ func main() {
 		NewIntents     int    `json:"new_intent_tasks"`
 		Training       int    `json:"training_updates"`
 	}
-	swap := filepath.Join(root, "installed-model-swap-v2")
+	swap := filepath.Join(root, name)
 	decode(filepath.Join(swap, "summary.json"), &s)
-	check(s.Attempts == 104 && len(s.Rows) == 104 && s.ModelRequested && s.NewIntents == 0 && s.Training == 0, "baseline scope")
+	check(s.Attempts == attempts && len(s.Rows) == attempts && s.ModelRequested && s.NewIntents == 0 && s.Training == 0, "declared scope")
 	total := totals{}
 	waits, metadata, weights, regular := 0, 0, 0, 0
 	for _, r := range s.Rows {
@@ -134,14 +147,14 @@ func main() {
 		check(string(raw(filepath.Join(swap, label+".stderr"))) == r.Stderr, "stderr differs")
 		check(len(raw(filepath.Join(swap, label+".stdout"))) == r.StdoutBytes, "stdout extent")
 		if r.Wait {
-			check(r.Condition == "metadata" && r.Attempt == 40 && r.Released && r.Exit == 1 && r.Absent && r.StdoutBytes == 0 && r.Elapsed >= 500000000, "wait not supported")
+			check(variant == "baseline" && r.Condition == "metadata" && r.Attempt == 40 && r.Released && r.Exit == 1 && r.Absent && r.StdoutBytes == 0 && r.Elapsed >= 500000000, "wait not supported")
 			waits++
 		} else {
 			check(!r.Released, "unclassified writer release")
 		}
 		if r.Exit == 0 {
 			check(!r.Absent, "successful output absent")
-			w := observe(filepath.Join(swap, label+"-results"), cases, expectedGo)
+			w := observe(filepath.Join(swap, label+"-results"), cases, expectedGo, source)
 			check(w == r.Observed, "observed work differs")
 			total.Predictions += w.Predictions
 			total.Native += w.Native
@@ -152,6 +165,6 @@ func main() {
 			check(r.Exit == 1 && r.Absent && r.StdoutBytes == 0 && r.Observed == totals{}, "setup failure produced work")
 		}
 	}
-	check(metadata == 40 && weights == 64 && waits == 1 && s.Confirmed == waits && regular == 36 && total == s.Regular, "baseline aggregate")
-	must(json.NewEncoder(os.Stdout).Encode(map[string]any{"status": "PASS", "historical_attempts": 104, "confirmed_fifo_waits": waits, "regular_completions": regular, "historical_observed_work": total, "separate_regular_control": controlWork, "reader_model_predictions": 0, "reader_native_runs": 0, "new_intent_tasks": 0, "training_updates": 0}))
+	check(metadata == wantMetadata && weights == 64 && waits == wantWait && s.Confirmed == waits && regular == wantRegular && total == s.Regular, "declared aggregate")
+	must(json.NewEncoder(os.Stdout).Encode(map[string]any{"status": "PASS", "variant": variant, "historical_attempts": attempts, "confirmed_fifo_waits": waits, "regular_completions": regular, "historical_observed_work": total, "separate_regular_control": controlWork, "reader_model_predictions": 0, "reader_native_runs": 0, "new_intent_tasks": 0, "training_updates": 0}))
 }

@@ -36,7 +36,9 @@ func main() {
 			panic("invalid member")
 		}
 		prefix, _, _ := strings.Cut(f.Name, "/")
-		if prefix != "installed-model-swap-v2" && prefix != "regular-control" && prefix != "inputs" {
+		if prefix != "installed-model-swap-v2" && prefix != "regular-control" && prefix != "inputs" && prefix != "expected" &&
+			prefix != "candidate-model-swap" && prefix != "candidate-native" && prefix != "candidate-native-isolated" &&
+			prefix != "installed-native-same-window" && prefix != "candidate-shared-worker-observations" {
 			panic("unexpected archive root")
 		}
 		roots[prefix] = true
