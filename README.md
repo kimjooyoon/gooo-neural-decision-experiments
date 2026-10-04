@@ -1,5 +1,14 @@
 # Gooo neural decision experiments
 
+[Shared field judgment](publication/record-shared-field-20261005) uses one2,072-parameter
+judge in three record-field positions. The same3,840 MPS updates produce75.0% FP32
+and87.5% QAT first-mask agreement on the registered source-body axis; new wording
+remains23.4%/19.9%. Across360 generated graphs, budget-one active fields reach
+126/144; the eight new-wording source views regress from32/48 to30/48. Keep both
+observations. SDKv0.2.23 and compiler main`2c807d461afc68a7ebfbd277d1dd6e97f5168e92` are merged and installed.
+[Four-file quickstart and readable field gaps](docs/shared-field-quickstart.ko.md)
+· [26-job source CI](https://github.com/kimjooyoon/gooo-neural-decision-experiments/actions/runs/37226752241).
+
 [Paired field intentions v2](publication/paired-field-intents-20261005) adds
 opposing and mixed requirements over the same permitted expressions. The same
 18,656-parameter network receives3,840 local MPS updates. Across1,536 source
@@ -8,7 +17,7 @@ FP32 27.6%; new wording on different bodies reaches15.8%. Ternary variants retai
 smaller improvements and their regressions.360 actual graph constructions count
 active fields separately from unchanged guards. The Go summary reader prints
 these percentages, remaining fields and costs. Models and all evidence are public.
-Compiler main `aeff3641` with SDK v0.2.22 is the current installed field release.
+That earlier paired-field observation used compiler main `aeff3641` with SDKv0.2.22.
 
 [Source-aware field learning](publication/record-field-learning-20261005) now
 uses the actual Gooo field expressions and paired Korean/English intent.

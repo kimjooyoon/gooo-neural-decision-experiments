@@ -1,0 +1,17 @@
+Source sha256:f00c13d6289697a7cffb067d882e6e77e72d994f2a188a71ef6c0a67d010d092; proposed mask 2; model calls: 1
+message [role-0]
+  intent: 제목에 입력 상태 필드의 값을 사용한다.
+  first  50.00%: input0.flag
+  second 50.00%: input0.message + ""
+  proposed: input0.flag
+flag [role-1]
+  intent: 상태를 ready 문자열로 설정한다.
+  first  0.13%: "wait"
+  second 99.87%: "ready"
+  proposed: "ready"
+context [role-2]
+  intent: 기존 사유 뒤에 :accepted를 붙인다.
+  first  69.02%: input0.context + ":accepted"
+  second 30.98%: ":accepted" + input0.context
+  proposed: input0.context + ":accepted"
+These probabilities order attempts. Run Gooo body-compose to measure finite functional completeness.

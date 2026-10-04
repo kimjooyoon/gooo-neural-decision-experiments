@@ -45,12 +45,18 @@ int8 배열2,096 B와 scale8 B, 요청별 workspace3,200 B 등을 사용합니�
 
 SDK **v0.2.23-experimental**, 모델 특징
 `triple_record_field_context_v1_shared_v1`, 산술 `float32_separate_v1`입니다.
-[컴파일러 연결 PR](https://github.com/kimjooyoon/meta-ontology-go/pull/1231)이
-공개되어 있으며 병합/설치 상태는 연구 레포의 검증 기록으로 갱신합니다.
+[개발 PR1231](https://github.com/kimjooyoon/meta-ontology-go/pull/1231)과
+[main PR1232](https://github.com/kimjooyoon/meta-ontology-go/pull/1232)을 각각 전체12개CI와
+독립 증거 확인 후 병합했습니다. 깨끗한 main `2c807d461afc68a7ebfbd277d1dd6e97f5168e92`를 Go1.27.1로
+빌드·설치하고 공개 가중치로 실제 실행을 확인했습니다.
 예제의 후보 예산은8이며, 입력을 전달하는 두 활동을 실제로 생성·실행합니다.
 
 ```sh
-hf download asketeddy/gooo-record-shared-field-tiny-v1 --local-dir ./gooo-field-model
+hf download asketeddy/gooo-record-shared-field-tiny-v1 \
+  models/qat_ternary/model.json models/qat_ternary/weights.bin \
+  demo.gooo.fixture demo-cases.json \
+  --revision 87f8c482d23dc0eaa41f5575f652e7ca61f44280 \
+  --local-dir ./gooo-field-model
 
 gooo body-compose --source ./gooo-field-model/demo.gooo.fixture \
   --model ./gooo-field-model/models/qat_ternary/model.json \
@@ -81,6 +87,10 @@ Go SDK의 `LoadRecordSharedThree`와 `PredictRecordSharedInto`로 같은 모델�
 | 활성 입력의 요구 필드 | 72/144 | 108/144 | 126/144 | 126/144 |
 | 입력과 다른 값이 필요한 필드 | 60/120 | 92/120 | 108/120 | 106/120 |
 
+평가 축을 나누면 기본 표현의 활성 필드는 앞선 v2 76/96개, 공유 FP32/QAT
+96/96개였습니다. 새 표현8개 소스는 앞선 v2 32/48개, 공유 모델30/48개로
+줄었습니다. 전체 합계의 개선과 새 표현 묶음의 퇴행을 함께 기록합니다.
+
 유지 분기의144/144 필드는 별도로 계산했습니다. 전체 명령 중앙값은
 결정론적395.80ms, 공유 FP32 394.65ms, QAT 395.30ms였습니다. 생성·빌드·실행
 시작 비용을 포함하며 고정된 순서로 측정했습니다. 작은 추론이 빨라진 관측만으로
@@ -90,8 +100,16 @@ Go SDK의 `LoadRecordSharedThree`와 `PredictRecordSharedInto`로 같은 모델�
 `evidence.zip`은 새 실험 원시자료37.91MiB를 압축해 담습니다. 기존 소스/특징
 뱅크는 v2의 고정 공개 아카이브를 재사용합니다. `audit.json`,
 `native-summary.json`과 `SHA256SUMS`에서 지표와 바이트 근거를 읽을 수 있습니다.
-Linux CI는 같은 가중치로 새 그래프를 생성하고 실행 값을 다시 계산합니다.
-해당 실행의 완료 상태는 검증 기록으로 추가합니다.
+[연구 CI37226752241](https://github.com/kimjooyoon/gooo-neural-decision-experiments/actions/runs/37226752241)은
+전체26개 작업을 통과했습니다. Linux의360개 그래프·720회 실행 원본을 내려받아
+소스·후보 선택·필드·값 전달·실제 출력·프로세스 완료를 독립 재계산했습니다.
+고정120개 NumPy/Go 비교의 최대 logit 차이도0이며, 모든 모델의 품질 수가
+macOS 관측과 같습니다. `validation/linux-validation.json`에 원본 지문을 기록합니다.
+
+최초 로컬 원본은39,748,306 B로 계획한64MiB 이내였습니다. 후속 Linux 재생의
+논리적 원본40,178,256 B를 합치면76.22MiB로 그 목표를 넘습니다. 두 관측을
+유지하고 범위를 공개합니다. 로컬에는Linux 자료의8MB압축 파일을 보관해
+메모리에서 검산하며 별도 압축 해제 복사본을 만들지 않았습니다.
 
 ## 학습과 근거
 
@@ -113,3 +131,52 @@ Linux CI는 같은 가중치로 새 그래프를 생성하고 실행 값을 다�
 확률은 후보 순서를 정하는 값이며 테스트에서 확인한 기능 완전성은 실행
 관측으로 계산합니다. 현재 한 번에 높은 정답률을 요구하기보다 남은 기능을
 측정하고 다음 후보로 진행하는 사용 흐름을 발전시키고 있습니다.
+
+## 공개 모델을 개발 중에 실제 사용한 기록
+
+공개 리비전`87f8c482`의21개 파일을 원본과 바이트 단위로 확인했습니다.
+개발 후보`d515db9d`에서 두 작업자의32개 요청을4회 관측했습니다. 매회
+선택 예시의 필드480/480개가 맞았고 첫 응답은 입력을 닫기 전에 도착했습니다.
+첫 실행은497.015ms, 세 반복은8.752/12.342/11.866ms였습니다.
+각 반복은 작업자 시작과 문맥 해석·조립을 포함합니다. 최초 실행도 보존합니다.
+메모리는약22.6~22.9MiB, 프로세스CPU시간은0.114~0.158초였습니다.
+호스트 전체CPU 증가량과 일반적인 처리량은 미측정입니다.
+
+설치한 main`2c807d461afc68a7ebfbd277d1dd6e97f5168e92`에서도 같은 공개 파일과 여섯 실제 실행 대조군,
+32개 혼합 요구의 작업자 요청을 확인했습니다. 생성된 프로그램 실행의
+추가 모델 호출은0회입니다. 원본 보고서는`validation/worker-trials`와
+`validation/installed-public-dogfood.json`에 있습니다. 데드락 검토의 범위는
+각60초 제한에서 두 작업자의32개 고정 요청을 완료하는 관측입니다.
+
+Go 독자는`go run validation/read-model.go --text MODEL.json CONTEXT.json`으로
+필드 이름·의도·두 후보식·확률과 제안식을 읽을 수 있습니다. 예제의 제목은
+50:50동률, 상태는약99.9%로 관측했습니다. 동률의 첫 후보도 실제 유한 예제를
+통과할 수 있으므로 후보 확률과 기능의 완전성을 따로 읽습니다.
+[짧은 사용 흐름](https://github.com/kimjooyoon/gooo-neural-decision-experiments/blob/main/docs/shared-field-quickstart.ko.md)
+· [main CI37228772888](https://github.com/kimjooyoon/meta-ontology-go/actions/runs/37228772888).
+
+## 참고한 원리와 연구
+
+[Laya](https://huggingface.co/convaiinnovations/laya)는 상태와 타입이 있는 질문을
+받아 선택과 확률을 반환하는 접근을 보여줍니다. Gooo에서는 이를 실제 후보식에
+대한 작은 판단 질문으로 좁혀 실험합니다. 이번 가중치는Go의 새로운 초기값과
+Gooo에서 만든 자료로 학습했습니다.
+
+[Ma 등의 BitNet b1.58 연구](https://arxiv.org/abs/2402.17764)는 가중치의
+삼진 표현`{-1,0,1}`과 그에 맞는 학습을 다룹니다. 우리의 작은 판단기에서는
+PTQ와QAT를 따로 관측하고 파일 크기·실제 텐서·전체RAM·기능 충족률을
+각각 계산합니다.
+
+[W3C PROV-O](https://www.w3.org/TR/prov-o/)의 개체·활동·사용·생성 관계는
+Gooo가 원본, 생성 과정과 관측 결과를 연결하는 어휘의 바탕입니다. 소스와
+선택의 이유, 실제로 전달한 값이 같은 기록에 남도록 언어를 발전시키고 있습니다.
+
+## 설치본의 반복 관측
+
+설치본의 첫 응답은483.816ms, 세 반복은12.164~36.625ms, 작업자RAM은22.53~23.27MiB였습니다. 모든4회에서32요청·선택 필드480/480개가 맞고 입력 종료 전에 첫 응답이 도착했습니다.
+
+개발 후보의 반복8.8~12.3ms와 설치본의 반복을 각각 보존합니다.
+가장 빠른 값만 고르지 않고36.6ms 반복도 포함합니다. `validation/installed-worker-summary.json`은
+각 요청 묶음의프로세스CPU초/전체벽시간×100을 한 코어 기준 평균으로
+계산합니다. 두 작업자와 런타임의 합계이므로100%를 넘을 수 있습니다.
+호스트 전체CPU 증가량과GPU utilization은 미측정입니다.
