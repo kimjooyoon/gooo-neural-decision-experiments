@@ -1,5 +1,14 @@
 # Gooo neural decision experiments
 
+[Record value origins](publication/record-value-origins-20261005) follow current
+and saved record/scalar definitions into a separate small-model input contract.
+Four authored source forms produce eight context exports: the old receiver
+collision is retained, the new origin arrays differ, and local renaming/finite
+input replacement preserve the arrays. A42-node source preparation benchmark
+takes about60µs; separating type-checker ownership reduces temporary allocation
+from153KB to87KB in that fixture. New origin weights remain a separate training
+study. [Preregistered plan and implementation update](docs/local-value-origin-plan.ko.md).
+
 [Sequential local field updates](publication/record-field-updates-20261005) add
 source-owned choices on record assignment RHS values. Six authored shapes include
 cross-field reads, saved records/scalars, guards and copied locals.72 valid graphs
