@@ -1,5 +1,12 @@
 # Gooo neural decision experiments
 
+[Native body composition](publication/native-composition-20261004) connects seven
+Gooo activities through typed binds, including two model-guided assemblies,
+Integer/Boolean/Text delivery, multiple roots and fanout. Six constructions and
+six saved replays passed588 finite runtime expectations. Fresh model requests
+make two predictions; saved composition replay makes zero. Failed first model
+candidates, separate process/build costs and per-stage actual values are retained.
+
 [Reusable source checkpoints](publication/source-realization-20261004) now carry
 the selected body, original baseline and picked paths into the next generation.
 Two tasks across twelve constructions retained their source/Go/plan identities
