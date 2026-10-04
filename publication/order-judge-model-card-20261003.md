@@ -51,7 +51,9 @@ fits. Equal pieces can reuse an earlier measurement.
   the worker and children, setup, construction and execution; host utilization and
   model-only RAM/latency are unobserved. Original first/warm responses are retained.
 
-- Clearer terminal expectation states are installed on clean main `01d21e92`.
+### Earlier integration checkpoints
+
+- Clearer terminal expectation states were installed on clean main `01d21e92`.
   Dev #1200 and main #1201 passed their own canonical CI and independent
   source proofs, then merged through normal expected-head merges. Fresh
   installed replay made eight ordinary constructions/four own-model judgments/16
@@ -59,8 +61,8 @@ fits. Equal pieces can reuse an earlier measurement.
   Separate missing-tool, invalid-expectation and FIFO controls display unobserved
   expectations; two deliberately changed-expectation requests retain actual 0/256.
   Nine synthetic formatter states are recorded separately from native work.
-  The original JSON/status/exit and runtime contracts are preserved. Current
-  compiler source is `01d21e9260b2c0f1d02f8029824f3dda41631e9d`; installed binary
+  The original JSON/status/exit and runtime contracts are preserved. This checkpoint's
+  compiler source is `01d21e9260b2c0f1d02f8029824f3dda41631e9d`; its installed binary
   SHA256 is `3d1e7ba724961bb7ad8e1866e6588bbe6212ceeee6bc93a4c888a62e2e1594cc`.
   Installed KO/EN model warm responses were 29.644083/24.497167ms; deterministic
   responses were 30.934083/24.965833ms. First responses 834.644792/477.573250ms
@@ -431,7 +433,7 @@ result and an omitted expectation was rejected before generation. Installation,
 exact proof archives and all observations are linked in the report. Weights
 remain unchanged.
 
-### Direct file construction and current installation
+### Direct file construction at the #1187 checkpoint
 
 Dev #1186 and [main #1187](https://github.com/kimjooyoon/meta-ontology-go/pull/1187)
 passed their own six canonical checks and independently verified immutable proofs.
