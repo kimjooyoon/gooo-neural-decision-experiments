@@ -12,6 +12,10 @@ import (
 )
 
 func recountPairedNative(prepared, directory, output string) {
+	recountPairedNativeAt(prepared, directory, output, "aeff3641254ac5f795fa1fb8c94bed702f10cbe4", "frozen_field_v1")
+}
+
+func recountPairedNativeAt(prepared, directory, output, revision, frozenProfile string) {
 	if prepared == "" || directory == "" || output == "" {
 		panic("paired bank, saved native directory and fresh recount output required")
 	}
@@ -22,7 +26,7 @@ func recountPairedNative(prepared, directory, output string) {
 	}
 	planned := map[string]bool{}
 	for _, s := range pairedNativePlan() {
-		for _, p := range []string{"deterministic", "frozen_field_v1", "fp32", "ptq_ternary", "qat_ternary"} {
+		for _, p := range []string{"deterministic", frozenProfile, "fp32", "ptq_ternary", "qat_ternary"} {
 			for _, b := range []int{1, 2, 8} {
 				planned[fmt.Sprintf("%s-%s-b%d", s.ID(), p, b)] = true
 			}
@@ -43,7 +47,7 @@ func recountPairedNative(prepared, directory, output string) {
 		check(json.Unmarshal(scan.Bytes(), &prior))
 		stem := fmt.Sprintf("%s-%s-b%d", prior.ID, prior.Profile, prior.Budget)
 		r, ok := byID[prior.ID]
-		if !ok || !planned[stem] || seen[stem] || prior.Goal != r.Goal || prior.Style != r.Style || prior.Counter || prior.Compiler != "aeff3641254ac5f795fa1fb8c94bed702f10cbe4" {
+		if !ok || !planned[stem] || seen[stem] || prior.Goal != r.Goal || prior.Style != r.Style || prior.Counter || prior.Compiler != revision {
 			panic("paired native inventory differs")
 		}
 		seen[stem] = true
