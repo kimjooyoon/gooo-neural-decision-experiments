@@ -24,18 +24,23 @@ fits. Equal pieces can reuse an earlier measurement.
 
 ## Artifact and integration status
 
-- Dev #1202 is checking source inputs, structural metadata and whole-candidate
-  weights through a shared nonblocking Unix opener on candidate `0eb69e5f`.
+- Dev #1202 passed its own CI and independently verified proof, then merged as `a11a3f08`.
+  Main #1203 checks the identical tree on snapshot `22c2c914`. The change reads source inputs, structural metadata and whole-candidate
+  weights through a shared nonblocking Unix opener, developed on `0eb69e5f`.
   Actual installed source/model FIFO waits and their controlled writer releases
   are retained. Current 64-swap controls have zero writer releases/timeouts;
   25 regular completions keep prior Go and 3,200/3,200 observations. Both model
   FIFO requests return a file error without a writer or output directory.
   A separate actual own-model/deterministic smoke keeps 1,024/1,024 in eight
-  constructions/four judgments/16 native runs. Model warm responses were
+  constructions/four judgments/16 native runs. End-to-end compiler warm responses were
   25.321709/27.571583ms; first responses of 298.670458/485.046083ms are retained.
   The first metadata error's total 528.789584ms is retained too. These are
-  existing authored tasks with unchanged weights/fit. Current installation is
+  construction-and-execution timings; model-only prediction latency is unobserved.
+  The tasks are existing authored tasks with unchanged weights/fit. Current installation is
   the proved main below. [Original wait, controls and Go readers](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/file-input-open-20261004).
+  Separate snapshot-worker concurrency controls preserve four constructions/two
+  judgments/eight native runs and 512/512 existing finite cases. Both processes
+  reach EOF and join without a timeout; original process times are retained.
 
 - Clearer terminal expectation states are installed on clean main `01d21e92`.
   Dev #1200 and main #1201 passed their own canonical CI and independent

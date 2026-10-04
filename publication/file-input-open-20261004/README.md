@@ -2,8 +2,11 @@
 
 2026-10-04 KST. [개발 #1202](https://github.com/kimjooyoon/meta-ontology-go/pull/1202)의
 현재 후보는 `0eb69e5f15ce40a2b07050ae747fe1552d5a9f46`입니다.
-[해당 소스의 CI](https://github.com/kimjooyoon/meta-ontology-go/actions/runs/37162902304)가
-진행 중이며 설치는 main `01d21e92`입니다. 아래 초기 후보 `1a47cb16`의 기록도 보존합니다.
+[해당 소스의 CI](https://github.com/kimjooyoon/meta-ontology-go/actions/runs/37162902304)는
+성공했고 원본 증거의 독립 소스 검증도 통과했습니다. 개발 브랜치 `a11a3f08`로 정상 병합했습니다.
+[배포 PR #1203](https://github.com/kimjooyoon/meta-ontology-go/pull/1203)은 같은 트리의
+후보 `22c2c914`에 자체 CI를 진행합니다. 설치는 main `01d21e92`입니다.
+아래 초기 후보 `1a47cb16`의 기록도 보존합니다.
 초기 후보 CI는 성공했지만 현재 소스의 병합 근거는 현재 소스의 별도 증거로 확인합니다.
 
 ## 현재 후보: 모델 파일까지 같은 읽기 경계 적용
@@ -27,6 +30,8 @@ FIFO일 때 파일 열기에서 기다리는 것을 실제 CLI로 재현했습�
 별도 정상 모델 요청의 첫/재사용 응답은 한국어 298.670458/25.321709ms,
 영어 485.046083/27.571583ms였습니다. 결정론 첫/재사용은
 307.617500/26.578709ms와 305.768084/26.236875ms입니다.
+정상 요청의 응답 시간은 바디 생성과 실제 실행을 포함합니다.
+모델 판단만의 시간은 별도로 측정하지 않았습니다.
 새 의도·학습·가중치 갱신은 0개이며 CPU 사용률과 모델 단독 RAM은 미관측입니다.
 
 모델 정보는 64KiB 이내이고 order-judge 가중치는 정확히 16,384바이트입니다.
@@ -38,6 +43,19 @@ Unix 실행 증거와 Windows arm64 교차 컴파일 증거를 구분합니다.
 `0dd3d0e451099532cb3c211088060227aefb29042be68c2abbb1b933c053ebcb`입니다.
 `revision2-swap-readback.json`과 `model-io-readback.json`은 원본 결과의 읽기 전용 확인입니다.
 초기 ZIP을 덮어쓰지 않습니다.
+
+## 별도 실행기로 병렬 요청하기
+
+배포 후보 `22c2c914`에서 바디 실행기를 따로 빌드하고 각 모드에 한영 요청을
+동시에 두 개씩 보냈습니다. 모델 사용·결정론 4개 구성, 자체 판단 2회, 실제 실행
+8회에서 **512/512**와 기존 생성 Go를 유지했습니다. 두 프로세스는 EOF까지
+종료를 확인했고 시간 초과는 0회였습니다. 모델 모드 총 1,405.621083ms·결정론
+614.624000ms는 모델 준비·동시 요청 생성/실행·프로세스 종료를 포함합니다.
+처리량이나 모델 단독 성능으로 일반화하지 않습니다.
+
+`candidate-worker-observations`와 빌드 정보·수집기를 보관합니다. 원본 수집기의
+`installed` 문구가 가리키는 실제 바이너리는 이 배포 후보입니다. 후속 수집기는
+설치 여부를 가정하지 않고 전달받은 깨끗한 소스로 표시합니다.
 
 ## 실제로 발견한 대기
 
@@ -97,12 +115,16 @@ ZIP SHA256은 `23bb0c253a9c136074e2dfa6df36d40e26610f4755ba9e5eb1867e0d9c2e0f2e`
 unzip native-observations.zip -d saved
 go run ./archive-readback native-observations.zip saved
 go run ./swap-readback saved saved/inputs saved/expected
-unzip revision2-native-observations.zip -d saved
+unzip -o revision2-native-observations.zip -d saved
+go run ./archive-readback revision2-native-observations.zip saved
 go run ./swap-readback saved saved/inputs saved/expected revision2
 go run ./model-io-readback saved
 GOOO_LOCAL_GO=/path/to/go1.27.1/bin/go go run ./race-probe \
   /path/to/clean-gooo saved/inputs fresh-swap-output 64
 ```
+
+위 두 ZIP을 새 폴더에서 풀고 보관된 결과를 확인하는 순서도 직접 실행했습니다.
+`public-cli-*.json`에 각 읽기 전용 확인을 남겼습니다.
 
 새 경로 교체 실행은 스케줄링에 따라 다른 완료/오류 목록을 만듭니다.
 `swap-readback`은 보관한 원래 14/64회 자료와 선택한 현재 후보 64회 자료를 확인합니다. `race-probe`는 Unix에서

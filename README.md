@@ -39,7 +39,9 @@ means measured outputs missed every expectation. [Full usage and next actions](h
   earlier Go and 3,200/3,200 observations, while 39 file errors occur before construction.
   Two model FIFO requests return without a writer. Separate own-model/deterministic
   smoke keeps 1,024/1,024. Initial candidate observations remain archived separately.
-  Dev #1202 is in its new-head CI; installation remains `01d21e92`.
+  Dev #1202 passed its exact-head CI and independent proof, then merged as `a11a3f08`.
+  Main #1203 checks the identical tree on snapshot `22c2c914`; installation remains `01d21e92`.
+  Separate concurrent standalone-worker controls preserve 512/512 finite observations.
 
 - [Distinguish unobserved expectations from actual measured zero](publication/finite-observation-display-20261004):
   installed terminal summaries use current case observations and replay state.
