@@ -10,6 +10,13 @@ without assembling the tool again. Each execution still measures its own result.
 
 ## What was measured
 
+The feature is now merged into compiler main `7acccf56` through PR1228 after
+its complete CI, and both local executables are installed. [Fresh installed
+controls](installed) retain the candidate's program identities, actual values
+and partial counts. Saved FP32-origin workload medians are2,327.40ms/497.14ms;
+fresh prediction median is18.792µs. The original candidate results below remain
+separate.
+
 [Candidate observations](candidate) bind clean compiler source
 `38962397144d4418b75f571471225ff02d712617`, Go1.27.1 and the existing frozen own
 models. [Compiler PR1227](https://github.com/kimjooyoon/meta-ontology-go/pull/1227)

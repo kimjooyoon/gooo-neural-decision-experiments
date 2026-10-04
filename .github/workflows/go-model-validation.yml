@@ -27,10 +27,11 @@ jobs:
           go test -race ./cmd/composition-series-observe
           go build -o "$RUNNER_TEMP/series-observe" ./cmd/composition-series-observe
           (cd publication/retained-composition-20261005/candidate && sha256sum -c SHA256SUMS)
+          (cd publication/retained-composition-20261005/installed && sha256sum -c SHA256SUMS)
       - uses: actions/checkout@v7
         with:
           repository: kimjooyoon/meta-ontology-go
-          ref: 38962397144d4418b75f571471225ff02d712617
+          ref: 7acccf564b3def31ddd368050c2288f05bd7076f
           path: .retained-composition-compiler
           persist-credentials: false
       - name: Run current Korean and English records with one graph build
@@ -46,12 +47,12 @@ jobs:
             "$RUNNER_TEMP/gooo-series" body-compose --source "$study/source.gooo.fixture" \
               --case-series "$study/case-series.json" --repeat 2 "${model_args[@]}" > "$stem.json"
             "$RUNNER_TEMP/series-observe" --verify-json "$stem.json" \
-              --compiler-source 38962397144d4418b75f571471225ff02d712617
+              --compiler-source 7acccf564b3def31ddd368050c2288f05bd7076f
             jq .composition "$stem.json" > "$stem-composition.json"
             "$RUNNER_TEMP/gooo-series" body-compose --source "$study/source.gooo.fixture" \
               --case-series "$study/case-series.json" --repeat 2 --composition "$stem-composition.json" > "$stem-saved.json"
             "$RUNNER_TEMP/series-observe" --verify-json "$stem-saved.json" \
-              --compiler-source 38962397144d4418b75f571471225ff02d712617 --saved
+              --compiler-source 7acccf564b3def31ddd368050c2288f05bd7076f --saved
             jq -S '[.runtime_history[]|.traces]' "$stem.json" > "$stem-values.json"
             jq -S '[.runtime_history[]|.traces]' "$stem-saved.json" > "$stem-saved-values.json"
             cmp "$stem-values.json" "$stem-saved-values.json"
