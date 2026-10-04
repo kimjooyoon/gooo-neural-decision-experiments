@@ -1,0 +1,28 @@
+package records
+namespace fieldstudy
+entity Text id "fieldstudy://text"
+entity Boolean id "fieldstudy://boolean"
+entity Candidate id "fieldstudy://family/6/record" fields {
+    field message id "fieldstudy://family/6/field/0" type string required one
+    field flag id "fieldstudy://family/6/field/1" type string required one
+    field context id "fieldstudy://family/6/field/2" type string required one
+}
+activity Select(Candidate, Boolean) -> Candidate computes `if input0.flag == "ready" {
+    return input0
+}
+if input1 {
+    return Candidate{message: input0.flag, flag: "wait", context: input0.context + ":accepted"}
+}
+return input0` assembling {
+    choice "role-0" field_value at "0" alternative "input0.message + \"\"" intent "원래 제목을 그대로 사용한다."
+    choice "role-1" field_value at "1" alternative "\"ready\"" intent "상태를 ready 문자열로 설정한다."
+    choice "role-2" field_value at "2" alternative "\":accepted\" + input0.context" intent "기존 사유 뒤에 :accepted를 붙인다."
+    value_case "[{\"context\":\"검토\",\"flag\":\"queued\",\"message\":\"한글\"},true]" -> "{\"context\":\"검토:accepted\",\"flag\":\"ready\",\"message\":\"한글\"}"
+    value_case "[{\"context\":\"review\",\"flag\":\"queued\",\"message\":\"English\"},true]" -> "{\"context\":\"review:accepted\",\"flag\":\"ready\",\"message\":\"English\"}"
+    value_case "[{\"context\":\"\",\"flag\":\"queued\",\"message\":\"\"},true]" -> "{\"context\":\":accepted\",\"flag\":\"ready\",\"message\":\"\"}"
+    value_case "[{\"context\":\"later\",\"flag\":\"queued\",\"message\":\"kept\"},false]" -> "{\"context\":\"later\",\"flag\":\"queued\",\"message\":\"kept\"}"
+    value_case "[{\"context\":\"done\",\"flag\":\"ready\",\"message\":\"already\"},true]" -> "{\"context\":\"done\",\"flag\":\"ready\",\"message\":\"already\"}"
+    attempts "1"
+}
+activity Label(Candidate) -> Text computes `return input.message + ":" + input.flag + ":" + input.context`
+bind Select.result -> Label.input

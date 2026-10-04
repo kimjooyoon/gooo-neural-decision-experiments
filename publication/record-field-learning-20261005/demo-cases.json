@@ -1,0 +1,77 @@
+{
+  "cases": [
+    {
+      "inputs": {
+        "Select.input0": {
+          "context": "새 사유",
+          "flag": "queued",
+          "message": "새 예제"
+        },
+        "Select.input1": true
+      },
+      "expected": {
+        "Label": "새 예제:ready:새 사유:accepted",
+        "Select": {
+          "context": "새 사유:accepted",
+          "flag": "ready",
+          "message": "새 예제"
+        }
+      }
+    },
+    {
+      "inputs": {
+        "Select.input0": {
+          "context": "new detail",
+          "flag": "queued",
+          "message": "Runtime"
+        },
+        "Select.input1": true
+      },
+      "expected": {
+        "Label": "Runtime:ready:new detail:accepted",
+        "Select": {
+          "context": "new detail:accepted",
+          "flag": "ready",
+          "message": "Runtime"
+        }
+      }
+    },
+    {
+      "inputs": {
+        "Select.input0": {
+          "context": "later",
+          "flag": "queued",
+          "message": "kept"
+        },
+        "Select.input1": false
+      },
+      "expected": {
+        "Label": "kept:queued:later",
+        "Select": {
+          "context": "later",
+          "flag": "queued",
+          "message": "kept"
+        }
+      }
+    },
+    {
+      "inputs": {
+        "Select.input0": {
+          "context": "done",
+          "flag": "ready",
+          "message": "already"
+        },
+        "Select.input1": true
+      },
+      "expected": {
+        "Label": "already:ready:done",
+        "Select": {
+          "context": "done",
+          "flag": "ready",
+          "message": "already"
+        }
+      }
+    }
+  ],
+  "schema": "gooo/body-composition-cases/v1"
+}

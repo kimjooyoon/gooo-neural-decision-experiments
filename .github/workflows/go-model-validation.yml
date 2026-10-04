@@ -10,6 +10,54 @@ permissions:
   contents: read
 
 jobs:
+  record-source-learning-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GOTOOLCHAIN: local
+      GOWORK: "off"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.27.1'
+          cache: false
+      - name: Replay the complete source bank and observed native values
+        run: |
+          go test -race ./cmd/record-field-curriculum
+          study=publication/record-field-learning-20261005
+          (cd "$study" && sha256sum -c SHA256SUMS)
+          unzip -q "$study/evidence.zip" -d "$RUNNER_TEMP/field-learning"
+          go run ./cmd/record-field-curriculum --audit-prepared "$RUNNER_TEMP/field-learning/prepared" \
+            --models "$RUNNER_TEMP/field-learning/trained/models" --output "$RUNNER_TEMP/field-audit"
+          go run ./cmd/record-field-curriculum --audit-prepared "$RUNNER_TEMP/field-learning/prepared" \
+            --verify-native "$RUNNER_TEMP/field-learning/native" --output "$RUNNER_TEMP/field-recount.jsonl"
+          cmp "$RUNNER_TEMP/field-recount.jsonl" "$RUNNER_TEMP/field-learning/native/summaries.jsonl"
+      - uses: actions/checkout@v7
+        with:
+          repository: kimjooyoon/meta-ontology-go
+          ref: af811fe3b5dbb709edd61fe9de216f6af0850911
+          path: .record-source-compiler
+          persist-credentials: false
+      - name: Reconstruct and execute the 100 finite observations
+        run: |
+          (cd .record-source-compiler && go build -trimpath -o "$RUNNER_TEMP/gooo-field-source" ./cmd/gooo)
+          go run ./cmd/record-field-curriculum --native-prepared "$RUNNER_TEMP/field-learning/prepared" \
+            --models "$RUNNER_TEMP/field-learning/trained/models" \
+            --compiler "$RUNNER_TEMP/gooo-field-source" \
+            --compiler-source af811fe3b5dbb709edd61fe9de216f6af0850911 \
+            --frozen-model models/own-three-feedback-v1/set-feedback/models/fp32/model.json \
+            --output "$RUNNER_TEMP/field-native-fresh"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: record-source-learning-replay
+          path: |
+            ${{ runner.temp }}/field-native-fresh
+            ${{ runner.temp }}/field-audit
+            ${{ runner.temp }}/field-recount.jsonl
+          if-no-files-found: error
+
   retained-composition-replay:
     runs-on: ubuntu-latest
     timeout-minutes: 10
