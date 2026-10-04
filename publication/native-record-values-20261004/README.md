@@ -3,7 +3,9 @@
 Observed on 2026-10-04 at clean compiler candidate
 [`fa3c892791a2fd775a265c7524c9ee59adce45bf`](https://github.com/kimjooyoon/meta-ontology-go/commit/fa3c892791a2fd775a265c7524c9ee59adce45bf),
 [development PR1223](https://github.com/kimjooyoon/meta-ontology-go/pull/1223).
-Go 1.27.1, macOS arm64. Installation is reported separately when completed.
+Go 1.27.1, macOS arm64. The feature is now merged and installed at main
+`b629a664`; [fresh installed observations and field completeness summaries](installed/README.md)
+are retained separately from these candidate measurements.
 
 ## What a user can express
 

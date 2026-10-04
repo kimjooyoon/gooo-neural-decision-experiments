@@ -25,7 +25,8 @@ jobs:
       - name: Verify retained record values and field observations
         run: |
           (cd publication/native-record-values-20261004 && sha256sum -c SHA256SUMS)
-          go test -race ./cmd/native-record-observe
+          (cd publication/native-record-values-20261004/installed && sha256sum -c SHA256SUMS)
+          go test -race ./cmd/native-record-observe ./cmd/record-completeness
           go build -o "$RUNNER_TEMP/record-observe" ./cmd/native-record-observe
       - uses: actions/checkout@v7
         with:

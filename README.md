@@ -8,6 +8,14 @@ Score assembly; record bodies come from Gooo source. Median prediction was 26.9�
 but whole generation took 12.80ms with the model versus 11.77ms deterministically.
 Saved replay makes zero predictions. [한국어 설명](publication/native-record-values-20261004/README.ko.md).
 
+The feature is merged and installed at compiler main `b629a664`.
+[Fresh installed controls](publication/native-record-values-20261004/installed)
+retain the same source/code/driver identities, 432/432 outputs and 1,152 field
+observations. `go run ./cmd/record-completeness --input CAPTURE.json` shows finite
+output/record-field ratios and the actual field gaps. Missing record expectations
+remain visible as unobserved; a second graph demonstrates external record input
+and local whole-value replacement.
+
 [Ordered native input joins](publication/native-input-joins-20261004) connect
 repeated-type and mixed-type inputs, including ports supplied partly by the caller
 and partly by producer results. One authored seven-activity graph passed 588
@@ -55,7 +63,7 @@ gooo_go_bin="$(GOTOOLCHAIN=go1.27.1 go env GOROOT)/bin/go"
 gooo_compiler_dir="$(mktemp -d)"
 git -C "$gooo_compiler_dir" init --quiet
 git -C "$gooo_compiler_dir" remote add origin https://github.com/kimjooyoon/meta-ontology-go.git
-git -C "$gooo_compiler_dir" fetch --depth 1 origin 7da097229caf39aa64a277fdc2c200256c834b9c
+git -C "$gooo_compiler_dir" fetch --depth 1 origin b629a664ea4a667945ab5f894557f42e97cafa35
 git -C "$gooo_compiler_dir" switch --detach FETCH_HEAD
 GOTOOLCHAIN=local GOWORK=off "$gooo_go_bin" -C "$gooo_compiler_dir" build -o "$PWD/gooo" ./cmd/gooo
 ./gooo body-path-run --source examples/whole-candidate-order/source.gooo \

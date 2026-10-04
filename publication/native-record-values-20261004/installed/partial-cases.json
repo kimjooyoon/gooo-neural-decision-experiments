@@ -1,0 +1,149 @@
+{
+  "schema": "gooo/body-composition-cases/v1",
+  "cases": [
+    {
+      "inputs": {
+        "Propose.input1": "gooo",
+        "ReviewCandidate.input1": true,
+        "Score": -8
+      },
+      "expected": {
+        "Echo": {
+          "state": "ready",
+          "title": "gooo"
+        },
+        "Label": "gooo:accepted",
+        "Propose": {
+          "state": "wait",
+          "title": "gooo"
+        },
+        "ReviewCandidate": {
+          "reason": "accepted",
+          "summary": "gooo"
+        },
+        "Same": true,
+        "Score": 15
+      }
+    },
+    {
+      "inputs": {
+        "Propose.input1": "유보",
+        "ReviewCandidate.input1": true,
+        "Score": 9
+      },
+      "expected": {
+        "Echo": {
+          "state": "wait",
+          "title": "유보"
+        },
+        "Label": "유보:deferred",
+        "Propose": {
+          "state": "wait",
+          "title": "유보"
+        },
+        "ReviewCandidate": {
+          "reason": "deferred",
+          "summary": "유보"
+        },
+        "Same": true,
+        "Score": -2
+      }
+    },
+    {
+      "inputs": {
+        "Propose.input1": "",
+        "ReviewCandidate.input1": false,
+        "Score": 0
+      },
+      "expected": {
+        "Echo": {
+          "state": "ready",
+          "title": ""
+        },
+        "Label": ":deferred",
+        "Propose": {
+          "state": "ready",
+          "title": ""
+        },
+        "ReviewCandidate": {
+          "reason": "deferred",
+          "summary": ""
+        },
+        "Same": true,
+        "Score": 7
+      }
+    },
+    {
+      "inputs": {
+        "Propose.input1": "줄\n바꿈",
+        "ReviewCandidate.input1": true,
+        "Score": 7
+      },
+      "expected": {
+        "Echo": {
+          "state": "ready",
+          "title": "줄\n바꿈"
+        },
+        "Label": "줄\n바꿈:accepted",
+        "Propose": {
+          "state": "ready",
+          "title": "줄\n바꿈"
+        },
+        "ReviewCandidate": {
+          "reason": "accepted",
+          "summary": "줄\n바꿈"
+        },
+        "Same": true,
+        "Score": 0
+      }
+    },
+    {
+      "inputs": {
+        "Propose.input1": "큰 값",
+        "ReviewCandidate.input1": true,
+        "Score": 9223372036854775807
+      },
+      "expected": {
+        "Echo": {
+          "state": "wait",
+          "title": "큰 값"
+        },
+        "Label": "큰 값:deferred",
+        "Propose": {
+          "state": "wait",
+          "title": "큰 값"
+        },
+        "ReviewCandidate": {
+          "reason": "deferred",
+          "summary": "큰 값"
+        },
+        "Same": true,
+        "Score": -9223372036854775800
+      }
+    },
+    {
+      "inputs": {
+        "Propose.input1": "é",
+        "ReviewCandidate.input1": true,
+        "Score": -9223372036854775808
+      },
+      "expected": {
+        "Echo": {
+          "state": "wait",
+          "title": "é"
+        },
+        "Label": "é:deferred",
+        "Propose": {
+          "state": "wait",
+          "title": "é"
+        },
+        "ReviewCandidate": {
+          "reason": "deferred",
+          "summary": "é"
+        },
+        "Same": true,
+        "Score": -9223372036854775801
+      }
+    }
+  ]
+}

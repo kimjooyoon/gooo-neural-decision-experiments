@@ -120,3 +120,26 @@ func TestJSONEqualityRetainsExactIntegersAndStringMeaning(t *testing.T) {
 		}
 	}
 }
+
+func TestInstalledUnscoredAndExternalRecordControls(t *testing.T) {
+	for _, test := range []struct {
+		name                        string
+		outputs, fields, unobserved int
+	}{
+		{"installed/partial", 35, 35, 0},
+		{"installed/external", 8, 8, 0},
+		{"installed/external-replay", 8, 8, 0},
+		{"installed/unscored-records", 18, 0, 36},
+	} {
+		r, err := measure(fixture(t, test.name))
+		if err != nil {
+			t.Fatal(err)
+		}
+		if r.Outputs.Passed != test.outputs || r.Fields.Passed != test.fields || r.Fields.Unobserved != test.unobserved {
+			t.Fatal(r)
+		}
+		if test.unobserved != 0 && (r.Fields.Total != 0 || r.Fields.Percent != nil || r.Outputs.Unobserved != 18) {
+			t.Fatal(r)
+		}
+	}
+}

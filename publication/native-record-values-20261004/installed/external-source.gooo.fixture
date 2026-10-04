@@ -1,0 +1,14 @@
+package records
+namespace recordinput
+entity Text id "recordinput://text"
+entity Item id "recordinput://item" fields {
+    field name id "recordinput://name" type string required one
+    field state id "recordinput://state" type string required one
+}
+activity Start(Item) -> Item computes `
+let copy = input
+copy = Item{name: copy.name, state: copy.state + "!"}
+return copy
+`
+activity End(Item) -> Text computes "return input.name + \":\" + input.state"
+bind Start.result -> End.input

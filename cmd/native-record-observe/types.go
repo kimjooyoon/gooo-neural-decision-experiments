@@ -124,6 +124,7 @@ type envelope struct {
 		} `json:"steps"`
 	} `json:"composition"`
 	Runtime struct {
+		Source   string `json:"producer_source_sha"`
 		Stage    string `json:"stage"`
 		Failure  string `json:"failure"`
 		Replayed bool   `json:"runtime_replayed"`
