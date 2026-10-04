@@ -133,6 +133,10 @@ func auditPaired(prepared, models, frozen, output string) {
 		model, err := jointdecision.LoadRecordThree(path)
 		check(err)
 		loaded[variant] = model
+	}
+	total, maximum := pairedParity(models, rows, loaded)
+	for _, variant := range []string{"frozen_field_v1", "fp32", "ptq_ternary", "qat_ternary"} {
+		model := loaded[variant]
 		file, err := os.OpenFile(filepath.Join(output, variant+"-predictions.jsonl"), os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0644)
 		check(err)
 		encoder := json.NewEncoder(file)
@@ -188,6 +192,10 @@ func auditPaired(prepared, models, frozen, output string) {
 		}
 		summaries[variant] = map[string]any{"counts": counts, "predict_ns_median": medians, "mean_entropy_bits": entropy, "metadata_sha256": model.MetadataSHA256(), "weights_sha256": model.WeightsSHA256(), "weight_file_bytes": model.PackedFileBytes(), "resident_tensor_bytes": model.ResidentTensorBytes(), "scale_bytes": model.MatrixScaleBytes()}
 	}
+	save(filepath.Join(output, "report.json"), map[string]any{"schema": "gooo/record-paired-model-audit/v2", "rows": len(rows), "source_and_feature_bank_replayed": true, "parity_records": total, "maximum_logit_absolute_error": maximum, "models": summaries, "scope": "Complete registered source/context/feature replay and numerical parity before quality evaluation. Distinct source/wording diagnostic axes; seen-body wording shares skeletons intentionally. Known v1 families are reused benchmarks. Warm row medians are not an end-to-end speedup; frozen v1 field model is evaluated on the same goal contexts."})
+}
+
+func pairedParity(models string, rows []PairedRow, loaded map[string]*jointdecision.ThreeModel) (int, float64) {
 	file, err := os.Open(filepath.Join(filepath.Dir(models), "go-parity.jsonl"))
 	check(err)
 	defer file.Close()
@@ -229,5 +237,5 @@ func auditPaired(prepared, models, frozen, output string) {
 	if total != 120 {
 		panic("complete paired parity inventory required")
 	}
-	save(filepath.Join(output, "report.json"), map[string]any{"schema": "gooo/record-paired-model-audit/v2", "rows": len(rows), "source_and_feature_bank_replayed": true, "parity_records": total, "maximum_logit_absolute_error": maximum, "models": summaries, "scope": "Complete registered source/context/feature replay. Distinct source/wording diagnostic axes; seen-body wording shares skeletons intentionally. Known v1 families are reused benchmarks. Warm row medians are not an end-to-end speedup; frozen v1 field model is evaluated on the same goal contexts."})
+	return total, maximum
 }
