@@ -45,6 +45,11 @@ func require(ok bool, message string) {
 	}
 }
 func audit(dir string, initial bool) map[string]any {
+	build := readObject(filepath.Join(dir, "compiler-build.json"))
+	source := build["compiler_source_sha"].(string)
+	require(build["source_status"] == "CLEAN_VCS" && len(source) == 40 && build["go_version"] == "go1.27.1", "clean source identity required")
+	sdk := object(build["decision_runtime"])
+	require(sdk["version"] == "v0.2.23-experimental" && sdk["replaced"] == false, "immutable SDK required")
 	summary := readObject(filepath.Join(dir, "summary.json"))
 	rows := summary["trials"].([]any)
 	require(len(rows) == 72, "72 planned tuples required")
@@ -79,6 +84,7 @@ func audit(dir string, initial bool) map[string]any {
 		capture := readObject(filepath.Join(dir, stem+"-raw.json"))
 		cases := readObject(filepath.Join(dir, stem+"-cases.json"))["cases"].([]any)
 		native := object(capture["runtime"])
+		require(native["producer_source_sha"] == source, "native compiler source differs")
 		require(number(native["model_calls"]) == 0 && native["runtime_replayed"] == true && native["projection_replayed"] == true, "replay observation differs")
 		checkProcess(object(native["build"]))
 		runs := native["runs"].([]any)
@@ -89,7 +95,9 @@ func audit(dir string, initial bool) map[string]any {
 		fields, named := recountTrace(native["traces"].([]any), cases, shape)
 		require(fields == number(r["runtime_fields_passed"]) && number(r["runtime_fields_total"]) == 12 && named == number(r["named_outputs_passed"]) && number(native["finite_passed"]) == named && number(native["finite_total"]) == 8, "runtime recount differs")
 		step := object(object(capture["composition"])["steps"].([]any)[0])
-		a := object(object(object(step["generation"])["report"])["record_assembly"])
+		generation := object(object(step["generation"])["report"])
+		require(generation["compiler_source_sha"] == source, "generation compiler source differs")
+		a := object(generation["record_assembly"])
 		calls := 0
 		if profile == "qat_ternary" {
 			calls = 1
@@ -137,8 +145,6 @@ func audit(dir string, initial bool) map[string]any {
 		}
 		return nil
 	}))
-	build := readObject(filepath.Join(dir, "compiler-build.json"))
-	require(build["source_status"] == "CLEAN_VCS" && build["compiler_source_sha"] == "f070e7743688815db7684134a42d01256ea3f9a0", "source identity differs")
 	return map[string]any{"schema": "gooo/sequential-record-independent-audit/v1", "groups": groups, "raw_bytes": rawBytes, "compiler_source_sha": build["compiler_source_sha"], "source_initial_failures_retained": initial, "scope": "all goals request the second expression mask7; same authored cases used for selection/native; whole-command costs include compilation/startup"}
 }
 func checkProcess(p map[string]any) {
