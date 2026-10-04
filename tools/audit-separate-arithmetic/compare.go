@@ -15,7 +15,7 @@ import (
 	"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/threestudent"
 )
 
-func readReport(root string) (report, error) {
+func readReport(root string, sourceDelta bool) (report, error) {
 	var r report
 	b, err := os.ReadFile(filepath.Join(root, "report.json"))
 	if err != nil {
@@ -37,7 +37,12 @@ func readReport(root string) (report, error) {
 		if !filepath.IsLocal(name) {
 			return r, errors.New("nonlocal source pin")
 		}
-		if err = pinned(name, pin); err != nil {
+		if sourceDelta {
+			err = pinnedGitSource(".", r.Source, name, pin)
+		} else {
+			err = pinned(name, pin)
+		}
+		if err != nil {
 			return r, err
 		}
 	}
@@ -64,10 +69,10 @@ func readReport(root string) (report, error) {
 		if !filepath.IsLocal(name) {
 			return r, errors.New("nonlocal model pin")
 		}
-		if strings.HasPrefix(name, "separate/") {
-			err = pinned(filepath.Join(root, "models", strings.TrimPrefix(name, "separate/")), pin)
-		} else if strings.HasPrefix(name, "legacy/") {
-			err = pinned(filepath.Join(bundle, "models", strings.TrimPrefix(name, "legacy/")), pin)
+		if after, ok := strings.CutPrefix(name, "separate/"); ok {
+			err = pinned(filepath.Join(root, "models", after), pin)
+		} else if after, ok := strings.CutPrefix(name, "legacy/"); ok {
+			err = pinned(filepath.Join(bundle, "models", after), pin)
 		} else {
 			return r, errors.New("unknown model lane")
 		}
@@ -160,22 +165,23 @@ func validateObservation(o observation, passed [8]int) error {
 	return nil
 }
 
-func compare(local, remote, output string) error {
+func compare(local, remote, output string, sourceDelta bool) error {
 	if output == "" {
 		return errors.New("fresh comparison path required")
 	}
 	if _, err := os.Lstat(output); !os.IsNotExist(err) {
 		return errors.New("fresh comparison path required")
 	}
-	a, err := readReport(local)
+	a, err := readReport(local, sourceDelta)
 	if err != nil {
 		return err
 	}
-	b, err := readReport(remote)
+	b, err := readReport(remote, sourceDelta)
 	if err != nil {
 		return err
 	}
-	if !reflect.DeepEqual(a.Sources, b.Sources) || !reflect.DeepEqual(a.Models, b.Models) || a.Protocol != b.Protocol {
+	sourcesEqual := reflect.DeepEqual(a.Sources, b.Sources)
+	if (!sourceDelta && !sourcesEqual) || !reflect.DeepEqual(a.Models, b.Models) || a.Protocol != b.Protocol {
 		return errors.New("computational source/model/protocol differs")
 	}
 	var legacy, separate changes
@@ -232,6 +238,14 @@ func compare(local, remote, output string) error {
 		return err
 	}
 	value := map[string]any{"schema": "gooo/separate-arithmetic-comparison/v1", "status": status, "source_revisions": [2]string{a.Source, b.Source}, "computational_sources_equal": true, "platforms": [2]string{a.GOOS + "/" + a.GOARCH, b.GOOS + "/" + b.GOARCH}, "collection_reports": [2]threestudent.Pin{pa, pb}, "legacy": legacy, "separate": separate, "changed_explicit_rows": changed, "new_model_predictions": 0, "new_optimizer_updates": 0, "feature_replays": 36864, "scope": "All paired complete journals, exact explicit feature/hidden/logit bits and discrete outcomes. Probability differences remain measured with a 1e-5 bound; legacy observations keep their own differences."}
+	if sourceDelta {
+		value["schema"] = "gooo/separate-arithmetic-comparison/v2"
+		value["computational_sources_equal"] = sourcesEqual
+		value["source_binding"] = "each recorded inventory checked against its immutable Git revision"
+		value["computational_sources"] = [2]map[string]threestudent.Pin{a.Sources, b.Sources}
+		value["changed_source_files"] = sourceChanges(a.Sources, b.Sources)
+		value["scope"] = "Arithmetic parity across independently source-bound revisions; source deltas remain explicit. All paired inputs, models, targets, hidden/logit bits, rankings and finite outcomes retain their original checks and probability bound."
+	}
 	raw, err := json.MarshalIndent(value, "", "  ")
 	if err != nil {
 		return err

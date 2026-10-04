@@ -104,13 +104,14 @@ func main() {
 	source := flag.String("source-revision", "", "exact clean collection source")
 	local := flag.String("local", "", "first complete collection")
 	remote := flag.String("remote", "", "second complete collection")
+	sourceDelta := flag.Bool("source-delta", false, "compare arithmetic across separately Git-verified source inventories")
 	flag.Parse()
 	var err error
 	switch *mode {
 	case "collect":
 		err = collect(*output, *source)
 	case "compare":
-		err = compare(*local, *remote, *output)
+		err = compare(*local, *remote, *output, *sourceDelta)
 	default:
 		err = errors.New("unknown mode")
 	}

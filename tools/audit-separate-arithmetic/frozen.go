@@ -157,12 +157,12 @@ func sourcePins(revision string) (map[string]threestudent.Pin, error) {
 	if err != nil || len(dirty) != 0 {
 		return nil, errors.New("clean collection source required")
 	}
-	files, err := exec.Command("git", "ls-files", "internal/decision", "internal/jointdecision", "internal/pathplan", "internal/threecohort", "internal/threestudent", "tools/audit-separate-arithmetic", "go.mod", "go.sum").Output()
+	files, err := exec.Command("git", "ls-files", "internal/decision", "internal/jointdecision", "internal/modelfile", "internal/pathplan", "internal/threecohort", "internal/threestudent", "tools/audit-separate-arithmetic", "go.mod", "go.sum").Output()
 	if err != nil {
 		return nil, err
 	}
 	pins := map[string]threestudent.Pin{}
-	for _, name := range strings.Fields(string(files)) {
+	for name := range strings.FieldsSeq(string(files)) {
 		pin, err := threestudent.FilePin(name)
 		if err != nil {
 			return nil, err

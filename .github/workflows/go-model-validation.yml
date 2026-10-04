@@ -200,6 +200,8 @@ jobs:
       GOWORK: "off"
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - uses: actions/setup-go@v7
         with:
           go-version: '1.27.1'
@@ -217,7 +219,7 @@ jobs:
       - name: Compare every new Linux observation with the frozen arm64 collection
         run: |
           unzip -q publication/full-input-separate-arithmetic-20261003/arm64.zip -d "$RUNNER_TEMP/separate-arm64"
-          go run ./tools/audit-separate-arithmetic --mode compare \
+          go run ./tools/audit-separate-arithmetic --mode compare --source-delta \
             --local "$RUNNER_TEMP/separate-arm64" --remote runs/own-three-separate-linux-ci \
             --output runs/own-three-separate-linux-ci/platform-comparison.json
       - uses: actions/upload-artifact@v7
