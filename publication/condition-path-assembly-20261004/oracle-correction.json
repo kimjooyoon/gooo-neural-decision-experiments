@@ -1,0 +1,17 @@
+{
+  "schema": "gooo/oracle-correction/v1",
+  "issue": "The first authored alternative-body suite declared input 5 -> 25. Under the documented body, input 5 takes the else branch and returns 24.",
+  "formula": "first=x+2; second=2*x; chosen=second; add 3 iff x>=0 && x!=2 && x<=4, otherwise subtract 3; return chosen+(first+second). Thus output is 5*x+5 on the add branch and 5*x-1 otherwise.",
+  "initial_case": {
+    "input": 5,
+    "expected": 25,
+    "observed": 24
+  },
+  "corrected_case": {
+    "input": 5,
+    "expected": 24,
+    "observed": 24
+  },
+  "initial_result": "PARTIAL 4/5 because the authored expectation was wrong; not a model or compiler failure.",
+  "corrected_result": "TRAINING_COMPLETE 5/5 for both model and deterministic routes."
+}

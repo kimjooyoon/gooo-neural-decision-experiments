@@ -1,0 +1,47 @@
+{
+  "schema": "gooo/source-typed-path-recipe/v1",
+  "choices": [
+    {
+      "id": "base-local",
+      "kind": "local_reference",
+      "occurrence": 0,
+      "intent": "Use the second local variable (second), not the first (first), as the branch base. 첫 번째 지역값 대신 두 번째 지역값을 분기의 기준으로 사용한다.",
+      "alternative_name": "second"
+    },
+    {
+      "id": "condition-branches",
+      "kind": "branch_layout",
+      "occurrence": 0,
+      "intent": "For nonnegative values other than two through four, add three. Otherwise subtract three. 0 이상 2가 아닌 값이 4 이하이면 3을 더하고, 나머지는 3을 뺀다."
+    },
+    {
+      "id": "independent-declarations",
+      "kind": "root_order",
+      "occurrence": 0,
+      "intent": "Either declaration order is valid because the two values are independent. 두 값은 서로 독립이므로 선언 순서는 어느 쪽이든 된다."
+    }
+  ],
+  "test_cases": [
+    {
+      "input": -1,
+      "expected": -6
+    },
+    {
+      "input": 0,
+      "expected": 5
+    },
+    {
+      "input": 2,
+      "expected": 9
+    },
+    {
+      "input": 4,
+      "expected": 25
+    },
+    {
+      "input": 5,
+      "expected": 25
+    }
+  ],
+  "max_attempts": 8
+}
