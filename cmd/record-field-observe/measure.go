@@ -8,6 +8,8 @@ import (
 
 type measurement struct {
 	Mode                  string     `json:"mode"`
+	ModelProfile          string     `json:"model_profile,omitempty"`
+	ResidentTensorBytes   int        `json:"resident_tensor_bytes,omitempty"`
 	Budget                int        `json:"attempt_budget,omitempty"`
 	Trial                 *int       `json:"trial,omitempty"`
 	Saved                 bool       `json:"saved"`
@@ -195,8 +197,9 @@ func measure(raw []byte, sha string, saved bool) (measurement, captured, error) 
 	row.Mode = "deterministic"
 	if f.Model != nil {
 		row.Mode = "model"
-		if f.Model.Metadata != "e9d7f4770d4d8402c64eea116028e6d6c049b1522f50f399c05f2c3571932a3b" ||
-			f.Model.Weights != "f5af1e35288cbad938d8416dd51873d83dff369a0e0c6e7e16f6e1f75b7f429b" || f.Model.Bytes != 74624 || f.Calls != 1 || f.PredictNS < 1 {
+		row.ModelProfile = frozenProfile(f.Model.Metadata, f.Model.Weights, f.Model.Bytes)
+		row.ResidentTensorBytes = f.Model.Bytes
+		if row.ModelProfile == "" || f.Calls != 1 || f.PredictNS < 1 {
 			return row, observation, fmt.Errorf("frozen own-model identity or prediction observation differs")
 		}
 	} else if f.Calls != 0 {
@@ -210,6 +213,23 @@ func measure(raw []byte, sha string, saved bool) (measurement, captured, error) 
 	row.GenerationMS, row.RuntimeMS = float64(c.Elapsed)/1e6, float64(r.Elapsed)/1e6
 	row.GoSHA, row.SourceSHA = c.GoSHA, c.SourceSHA
 	return row, observation, nil
+}
+
+func frozenProfile(metadata, weights string, resident int) string {
+	profiles := [...]struct {
+		name, metadata, weights string
+		resident                int
+	}{
+		{"fp32", "e9d7f4770d4d8402c64eea116028e6d6c049b1522f50f399c05f2c3571932a3b", "f5af1e35288cbad938d8416dd51873d83dff369a0e0c6e7e16f6e1f75b7f429b", 74624},
+		{"ptq_ternary", "2bc62124e2ca72e2effe1e770842b7137f8968e2cd1238f139b7d1d503beb1bc", "942e11299fecb9f2c399024375ac5d7aa114df2e3d2070a625872d391542b82d", 18752},
+		{"qat_ternary", "fc5446ea7ca31ba2eb4ff29957cec5614df9820cfd110bc1f51a79f996325c43", "2d75a95d03f060177c1f8feff7fde582b4dc70cd3000074a51b27afbc74b3e3a", 18752},
+	}
+	for _, profile := range profiles {
+		if metadata == profile.metadata && weights == profile.weights && resident == profile.resident {
+			return profile.name
+		}
+	}
+	return ""
 }
 
 func equalJSON(a, b []byte) bool {

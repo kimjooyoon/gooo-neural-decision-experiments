@@ -11,6 +11,14 @@ expected value, even while the whole record still differs. The compiler emits
 the selected Gooo body and ordinary Go, and a second activity reads the actual
 record through a source-declared connection.
 
+The feature is merged and installed from compiler main
+`f6da667e11951b6939fc5e30442e01a09ca06e85` after PR1226 and its complete CI.
+[Fresh installed controls](installed) retain all 30 candidate program identities
+and finite results. Full-budget prediction median is 31.625µs, graph generation
+9.890ms/9.337ms and whole command 323.462ms/324.194ms for model/deterministic
+construction. The result reader shows both selection and runtime ratios plus
+the concrete remaining fields. [Ternary pilot](quantized-pilot).
+
 [Clean candidate observations](candidate) retain four budgets, three paired
 trials per mode and saved full-budget replays. The complete selection reaches
 15/15 fields and 5/5 cases; compiled execution reaches 21/21 record-output fields
@@ -75,6 +83,28 @@ contract, with separate source shapes for evaluation. Compare fields completed
 under the same attempt budget, actual attempted candidates, prediction latency
 and resident tensor bytes. Records with optional/nested fields and richer field
 types are further language work.
+
+## Next use and latency experiments
+
+The current `body-compose` runtime builds the generated Go in a fresh workspace
+on every invocation, including saved-composition replay. Saving a composition
+reuses the selected source and removes new model predictions; each invocation
+still observes fresh native outputs. The measured whole command cost motivates
+the following small steps:
+
+1. Retain one compiled graph per local worker and reuse it when generated Go,
+   driver, toolchain and target environment agree. Execute every new input and
+   expected-value suite, and report the original build and current run costs.
+2. Compare first build, repeated inputs, changed expectations and changed source
+   with the same field/output denominators. Keep a bounded workspace and release
+   it when the worker closes or is cancelled.
+3. Train a field-oriented judge with source-shape splits and Korean/English
+   intents. Use observed field improvements to rank the next permitted assembly.
+   Compare completion at budgets 1/2/4 with prediction and execution cost.
+
+These are planned follow-ups. The published field observations use fresh builds
+and unchanged frozen weights. The Go completeness reader now also shows the
+selection fields and concrete remaining field differences before runtime scores.
 
 ## 한국어
 

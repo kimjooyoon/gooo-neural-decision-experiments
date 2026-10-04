@@ -8,6 +8,12 @@ controls reach equal counts on this shape; model prediction median is about
 29µs. The original clean candidate, compiled runtime values, Go observer and
 separate partial/whole-case metrics are retained.
 
+Compiler main `f6da667e` is now installed. [Separate installed controls](publication/record-field-assembly-20261004/installed)
+retain the same 30 program identities and finite results; fresh prediction median
+is 31.625µs and whole-command medians are about 323ms/324ms. The Go completeness
+reader also lists the remaining selection fields. [Frozen ternary pilots](publication/record-field-assembly-20261004/quantized-pilot)
+use 18,752 resident tensor bytes per profile. Field-specific training is subsequent work.
+
 [Native record values](publication/native-record-values-20261004) let a Gooo body
 construct a `Candidate`, read its title/state, and pass it into a `Review` body.
 One six-activity graph met 432/432 named expectations in twelve repeated controls,
@@ -16,7 +22,7 @@ Score assembly; record bodies come from Gooo source. Median prediction was 26.9�
 but whole generation took 12.80ms with the model versus 11.77ms deterministically.
 Saved replay makes zero predictions. [한국어 설명](publication/native-record-values-20261004/README.ko.md).
 
-The feature is merged and installed at compiler main `b629a664`.
+Record value transfer was measured on installed compiler main `b629a664`.
 [Fresh installed controls](publication/native-record-values-20261004/installed)
 retain the same source/code/driver identities, 432/432 outputs and 1,152 field
 observations. `go run ./cmd/record-completeness --input CAPTURE.json` shows finite
@@ -71,7 +77,7 @@ gooo_go_bin="$(GOTOOLCHAIN=go1.27.1 go env GOROOT)/bin/go"
 gooo_compiler_dir="$(mktemp -d)"
 git -C "$gooo_compiler_dir" init --quiet
 git -C "$gooo_compiler_dir" remote add origin https://github.com/kimjooyoon/meta-ontology-go.git
-git -C "$gooo_compiler_dir" fetch --depth 1 origin b629a664ea4a667945ab5f894557f42e97cafa35
+git -C "$gooo_compiler_dir" fetch --depth 1 origin f6da667e11951b6939fc5e30442e01a09ca06e85
 git -C "$gooo_compiler_dir" switch --detach FETCH_HEAD
 GOTOOLCHAIN=local GOWORK=off "$gooo_go_bin" -C "$gooo_compiler_dir" build -o "$PWD/gooo" ./cmd/gooo
 ./gooo body-path-run --source examples/whole-candidate-order/source.gooo \

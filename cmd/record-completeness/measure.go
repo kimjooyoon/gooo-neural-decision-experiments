@@ -23,16 +23,25 @@ type gap struct {
 	Expected   json.RawMessage `json:"expected,omitempty"`
 }
 type completeness struct {
-	Schema  string      `json:"schema"`
-	Scope   string      `json:"scope"`
-	Outputs finiteScore `json:"named_outputs"`
-	Fields  finiteScore `json:"record_output_fields"`
-	Gaps    []gap       `json:"gaps"`
+	Schema    string           `json:"schema"`
+	Scope     string           `json:"scope"`
+	Outputs   finiteScore      `json:"named_outputs"`
+	Fields    finiteScore      `json:"record_output_fields"`
+	Gaps      []gap            `json:"gaps"`
+	Selection []selectionScore `json:"record_selection,omitempty"`
 }
 type observation struct {
 	Composition struct {
 		Stage string `json:"stage"`
-		Plan  struct {
+		Steps []struct {
+			Generation struct {
+				Report struct {
+					ActivityID string           `json:"activity_id"`
+					Record     *selectionRecord `json:"record_assembly"`
+				} `json:"report"`
+			} `json:"generation"`
+		} `json:"steps"`
+		Plan struct {
 			Activities []struct {
 				Name   string `json:"name"`
 				ID     string `json:"id"`
@@ -63,7 +72,7 @@ type observation struct {
 }
 
 func measure(raw []byte) (completeness, error) {
-	result := completeness{Schema: "gooo/finite-record-completeness/v1", Scope: "Observed caller expectations in this captured execution; record-output field values only; unobserved values receive no match credit; finite ratios describe the provided contract"}
+	result := completeness{Schema: "gooo/finite-record-completeness/v1", Scope: "Selection cases and observed runtime expectations retain separate finite ratios; record-output field values only; unobserved values receive no match credit; ratios describe the provided contracts"}
 	var source observation
 	if err := json.Unmarshal(raw, &source); err != nil {
 		return result, err
@@ -73,6 +82,11 @@ func measure(raw []byte) (completeness, error) {
 	}
 	nodes := source.Composition.Plan.Activities
 	if err := checkDeclarations(source); err != nil {
+		return result, err
+	}
+	var err error
+	result.Selection, err = measureSelections(source)
+	if err != nil {
 		return result, err
 	}
 	for caseIndex, trace := range source.Runtime.Traces {
