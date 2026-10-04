@@ -1,0 +1,77 @@
+{
+  "cases": [
+    {
+      "inputs": {
+        "Select.input0": {
+          "context": "이번 사유",
+          "flag": "queued",
+          "message": "이번 제목"
+        },
+        "Select.input1": true
+      },
+      "expected": {
+        "Label": "queued:ready:이번 사유:accepted",
+        "Select": {
+          "context": "이번 사유:accepted",
+          "flag": "ready",
+          "message": "queued"
+        }
+      }
+    },
+    {
+      "inputs": {
+        "Select.input0": {
+          "context": "new paired detail",
+          "flag": "queued",
+          "message": "Current runtime"
+        },
+        "Select.input1": true
+      },
+      "expected": {
+        "Label": "queued:ready:new paired detail:accepted",
+        "Select": {
+          "context": "new paired detail:accepted",
+          "flag": "ready",
+          "message": "queued"
+        }
+      }
+    },
+    {
+      "inputs": {
+        "Select.input0": {
+          "context": "later message",
+          "flag": "queued",
+          "message": "keep value"
+        },
+        "Select.input1": false
+      },
+      "expected": {
+        "Label": "keep value:queued:later message",
+        "Select": {
+          "context": "later message",
+          "flag": "queued",
+          "message": "keep value"
+        }
+      }
+    },
+    {
+      "inputs": {
+        "Select.input0": {
+          "context": "already done",
+          "flag": "ready",
+          "message": "completed"
+        },
+        "Select.input1": true
+      },
+      "expected": {
+        "Label": "completed:ready:already done",
+        "Select": {
+          "context": "already done",
+          "flag": "ready",
+          "message": "completed"
+        }
+      }
+    }
+  ],
+  "schema": "gooo/body-composition-cases/v1"
+}
