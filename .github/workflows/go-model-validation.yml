@@ -10,6 +10,62 @@ permissions:
   contents: read
 
 jobs:
+  paired-intent-learning-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GOTOOLCHAIN: local
+      GOWORK: "off"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.27.1'
+          cache: false
+      - name: Replay paired goals, features, numerical exports and native values
+        run: |
+          go test -race ./cmd/record-field-curriculum
+          study=publication/paired-field-intents-20261005
+          (cd "$study" && sha256sum -c SHA256SUMS)
+          unzip -q "$study/evidence.zip" -d "$RUNNER_TEMP/paired-intents"
+          go run ./cmd/record-field-curriculum --paired-audit "$RUNNER_TEMP/paired-intents/prepared" \
+            --models "$RUNNER_TEMP/paired-intents/trained/models" \
+            --frozen-model "$study/baselines/frozen-field-v1/model.json" --output "$RUNNER_TEMP/paired-audit"
+          go run ./cmd/record-field-curriculum --paired-recount "$RUNNER_TEMP/paired-intents/native" \
+            --audit-prepared "$RUNNER_TEMP/paired-intents/prepared" --output "$RUNNER_TEMP/paired-recount.jsonl"
+          cmp "$RUNNER_TEMP/paired-recount.jsonl" "$RUNNER_TEMP/paired-intents/native/summaries.jsonl"
+          go run ./cmd/record-field-curriculum --paired-summary "$RUNNER_TEMP/paired-intents" \
+            --output "$RUNNER_TEMP/paired-summary.json"
+      - uses: actions/checkout@v7
+        with:
+          repository: kimjooyoon/meta-ontology-go
+          ref: aeff3641254ac5f795fa1fb8c94bed702f10cbe4
+          path: .paired-source-compiler
+          persist-credentials: false
+      - name: Reconstruct all 360 graphs and execute current fresh inputs
+        run: |
+          (cd .paired-source-compiler && go build -trimpath -o "$RUNNER_TEMP/gooo-paired-source" ./cmd/gooo)
+          go run ./cmd/record-field-curriculum --paired-native "$RUNNER_TEMP/paired-intents/prepared" \
+            --models "$RUNNER_TEMP/paired-intents/trained/models" \
+            --compiler "$RUNNER_TEMP/gooo-paired-source" \
+            --compiler-source aeff3641254ac5f795fa1fb8c94bed702f10cbe4 \
+            --frozen-model publication/paired-field-intents-20261005/baselines/frozen-field-v1/model.json \
+            --output "$RUNNER_TEMP/paired-native-fresh"
+          go run ./cmd/record-field-curriculum --paired-recount "$RUNNER_TEMP/paired-native-fresh" \
+            --audit-prepared "$RUNNER_TEMP/paired-intents/prepared" --output "$RUNNER_TEMP/paired-fresh-recount.jsonl"
+          cmp "$RUNNER_TEMP/paired-fresh-recount.jsonl" "$RUNNER_TEMP/paired-native-fresh/summaries.jsonl"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: paired-intent-learning-replay
+          path: |
+            ${{ runner.temp }}/paired-native-fresh
+            ${{ runner.temp }}/paired-audit
+            ${{ runner.temp }}/paired-recount.jsonl
+            ${{ runner.temp }}/paired-fresh-recount.jsonl
+            ${{ runner.temp }}/paired-summary.json
+          if-no-files-found: error
+
   record-source-learning-replay:
     runs-on: ubuntu-latest
     timeout-minutes: 10

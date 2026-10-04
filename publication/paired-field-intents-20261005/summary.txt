@@ -1,0 +1,25 @@
+Gooo paired intent pilot: first complete mask / first two / first four; individual field requirements
+test_source frozen_field_v1: 192/1536 (12.50%), 384/1536, 764/1536; fields 2304/4608; Go 17.937µs
+test_source fp32: 424/1536 (27.60%), 844/1536, 1251/1536; fields 2942/4608; Go 17.792µs
+test_source ptq_ternary: 191/1536 (12.43%), 384/1536, 768/1536; fields 2304/4608; Go 16.250µs
+test_source qat_ternary: 212/1536 (13.80%), 450/1536, 874/1536; fields 2430/4608; Go 16.250µs
+test_wording_seen frozen_field_v1: 64/512 (12.50%), 128/512, 254/512; fields 768/1536; Go 17.833µs
+test_wording_seen fp32: 100/512 (19.53%), 203/512, 343/512; fields 905/1536; Go 17.750µs
+test_wording_seen ptq_ternary: 64/512 (12.50%), 128/512, 256/512; fields 771/1536; Go 15.917µs
+test_wording_seen qat_ternary: 67/512 (13.09%), 147/512, 260/512; fields 787/1536; Go 15.959µs
+test_wording_new frozen_field_v1: 64/512 (12.50%), 128/512, 256/512; fields 768/1536; Go 18.125µs
+test_wording_new fp32: 81/512 (15.82%), 163/512, 287/512; fields 831/1536; Go 18.000µs
+test_wording_new ptq_ternary: 64/512 (12.50%), 128/512, 256/512; fields 768/1536; Go 16.209µs
+test_wording_new qat_ternary: 65/512 (12.70%), 144/512, 277/512; fields 786/1536; Go 16.208µs
+Native budget one: active fields; unchanged guards; required changed fields
+source deterministic: 48/96; 96/96; 40/80
+source frozen_field_v1: 48/96; 96/96; 32/80
+source fp32: 76/96; 96/96; 62/80
+source ptq_ternary: 46/96; 96/96; 30/80
+source qat_ternary: 44/96; 96/96; 40/80
+wording_new deterministic: 24/48; 48/48; 20/40
+wording_new frozen_field_v1: 24/48; 48/48; 16/40
+wording_new fp32: 32/48; 48/48; 30/40
+wording_new ptq_ternary: 24/48; 48/48; 24/40
+wording_new qat_ternary: 26/48; 48/48; 22/40
+Training: 3840 updates; 7.21s process wall; 4.17s process CPU; 538.28MiB peak RSS; measured average 57.84% of one CPU core. GPU utilization unmeasured.

@@ -1,5 +1,15 @@
 # Gooo neural decision experiments
 
+[Paired field intentions v2](publication/paired-field-intents-20261005) adds
+opposing and mixed requirements over the same permitted expressions. The same
+18,656-parameter network receives3,840 local MPS updates. Across1,536 source
+views the first complete mask changes from the frozen field model's12.5% to
+FP32 27.6%; new wording on different bodies reaches15.8%. Ternary variants retain
+smaller improvements and their regressions.360 actual graph constructions count
+active fields separately from unchanged guards. The Go summary reader prints
+these percentages, remaining fields and costs. Models and all evidence are public.
+Compiler main `aeff3641` with SDK v0.2.22 is the current installed field release.
+
 [Source-aware field learning](publication/record-field-learning-20261005) now
 uses the actual Gooo field expressions and paired Korean/English intent.
 Fresh initialization and 480 local MPS updates produce FP32/PTQ/QAT models;

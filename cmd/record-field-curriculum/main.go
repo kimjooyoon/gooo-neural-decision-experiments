@@ -69,7 +69,33 @@ func main() {
 	nativePrepared := flag.String("native-prepared", "", "execute existing source views on fresh runtime inputs")
 	oldModel := flag.String("frozen-model", "", "explicit frozen ordinal model control")
 	verifyNative := flag.String("verify-native", "", "recount captured native observations against current inputs")
+	paired := flag.Bool("paired-intents", false, "prepare the preregistered paired goal/wording curriculum")
+	pairedLimit := flag.Int("paired-limit", pairedTotal, "development cap; paired training requires all source views")
+	pairedAudit := flag.String("paired-audit", "", "audit the complete paired preparation")
+	pairedNative := flag.String("paired-native", "", "execute the registered paired native source views")
+	pairedRecount := flag.String("paired-recount", "", "independently recount all saved paired native observations")
+	pairedSummary := flag.String("paired-summary", "", "read a complete paired study and print compact percentages and costs")
 	flag.Parse()
+	if *pairedSummary != "" {
+		summarizePairedStudy(*pairedSummary, *output)
+		return
+	}
+	if *pairedRecount != "" {
+		recountPairedNative(*prepared, *pairedRecount, *output)
+		return
+	}
+	if *pairedAudit != "" {
+		auditPaired(*pairedAudit, *models, *oldModel, *output)
+		return
+	}
+	if *pairedNative != "" {
+		nativePaired(*pairedNative, *models, *compiler, *sourceRevision, *oldModel, *output)
+		return
+	}
+	if *paired {
+		preparePaired(*compiler, *sourceRevision, *output, *pairedLimit)
+		return
+	}
 	if *verifyNative != "" {
 		verifyNativeDirectory(*prepared, *verifyNative, *output)
 		return
