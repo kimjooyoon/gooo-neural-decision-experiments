@@ -100,12 +100,16 @@ func main() {
 	if len(os.Args) == 3 {
 		variant = os.Args[2]
 	}
-	check(variant == "baseline" || variant == "candidate", "variant")
+	check(variant == "baseline" || variant == "candidate" || variant == "installed", "variant")
 	name, attempts, wantMetadata, wantRegular, wantWait := "installed-model-swap-v2", 104, 40, 36, 1
 	source := "d1bfd273ab4e21d0191548b066a27bcb77d7ed86"
 	if variant == "candidate" {
 		name, attempts, wantMetadata, wantRegular, wantWait = "candidate-model-swap", 128, 64, 34, 0
 		source = "2420ad198480ca4592306df7db630a82de6d9ed4"
+	}
+	if variant == "installed" {
+		name, attempts, wantMetadata, wantRegular, wantWait = "installed-sdk21-model-swap", 128, 64, 35, 0
+		source = "4f6c7566dd4390b04a48589c82eb2d9eea3a6589"
 	}
 	var input struct {
 		Schema string      `json:"schema"`

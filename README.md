@@ -13,7 +13,7 @@ directory in PATH. This pins the compiler to the source used in the latest
 installed study; the small model is already included here.
 
 ```sh
-GOTOOLCHAIN=go1.27.1 go install github.com/kimjooyoon/meta-ontology-go/cmd/gooo@d1bfd273ab4e21d0191548b066a27bcb77d7ed86
+GOTOOLCHAIN=go1.27.1 go install github.com/kimjooyoon/meta-ontology-go/cmd/gooo@4f6c7566dd4390b04a48589c82eb2d9eea3a6589
 gooo body-path-run --source examples/whole-candidate-order/source.gooo \
   --activity Compose --path-plan examples/whole-candidate-order/recipe.json \
   --cases examples/whole-candidate-order/cases.json \
@@ -44,8 +44,20 @@ means measured outputs missed every expectation. [Full usage and next actions](h
   36 model judgments and 4,608/4,608 supplied expectations. Research `ddcd1002`
   adds a bounded Unix nonblocking/no-follow reader for these SDK profiles.
   The original failing regressions and complete saved observations are retained.
-  [SDK PR6](https://github.com/kimjooyoon/gooo-decision-runtime/pull/6) precedes
-  compiler adoption; installed results still describe SDK v0.2.20.
+  [SDK PR6](https://github.com/kimjooyoon/gooo-decision-runtime/pull/6) released
+  v0.2.21; compiler dev #1206 and main #1207 passed their own proofs and normally
+  merged. CLI and worker are installed from clean main `4f6c7566`. Fresh swaps
+  have zero releases/timeouts; 35 normal completions keep 4,480/4,480. Ordinary
+  runs keep 1,024/1,024, concurrent shared worker 512/512 and the actual downloaded
+  compound quickstart 6/6. Earlier SDK20 waits and candidate controls remain.
+
+- [Compare arithmetic as source changes](publication/arithmetic-source-delta-20261004):
+  per-edition Git source binding keeps fourteen changed files visible while
+  complete local/Linux replays each make 73,728 predictions over 18,432 inputs.
+  Explicit arithmetic retains all values, rankings and finite curves; legacy
+  arithmetic's 272 ranking and 38 finite-outcome differences remain. Source
+  `695f5bc8` passed the whole research CI37168510833, and the complete retrieved
+  Linux arithmetic artifact independently reproduces its original comparison.
 
 - [Avoid waiting before input-file validation](publication/file-input-open-20261004):
   an actual source-path swap held the installed CLI before output creation until

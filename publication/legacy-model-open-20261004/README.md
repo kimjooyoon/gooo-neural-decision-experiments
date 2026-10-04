@@ -104,7 +104,57 @@ when both names already refer to the same inode. Its original source and error
 are preserved. The revised controller joins both child and swapper before
 removing its owned temporary directory. No timeout is used as proof of the gap.
 
-## Read the saved evidence
+## Fresh main installation
+
+Main PR1207 passed canonical CI37167954453 and independently verified proof
+`52552ec9e43bc000bb27ba6aed1f17282d67255858771cc4b2de07e063db3d8c`.
+Its digest-bound authorization, live dev/tree/main-parent tuple and clean PR
+were checked before normal expected-head merge to
+`4f6c7566dd4390b04a48589c82eb2d9eea3a6589`.
+Both CLI and standalone worker were freshly built and installed from that clean
+main, with Go1.27.1 and SDK v0.2.21. Their hashes and source/proof-bound manifest
+are recorded alongside build information; the prior binaries remain recoverable.
+
+| Fresh installed observation | Constructions / native runs | Actual model predictions | Supplied expectations |
+| --- | ---: | ---: | ---: |
+| 128 model-path swaps; 35 regular completions | 35 / 70 | 35 shared | 4,480/4,480 |
+| Ordinary KO/EN, model/deterministic | 8 / 16 | 4 order-judge | 1,024/1,024 |
+| Concurrent shared-model worker, two modes | 4 / 8 | 2 shared | 512/512 |
+| Actual Hub-downloaded compound quickstart | 2 / 4 | 2 shared | 6/6 |
+
+All 128 swaps have zero writer releases/timeouts and joined owned processes.
+The 93 setup errors occur before construction. Generated Go remains equal to
+the prior frozen programs. A separate missing-tool control keeps the original
+error, zero native/model calls and 128 unobserved expectations.
+These are existing authored tasks with zero weight/optimizer changes.
+
+The current ordinary order-model first/reused KO/EN times are retained in
+`installed-native-readback.json`. The downloaded shared-model quickstart's
+first/reused responses are 1,188.190292/75.380833ms. These original intervals
+cover request decoding, construction and native execution, excluding initial
+model setup and saving/output. No response-speed improvement is inferred.
+
+The current concurrent worker model interval is 1.796446292s with 1.305823s
+CPU time, averaging 72.69% of one core. Deterministic is 1.272651917s with
+1.310865s CPU time, averaging 103.00% of one core across the process and children.
+The interval includes setup/construction/execution/EOF joining; parallel children
+can use more than one core. Host CPU and model-only RAM remain unobserved.
+
+`installed-sdk21-observations.zip` retains all exact installed files. Its inputs,
+frozen Go and separate older ordinary control are included for independent
+consumption. The following installed readers make zero new inference/execution:
+
+```sh
+mkdir /tmp/gooo-sdk21-installed
+unzip -q publication/legacy-model-open-20261004/installed-sdk21-observations.zip -d /tmp/gooo-sdk21-installed
+go run ./publication/legacy-model-open-20261004/archive-readback publication/legacy-model-open-20261004/installed-sdk21-observations.zip /tmp/gooo-sdk21-installed
+go run ./publication/legacy-model-open-20261004/readback /tmp/gooo-sdk21-installed installed
+go run ./publication/legacy-model-open-20261004/native-readback /tmp/gooo-sdk21-installed installed
+go run ./publication/legacy-model-open-20261004/worker-readback /tmp/gooo-sdk21-installed /tmp/gooo-sdk21-installed installed
+go run ./publication/direct-body-quickstart-20261004/readback /tmp/gooo-sdk21-installed installed
+```
+
+## Read the earlier saved evidence
 
 From this repository's root with Go1.27.1:
 

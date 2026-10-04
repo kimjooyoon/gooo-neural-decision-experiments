@@ -30,18 +30,25 @@ func check(ok bool, s string) {
 func raw(p string) []byte    { b, e := os.ReadFile(p); must(e); return b }
 func decode(p string, v any) { must(json.Unmarshal(raw(p), v)) }
 func main() {
-	check(len(os.Args) == 2, "usage native-readback saved-root")
+	check(len(os.Args) == 2 || (len(os.Args) == 3 && os.Args[2] == "installed"), "usage native-readback saved-root [installed]")
 	root := os.Args[1]
+	arms := []string{"candidate-native", "candidate-native-isolated", "installed-native-same-window"}
+	if len(os.Args) == 3 {
+		arms = []string{"installed-sdk21-native"}
+	}
 	var input struct {
 		Cases []testCase `json:"cases"`
 	}
 	decode(filepath.Join(root, "inputs", "cases-128.json"), &input)
 	check(len(input.Cases) == 128, "case count")
 	var rows []map[string]any
-	for _, arm := range []string{"candidate-native", "candidate-native-isolated", "installed-native-same-window"} {
+	for _, arm := range arms {
 		source := "2420ad198480ca4592306df7db630a82de6d9ed4"
 		if arm == "installed-native-same-window" {
 			source = "d1bfd273ab4e21d0191548b066a27bcb77d7ed86"
+		}
+		if arm == "installed-sdk21-native" {
+			source = "4f6c7566dd4390b04a48589c82eb2d9eea3a6589"
 		}
 		predictions, native, passed := 0, 0, 0
 		for _, language := range []string{"ko", "en"} {
@@ -122,5 +129,5 @@ func main() {
 		check(t.Source == source && t.Modified == "false" && t.Status == "execution_failed", "missing tool retained")
 		check(strings.Contains(string(raw(filepath.Join(root, arm, "missing-tool.stderr"))), "native unobserved"), "missing tool display")
 	}
-	must(json.NewEncoder(os.Stdout).Encode(map[string]any{"status": "PASS", "historical_constructions": 24, "historical_model_predictions": 12, "historical_native_runs": 48, "historical_finite_passed": 3072, "historical_finite_total": 3072, "original_missing_tool_controls": 3, "records": rows, "reader_model_predictions": 0, "reader_native_runs": 0, "new_intent_tasks": 0, "training_updates": 0}))
+	must(json.NewEncoder(os.Stdout).Encode(map[string]any{"status": "PASS", "historical_constructions": 8 * len(arms), "historical_model_predictions": 4 * len(arms), "historical_native_runs": 16 * len(arms), "historical_finite_passed": 1024 * len(arms), "historical_finite_total": 1024 * len(arms), "original_missing_tool_controls": len(arms), "records": rows, "reader_model_predictions": 0, "reader_native_runs": 0, "new_intent_tasks": 0, "training_updates": 0}))
 }

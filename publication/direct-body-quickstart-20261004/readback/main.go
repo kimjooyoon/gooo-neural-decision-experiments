@@ -22,12 +22,20 @@ func raw(p string) []byte  { b, err := os.ReadFile(p); must(err); return b }
 func read(p string, v any) { must(json.Unmarshal(raw(p), v)) }
 
 func main() {
-	check(len(os.Args) == 2, "usage saved-root")
+	check(len(os.Args) == 2 || (len(os.Args) == 3 && os.Args[2] == "installed"), "usage saved-root [installed]")
 	root := os.Args[1]
+	arms := []string{"direct-order-example-model", "direct-order-example-deterministic", "hf-downloaded-compound-example"}
+	source := "2420ad198480ca4592306df7db630a82de6d9ed4"
+	wantCases, wantNative, wantPredictions := 38, 12, 4
+	if len(os.Args) == 3 {
+		arms = []string{"installed-sdk21-quickstart"}
+		source = "4f6c7566dd4390b04a48589c82eb2d9eea3a6589"
+		wantCases, wantNative, wantPredictions = 6, 4, 2
+	}
 	passed, native, predictions := 0, 0, 0
 	var orderGo []byte
 	var rows []map[string]any
-	for _, dir := range []string{"direct-order-example-model", "direct-order-example-deterministic", "hf-downloaded-compound-example"} {
+	for _, dir := range arms {
 		base := filepath.Join(root, dir)
 		var cases struct {
 			Cases []struct{ Input, Expected int64 }
@@ -37,7 +45,7 @@ func main() {
 		if dir == "direct-order-example-deterministic" {
 			want = 0
 		}
-		if dir == "hf-downloaded-compound-example" {
+		if dir == "hf-downloaded-compound-example" || dir == "installed-sdk21-quickstart" {
 			count = 3
 		}
 		check(len(cases.Cases) == count, "case denominator")
@@ -71,7 +79,7 @@ func main() {
 				}
 			}
 			read(prefix+"generation.json", &g)
-			check(g.Report.Source == "2420ad198480ca4592306df7db630a82de6d9ed4", "source")
+			check(g.Report.Source == source, "source")
 			calls := g.Report.Paths.Search.Selection
 			check(calls.Local != nil && *calls.Local == want && calls.External != nil && *calls.External == 0, "model calls")
 			predictions += *calls.Local
@@ -124,6 +132,6 @@ func main() {
 			rows = append(rows, map[string]any{"arm": dir, "request": n, "original_response_ms": row.Response, "original_cases": count, "original_predictions": want})
 		}
 	}
-	check(passed == 38 && native == 12 && predictions == 4, "aggregate")
-	must(json.NewEncoder(os.Stdout).Encode(map[string]any{"status": "PASS", "scope": "existing authored quickstarts; source, saved generated Go and int64 output consistency", "original_constructions": 6, "original_cases": passed, "original_native_runs": native, "original_predictions": predictions, "new_intents": 0, "training_updates": 0, "reader_predictions": 0, "reader_executions": 0, "rows": rows}))
+	check(passed == wantCases && native == wantNative && predictions == wantPredictions, "aggregate")
+	must(json.NewEncoder(os.Stdout).Encode(map[string]any{"status": "PASS", "scope": "existing authored quickstarts; source, saved generated Go and int64 output consistency", "original_constructions": 2 * len(arms), "original_cases": passed, "original_native_runs": native, "original_predictions": predictions, "new_intents": 0, "training_updates": 0, "reader_predictions": 0, "reader_executions": 0, "rows": rows}))
 }

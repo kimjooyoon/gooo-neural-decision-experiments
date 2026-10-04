@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 )
 
-const source = "2420ad198480ca4592306df7db630a82de6d9ed4"
+const candidateSource = "2420ad198480ca4592306df7db630a82de6d9ed4"
 
 func must(err error) {
 	if err != nil {
@@ -89,8 +89,13 @@ type summary struct {
 }
 
 func main() {
-	check(len(os.Args) == 3, "usage worker-saved-root candidate-saved-root")
+	check(len(os.Args) == 3 || (len(os.Args) == 4 && os.Args[3] == "installed"), "usage worker-saved-root frozen-saved-root [installed]")
 	root := filepath.Join(os.Args[1], "candidate-shared-worker-observations")
+	source := candidateSource
+	if len(os.Args) == 4 {
+		root = filepath.Join(os.Args[1], "installed-sdk21-shared-worker")
+		source = "4f6c7566dd4390b04a48589c82eb2d9eea3a6589"
+	}
 	var requests []request
 	d := json.NewDecoder(bytes.NewReader(raw(filepath.Join(root, "requests.jsonl"))))
 	for {

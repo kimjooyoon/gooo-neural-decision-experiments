@@ -40,7 +40,8 @@ func main() {
 			prefix != "candidate-model-swap" && prefix != "candidate-native" && prefix != "candidate-native-isolated" &&
 			prefix != "installed-native-same-window" && prefix != "candidate-shared-worker-observations" &&
 			prefix != "direct-order-example-model" && prefix != "direct-order-example-deterministic" && prefix != "hf-downloaded-compound-example" &&
-			prefix != "arithmetic-delta-arm64" && prefix != "arithmetic-delta-linux" {
+			prefix != "arithmetic-delta-arm64" && prefix != "arithmetic-delta-linux" &&
+			prefix != "installed-sdk21-model-swap" && prefix != "installed-sdk21-native" && prefix != "installed-sdk21-shared-worker" && prefix != "installed-sdk21-quickstart" {
 			panic("unexpected archive root")
 		}
 		roots[prefix] = true
