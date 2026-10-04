@@ -1,0 +1,206 @@
+{
+  "schema": "gooo/finite-record-completeness/v1",
+  "scope": "Selection cases and observed runtime expectations retain separate finite ratios; record-output field values only; unobserved values receive no match credit; ratios describe the provided contracts",
+  "named_outputs": {
+    "passed": 6,
+    "total": 14,
+    "unobserved": 0,
+    "percent": 42.857142857142854
+  },
+  "record_output_fields": {
+    "passed": 17,
+    "total": 21,
+    "unobserved": 0,
+    "percent": 80.95238095238095
+  },
+  "gaps": [
+    {
+      "case_index": 0,
+      "activity": "Select",
+      "activity_id": "fieldupdates://activity/select",
+      "status": "mismatch",
+      "actual": {
+        "reason": "deferred",
+        "state": "ready",
+        "title": "한글"
+      },
+      "expected": {
+        "reason": "한글:ready",
+        "state": "ready",
+        "title": "한글"
+      }
+    },
+    {
+      "case_index": 0,
+      "activity": "Select",
+      "activity_id": "fieldupdates://activity/select",
+      "field": "reason",
+      "status": "mismatch",
+      "actual": "deferred",
+      "expected": "한글:ready"
+    },
+    {
+      "case_index": 0,
+      "activity": "Label",
+      "activity_id": "fieldupdates://activity/label",
+      "status": "mismatch",
+      "actual": "한글:ready:deferred",
+      "expected": "한글:ready:한글:ready"
+    },
+    {
+      "case_index": 1,
+      "activity": "Select",
+      "activity_id": "fieldupdates://activity/select",
+      "status": "mismatch",
+      "actual": {
+        "reason": "deferred",
+        "state": "ready",
+        "title": "English"
+      },
+      "expected": {
+        "reason": "English:ready",
+        "state": "ready",
+        "title": "English"
+      }
+    },
+    {
+      "case_index": 1,
+      "activity": "Select",
+      "activity_id": "fieldupdates://activity/select",
+      "field": "reason",
+      "status": "mismatch",
+      "actual": "deferred",
+      "expected": "English:ready"
+    },
+    {
+      "case_index": 1,
+      "activity": "Label",
+      "activity_id": "fieldupdates://activity/label",
+      "status": "mismatch",
+      "actual": "English:ready:deferred",
+      "expected": "English:ready:English:ready"
+    },
+    {
+      "case_index": 2,
+      "activity": "Select",
+      "activity_id": "fieldupdates://activity/select",
+      "status": "mismatch",
+      "actual": {
+        "reason": "deferred",
+        "state": "ready",
+        "title": ""
+      },
+      "expected": {
+        "reason": ":ready",
+        "state": "ready",
+        "title": ""
+      }
+    },
+    {
+      "case_index": 2,
+      "activity": "Select",
+      "activity_id": "fieldupdates://activity/select",
+      "field": "reason",
+      "status": "mismatch",
+      "actual": "deferred",
+      "expected": ":ready"
+    },
+    {
+      "case_index": 2,
+      "activity": "Label",
+      "activity_id": "fieldupdates://activity/label",
+      "status": "mismatch",
+      "actual": ":ready:deferred",
+      "expected": ":ready::ready"
+    },
+    {
+      "case_index": 5,
+      "activity": "Select",
+      "activity_id": "fieldupdates://activity/select",
+      "status": "mismatch",
+      "actual": {
+        "reason": "deferred",
+        "state": "ready",
+        "title": "new\n\"title\""
+      },
+      "expected": {
+        "reason": "new\n\"title\":ready",
+        "state": "ready",
+        "title": "new\n\"title\""
+      }
+    },
+    {
+      "case_index": 5,
+      "activity": "Select",
+      "activity_id": "fieldupdates://activity/select",
+      "field": "reason",
+      "status": "mismatch",
+      "actual": "deferred",
+      "expected": "new\n\"title\":ready"
+    },
+    {
+      "case_index": 5,
+      "activity": "Label",
+      "activity_id": "fieldupdates://activity/label",
+      "status": "mismatch",
+      "actual": "new\n\"title\":ready:deferred",
+      "expected": "new\n\"title\":ready:new\n\"title\":ready"
+    }
+  ],
+  "record_selection": [
+    {
+      "activity": "Select",
+      "activity_id": "fieldupdates://activity/select",
+      "cases": {
+        "passed": 2,
+        "total": 5,
+        "unobserved": 0,
+        "percent": 40
+      },
+      "fields": {
+        "passed": 12,
+        "total": 15,
+        "unobserved": 0,
+        "percent": 80
+      },
+      "evaluated_candidates": 3,
+      "attempted_candidates": 4,
+      "type_rejected_candidates": 1,
+      "type_rejections": [
+        {
+          "mask": 3,
+          "reason": "typecheck generated activity: body.goo:11:5: declared and not used: saved"
+        }
+      ],
+      "gaps": [
+        {
+          "case_index": 0,
+          "activity": "Select",
+          "activity_id": "fieldupdates://activity/select",
+          "field": "reason",
+          "status": "mismatch",
+          "actual": "deferred",
+          "expected": "한글:ready"
+        },
+        {
+          "case_index": 1,
+          "activity": "Select",
+          "activity_id": "fieldupdates://activity/select",
+          "field": "reason",
+          "status": "mismatch",
+          "actual": "deferred",
+          "expected": "English:ready"
+        },
+        {
+          "case_index": 2,
+          "activity": "Select",
+          "activity_id": "fieldupdates://activity/select",
+          "field": "reason",
+          "status": "mismatch",
+          "actual": "deferred",
+          "expected": ":ready"
+        }
+      ]
+    }
+  ]
+}

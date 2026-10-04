@@ -37,6 +37,13 @@ func run(path string, asJSON bool) error {
 		fmt.Printf("Selection %s: cases %d/%d (%s); fields %d/%d (%s); evaluated candidates: %d\n",
 			selection.Activity, selection.Cases.Passed, selection.Cases.Total, percentage(selection.Cases.Percent),
 			selection.Fields.Passed, selection.Fields.Total, percentage(selection.Fields.Percent), selection.Attempts)
+		if selection.Rejected > 0 {
+			fmt.Printf("Selection %s: attempted candidates: %d; rejected before case execution: %d\n",
+				selection.Activity, selection.Attempted, selection.Rejected)
+			for _, rejected := range selection.Rejections {
+				fmt.Printf("Selection %s candidate %d: %s\n", selection.Activity, rejected.Mask, rejected.Reason)
+			}
+		}
 		for _, gap := range selection.Gaps {
 			fmt.Printf("Selection case %d %s%s: %s; actual=%s expected=%s\n",
 				gap.Case, gap.Activity, suffix(gap.Field), gap.Status, printable(gap.Actual), printable(gap.Expected))
