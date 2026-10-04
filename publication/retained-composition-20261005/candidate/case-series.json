@@ -1,0 +1,24 @@
+{
+  "schema": "gooo/body-composition-case-series/v1",
+  "suites": [
+    {
+      "schema": "gooo/body-composition-cases/v1",
+      "cases": [
+        {"inputs":{"Select.input0":{"title":"첫 입력","state":"queued","reason":"검토"},"Select.input1":true},"expected":{"Select":{"title":"첫 입력","state":"ready","reason":"검토:accepted"},"Label":"첫 입력:ready:검토:accepted"}},
+        {"inputs":{"Select.input0":{"title":"keep","state":"queued","reason":"later"},"Select.input1":false},"expected":{"Select":{"title":"keep","state":"queued","reason":"later"},"Label":"keep:queued:later"}}
+      ]
+    },
+    {
+      "schema": "gooo/body-composition-cases/v1",
+      "cases": [
+        {"inputs":{"Select.input0":{"title":"New title","state":"waiting","reason":"새 실행"},"Select.input1":true},"expected":{"Select":{"title":"New title","state":"ready","reason":"새 실행:accepted"},"Label":"New title:ready:새 실행:accepted"}}
+      ]
+    },
+    {
+      "schema": "gooo/body-composition-cases/v1",
+      "cases": [
+        {"inputs":{"Select.input0":{"title":"Third","state":"ready","reason":"unchanged"},"Select.input1":true},"expected":{"Select":{"title":"Third","state":"ready","reason":"unchanged"},"Label":"a deliberately different expectation"}}
+      ]
+    }
+  ]
+}
