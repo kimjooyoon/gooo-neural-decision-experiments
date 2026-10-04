@@ -47,11 +47,11 @@ Unicode comparisons, line endings and int64 wraparound.
 
 | Control | Observed result |
 |---|---|
-| 6 fresh constructions: 2 modes × 3 consecutive checkpoints |294/294 named output expectations |
-| 6 separate saved replays |294/294; zero new predictions |
-|All 12 controls |588/588 outputs; 1,008 input observations; 504 bound deliveries; 24 native runs |
-|Actual own-model calls in these controls | 3; one for each fresh model construction |
-|Fresh selection examples |36/36 across 6 constructions; kept separate from runtime outputs |
+| 6 fresh constructions: 2 modes × 3 consecutive checkpoints | 294/294 named output expectations |
+| 6 separate saved replays | 294/294; zero new predictions |
+| All 12 controls | 588/588 outputs; 1,008 input observations; 504 bound deliveries; 24 native runs |
+| Actual own-model calls in these controls | 3; one for each fresh model construction |
+| Fresh selection examples | 36/36 across 6 constructions; kept separate from runtime outputs |
 
 The first model-ranked mask 6 passed 0/6 selection examples. The next checked
 candidate, mask 7, passed 6/6. Deterministic enumeration began with mask 0 at 0/6
@@ -82,15 +82,18 @@ Go caches, on macOS/arm64 with Go 1.27.1:
 runtime time. Generation includes source preparation and ordinary body checks;
 it is a whole graph measurement, separate from individual prediction latency.
 Peak RSS includes the command's build/execution resource observations rather
-than only the neural tensor. The tensor remains 74,624bytes. Host CPU utilization
+than only the neural tensor. The tensor remains 74,624 bytes. Host CPU utilization
 was not sampled alongside this final series, so no whole-computer increase is
 attributed to the model. These timings do not establish a general speed gain.
 
 An earlier candidate (`0ab58d1b`) was measured while full tests/race checks ran
-locally. Its source partition exceeded the compiler CI extractor's capacity;
-the final candidate separates plan, input delivery and preparation files without
-changing the generated program. Earlier measurements remain private so the
-public series has one exact final candidate source.
+locally. Its source partition exceeded the compiler CI extractor's capacity.
+The measured candidate `5af78bcb` separates plan, input delivery and preparation
+files, but its preparation function still exceeded the extractor's rendered
+capacity. Follow-up source `6b6c86f2` divides preparation into smaller functions.
+The observations here retain their exact measured source; merge and installation
+are pending. Earlier measurements remain private, and any installed-source
+observations will be recorded separately.
 
 ## Use the model and rerun
 
