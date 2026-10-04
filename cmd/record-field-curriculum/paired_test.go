@@ -3,11 +3,27 @@ package main
 import (
 	"archive/zip"
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"strings"
 	"testing"
 )
+
+func TestPairedRecountComparesValuesAcrossNestedStructAndMapOrder(t *testing.T) {
+	want := map[string]any{"schema": "gooo/body-composition-cases/v1", "cases": pairedNativeCases(6, 7)}
+	raw, err := json.Marshal(want)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !sameRecountJSON(raw, want) {
+		t.Fatal("equivalent cases rejected due to JSON key order")
+	}
+	want["cases"] = pairedNativeCases(6, 0)
+	if sameRecountJSON(raw, want) {
+		t.Fatal("different intended values accepted")
+	}
+}
 
 func TestBaseCurriculumPreservesPublishedSourceBytes(t *testing.T) {
 	z, err := zip.OpenReader("../../publication/record-field-learning-20261005/evidence.zip")

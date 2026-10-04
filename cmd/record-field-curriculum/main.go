@@ -73,7 +73,17 @@ func main() {
 	pairedLimit := flag.Int("paired-limit", pairedTotal, "development cap; paired training requires all source views")
 	pairedAudit := flag.String("paired-audit", "", "audit the complete paired preparation")
 	pairedNative := flag.String("paired-native", "", "execute the registered paired native source views")
+	pairedRecount := flag.String("paired-recount", "", "independently recount all saved paired native observations")
+	pairedSummary := flag.String("paired-summary", "", "read a complete paired study and print compact percentages and costs")
 	flag.Parse()
+	if *pairedSummary != "" {
+		summarizePairedStudy(*pairedSummary, *output)
+		return
+	}
+	if *pairedRecount != "" {
+		recountPairedNative(*prepared, *pairedRecount, *output)
+		return
+	}
 	if *pairedAudit != "" {
 		auditPaired(*pairedAudit, *models, *oldModel, *output)
 		return
