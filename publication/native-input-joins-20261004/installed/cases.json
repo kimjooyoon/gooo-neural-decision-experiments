@@ -1,0 +1,12 @@
+{
+  "schema": "gooo/body-composition-cases/v1",
+  "cases": [
+    {"inputs":{"Left":-8,"Right":2,"Label.input1":true,"Label.input2":"gooo","Compare.input0":"같음","Compare.input1":"같음"},"expected":{"Left":15,"Right":4,"Add":19,"Difference":-11,"Label":"gooo!","Compare":true,"Invert":false}},
+    {"inputs":{"Left":0,"Right":0,"Label.input1":false,"Label.input2":"","Compare.input0":"","Compare.input1":""},"expected":{"Left":7,"Right":0,"Add":7,"Difference":-7,"Label":"","Compare":true,"Invert":false}},
+    {"inputs":{"Left":9,"Right":0,"Label.input1":true,"Label.input2":"한글🧠","Compare.input0":"a","Compare.input1":"b"},"expected":{"Left":-2,"Right":0,"Add":-2,"Difference":2,"Label":"한글🧠","Compare":false,"Invert":true}},
+    {"inputs":{"Left":7,"Right":0,"Label.input1":true,"Label.input2":"zero","Compare.input0":"0","Compare.input1":""},"expected":{"Left":0,"Right":0,"Add":0,"Difference":0,"Label":"zero","Compare":false,"Invert":true}},
+    {"inputs":{"Left":-1,"Right":-5,"Label.input1":true,"Label.input2":"line\nbreak","Compare.input0":"line\nbreak","Compare.input1":"line\nbreak"},"expected":{"Left":8,"Right":-10,"Add":-2,"Difference":-18,"Label":"line\nbreak","Compare":true,"Invert":false}},
+    {"inputs":{"Left":9223372036854775807,"Right":9223372036854775807,"Label.input1":true,"Label.input2":"limit","Compare.input0":"é","Compare.input1":"é"},"expected":{"Left":-9223372036854775800,"Right":-2,"Add":-9223372036854775802,"Difference":9223372036854775798,"Label":"limit","Compare":false,"Invert":true}},
+    {"inputs":{"Left":-9223372036854775808,"Right":-9223372036854775808,"Label.input1":true,"Label.input2":"minimum","Compare.input0":"🙂","Compare.input1":"🙂"},"expected":{"Left":-9223372036854775801,"Right":0,"Add":-9223372036854775801,"Difference":9223372036854775801,"Label":"minimum","Compare":true,"Invert":false}}
+  ]
+}
