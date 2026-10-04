@@ -6,14 +6,17 @@ cross-field reads, saved records/scalars, guards and copied locals.72 valid grap
 retain144 native executions and independently recounted fields. Frozen QAT ranks
 mask7 first throughout; all requested goals are mask7, so that result does not
 establish discrimination between intents. Initial24 unused-local source failures
-are preserved separately. Candidate language PR1233 is undergoing exact-source CI.
+are preserved separately. Language PR1233 and main promotion PR1234 each passed all12
+checks plus independent proof verification and merged. Clean main `a5f6e8c668ff9fc7cfe3367a5019b50fbcadc1fa`
+and SDKv0.2.23 are installed. Linux independently repeats all72 source/choice/value tuples.
+[Sequential quickstart](docs/sequential-field-quickstart.ko.md) · [Local value origin plan](docs/local-value-origin-plan.ko.md).
 
 [Shared field judgment](publication/record-shared-field-20261005) uses one2,072-parameter
 judge in three record-field positions. The same3,840 MPS updates produce75.0% FP32
 and87.5% QAT first-mask agreement on the registered source-body axis; new wording
 remains23.4%/19.9%. Across360 generated graphs, budget-one active fields reach
 126/144; the eight new-wording source views regress from32/48 to30/48. Keep both
-observations. SDKv0.2.23 and compiler main`2c807d461afc68a7ebfbd277d1dd6e97f5168e92` are merged and installed.
+observations. That shared-field study used merged main`2c807d461afc68a7ebfbd277d1dd6e97f5168e92` with SDKv0.2.23; the current installation is listed above.
 [Four-file quickstart and readable field gaps](docs/shared-field-quickstart.ko.md)
 · [26-job source CI](https://github.com/kimjooyoon/gooo-neural-decision-experiments/actions/runs/37226752241).
 

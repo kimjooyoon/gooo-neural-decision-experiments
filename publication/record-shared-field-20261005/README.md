@@ -19,14 +19,25 @@ tags:
 [새 실험](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/record-field-updates-20261005)을
 실행했습니다. 앞에서 바꾼 상태를 다음 설명 필드가 읽고,저장한 레코드와
 문자열 값을 사용하는 여섯 코드 형태입니다. Gooo의`field_update` 선택을
-연결한 [PR1233](https://github.com/kimjooyoon/meta-ontology-go/pull/1233)이 병합 검사 중입니다.
+연결한 [PR1233](https://github.com/kimjooyoon/meta-ontology-go/pull/1233)과
+[main PR1234](https://github.com/kimjooyoon/meta-ontology-go/pull/1234)을 각각 전체12개 검사와
+독립 확인 후 병합했습니다. 현재 설치본은 main `a5f6e8c668ff9fc7cfe3367a5019b50fbcadc1fa`·Go1.27.1·SDKv0.2.23입니다.
+[순차 조립 시작 안내](https://github.com/kimjooyoon/gooo-neural-decision-experiments/blob/main/docs/sequential-field-quickstart.ko.md)를 제공합니다.
+연구 CI의 전체27개 작업이 통과했고 Linux에서 새로 실행한72개 그래프를
+내려받아 필드·후보·실제 값을 독립 확인했습니다. 원래 Mac 관측과 설치 후 관측을 구분합니다.
+
+설치 후72개 그래프도 같은 후보·응답·실제 값을 유지했습니다. 두 작업자의
+4회 관측은 각각32개 요청·선택 필드384/384개를 완료했고 입력 종료 전에
+첫 응답이 도착했습니다. 처음525.86ms, 반복6.71~10.37ms·작업자RAM22.88~23.41MiB입니다.
+추가 원본까지 합치면 처음16MiB 목표를 넘어18.98MiB이며, 모두 압축 보존합니다.
+[별도 설치·작업자 관측](https://huggingface.co/asketeddy/gooo-record-shared-field-tiny-v1/tree/main/experiments/record-field-updates-20261005/validation)을 읽을 수 있습니다.
 
 72개 유효한 그래프·144회 실행에서 QAT는 첫 후보로 필드144/144개와
 활동 출력96/96개를 맞췄습니다(각 시도 예산의12개 그래프).
 모든 목표가 같은 mask7이므로 이 수치에는 대안식을 선호하는 편향이
 작용할 수 있습니다. 학습0회,추론 중앙값17.50~18.46µs,전체 명령은약310ms입니다.
 초기24개 미사용 변수 오류와 수정 계획을 포함한 원본을
-[여기](experiments/record-field-updates-20261005)에서 읽을 수 있습니다.
+[여기](https://huggingface.co/asketeddy/gooo-record-shared-field-tiny-v1/tree/main/experiments/record-field-updates-20261005)에서 읽을 수 있습니다.
 현재 입력 배열에서는`copy.state`와`saved.state`가 동일해 실제 모델 응답도
 같습니다. 다음 개선은 지역 변수의 현재 정의와 값의 출처를 표현하는 작업입니다.
 
@@ -59,6 +70,9 @@ int8 배열2,096 B와 scale8 B, 요청별 workspace3,200 B 등을 사용합니�
 파일의1.58bit 수준 표현과 전체 프로세스 RAM은 서로 다른 크기입니다.
 
 ## 사용
+
+아래 공유 필드 예제는 앞선 main2c의 고정 배포 기록입니다. 최신 순차 필드
+기능은 위 main 소스와 시작 안내를 사용합니다. 모델 가중치는 동일합니다.
 
 SDK **v0.2.23-experimental**, 모델 특징
 `triple_record_field_context_v1_shared_v1`, 산술 `float32_separate_v1`입니다.
