@@ -152,7 +152,7 @@ func checkPartial(raw []byte, sha string) error {
 		return err
 	}
 	r := current.Runtime
-	if current.GeneratedNow || current.Composition.Stage != "COMPLETE" || len(current.Composition.Steps) != 6 || r.Stage != "COMPLETE" || r.Failure != "" || !r.Replayed || r.Passed != 35 || r.Total != 36 || r.Calls != 0 || len(r.Traces) != 6 || len(r.Runs) != 2 {
+	if current.GeneratedNow || current.Composition.Stage != "COMPLETE" || len(current.Composition.Steps) != 6 || r.Source != sha || r.Stage != "COMPLETE" || r.Failure != "" || !r.Replayed || r.Passed != 35 || r.Total != 36 || r.Calls != 0 || len(r.Traces) != 6 || len(r.Runs) != 2 {
 		return fmt.Errorf("partial completeness observation differs")
 	}
 	for _, step := range current.Composition.Steps {

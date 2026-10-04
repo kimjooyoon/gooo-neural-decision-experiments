@@ -1,0 +1,41 @@
+{
+  "schema": "gooo/finite-record-completeness/v1",
+  "scope": "Observed caller expectations in this captured execution; record-output field values only; unobserved values receive no match credit; finite ratios describe the provided contract",
+  "named_outputs": {
+    "passed": 35,
+    "total": 36,
+    "unobserved": 0,
+    "percent": 97.22222222222223
+  },
+  "record_output_fields": {
+    "passed": 35,
+    "total": 36,
+    "unobserved": 0,
+    "percent": 97.22222222222223
+  },
+  "gaps": [
+    {
+      "case_index": 0,
+      "activity": "Propose",
+      "activity_id": "records://activity/propose",
+      "status": "mismatch",
+      "actual": {
+        "state": "ready",
+        "title": "gooo"
+      },
+      "expected": {
+        "state": "wait",
+        "title": "gooo"
+      }
+    },
+    {
+      "case_index": 0,
+      "activity": "Propose",
+      "activity_id": "records://activity/propose",
+      "field": "state",
+      "status": "mismatch",
+      "actual": "ready",
+      "expected": "wait"
+    }
+  ]
+}

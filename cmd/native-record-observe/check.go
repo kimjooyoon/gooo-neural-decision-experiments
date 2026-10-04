@@ -21,7 +21,7 @@ func readObservationCases(raw []byte, sha, mode string, stage int, replayed bool
 		return row, observation, err
 	}
 	c, r := observation.Composition, observation.Runtime
-	if observation.GeneratedNow == replayed || c.Stage != "COMPLETE" || c.Failure != "" || r.Stage != "COMPLETE" || r.Failure != "" || !r.Replayed || r.Calls != 0 || len(c.Steps) != 6 || len(r.Traces) != cases || len(r.Runs) != 2 || r.Total != cases*6 || r.Passed != cases*6 {
+	if observation.GeneratedNow == replayed || c.Stage != "COMPLETE" || c.Failure != "" || r.Source != sha || r.Stage != "COMPLETE" || r.Failure != "" || !r.Replayed || r.Calls != 0 || len(c.Steps) != 6 || len(r.Traces) != cases || len(r.Runs) != 2 || r.Total != cases*6 || r.Passed != cases*6 {
 		return row, observation, fmt.Errorf("incomplete six-activity, six-case record graph")
 	}
 	for _, run := range r.Runs {

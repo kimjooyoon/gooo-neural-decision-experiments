@@ -1,0 +1,11 @@
+{
+  "schema": "gooo/body-composition-cases/v1",
+  "cases": [
+    {"inputs": {"Score": -8, "Propose.input1": "gooo", "ReviewCandidate.input1": true}, "expected": {"Score": 15, "Propose": {"title": "gooo", "state": "ready"}, "ReviewCandidate": {"summary": "gooo", "reason": "accepted"}, "Label": "gooo:accepted", "Echo": {"title": "gooo", "state": "ready"}, "Same": true}},
+    {"inputs": {"Score": 9, "Propose.input1": "유보", "ReviewCandidate.input1": true}, "expected": {"Score": -2, "Propose": {"title": "유보", "state": "wait"}, "ReviewCandidate": {"summary": "유보", "reason": "deferred"}, "Label": "유보:deferred", "Echo": {"title": "유보", "state": "wait"}, "Same": true}},
+    {"inputs": {"Score": 0, "Propose.input1": "", "ReviewCandidate.input1": false}, "expected": {"Score": 7, "Propose": {"title": "", "state": "ready"}, "ReviewCandidate": {"summary": "", "reason": "deferred"}, "Label": ":deferred", "Echo": {"title": "", "state": "ready"}, "Same": true}},
+    {"inputs": {"Score": 7, "Propose.input1": "줄\n바꿈", "ReviewCandidate.input1": true}, "expected": {"Score": 0, "Propose": {"title": "줄\n바꿈", "state": "ready"}, "ReviewCandidate": {"summary": "줄\n바꿈", "reason": "accepted"}, "Label": "줄\n바꿈:accepted", "Echo": {"title": "줄\n바꿈", "state": "ready"}, "Same": true}},
+    {"inputs": {"Score": 9223372036854775807, "Propose.input1": "큰 값", "ReviewCandidate.input1": true}, "expected": {"Score": -9223372036854775800, "Propose": {"title": "큰 값", "state": "wait"}, "ReviewCandidate": {"summary": "큰 값", "reason": "deferred"}, "Label": "큰 값:deferred", "Echo": {"title": "큰 값", "state": "wait"}, "Same": true}},
+    {"inputs": {"Score": -9223372036854775808, "Propose.input1": "é", "ReviewCandidate.input1": true}, "expected": {"Score": -9223372036854775801, "Propose": {"title": "é", "state": "wait"}, "ReviewCandidate": {"summary": "é", "reason": "deferred"}, "Label": "é:deferred", "Echo": {"title": "é", "state": "wait"}, "Same": true}}
+  ]
+}
