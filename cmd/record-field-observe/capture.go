@@ -62,7 +62,8 @@ func capture(compiler, sha, source, cases, model, out, private string) error {
 				if row.Mode != mode || row.Attempts > budget {
 					return fmt.Errorf("mode or source budget differs")
 				}
-				row.Budget, row.Trial, row.Resources = budget, trial, resources
+				trialIndex := trial
+				row.Budget, row.Trial, row.Resources = budget, &trialIndex, &resources
 				if err = os.WriteFile(filepath.Join(out, stem+".json"), raw, 0644); err != nil {
 					return err
 				}
@@ -92,7 +93,7 @@ func capture(compiler, sha, source, cases, model, out, private string) error {
 				if err != nil || replay.GoSHA != row.GoSHA || replay.SourceSHA != row.SourceSHA {
 					return fmt.Errorf("saved replay differs: %v", err)
 				}
-				replay.Budget, replay.Trial, replay.Resources = budget, trial, cost
+				replay.Budget, replay.Trial, replay.Resources = budget, &trialIndex, &cost
 				rows = append(rows, replay)
 				if err = os.WriteFile(filepath.Join(out, stem+"-replay.json"), replayed, 0644); err != nil {
 					return err

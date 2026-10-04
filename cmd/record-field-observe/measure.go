@@ -7,29 +7,29 @@ import (
 )
 
 type measurement struct {
-	Mode                  string    `json:"mode"`
-	Budget                int       `json:"attempt_budget"`
-	Trial                 int       `json:"trial"`
-	Saved                 bool      `json:"saved"`
-	SelectedMask          uint16    `json:"selected_mask"`
-	Ranking               []uint16  `json:"ranking"`
-	Attempts              int       `json:"evaluated_candidates"`
-	SelectionPassed       int       `json:"selection_passed"`
-	SelectionTotal        int       `json:"selection_total"`
-	SelectionFieldsPassed int       `json:"selection_fields_passed"`
-	SelectionFieldsTotal  int       `json:"selection_fields_total"`
-	RuntimePassed         int       `json:"runtime_passed"`
-	RuntimeTotal          int       `json:"runtime_total"`
-	RuntimeFieldsPassed   int       `json:"runtime_fields_passed"`
-	RuntimeFieldsTotal    int       `json:"runtime_fields_total"`
-	ActualCalls           int       `json:"actual_model_calls"`
-	StoredCalls           int       `json:"stored_model_calls"`
-	PredictNS             int64     `json:"stored_prediction_ns"`
-	GenerationMS          float64   `json:"generation_ms"`
-	RuntimeMS             float64   `json:"runtime_ms"`
-	Resources             resources `json:"resources"`
-	GoSHA                 string    `json:"generated_go_sha256"`
-	SourceSHA             string    `json:"selected_source_sha256"`
+	Mode                  string     `json:"mode"`
+	Budget                int        `json:"attempt_budget,omitempty"`
+	Trial                 *int       `json:"trial,omitempty"`
+	Saved                 bool       `json:"saved"`
+	SelectedMask          uint16     `json:"selected_mask"`
+	Ranking               []uint16   `json:"ranking"`
+	Attempts              int        `json:"evaluated_candidates"`
+	SelectionPassed       int        `json:"selection_passed"`
+	SelectionTotal        int        `json:"selection_total"`
+	SelectionFieldsPassed int        `json:"selection_fields_passed"`
+	SelectionFieldsTotal  int        `json:"selection_fields_total"`
+	RuntimePassed         int        `json:"runtime_passed"`
+	RuntimeTotal          int        `json:"runtime_total"`
+	RuntimeFieldsPassed   int        `json:"runtime_fields_passed"`
+	RuntimeFieldsTotal    int        `json:"runtime_fields_total"`
+	ActualCalls           int        `json:"actual_model_calls"`
+	StoredCalls           int        `json:"stored_model_calls"`
+	PredictNS             int64      `json:"stored_prediction_ns"`
+	GenerationMS          float64    `json:"generation_ms"`
+	RuntimeMS             float64    `json:"runtime_ms"`
+	Resources             *resources `json:"resources,omitempty"`
+	GoSHA                 string     `json:"generated_go_sha256"`
+	SourceSHA             string     `json:"selected_source_sha256"`
 }
 
 type fieldCase struct {
