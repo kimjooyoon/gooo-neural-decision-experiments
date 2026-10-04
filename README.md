@@ -1,5 +1,12 @@
 # Gooo neural decision experiments
 
+[Candidate continuation](publication/record-candidate-continuation-20261005) keeps
+generating when individually valid field alternatives form an unused-local
+combination. The unchanged public QAT model completes the authored example in
+four attempts, including one type rejection. The Go summary distinguishes
+attempted, evaluated and rejected candidates, while selection and native values
+retain their own finite completeness counts.
+
 [Record value origins](publication/record-value-origins-20261005) follow current
 and saved record/scalar definitions into a separate small-model input contract.
 Four authored source forms produce eight context exports: the old receiver

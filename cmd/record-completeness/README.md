@@ -25,6 +25,13 @@ The complete output includes every remaining selection and runtime difference.
 The optional JSON `record_selection` contains a separate score per activity.
 The reader recomputes both reported selection ratios from expected/actual values.
 
+For [a combination rejected by type checking](../../publication/record-candidate-continuation-20261005),
+the reader separates attempted candidates, candidates whose cases executed and
+type-rejected candidates. It prints the rejected mask and diagnostic. A rejected
+candidate has no finite case/field denominator. The selected implementation's
+actual values determine its completeness. Successful historical reports retain
+their previous JSON shape; rejection details are added when observed.
+
 ```sh
 go run ./cmd/record-completeness \
   --input publication/native-record-values-20261004/partial.json

@@ -19,12 +19,30 @@ type selectionRecord struct {
 }
 
 type selectionScore struct {
-	Activity   string      `json:"activity"`
-	ActivityID string      `json:"activity_id"`
-	Cases      finiteScore `json:"cases"`
-	Fields     finiteScore `json:"fields"`
-	Attempts   int         `json:"evaluated_candidates"`
-	Gaps       []gap       `json:"gaps"`
+	Activity   string          `json:"activity"`
+	ActivityID string          `json:"activity_id"`
+	Cases      finiteScore     `json:"cases"`
+	Fields     finiteScore     `json:"fields"`
+	Attempts   int             `json:"evaluated_candidates"`
+	Attempted  int             `json:"attempted_candidates,omitempty"`
+	Rejected   int             `json:"type_rejected_candidates,omitempty"`
+	Rejections []typeRejection `json:"type_rejections,omitempty"`
+	Gaps       []gap           `json:"gaps"`
+}
+
+type selectionAttempt struct {
+	Mask         uint16 `json:"mask"`
+	Status       string `json:"status"`
+	Reason       string `json:"reason"`
+	Passed       int    `json:"passed"`
+	Total        int    `json:"total"`
+	FieldsPassed int    `json:"fields_passed"`
+	FieldsTotal  int    `json:"fields_total"`
+}
+
+type typeRejection struct {
+	Mask   uint16 `json:"mask"`
+	Reason string `json:"reason"`
 }
 
 // Selection cases belong to the assembly contract. Runtime cases have their
@@ -41,7 +59,7 @@ func measureSelections(source observation) ([]selectionScore, error) {
 			return nil, fmt.Errorf("record selection cases or activity incomplete")
 		}
 		seen[r.ActivityID] = true
-		score := selectionScore{ActivityID: r.ActivityID, Attempts: len(r.Record.Attempts)}
+		score := selectionScore{ActivityID: r.ActivityID}
 		var names []string
 		for _, node := range source.Composition.Plan.Activities {
 			if node.ID != r.ActivityID {
@@ -98,6 +116,31 @@ func measureSelections(source observation) ([]selectionScore, error) {
 		if score.Cases.Passed != r.Record.Passed || score.Cases.Total != r.Record.Total ||
 			score.Fields.Passed != r.Record.FieldsPassed || score.Fields.Total != r.Record.FieldsTotal {
 			return nil, fmt.Errorf("record selection counts differ from actual values")
+		}
+		for _, raw := range r.Record.Attempts {
+			var attempt selectionAttempt
+			if json.Unmarshal(raw, &attempt) != nil {
+				return nil, fmt.Errorf("record attempt observation is invalid")
+			}
+			switch attempt.Status {
+			case "TYPECHECK_FAILED":
+				if attempt.Reason == "" || attempt.Passed != 0 || attempt.Total != 0 || attempt.FieldsPassed != 0 || attempt.FieldsTotal != 0 {
+					return nil, fmt.Errorf("type-rejected candidate has finite scores or no reason")
+				}
+				score.Rejected++
+				score.Rejections = append(score.Rejections, typeRejection{attempt.Mask, attempt.Reason})
+			case "":
+				if attempt.Reason != "" || attempt.Total != score.Cases.Total || attempt.FieldsTotal != score.Fields.Total ||
+					attempt.Passed < 0 || attempt.Passed > attempt.Total || attempt.FieldsPassed < 0 || attempt.FieldsPassed > attempt.FieldsTotal {
+					return nil, fmt.Errorf("evaluated candidate has incompatible finite counts")
+				}
+				score.Attempts++
+			default:
+				return nil, fmt.Errorf("unknown record attempt status")
+			}
+		}
+		if score.Rejected > 0 {
+			score.Attempted = len(r.Record.Attempts)
 		}
 		score.Cases.Percent, score.Fields.Percent = ratio(score.Cases), ratio(score.Fields)
 		scores = append(scores, score)
