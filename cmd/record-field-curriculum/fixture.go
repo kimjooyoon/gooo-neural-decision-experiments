@@ -12,6 +12,10 @@ var names = [8][3]string{{"title", "state", "reason"}, {"caption", "status", "ex
 var intents = [2][3]string{{"원래 제목을 그대로 사용한다.", "상태를 ready 문자열로 설정한다.", "기존 사유 뒤에 :accepted를 붙인다."}, {"Keep the original title.", "Set state to the ready string.", "Append :accepted to the original reason."}}
 
 func fixture(family int, order [3]int, mask uint16, language string) []byte {
+	return goalFixture(family, order, mask, language, 0, 0)
+}
+
+func goalFixture(family int, order [3]int, mask uint16, language string, goal, style int) []byte {
 	fields := names[family]
 	good := [3]string{"input0." + fields[0], strconv.Quote("ready"), "input0." + fields[2] + " + " + strconv.Quote(":accepted")}
 	bad := [3]string{strconv.Quote("draft"), strconv.Quote("wait"), strconv.Quote("deferred")}
@@ -53,12 +57,8 @@ func fixture(family int, order [3]int, mask uint16, language string) []byte {
 		fmt.Fprintf(&b, "    field %s id \"fieldstudy://family/%d/field/%d\" type string required one\n", field, family, role)
 	}
 	fmt.Fprintf(&b, "}\nactivity Select(Candidate, Boolean) -> Candidate computes `%s` assembling {\n", body)
-	lang := 0
-	if language == "en" {
-		lang = 1
-	}
 	for _, role := range order {
-		fmt.Fprintf(&b, "    choice %s field_value at %s alternative %s intent %s\n", strconv.Quote(fmt.Sprintf("role-%d", role)), strconv.Quote(strconv.Itoa(role)), strconv.Quote(second[role]), strconv.Quote(intents[lang][role]))
+		fmt.Fprintf(&b, "    choice %s field_value at %s alternative %s intent %s\n", strconv.Quote(fmt.Sprintf("role-%d", role)), strconv.Quote(strconv.Itoa(role)), strconv.Quote(second[role]), strconv.Quote(goalIntent(family, role, goal&(1<<role) != 0, language, style)))
 	}
 	for _, c := range [5]struct {
 		title, state, reason string
@@ -67,8 +67,7 @@ func fixture(family int, order [3]int, mask uint16, language string) []byte {
 		input := map[string]string{fields[0]: c.title, fields[1]: c.state, fields[2]: c.reason}
 		expected := map[string]string{fields[0]: c.title, fields[1]: c.state, fields[2]: c.reason}
 		if c.active && c.state != "ready" {
-			expected[fields[1]] = "ready"
-			expected[fields[2]] = c.reason + ":accepted"
+			expected = goalValues(family, goal, c.title, c.state, c.reason)
 		}
 		in, _ := json.Marshal([]any{input, c.active})
 		out, _ := json.Marshal(expected)
