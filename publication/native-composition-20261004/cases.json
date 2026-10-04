@@ -1,0 +1,12 @@
+{
+  "schema": "gooo/body-composition-cases/v1",
+  "cases": [
+    {"inputs": {"Assemble": -8, "Decorate": "gooo"}, "expected": {"Assemble": 15, "Clamp": 10, "IsPositive": true, "Invert": false, "Twice": 30, "Decorate": "gooo!", "Same": true}},
+    {"inputs": {"Assemble": -1, "Decorate": "언어"}, "expected": {"Assemble": 8, "Clamp": 8, "IsPositive": true, "Invert": false, "Twice": 16, "Decorate": "언어!", "Same": false}},
+    {"inputs": {"Assemble": 0, "Decorate": ""}, "expected": {"Assemble": 7, "Clamp": 7, "IsPositive": true, "Invert": false, "Twice": 14, "Decorate": "!", "Same": false}},
+    {"inputs": {"Assemble": 3, "Decorate": "gooo"}, "expected": {"Assemble": 4, "Clamp": 4, "IsPositive": true, "Invert": false, "Twice": 8, "Decorate": "gooo!", "Same": true}},
+    {"inputs": {"Assemble": 7, "Decorate": "Gooo"}, "expected": {"Assemble": 0, "Clamp": 0, "IsPositive": false, "Invert": true, "Twice": 0, "Decorate": "Gooo!", "Same": false}},
+    {"inputs": {"Assemble": 9, "Decorate": "🙂"}, "expected": {"Assemble": -2, "Clamp": 0, "IsPositive": false, "Invert": true, "Twice": -4, "Decorate": "🙂!", "Same": false}},
+    {"inputs": {"Assemble": 9223372036854775807, "Decorate": "gooo"}, "expected": {"Assemble": -9223372036854775800, "Clamp": 0, "IsPositive": false, "Invert": true, "Twice": 16, "Decorate": "gooo!", "Same": true}}
+  ]
+}

@@ -1,0 +1,42 @@
+package composition
+namespace composition
+entity Integer id "composition://integer"
+entity Boolean id "composition://boolean"
+entity Text id "composition://text"
+
+activity Assemble(Integer) -> Integer computes `let a = input - 1
+let b = a - 3
+return b - 9` assembling {
+    choice "first" operand_order at "0" intent "첫 번째 피연산자를 반대로 배치한다. Reverse the first operands."
+    choice "second" operand_order at "1" intent "두 번째 피연산자를 반대로 배치한다. Reverse the second operands."
+    choice "third" operand_order at "2" intent "세 번째 피연산자를 반대로 배치한다. Reverse the third operands."
+    case "-8" -> "15"
+    case "-1" -> "8"
+    case "0" -> "7"
+    case "3" -> "4"
+    case "4" -> "3"
+    case "9" -> "-2"
+    attempts "8"
+}
+
+activity Clamp(Integer) -> Integer computes "if input < 0 { return 0 } else if input < 10 { return input } else { return 10 }" assembling {
+    choice "lower-branch" branch_layout at "0" intent "음수이면 0을 반환한다. Return zero for negative input."
+    choice "upper-comparison" operand_order at "1" intent "입력이 10보다 작은지 확인한다. Check input below ten."
+    choice "middle-branch" branch_layout at "1" intent "중간 범위는 입력을, 그 이상은 10을 반환한다. Return input in the middle range, otherwise ten."
+    case "-1" -> "0"
+    case "5" -> "5"
+    case "11" -> "10"
+    attempts "8"
+}
+
+activity IsPositive(Integer) -> Boolean computes "return input > 0"
+activity Invert(Boolean) -> Boolean computes "return !input"
+activity Twice(Integer) -> Integer computes "return input * 2"
+activity Decorate(Text) -> Text computes `return input + "!"`
+activity Same(Text) -> Boolean computes `return input == "gooo!"`
+
+bind Assemble.result -> Clamp.input
+bind Clamp.result -> IsPositive.input
+bind IsPositive.result -> Invert.input
+bind Assemble.result -> Twice.input
+bind Decorate.result -> Same.input
