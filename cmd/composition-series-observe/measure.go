@@ -182,7 +182,8 @@ func measure(raw []byte, sha string, saved bool) (measurement, error) {
 
 func measureFrame(f frame, s suite, sha string) (frameMeasurement, error) {
 	r := frameMeasurement{RuntimeMS: float64(f.Elapsed) / 1e6, BuildMS: float64(f.Build.Wall) / 1e6}
-	if f.Stage != "COMPLETE" || f.Compiler != sha || !f.Replayed || f.Calls != 0 || len(f.Runs) != 2 || len(f.Traces) != len(s.Cases) {
+	if len(s.Cases) < 1 || len(s.Cases) > 128 || f.Stage != "COMPLETE" || f.Compiler != sha ||
+		!f.Replayed || f.Calls != 0 || len(f.Runs) != 2 || len(f.Traces) != len(s.Cases) {
 		return r, fmt.Errorf("current compiled values required")
 	}
 	for _, p := range append([]process{f.Build, f.Toolchain}, f.Runs...) {

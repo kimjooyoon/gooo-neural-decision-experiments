@@ -82,11 +82,21 @@ latest history frame. Replaying `--composition` starts one new native build,
 then reuses it within that request; it makes zero new predictions.
 
 The Go observer accepts `--verify-json CAPTURE.json --compiler-source REVISION`
-and `--saved` for a saved capture. Its native CI repeats four profiles and their
+and `--saved` for a saved capture. Add `--text` for a concise per-suite summary
+with output/field percentages, current model calls, build/reuse and actual mismatches:
+
+```sh
+go run ./cmd/composition-series-observe \
+  --verify-json publication/retained-composition-20261005/candidate/fp32-0-fresh.json \
+  --compiler-source 38962397144d4418b75f571471225ff02d712617 --text
+```
+
+Its native CI repeats four profiles and their
 saved counterparts on Linux. The executor owns at most one compiled artifact;
 program changes replace it and close releases it. Local tests cover changed
 programs, current inputs, concurrent callers and cancellable waiting.
 
-Next work is compact training on different field/source shapes and a simpler
-terminal summary of partial current results. This change reduces repeated build
-cost in an existing language flow.
+[Independent Linux readback](linux-readback) rechecks the eight native responses
+from the first research CI job. [The next compact field curriculum](next-field-learning.md)
+describes source-family splits and per-field intent; new training is subsequent
+work. This change reduces repeated build cost in an existing language flow.
