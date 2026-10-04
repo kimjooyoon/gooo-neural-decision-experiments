@@ -30,6 +30,8 @@ type entry struct {
 func hash(raw []byte) string { sum := sha256.Sum256(raw); return hex.EncodeToString(sum[:]) }
 func inventory() map[string]string {
 	return map[string]string{
+		"internal/modelfile/read.go": "internal/modelfile/read.go", "internal/modelfile/read_test.go": "internal/modelfile/read_test.go",
+		"internal/modelfile/open_unix.go": "internal/modelfile/open_unix.go", "internal/modelfile/open_other.go": "internal/modelfile/open_other.go", "internal/modelfile/read_unix_test.go": "internal/modelfile/read_unix_test.go",
 		"semantic_bag_features.go": "internal/decision/semantic_bag_features.go", "semantic_bag_features_test.go": "internal/decision/semantic_bag_features_test.go",
 		"jointdecision/three_bag_input.go": "internal/jointdecision/three_bag_input.go", "jointdecision/three_bag_test.go": "internal/jointdecision/three_bag_test.go",
 		"jointdecision/three_separate.go": "internal/jointdecision/three_separate.go", "jointdecision/three_separate_test.go": "internal/jointdecision/three_separate_test.go",
@@ -69,7 +71,7 @@ func run(output string) error {
 	if err != nil {
 		return err
 	}
-	paths := []string{"diff", "--quiet", "HEAD", "--", "internal/decision", "internal/jointdecision", "internal/bodyplan", "internal/pathplan", "internal/strictjson", "studies/split-context-features-v2", "LICENSE"}
+	paths := []string{"diff", "--quiet", "HEAD", "--", "internal/decision", "internal/jointdecision", "internal/modelfile", "internal/bodyplan", "internal/pathplan", "internal/strictjson", "studies/split-context-features-v2", "LICENSE"}
 	if err := exec.Command("git", paths...).Run(); err != nil {
 		return errors.New("origin source must be committed before extraction")
 	}
@@ -91,6 +93,7 @@ func run(output string) error {
 			"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/bodyplan":      "github.com/kimjooyoon/gooo-decision-runtime/bodyplan",
 			"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/pathplan":      "github.com/kimjooyoon/gooo-decision-runtime/pathplan",
 			"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/strictjson":    "github.com/kimjooyoon/gooo-decision-runtime/internal/strictjson",
+			"github.com/kimjooyoon/gooo-neural-decision-experiments/internal/modelfile":     "github.com/kimjooyoon/gooo-decision-runtime/internal/modelfile",
 		} {
 			transformed = strings.ReplaceAll(transformed, old, newName)
 		}
