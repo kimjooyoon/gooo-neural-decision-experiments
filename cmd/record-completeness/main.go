@@ -33,6 +33,15 @@ func run(path string, asJSON bool) error {
 		encoder.SetIndent("", "  ")
 		return encoder.Encode(report)
 	}
+	for _, selection := range report.Selection {
+		fmt.Printf("Selection %s: cases %d/%d (%s); fields %d/%d (%s); evaluated candidates: %d\n",
+			selection.Activity, selection.Cases.Passed, selection.Cases.Total, percentage(selection.Cases.Percent),
+			selection.Fields.Passed, selection.Fields.Total, percentage(selection.Fields.Percent), selection.Attempts)
+		for _, gap := range selection.Gaps {
+			fmt.Printf("Selection case %d %s%s: %s; actual=%s expected=%s\n",
+				gap.Case, gap.Activity, suffix(gap.Field), gap.Status, printable(gap.Actual), printable(gap.Expected))
+		}
+	}
 	fmt.Printf("Named outputs: %d/%d (%s); unobserved: %d\n", report.Outputs.Passed, report.Outputs.Total, percentage(report.Outputs.Percent), report.Outputs.Unobserved)
 	fmt.Printf("Record output fields: %d/%d (%s); unobserved: %d\n", report.Fields.Passed, report.Fields.Total, percentage(report.Fields.Percent), report.Fields.Unobserved)
 	for _, gap := range report.Gaps {

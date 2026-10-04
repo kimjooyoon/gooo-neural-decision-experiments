@@ -5,6 +5,26 @@ prints named-output matches, output-record field matches and the exact gaps.
 The denominator comes from caller expectations in that execution. Input field
 observations describe delivery and retain their separate trace counts.
 
+If the response contains field assembly, it also prints the selection contract's
+case and field ratios, evaluated candidates and remaining field differences.
+Selection cases and actual runtime cases keep separate denominators. For example:
+
+```sh
+go run ./cmd/record-completeness \
+  --input publication/record-field-assembly-20261004/candidate/budget-4-model-0.json
+```
+
+```text
+Selection Select: cases 2/5 (40.00%); fields 12/15 (80.00%); evaluated candidates: 4
+Selection case 0 Select.state: mismatch; actual="wait" expected="ready"
+Named outputs: 6/14 (42.86%); unobserved: 0
+Record output fields: 17/21 (80.95%); unobserved: 0
+```
+
+The complete output includes every remaining selection and runtime difference.
+The optional JSON `record_selection` contains a separate score per activity.
+The reader recomputes both reported selection ratios from expected/actual values.
+
 ```sh
 go run ./cmd/record-completeness \
   --input publication/native-record-values-20261004/partial.json
