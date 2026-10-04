@@ -77,3 +77,35 @@ func TestSavedObservationCarriesHistoricalCostsSeparately(t *testing.T) {
 		t.Fatal("historical prediction accounting", row, err)
 	}
 }
+
+func TestQuantizedPilotProfilesAndSavedAccounting(t *testing.T) {
+	const source = "cb316851c8701577fdb5d0d426651e68de3a4b88"
+	for _, profile := range []string{"ptq_ternary", "qat_ternary"} {
+		raw, err := os.ReadFile("../../publication/record-field-assembly-20261004/quantized-pilot/field-" + profile + ".json")
+		if err != nil {
+			t.Fatal(err)
+		}
+		row, observation, err := measure(raw, source, false)
+		if err != nil || row.ModelProfile != profile || row.ResidentTensorBytes != 18752 ||
+			row.SelectionFieldsPassed != 15 || row.RuntimeFieldsPassed != 21 || row.RuntimePassed != 14 || row.ActualCalls != 1 {
+			t.Fatal(profile, row, err)
+		}
+		observation.Generated = false
+		saved, err := json.Marshal(observation)
+		if err != nil {
+			t.Fatal(err)
+		}
+		row, _, err = measure(saved, source, true)
+		if err != nil || row.ActualCalls != 0 || row.StoredCalls != 1 || row.ModelProfile != profile {
+			t.Fatal("saved", profile, row, err)
+		}
+		observation.Composition.Steps[0].Generation.Report.Record.Model.Bytes = 74624
+		changed, err := json.Marshal(observation)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if _, _, err = measure(changed, source, true); err == nil {
+			t.Fatal("mismatched quantized resident tensor count accepted", profile)
+		}
+	}
+}

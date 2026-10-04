@@ -27,6 +27,7 @@ jobs:
           go test -race ./cmd/record-field-observe
           go build -o "$RUNNER_TEMP/field-observe" ./cmd/record-field-observe
           (cd publication/record-field-assembly-20261004/candidate && sha256sum -c SHA256SUMS)
+          (cd publication/record-field-assembly-20261004/quantized-pilot && sha256sum -c SHA256SUMS)
       - uses: actions/checkout@v7
         with:
           repository: kimjooyoon/meta-ontology-go
@@ -39,9 +40,12 @@ jobs:
           study=publication/record-field-assembly-20261004/candidate
           model=models/own-three-feedback-v1/set-feedback/models/fp32/model.json
           for budget in 1 2 4 8; do
-            for mode in model deterministic; do
+            for mode in model deterministic ptq_ternary qat_ternary; do
               model_args=()
               if [ "$mode" = model ]; then model_args=(--model "$model"); fi
+              if [ "$mode" = ptq_ternary ] || [ "$mode" = qat_ternary ]; then
+                model_args=(--model "models/own-three-feedback-v1/set-feedback/models/$mode/model.json")
+              fi
               stem="$RUNNER_TEMP/fields-$budget-$mode"
               "$RUNNER_TEMP/gooo-fields" body-compose --source "$study/source-budget-$budget.gooo.fixture" \
                 --cases "$study/cases.json" "${model_args[@]}" > "$stem.json"
