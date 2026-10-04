@@ -29,10 +29,11 @@ jobs:
           go build -o "$RUNNER_TEMP/field-completeness" ./cmd/record-completeness
           (cd publication/record-field-assembly-20261004/candidate && sha256sum -c SHA256SUMS)
           (cd publication/record-field-assembly-20261004/quantized-pilot && sha256sum -c SHA256SUMS)
+          (cd publication/record-field-assembly-20261004/installed && sha256sum -c SHA256SUMS)
       - uses: actions/checkout@v7
         with:
           repository: kimjooyoon/meta-ontology-go
-          ref: cb316851c8701577fdb5d0d426651e68de3a4b88
+          ref: f6da667e11951b6939fc5e30442e01a09ca06e85
           path: .field-assembly-compiler
           persist-credentials: false
       - name: Assemble and execute typed field alternatives with partial budgets
@@ -51,13 +52,13 @@ jobs:
               "$RUNNER_TEMP/gooo-fields" body-compose --source "$study/source-budget-$budget.gooo.fixture" \
                 --cases "$study/cases.json" "${model_args[@]}" > "$stem.json"
               "$RUNNER_TEMP/field-observe" --verify-json "$stem.json" \
-                --compiler-source cb316851c8701577fdb5d0d426651e68de3a4b88
+                --compiler-source f6da667e11951b6939fc5e30442e01a09ca06e85
               "$RUNNER_TEMP/field-completeness" --input "$stem.json" --json > "$stem-completeness.json"
               jq '.composition' "$stem.json" > "$stem-composition.json"
               "$RUNNER_TEMP/gooo-fields" body-compose --source "$study/source-budget-$budget.gooo.fixture" \
                 --cases "$study/cases.json" --composition "$stem-composition.json" > "$stem-replay.json"
               "$RUNNER_TEMP/field-observe" --verify-json "$stem-replay.json" \
-                --compiler-source cb316851c8701577fdb5d0d426651e68de3a4b88 --saved
+                --compiler-source f6da667e11951b6939fc5e30442e01a09ca06e85 --saved
               jq -S '{source:.composition.gooo_source,go:.composition.generated_sha256}' "$stem.json" > "$stem-program.json"
               jq -S '{source:.composition.gooo_source,go:.composition.generated_sha256}' "$stem-replay.json" > "$stem-replay-program.json"
               cmp "$stem-program.json" "$stem-replay-program.json"

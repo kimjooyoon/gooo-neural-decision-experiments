@@ -72,7 +72,7 @@ type observation struct {
 }
 
 func measure(raw []byte) (completeness, error) {
-	result := completeness{Schema: "gooo/finite-record-completeness/v1", Scope: "Observed caller expectations in this captured execution; record-output field values only; unobserved values receive no match credit; finite ratios describe the provided contract"}
+	result := completeness{Schema: "gooo/finite-record-completeness/v1", Scope: "Selection cases and observed runtime expectations retain separate finite ratios; record-output field values only; unobserved values receive no match credit; ratios describe the provided contracts"}
 	var source observation
 	if err := json.Unmarshal(raw, &source); err != nil {
 		return result, err
