@@ -23,7 +23,23 @@ generated-program behavior have separate observations.
 
 Focused race tests verify historical Git source binding, invalid/missing source
 and complete added/removed/changed inventories. The Linux CI requests the new
-mode and fetches Git history. Its result is recorded separately when available.
+mode and fetches Git history.
+
+The `separate-arithmetic-replay` job of source-bound CI37168510833 finished
+SUCCESS. Artifact11289922451 was downloaded and its archive SHA256
+`00d944c221608fc53e748ed8c798fcf9bf9c342864f3df73e4f66b44d95102b6`
+matched GitHub's metadata. Independent local consumption of every Linux row
+also passed. All 18,432 explicit observations retain zero value, ranking or
+finite-outcome differences. Legacy arithmetic keeps its original **272 ranking
+differences and 38 finite-outcome differences**, with unchanged first masks.
+The broader workflow's jobs have their own status; this evidence covers the
+completed arithmetic job and source `695f5bc8`.
+
+`linux.zip` preserves the complete retrieved Linux collection, its original
+CI comparison and model files. `linux-independent-comparison.json` records the
+independent consumption. Collection counts are 73,728 actual predictions per
+platform; comparison makes zero predictions. Weights and optimizer state remain
+fixed throughout.
 
 `arm64.zip` contains the exact complete new collection. The member reader checks
 every file's bytes and closes the archive inventory; comparison does no new
