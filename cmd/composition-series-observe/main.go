@@ -19,6 +19,7 @@ func main() {
 	private := flag.String("private-out", "", "fresh private resource log directory")
 	input := flag.String("verify-json", "", "captured body-compose response")
 	saved := flag.Bool("saved", false, "response uses a saved construction")
+	text := flag.Bool("text", false, "show a short current-input summary")
 	flag.Parse()
 	var err error
 	if *input != "" {
@@ -28,7 +29,11 @@ func main() {
 			var report measurement
 			report, err = measure(raw, *sha, *saved)
 			if err == nil {
-				err = json.NewEncoder(os.Stdout).Encode(report)
+				if *text {
+					err = writeText(os.Stdout, report, raw)
+				} else {
+					err = json.NewEncoder(os.Stdout).Encode(report)
+				}
 			}
 		}
 	} else {

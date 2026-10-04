@@ -10,6 +10,13 @@ without assembling the tool again. Each execution still measures its own result.
 
 ## What was measured
 
+The feature is now merged into compiler main `7acccf56` through PR1228 after
+its complete CI, and both local executables are installed. [Fresh installed
+controls](installed) retain the candidate's program identities, actual values
+and partial counts. Saved FP32-origin workload medians are2,327.40ms/497.14ms;
+fresh prediction median is18.792µs. The original candidate results below remain
+separate.
+
 [Candidate observations](candidate) bind clean compiler source
 `38962397144d4418b75f571471225ff02d712617`, Go1.27.1 and the existing frozen own
 models. [Compiler PR1227](https://github.com/kimjooyoon/meta-ontology-go/pull/1227)
@@ -58,10 +65,19 @@ frames have a **22.001ms** median. The initial disconnected request took
 1,743.89ms end-to-end; the other two took 509.76/515.24ms. Original first and warm
 observations remain in the data. These costs depend on the local cache/device.
 
+The first saved FP32 trial separates a96.49ms build, a248.26ms first native
+launch/execution and an8.32ms second execution of the same suite. This identifies
+both build and first-execution wall cost. The underlying cause of the first-run
+delay is unmeasured. Keeping the executable avoids repeating both stages;
+the text reader shows build and both native times separately.
+
 One fresh PTQ and one QAT request also retain the same generated program and
 finite results. Each has 18,752 resident tensor bytes versus FP32's 74,624.
-Prediction observations are 19.041µs/19.000µs. Actual storage is 2-bit packing;
-1.58 bits describes ternary information content. Weights and training are
+Prediction observations are 19.041µs/19.000µs. The `ternary_base3_5` matrices pack
+five trits per byte, approximately 1.6 stored bits per matrix weight. Each weight
+file is 3,854 bytes including FP32 biases; decoded tensor residency is the
+separate 18,752-byte count. The earlier 2-bit wording is corrected here from the
+actual metadata and files. 1.58 bits describes ternary information content. Weights and training are
 unchanged. Equal finite results on this shape leave broader model quality open.
 
 ## Try the source and read the current result
@@ -82,11 +98,21 @@ latest history frame. Replaying `--composition` starts one new native build,
 then reuses it within that request; it makes zero new predictions.
 
 The Go observer accepts `--verify-json CAPTURE.json --compiler-source REVISION`
-and `--saved` for a saved capture. Its native CI repeats four profiles and their
+and `--saved` for a saved capture. Add `--text` for a concise per-suite summary
+with output/field percentages, current model calls, build/reuse and actual mismatches:
+
+```sh
+go run ./cmd/composition-series-observe \
+  --verify-json publication/retained-composition-20261005/candidate/fp32-0-fresh.json \
+  --compiler-source 38962397144d4418b75f571471225ff02d712617 --text
+```
+
+Its native CI repeats four profiles and their
 saved counterparts on Linux. The executor owns at most one compiled artifact;
 program changes replace it and close releases it. Local tests cover changed
 programs, current inputs, concurrent callers and cancellable waiting.
 
-Next work is compact training on different field/source shapes and a simpler
-terminal summary of partial current results. This change reduces repeated build
-cost in an existing language flow.
+[Independent Linux readback](linux-readback) rechecks the eight native responses
+from the first research CI job. [The next compact field curriculum](next-field-learning.md)
+describes source-family splits and per-field intent; new training is subsequent
+work. This change reduces repeated build cost in an existing language flow.

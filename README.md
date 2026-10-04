@@ -1,13 +1,14 @@
 # Gooo neural decision experiments
 
 [Retained graph execution](publication/retained-composition-20261005) applies new
-inputs and expectations to one compiled Gooo graph. The current clean candidate
-keeps all actual values and deliberate partial matches. In three paired saved
-FP32-origin controls, a six-suite workload changes from about 2.32s across six
-stateless CLI commands to 0.51s in one retained command; CPU time is 1.46s/0.38s,
-with similar peak RSS. The comparison includes different startup counts. Fresh
-own-model prediction median is18.834µs; weights are unchanged. Candidate status,
-source identity, original timings and current-input checks are published together.
+inputs and expectations to one compiled Gooo graph. Main `7acccf56` is merged and
+installed after complete CI. [Fresh installed controls](publication/retained-composition-20261005/installed)
+keep the original candidate's program identities, actual values and deliberate
+partial matches. Three paired saved FP32-origin six-suite workloads change from
+about2.33s across six stateless CLI commands to0.50s in one retained command;
+CPU time is1.45s/0.36s with similar peak RSS. The comparison includes different
+startup counts. Fresh own-model prediction median is18.792µs; weights are unchanged.
+The Go text reader lists current percentages, mismatches, build and native times.
 
 [Record field assembly](publication/record-field-assembly-20261004) lets Gooo
 declare alternatives inside record constructors and retain partial field

@@ -64,6 +64,8 @@ type frameMeasurement struct {
 	BuildMS      float64 `json:"current_build_ms"`
 	RuntimeMS    float64 `json:"runtime_ms"`
 	ChildCPUms   float64 `json:"current_child_cpu_ms"`
+	FirstRunMS   float64 `json:"first_native_run_ms"`
+	ReplayRunMS  float64 `json:"replay_native_run_ms"`
 }
 type measurement struct {
 	Profile     string             `json:"profile"`
@@ -182,7 +184,8 @@ func measure(raw []byte, sha string, saved bool) (measurement, error) {
 
 func measureFrame(f frame, s suite, sha string) (frameMeasurement, error) {
 	r := frameMeasurement{RuntimeMS: float64(f.Elapsed) / 1e6, BuildMS: float64(f.Build.Wall) / 1e6}
-	if f.Stage != "COMPLETE" || f.Compiler != sha || !f.Replayed || f.Calls != 0 || len(f.Runs) != 2 || len(f.Traces) != len(s.Cases) {
+	if len(s.Cases) < 1 || len(s.Cases) > 128 || f.Stage != "COMPLETE" || f.Compiler != sha ||
+		!f.Replayed || f.Calls != 0 || len(f.Runs) != 2 || len(f.Traces) != len(s.Cases) {
 		return r, fmt.Errorf("current compiled values required")
 	}
 	for _, p := range append([]process{f.Build, f.Toolchain}, f.Runs...) {
@@ -196,6 +199,7 @@ func measureFrame(f frame, s suite, sha string) (frameMeasurement, error) {
 			return r, fmt.Errorf("missing native run")
 		}
 	}
+	r.FirstRunMS, r.ReplayRunMS = float64(f.Runs[0].Wall)/1e6, float64(f.Runs[1].Wall)/1e6
 	for i, trace := range f.Traces {
 		if trace.Index != i || len(trace.Deliveries) != 2 {
 			return r, fmt.Errorf("current case trace differs")
