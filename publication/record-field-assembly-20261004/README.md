@@ -21,6 +21,10 @@ The original candidate is source `48f7027584281ef87e43220f680093bc693f4488`.
 Compiler [PR1225](https://github.com/kimjooyoon/meta-ontology-go/pull/1225) adds the
 feature and the following Go modernizer change. Candidate measurements retain
 their exact earlier revision. This cohort records work before main installation.
+The follow-up source `cb316851` also keeps the syntax package independent of
+model runtime dependencies and supports saved JSON indentation/key ordering.
+An actual saved partial-model construction was replayed with 6/14 native outputs
+and zero new predictions after reproducing the earlier formatting error.
 
 ## Reproduce and inspect
 

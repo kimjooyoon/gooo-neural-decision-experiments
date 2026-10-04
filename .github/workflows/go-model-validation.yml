@@ -30,7 +30,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           repository: kimjooyoon/meta-ontology-go
-          ref: 52238d7ff015c71d39606ab2b281f7fe19678beb
+          ref: cb316851c8701577fdb5d0d426651e68de3a4b88
           path: .field-assembly-compiler
           persist-credentials: false
       - name: Assemble and execute typed field alternatives with partial budgets
@@ -46,12 +46,12 @@ jobs:
               "$RUNNER_TEMP/gooo-fields" body-compose --source "$study/source-budget-$budget.gooo.fixture" \
                 --cases "$study/cases.json" "${model_args[@]}" > "$stem.json"
               "$RUNNER_TEMP/field-observe" --verify-json "$stem.json" \
-                --compiler-source 52238d7ff015c71d39606ab2b281f7fe19678beb
+                --compiler-source cb316851c8701577fdb5d0d426651e68de3a4b88
               jq '.composition' "$stem.json" > "$stem-composition.json"
               "$RUNNER_TEMP/gooo-fields" body-compose --source "$study/source-budget-$budget.gooo.fixture" \
                 --cases "$study/cases.json" --composition "$stem-composition.json" > "$stem-replay.json"
               "$RUNNER_TEMP/field-observe" --verify-json "$stem-replay.json" \
-                --compiler-source 52238d7ff015c71d39606ab2b281f7fe19678beb --saved
+                --compiler-source cb316851c8701577fdb5d0d426651e68de3a4b88 --saved
               jq -S '{source:.composition.gooo_source,go:.composition.generated_sha256}' "$stem.json" > "$stem-program.json"
               jq -S '{source:.composition.gooo_source,go:.composition.generated_sha256}' "$stem-replay.json" > "$stem-replay-program.json"
               cmp "$stem-program.json" "$stem-replay-program.json"
