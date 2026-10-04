@@ -70,7 +70,22 @@ func main() {
 	goBin := flag.String("go-bin", "", "Go1.27.1")
 	model := flag.String("model", "", "frozen QAT model.json")
 	out := flag.String("out", "", "new output directory")
+	auditDir := flag.String("audit", "", "existing captured directory")
+	report := flag.String("audit-report", "", "audit JSON output path")
+	archive := flag.String("pack", "", "byte-verified ZIP output path")
+	initial := flag.Bool("initial", false, "expect the retained24 initial preflight failures")
 	flag.Parse()
+	if *auditDir != "" {
+		result := encode(audit(*auditDir, *initial))
+		if *report != "" {
+			write(*report, result)
+		}
+		if *archive != "" {
+			pack(*auditDir, *archive)
+		}
+		fmt.Println(string(result))
+		return
+	}
 	if *cli == "" || *goBin == "" || *model == "" || *out == "" {
 		panic("gooo/go-bin/model/out required")
 	}

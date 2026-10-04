@@ -1,5 +1,13 @@
 # Gooo neural decision experiments
 
+[Sequential local field updates](publication/record-field-updates-20261005) add
+source-owned choices on record assignment RHS values. Six authored shapes include
+cross-field reads, saved records/scalars, guards and copied locals.72 valid graphs
+retain144 native executions and independently recounted fields. Frozen QAT ranks
+mask7 first throughout; all requested goals are mask7, so that result does not
+establish discrimination between intents. Initial24 unused-local source failures
+are preserved separately. Candidate language PR1233 is undergoing exact-source CI.
+
 [Shared field judgment](publication/record-shared-field-20261005) uses one2,072-parameter
 judge in three record-field positions. The same3,840 MPS updates produce75.0% FP32
 and87.5% QAT first-mask agreement on the registered source-body axis; new wording
