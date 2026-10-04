@@ -106,7 +106,7 @@ def main():
                             arithmetic_version="float32_separate_v1", temperature=temperature)
             del metadata["confidence_threshold"]
             core.save_json(directory / "model.json", metadata)
-            indices = list(range(0, 768, 12))
+            indices = [index for start in range(0, 768, 24) for index in (start, start+1)]
             values = core.exported_logits(directory, x[indices])
             for i, index in enumerate(indices):
                 parity.append({"variant": variant, "row": index, "id": rows[index]["id"], "text": rows[index]["text"], "logits": values[i].tolist()})
