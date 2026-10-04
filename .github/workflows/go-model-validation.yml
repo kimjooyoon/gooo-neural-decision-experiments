@@ -10,6 +10,64 @@ permissions:
   contents: read
 
 jobs:
+  shared-record-field-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GOTOOLCHAIN: local
+      GOWORK: "off"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.27.1'
+          cache: false
+      - name: Replay frozen Go source/arrays, shared exports and every native value
+        run: |
+          study=publication/record-shared-field-20261005
+          (cd "$study" && sha256sum -c SHA256SUMS)
+          unzip -q publication/paired-field-intents-20261005/evidence.zip -d "$RUNNER_TEMP/shared-bank"
+          unzip -q "$study/evidence.zip" -d "$RUNNER_TEMP/shared-pilot"
+          go test -race ./cmd/record-field-curriculum ./tools/package-record-shared
+          go run ./cmd/record-field-curriculum --shared-audit "$RUNNER_TEMP/shared-bank/prepared" \
+            --models "$study/models" --frozen-model publication/paired-field-intents-20261005/models/fp32/model.json \
+            --output "$RUNNER_TEMP/shared-audit"
+          go run ./cmd/record-field-curriculum --shared-recount "$RUNNER_TEMP/shared-pilot/native" \
+            --audit-prepared "$RUNNER_TEMP/shared-bank/prepared" \
+            --compiler-source 7cc80858972120acfbadb35ea1e5ffd824b5d81f --output "$RUNNER_TEMP/shared-recount.jsonl"
+          cmp "$RUNNER_TEMP/shared-recount.jsonl" "$RUNNER_TEMP/shared-pilot/native/summaries.jsonl"
+          go run ./publication/record-shared-field-20261005/validation/read-model.go \
+            "$study/models/qat_ternary/model.json" "$study/demo-context.json" > "$RUNNER_TEMP/shared-public-read.json"
+      - uses: actions/checkout@v7
+        with:
+          repository: kimjooyoon/meta-ontology-go
+          ref: 7cc80858972120acfbadb35ea1e5ffd824b5d81f
+          path: .shared-source-compiler
+          persist-credentials: false
+      - name: Generate and immediately execute all 360 shared pilot graphs
+        run: |
+          (cd .shared-source-compiler && go build -trimpath -o "$RUNNER_TEMP/gooo-shared" ./cmd/gooo)
+          go run ./cmd/record-field-curriculum --shared-native "$RUNNER_TEMP/shared-bank/prepared" \
+            --models publication/record-shared-field-20261005/models \
+            --frozen-model publication/paired-field-intents-20261005/models/fp32/model.json \
+            --compiler "$RUNNER_TEMP/gooo-shared" --compiler-source 7cc80858972120acfbadb35ea1e5ffd824b5d81f \
+            --output "$RUNNER_TEMP/shared-native-fresh"
+          go run ./cmd/record-field-curriculum --shared-recount "$RUNNER_TEMP/shared-native-fresh" \
+            --audit-prepared "$RUNNER_TEMP/shared-bank/prepared" \
+            --compiler-source 7cc80858972120acfbadb35ea1e5ffd824b5d81f --output "$RUNNER_TEMP/shared-fresh-recount.jsonl"
+          cmp "$RUNNER_TEMP/shared-fresh-recount.jsonl" "$RUNNER_TEMP/shared-native-fresh/summaries.jsonl"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: shared-record-field-replay
+          path: |
+            ${{ runner.temp }}/shared-native-fresh
+            ${{ runner.temp }}/shared-audit
+            ${{ runner.temp }}/shared-recount.jsonl
+            ${{ runner.temp }}/shared-fresh-recount.jsonl
+            ${{ runner.temp }}/shared-public-read.json
+          if-no-files-found: error
+
   paired-intent-learning-replay:
     runs-on: ubuntu-latest
     timeout-minutes: 10

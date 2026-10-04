@@ -111,6 +111,10 @@ func summarizePairedNative(raw []byte, cases []NativeCase, family int) PairedNat
 }
 
 func nativePaired(prepared, models, compiler, revision, frozen, output string) {
+	nativePairedProfiles(prepared, models, compiler, revision, frozen, output, "frozen_field_v1")
+}
+
+func nativePairedProfiles(prepared, models, compiler, revision, frozen, output, frozenProfile string) {
 	if prepared == "" || models == "" || compiler == "" || len(revision) != 40 || frozen == "" || output == "" {
 		panic("explicit paired native inputs required")
 	}
@@ -145,7 +149,7 @@ func nativePaired(prepared, models, compiler, revision, frozen, output string) {
 		}
 		base, err := os.ReadFile(filepath.Join(prepared, r.SourceFile))
 		check(err)
-		for _, profile := range []string{"deterministic", "frozen_field_v1", "fp32", "ptq_ternary", "qat_ternary"} {
+		for _, profile := range []string{"deterministic", frozenProfile, "fp32", "ptq_ternary", "qat_ternary"} {
 			for _, budget := range []int{1, 2, 8} {
 				stem := fmt.Sprintf("%s-%s-b%d", r.ID, profile, budget)
 				source := []byte(strings.Replace(string(base), `attempts "8"`, fmt.Sprintf(`attempts "%d"`, budget), 1))
@@ -155,7 +159,7 @@ func nativePaired(prepared, models, compiler, revision, frozen, output string) {
 				caseFile := filepath.Join(output, stem+"-cases.json")
 				save(caseFile, map[string]any{"schema": "gooo/body-composition-cases/v1", "cases": cases})
 				args := []string{"body-compose", "--source", sourceFile, "--cases", caseFile}
-				if profile == "frozen_field_v1" {
+				if profile == frozenProfile {
 					args = append(args, "--model", frozen)
 				} else if profile != "deterministic" {
 					args = append(args, "--model", filepath.Join(models, profile, "model.json"))

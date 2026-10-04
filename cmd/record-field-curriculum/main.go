@@ -75,7 +75,30 @@ func main() {
 	pairedNative := flag.String("paired-native", "", "execute the registered paired native source views")
 	pairedRecount := flag.String("paired-recount", "", "independently recount all saved paired native observations")
 	pairedSummary := flag.String("paired-summary", "", "read a complete paired study and print compact percentages and costs")
+	sharedInit := flag.String("shared-init", "", "replay the frozen paired bank and create a fresh shared initializer")
+	sharedAudit := flag.String("shared-audit", "", "audit shared record models against frozen paired views and dense v2")
+	sharedNative := flag.String("shared-native", "", "execute shared models and frozen dense v2 at matched native budgets")
+	sharedRecount := flag.String("shared-recount", "", "recount native shared pilot at an explicit compiler revision")
 	flag.Parse()
+	if *sharedRecount != "" {
+		if len(*sourceRevision) != 40 {
+			panic("explicit shared recount compiler revision required")
+		}
+		recountPairedNativeAt(*prepared, *sharedRecount, *output, *sourceRevision, "frozen_field_v2")
+		return
+	}
+	if *sharedNative != "" {
+		nativePairedProfiles(*sharedNative, *models, *compiler, *sourceRevision, *oldModel, *output, "frozen_field_v2")
+		return
+	}
+	if *sharedInit != "" {
+		sharedInitializer(*sharedInit, *compiler, *sourceRevision, *output)
+		return
+	}
+	if *sharedAudit != "" {
+		auditShared(*sharedAudit, *models, *oldModel, *output)
+		return
+	}
 	if *pairedSummary != "" {
 		summarizePairedStudy(*pairedSummary, *output)
 		return
