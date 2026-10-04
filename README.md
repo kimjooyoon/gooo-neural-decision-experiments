@@ -1,9 +1,17 @@
 # Gooo neural decision experiments
 
+[Ordered native input joins](publication/native-input-joins-20261004) connect
+repeated-type and mixed-type inputs, including ports supplied partly by the caller
+and partly by producer results. One authored seven-activity graph passed 588
+named runtime expectations across 12 repeated controls. The own model checked 2
+Left-body candidates versus 8 deterministic candidates; whole generation medians
+were 9.711ms and 6.396ms respectively. Actual per-port values, first candidate
+failures, saved zero-inference replay and process costs are retained.
+
 [Native body composition](publication/native-composition-20261004) connects seven
 Gooo activities through typed binds, including two model-guided assemblies,
 Integer/Boolean/Text delivery, multiple roots and fanout. Six constructions and
-six saved replays passed588 finite runtime expectations. Fresh model requests
+six saved replays passed 588 finite runtime expectations. Fresh model requests
 make two predictions; saved composition replay makes zero. Failed first model
 candidates, separate process/build costs and per-stage actual values are retained.
 
@@ -28,7 +36,7 @@ training tools and original evidence behind that process.
 
 ## Try a local construction
 
-From this repository's root, select the actual Go1.27.1 executable, then build
+From this repository's root, select the actual Go 1.27.1 executable, then build
 the compiler from a clean, shallow checkout. This retains the exact source
 revision in its construction and execution receipts. The small model is already
 included here.
@@ -58,7 +66,7 @@ caller expectations. Read its generated Go and actual runtime outputs in the
 result directory. `unobserved` means no usable output was measured; `0/128`
 means measured outputs missed every expectation. [Full usage and next actions](https://github.com/kimjooyoon/meta-ontology-go/wiki/File-Based-Body-Run).
 
-Building with Go1.27.1 does not replace another `go` already on PATH. The explicit
+Building with Go 1.27.1 does not replace another `go` already on PATH. The explicit
 `--go-bin` avoids that mismatch during native execution. A module-style
 `go install ...@revision` keeps its module version, but the observed binary lacks
 the VCS source fields used by Gooo receipts. [Both installation paths and the
@@ -70,7 +78,7 @@ their results separately.
 - [Compose typed body paths with conditions](publication/condition-path-assembly-20261004):
   source recipes accept `>`, `>=`, `!=` and boolean `!`, normalized into the existing
   typed comparisons. Dev #1210 and main #1212 merged; current main `7da09722` is installed
-  with Go1.27.1. In one nondefault-choice fixture, model and deterministic paths reached
+  with Go 1.27.1. In one nondefault-choice fixture, model and deterministic paths reached
   the same body, passed 5/5 selection cases and 11/11 separate compiled cases. The model
   guessed the wrong default first and evaluated one extra candidate; direct codegen medians
   were 11.087ms with the model and 8.981ms deterministically. The report keeps the finite
@@ -199,7 +207,7 @@ their results separately.
   generations/four predictions/16 runs with 1,024/1,024 expectations unchanged.
 - [Replay saved IR baselines with Go](publication/go-baseline-replay-20261003):
   an explicit source-version repair preserves the original freeze and current
-  Go1.27.1 scripts. A stdlib Go tool binds all 142 frozen inputs, then replays
+  Go 1.27.1 scripts. A stdlib Go tool binds all 142 frozen inputs, then replays
   52 saved modules and 96 candidate packages, including the three expected
   compile failures. Source hashes, original failures and unknown denominators
   are retained. Local and Linux replay pass; public PR #19 is merged.

@@ -40,6 +40,7 @@ type summary struct {
 	RuntimeTotal     int       `json:"runtime_total"`
 	ObservedValues   int       `json:"observed_values"`
 	Deliveries       int       `json:"observed_edge_deliveries"`
+	InputSlots       int       `json:"observed_input_slots,omitempty"`
 	NativeRuns       int       `json:"native_runs"`
 	GoooSHA          string    `json:"gooo_sha256"`
 	GoSHA            string    `json:"generated_go_sha256"`
@@ -49,6 +50,17 @@ type summary struct {
 type envelope struct {
 	GeneratedNow bool `json:"generated_now"`
 	Composition  struct {
+		Plan struct {
+			Activities []struct {
+				ID     string `json:"id"`
+				From   int    `json:"input_from"`
+				Inputs []struct {
+					Port   string `json:"port"`
+					Entity string `json:"entity_id"`
+					From   int    `json:"from"`
+				} `json:"inputs"`
+			} `json:"activities"`
+		} `json:"plan"`
 		Stage     string `json:"stage"`
 		Failure   string `json:"failure"`
 		Gooo      string `json:"gooo_source"`
@@ -87,8 +99,18 @@ type envelope struct {
 		} `json:"runs"`
 		Traces []struct {
 			Deliveries []struct {
-				Producer string `json:"producer_id"`
-				Passed   *bool  `json:"passed"`
+				Activity string          `json:"activity_id"`
+				Producer string          `json:"producer_id"`
+				Input    json.RawMessage `json:"input"`
+				Actual   json.RawMessage `json:"actual"`
+				Expected json.RawMessage `json:"expected"`
+				Inputs   []struct {
+					Port     string          `json:"port"`
+					Entity   string          `json:"entity_id"`
+					Producer string          `json:"producer_id"`
+					Value    json.RawMessage `json:"value"`
+				} `json:"inputs"`
+				Passed *bool `json:"passed"`
 			} `json:"deliveries"`
 		} `json:"traces"`
 	} `json:"runtime"`
@@ -105,14 +127,15 @@ func main() {
 	model := flag.String("model", "models/own-three-feedback-v1/set-feedback/models/fp32/model.json", "unchanged own model")
 	private := flag.String("private-out", "", "new process resource log directory")
 	public := flag.String("out", "", "new public evidence directory")
+	inputJoins := flag.Bool("input-joins", false, "seven-activity repeated/mixed/partly bound input profile")
 	flag.Parse()
-	if err := observe(*compiler, *sha, *source, *cases, *model, *private, *public); err != nil {
+	if err := observe(*compiler, *sha, *source, *cases, *model, *private, *public, *inputJoins); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 }
 
-func observe(compiler, sha, source, cases, model, private, public string) error {
+func observe(compiler, sha, source, cases, model, private, public string, inputJoins bool) error {
 	if runtime.GOOS != "darwin" || len(sha) != 40 || private == "" || public == "" {
 		return fmt.Errorf("macOS resources, exact source SHA and two fresh output directories required")
 	}
@@ -144,7 +167,7 @@ func observe(compiler, sha, source, cases, model, private, public string) error 
 			if err != nil {
 				return err
 			}
-			row, current, err := readObservation(raw, sha, mode, stage, false, resource)
+			row, current, err := readObservationProfile(raw, sha, mode, stage, false, resource, inputJoins)
 			if err != nil {
 				return err
 			}
@@ -169,7 +192,7 @@ func observe(compiler, sha, source, cases, model, private, public string) error 
 			if err != nil {
 				return err
 			}
-			replayed, replay, err := readObservation(replayRaw, sha, mode, stage, true, replayResource)
+			replayed, replay, err := readObservationProfile(replayRaw, sha, mode, stage, true, replayResource, inputJoins)
 			if err != nil {
 				return err
 			}
@@ -186,12 +209,16 @@ func observe(compiler, sha, source, cases, model, private, public string) error 
 			}
 		}
 	}
+	scope := "One seven-activity graph, two modes, three consecutive generations each and six separate saved replays; seven cases and 49 named expectations per control; process resources include native build/children; fixed order and warm cache; no host utilization or accuracy gain claim"
+	if inputJoins {
+		scope += "; input-joins profile has one assembly, six selection examples, six bound edges and 12 input slots per case; ordered per-port values are checked against actual producer outputs"
+	}
 	raw, err := json.MarshalIndent(struct {
 		Schema string    `json:"schema"`
 		Scope  string    `json:"scope"`
 		Rows   []summary `json:"rows"`
 	}{
-		"gooo/native-composition-observation/v1", "One seven-activity graph, two modes, three consecutive generations each and six separate saved replays; seven cases and 49 named expectations per control; process resources include native build/children; fixed order and warm cache; no host utilization or accuracy gain claim", rows}, "", "  ")
+		"gooo/native-composition-observation/v1", scope, rows}, "", "  ")
 	if err != nil {
 		return err
 	}
@@ -199,6 +226,10 @@ func observe(compiler, sha, source, cases, model, private, public string) error 
 }
 
 func readObservation(raw []byte, sha, mode string, stage int, replayed bool, resource resources) (summary, envelope, error) {
+	return readObservationProfile(raw, sha, mode, stage, replayed, resource, false)
+}
+
+func readObservationProfile(raw []byte, sha, mode string, stage int, replayed bool, resource resources, inputJoins bool) (summary, envelope, error) {
 	var observation envelope
 	row := summary{Mode: mode, Stage: stage, Replayed: replayed, Resources: resource}
 	if err := json.Unmarshal(raw, &observation); err != nil {
@@ -230,8 +261,15 @@ func readObservation(raw []byte, sha, mode string, stage int, replayed bool, res
 	expectedCalls := 0
 	if mode == "model" {
 		expectedCalls = 2
+		if inputJoins {
+			expectedCalls = 1
+		}
 	}
-	if row.StoredModelCalls != expectedCalls || row.SelectionTotal != 9 || row.SelectionPassed != 9 {
+	expectedSelection := 9
+	if inputJoins {
+		expectedSelection = 6
+	}
+	if row.StoredModelCalls != expectedCalls || row.SelectionTotal != expectedSelection || row.SelectionPassed != expectedSelection {
 		return row, observation, fmt.Errorf("selection/model call observations differ")
 	}
 	if !replayed {
@@ -239,18 +277,68 @@ func readObservation(raw []byte, sha, mode string, stage int, replayed bool, res
 	}
 	row.RuntimeMS, row.RuntimePassed, row.RuntimeTotal, row.NativeRuns = float64(r.Elapsed)/1e6, r.Passed, r.Total, len(r.Runs)
 	row.GoSHA, row.DriverSHA, row.GoooSHA = c.GoSHA, c.DriverSHA, fmt.Sprintf("sha256:%x", sha256.Sum256([]byte(c.Gooo)))
+	if inputJoins && len(c.Plan.Activities) != 7 {
+		return row, observation, fmt.Errorf("input plan missing activities")
+	}
 	for _, trace := range r.Traces {
 		row.ObservedValues += len(trace.Deliveries)
-		for _, delivery := range trace.Deliveries {
+		if inputJoins && len(trace.Deliveries) != 7 {
+			return row, observation, fmt.Errorf("input trace missing activities")
+		}
+		for i, delivery := range trace.Deliveries {
 			if delivery.Producer != "" {
 				row.Deliveries++
+			}
+			if inputJoins {
+				node := c.Plan.Activities[i]
+				if delivery.Activity != node.ID || len(delivery.Inputs) != len(node.Inputs) {
+					return row, observation, fmt.Errorf("input trace arity or activity differs")
+				}
+				if len(delivery.Expected) == 0 || !bytes.Equal(delivery.Actual, delivery.Expected) {
+					return row, observation, fmt.Errorf("named output differs from its finite expectation")
+				}
+				if len(node.Inputs) == 0 {
+					if len(delivery.Input) == 0 {
+						return row, observation, fmt.Errorf("single input value missing")
+					}
+					row.InputSlots++
+					if node.From >= 0 && (node.From >= i || delivery.Producer != c.Plan.Activities[node.From].ID || !bytes.Equal(delivery.Input, trace.Deliveries[node.From].Actual)) {
+						return row, observation, fmt.Errorf("single input differs from its producer")
+					}
+					if node.From < 0 && delivery.Producer != "" {
+						return row, observation, fmt.Errorf("external single input has an undeclared producer")
+					}
+				} else {
+					if len(delivery.Input) != 0 || delivery.Producer != "" {
+						return row, observation, fmt.Errorf("multiple input trace has an ambiguous scalar value")
+					}
+					for p, input := range delivery.Inputs {
+						slot := node.Inputs[p]
+						if input.Port != fmt.Sprintf("input%d", p) || input.Port != slot.Port || input.Entity == "" || input.Entity != slot.Entity || len(input.Value) == 0 || bytes.Equal(input.Value, []byte("null")) {
+							return row, observation, fmt.Errorf("ordered input value/identity missing")
+						}
+						row.InputSlots++
+						if slot.From >= 0 {
+							if slot.From >= i || input.Producer != c.Plan.Activities[slot.From].ID || !bytes.Equal(input.Value, trace.Deliveries[slot.From].Actual) {
+								return row, observation, fmt.Errorf("ordered input differs from its producer")
+							}
+							row.Deliveries++
+						} else if input.Producer != "" {
+							return row, observation, fmt.Errorf("external input has an undeclared producer")
+						}
+					}
+				}
 			}
 			if delivery.Passed == nil || !*delivery.Passed {
 				return row, observation, fmt.Errorf("missing named native expectation")
 			}
 		}
 	}
-	if row.ObservedValues != 49 || row.Deliveries != 35 {
+	expectedDeliveries := 35
+	if inputJoins {
+		expectedDeliveries = 42
+	}
+	if row.ObservedValues != 49 || row.Deliveries != expectedDeliveries || inputJoins && row.InputSlots != 84 {
 		return row, observation, fmt.Errorf("native trace count differs")
 	}
 	return row, observation, nil
