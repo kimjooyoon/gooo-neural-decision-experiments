@@ -69,6 +69,81 @@ jobs:
             ${{ runner.temp }}/recalculated-summary.json
           if-no-files-found: error
 
+  condition-path-assembly-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GOTOOLCHAIN: local
+      GOWORK: "off"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.27.1'
+          cache: false
+      - name: Verify retained condition-path inputs and observations
+        run: |
+          (cd publication/condition-path-assembly-20261004 && sha256sum -c SHA256SUMS)
+          jq -e '.compiler.feature_source_commit == "a7dfad39f10ba6591ea013763d2c1e87f8e50322" and .experiment.model_selection_passed == "5/5" and .experiment.deterministic_selection_passed == "5/5" and .experiment.model_runtime_passed == "11/11" and .experiment.deterministic_runtime_passed == "11/11" and .experiment.global_completeness_score == null' \
+            publication/condition-path-assembly-20261004/manifest.json
+      - uses: actions/checkout@v7
+        with:
+          repository: kimjooyoon/meta-ontology-go
+          ref: a7dfad39f10ba6591ea013763d2c1e87f8e50322
+          path: .condition-path-compiler
+          persist-credentials: false
+      - name: Build the exact compiler used by the observation
+        run: |
+          (cd .condition-path-compiler && go build -trimpath -o "$RUNNER_TEMP/gooo-condition" ./cmd/gooo)
+      - name: Replay model and deterministic body construction
+        run: |
+          study=publication/condition-path-assembly-20261004
+          model=models/own-three-feedback-v1/set-feedback/models/fp32/model.json
+          "$RUNNER_TEMP/gooo-condition" body-codegen --json --activity Qualified \
+            --path-plan "$study/recipe.json" --path-model "$model" \
+            "$study/source.gooo.fixture" > "$RUNNER_TEMP/condition-model.json"
+          "$RUNNER_TEMP/gooo-condition" body-codegen --json --activity Qualified \
+            --path-plan "$study/recipe.json" \
+            "$study/source.gooo.fixture" > "$RUNNER_TEMP/condition-deterministic.json"
+          for arm in model deterministic; do
+            jq -e '.report.decision == "PASS" and .report.body_paths.search.selection.choices == {"base-local":"reference_second","condition-branches":"layout_forward","independent-declarations":"schedule_forward"}' \
+              "$RUNNER_TEMP/condition-$arm.json"
+            jq -S '.report | {generated_digest, choices:.body_paths.search.selection.choices}' \
+              "$RUNNER_TEMP/condition-$arm.json" > "$RUNNER_TEMP/condition-$arm-current-key.json"
+            jq -S '.report | {generated_digest, choices:.body_paths.search.selection.choices}' \
+              "$study/$arm-generation.json" > "$RUNNER_TEMP/condition-$arm-expected-key.json"
+            cmp "$RUNNER_TEMP/condition-$arm-current-key.json" \
+              "$RUNNER_TEMP/condition-$arm-expected-key.json"
+          done
+      - name: Replay compiled execution outside the selection suite
+        run: |
+          study=publication/condition-path-assembly-20261004
+          model=models/own-three-feedback-v1/set-feedback/models/fp32/model.json
+          task_go_bin="$(GOTOOLCHAIN=go1.27.1 go env GOROOT)/bin/go"
+          "$task_go_bin" version
+          "$RUNNER_TEMP/gooo-condition" body-path-run --source "$study/source.gooo.fixture" \
+            --activity Qualified --path-plan "$study/recipe.json" \
+            --cases "$study/runtime-cases.json" --go-bin "$task_go_bin" \
+            --repeat 2 --timing --model "$model" --out "$RUNNER_TEMP/condition-model-run"
+          "$RUNNER_TEMP/gooo-condition" body-path-run --source "$study/source.gooo.fixture" \
+            --activity Qualified --path-plan "$study/recipe.json" \
+            --cases "$study/runtime-cases.json" --go-bin "$task_go_bin" \
+            --repeat 2 --timing --out "$RUNNER_TEMP/condition-deterministic-run"
+          for arm in model deterministic; do
+            jq -e 'length == 2 and all(.rows[]; .passed == 11 and .total == 11 and .native_runs == 2)' \
+              "$RUNNER_TEMP/condition-$arm-run/summary.json"
+          done
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: condition-path-assembly-linux-replay
+          path: |
+            ${{ runner.temp }}/condition-model.json
+            ${{ runner.temp }}/condition-deterministic.json
+            ${{ runner.temp }}/condition-model-run
+            ${{ runner.temp }}/condition-deterministic-run
+          if-no-files-found: error
+
   order-example:
     runs-on: ubuntu-latest
     timeout-minutes: 5

@@ -1,0 +1,4 @@
+package condition_assembly
+namespace condition_assembly
+entity Integer id "condition-assembly://integer"
+activity Qualified(Integer) -> Integer computes "let first = input + 2\nlet second = input * 2\nlet chosen = first\nlet eligible = input >= 0 && input != 2\nif eligible && !(input > 4) {\n\tchosen = chosen + 3\n} else {\n\tchosen = chosen - 3\n}\nreturn chosen + (first + second)"
