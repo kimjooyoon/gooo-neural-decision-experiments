@@ -91,9 +91,12 @@ locally. Its source partition exceeded the compiler CI extractor's capacity.
 The measured candidate `5af78bcb` separates plan, input delivery and preparation
 files, but its preparation function still exceeded the extractor's rendered
 capacity. Follow-up source `6b6c86f2` divides preparation into smaller functions.
-The observations here retain their exact measured source; merge and installation
-are pending. Earlier measurements remain private, and any installed-source
-observations will be recorded separately.
+The observations here retain their exact measured source. Development PR1221
+and main PR1222 passed their own complete CI and independent proofs, and the
+compiler was installed from main `1bef47fc`. The [separate installed-source
+controls](installed/README.md) retain the same588/588 and source/Go/driver hashes,
+three actual predictions, observed concurrency98/98, extra scenarios42/42 and
+the intentionally changed expectation48/49. Earlier measurements remain private.
 
 ## Use the model and rerun
 
