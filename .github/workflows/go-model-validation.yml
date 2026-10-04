@@ -10,6 +10,59 @@ permissions:
   contents: read
 
 jobs:
+  retained-composition-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GOTOOLCHAIN: local
+      GOWORK: "off"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.27.1'
+          cache: false
+      - name: Check saved current-input observations
+        run: |
+          go test -race ./cmd/composition-series-observe
+          go build -o "$RUNNER_TEMP/series-observe" ./cmd/composition-series-observe
+          (cd publication/retained-composition-20261005/candidate && sha256sum -c SHA256SUMS)
+      - uses: actions/checkout@v7
+        with:
+          repository: kimjooyoon/meta-ontology-go
+          ref: 38962397144d4418b75f571471225ff02d712617
+          path: .retained-composition-compiler
+          persist-credentials: false
+      - name: Run current Korean and English records with one graph build
+        run: |
+          (cd .retained-composition-compiler && go build -o "$RUNNER_TEMP/gooo-series" ./cmd/gooo)
+          study=publication/retained-composition-20261005/candidate
+          for profile in deterministic fp32 ptq_ternary qat_ternary; do
+            model_args=()
+            if [ "$profile" != deterministic ]; then
+              model_args=(--model "models/own-three-feedback-v1/set-feedback/models/$profile/model.json")
+            fi
+            stem="$RUNNER_TEMP/series-$profile"
+            "$RUNNER_TEMP/gooo-series" body-compose --source "$study/source.gooo.fixture" \
+              --case-series "$study/case-series.json" --repeat 2 "${model_args[@]}" > "$stem.json"
+            "$RUNNER_TEMP/series-observe" --verify-json "$stem.json" \
+              --compiler-source 38962397144d4418b75f571471225ff02d712617
+            jq .composition "$stem.json" > "$stem-composition.json"
+            "$RUNNER_TEMP/gooo-series" body-compose --source "$study/source.gooo.fixture" \
+              --case-series "$study/case-series.json" --repeat 2 --composition "$stem-composition.json" > "$stem-saved.json"
+            "$RUNNER_TEMP/series-observe" --verify-json "$stem-saved.json" \
+              --compiler-source 38962397144d4418b75f571471225ff02d712617 --saved
+            jq -S '[.runtime_history[]|.traces]' "$stem.json" > "$stem-values.json"
+            jq -S '[.runtime_history[]|.traces]' "$stem-saved.json" > "$stem-saved-values.json"
+            cmp "$stem-values.json" "$stem-saved-values.json"
+          done
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: retained-composition-replay
+          path: ${{ runner.temp }}/series-*.json
+          if-no-files-found: error
+
   record-field-assembly-replay:
     runs-on: ubuntu-latest
     timeout-minutes: 10
