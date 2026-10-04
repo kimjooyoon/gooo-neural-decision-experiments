@@ -60,8 +60,12 @@ func inspect(root, scope string, released bool) []map[string]any {
 }
 
 func main() {
-	check(len(os.Args) == 2, "usage: model-io-readback saved-root")
+	check(len(os.Args) == 2 || len(os.Args) == 3, "usage: model-io-readback saved-root [installed]")
 	rows := append(inspect(os.Args[1], "model-io-baseline", true), inspect(os.Args[1], "model-io-revision2", false)...)
+	if len(os.Args) == 3 {
+		check(os.Args[2] == "installed", "unknown stage")
+		rows = append(rows, inspect(os.Args[1], "model-io-installed", false)...)
+	}
 	must(json.NewEncoder(os.Stdout).Encode(map[string]any{"status": "PASS", "rows": rows,
 		"model_predictions_added": 0, "native_runs_added": 0, "scope": "saved model I/O errors only"}))
 	fmt.Fprintln(os.Stderr, "Original latencies retained; controlled writer release is not natural completion time.")

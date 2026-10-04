@@ -38,7 +38,9 @@ func main() {
 		prefix, _, _ := strings.Cut(f.Name, "/")
 		if prefix != "candidate-native" && prefix != "baseline-race" && prefix != "candidate-race" &&
 			prefix != "inputs" && prefix != "expected" && prefix != "revision2-race" &&
-			prefix != "revision2-native" && prefix != "model-io-baseline" && prefix != "model-io-revision2" {
+			prefix != "revision2-native" && prefix != "model-io-baseline" && prefix != "model-io-revision2" &&
+			prefix != "installed-race" && prefix != "installed-native" && prefix != "model-io-installed" &&
+			prefix != "installed-worker-observations" && prefix != "candidate-worker-cpu-observations" {
 			panic("unexpected archive root")
 		}
 		roots[prefix] = true

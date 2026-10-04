@@ -40,8 +40,11 @@ means measured outputs missed every expectation. [Full usage and next actions](h
   Two model FIFO requests return without a writer. Separate own-model/deterministic
   smoke keeps 1,024/1,024. Initial candidate observations remain archived separately.
   Dev #1202 passed its exact-head CI and independent proof, then merged as `a11a3f08`.
-  Main #1203 checks the identical tree on snapshot `22c2c914`; installation remains `01d21e92`.
-  Separate concurrent standalone-worker controls preserve 512/512 finite observations.
+  Main #1203 passed its own proof and normally merged as `d1bfd273`; both CLI and
+  worker are installed from that clean source. Fresh 64 swaps have zero waits/timeouts;
+  33 regular completions keep 4,224/4,224. Fresh ordinary controls keep 1,024/1,024,
+  and concurrent standalone-worker controls keep 512/512. Whole-process CPU accounting
+  and original first/warm times are published with their observation scopes.
 
 - [Distinguish unobserved expectations from actual measured zero](publication/finite-observation-display-20261004):
   installed terminal summaries use current case observations and replay state.

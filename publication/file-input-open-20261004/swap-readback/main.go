@@ -126,15 +126,18 @@ func inspect(root, scope, source, expected, input string, count, releases int) o
 }
 
 func main() {
-	check(len(os.Args) == 4 || len(os.Args) == 5, "usage: swap-readback saved-root inputs frozen-Go [revision2]")
+	check(len(os.Args) == 4 || len(os.Args) == 5, "usage: swap-readback saved-root inputs frozen-Go [revision2|installed]")
 	root, input, expected := os.Args[1], os.Args[2], os.Args[3]
 	rows := []object{
 		inspect(root, "baseline-race", "01d21e9260b2c0f1d02f8029824f3dda41631e9d", expected, input, 14, 1),
 		inspect(root, "candidate-race", "1a47cb16b0abb9fe7faaaace158612f9b77ee504", expected, input, 64, 0),
 	}
 	if len(os.Args) == 5 {
-		check(os.Args[4] == "revision2", "unknown revision")
+		check(os.Args[4] == "revision2" || os.Args[4] == "installed", "unknown revision")
 		rows = append(rows, inspect(root, "revision2-race", "0eb69e5f15ce40a2b07050ae747fe1552d5a9f46", expected, input, 64, 0))
+		if os.Args[4] == "installed" {
+			rows = append(rows, inspect(root, "installed-race", "d1bfd273ab4e21d0191548b066a27bcb77d7ed86", expected, input, 64, 0))
+		}
 	}
 	must(json.NewEncoder(os.Stdout).Encode(object{"status": "PASS", "scope": "saved swap attempts only; no new execution", "rows": rows, "model_predictions_added": 0, "native_runs_added": 0}))
 }

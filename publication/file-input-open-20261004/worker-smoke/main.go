@@ -139,7 +139,9 @@ func main() {
 			}
 		}
 		check(len(seen) == 2 && passed == 256 && native == 4, "worker denominator changed")
-		rows = append(rows, map[string]any{"mode": mode, "requests": 2, "workers": 2, "actual_model_predictions": predictions, "native_runs": native, "finite_passed": passed, "finite_total": 256, "process_joined": true, "timeout": false, "total_process_ns": elapsed})
+		userCPU, systemCPU := c.ProcessState.UserTime().Nanoseconds(), c.ProcessState.SystemTime().Nanoseconds()
+		rows = append(rows, map[string]any{"mode": mode, "requests": 2, "workers": 2, "actual_model_predictions": predictions, "native_runs": native, "finite_passed": passed, "finite_total": 256, "process_joined": true, "timeout": false, "total_process_ns": elapsed,
+			"cpu_user_ns": userCPU, "cpu_system_ns": systemCPU, "average_cpu_percent_one_core_basis": 100 * float64(userCPU+systemCPU) / float64(elapsed), "cpu_scope": "Go ProcessState exited worker and children; whole setup/construction/execution/EOF interval", "host_cpu_utilization": "UNOBSERVED", "model_only_ram": "UNOBSERVED"})
 	}
 	save(filepath.Join(out, "summary.json"), map[string]any{"status": "PASS", "source": source, "rows": rows, "requests": 4, "actual_model_predictions": 2, "native_runs": 8, "finite_passed": 512, "finite_total": 512, "new_intent_tasks": 0, "training_updates": 0, "scope": "standalone clean worker, two concurrent authored KO/EN requests per mode; total process time includes setup and EOF joining"})
 	fmt.Println("Standalone worker: model/deterministic concurrent construction and native replay PASS.")

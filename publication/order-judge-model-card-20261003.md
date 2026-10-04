@@ -25,7 +25,9 @@ fits. Equal pieces can reuse an earlier measurement.
 ## Artifact and integration status
 
 - Dev #1202 passed its own CI and independently verified proof, then merged as `a11a3f08`.
-  Main #1203 checks the identical tree on snapshot `22c2c914`. The change reads source inputs, structural metadata and whole-candidate
+  Main #1203 passed its own proof/live authorization and normally merged as `d1bfd273`.
+  Both CLI and worker are installed from that clean source with Go1.27.1/SDK v0.2.20.
+  The change reads source inputs, structural metadata and whole-candidate
   weights through a shared nonblocking Unix opener, developed on `0eb69e5f`.
   Actual installed source/model FIFO waits and their controlled writer releases
   are retained. Current 64-swap controls have zero writer releases/timeouts;
@@ -36,11 +38,18 @@ fits. Equal pieces can reuse an earlier measurement.
   25.321709/27.571583ms; first responses of 298.670458/485.046083ms are retained.
   The first metadata error's total 528.789584ms is retained too. These are
   construction-and-execution timings; model-only prediction latency is unobserved.
-  The tasks are existing authored tasks with unchanged weights/fit. Current installation is
-  the proved main below. [Original wait, controls and Go readers](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/file-input-open-20261004).
+  The tasks are existing authored tasks with unchanged weights/fit.
+  [Original wait, controls and Go readers](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/file-input-open-20261004).
   Separate snapshot-worker concurrency controls preserve four constructions/two
   judgments/eight native runs and 512/512 existing finite cases. Both processes
   reach EOF and join without a timeout; original process times are retained.
+  Fresh installed controls separately keep 1,024/1,024 and concurrent worker 512/512.
+  Fresh 64 swaps need no writer releases/timeouts; 33 regular completions retain
+  4,224/4,224 and frozen Go. The installed worker's two concurrent model requests
+  use 0.468295s CPU in a 1.007832458s whole-process interval (46.4656% on a one-core
+  basis). Deterministic requests use 0.461916s/0.584048541s (79.0886%). CPU includes
+  the worker and children, setup, construction and execution; host utilization and
+  model-only RAM/latency are unobserved. Original first/warm responses are retained.
 
 - Clearer terminal expectation states are installed on clean main `01d21e92`.
   Dev #1200 and main #1201 passed their own canonical CI and independent
