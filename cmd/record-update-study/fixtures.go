@@ -9,9 +9,9 @@ import (
 func shapes() []shape {
 	return []shape{
 		{"ordered", "let copy = input0\ncopy.title = \"draft\"\ncopy.state = \"wait\"\ncopy.reason = \"deferred\"\nreturn copy", `copy.title + ":" + copy.state`, [3]int{0, 1, 2}, false, func(r record) string { return r.Title + ":ready" }},
-		{"record_snapshot", "let copy = input0\nlet saved = copy\ncopy.title = \"draft\"\ncopy.state = \"wait\"\ncopy.reason = \"deferred\"\nreturn copy", `copy.title + ":" + saved.state`, [3]int{0, 1, 2}, false, func(r record) string { return r.Title + ":" + r.State }},
+		{"record_snapshot", "let copy = input0\nlet saved = copy\ncopy.title = \"draft\"\ncopy.state = \"wait\"\ncopy.reason = saved.state\nreturn copy", `copy.title + ":" + saved.state`, [3]int{0, 1, 2}, false, func(r record) string { return r.Title + ":" + r.State }},
 		{"guarded", "let copy = input0\nif input1 && copy.state != \"ready\" {\ncopy.title = \"draft\"\ncopy.state = \"wait\"\ncopy.reason = \"deferred\"\n}\nreturn copy", `copy.title + ":" + copy.state`, [3]int{0, 1, 2}, true, func(r record) string { return r.Title + ":ready" }},
-		{"scalar_snapshot", "let copy = input0\ncopy.title = \"draft\"\nlet saved = copy.title\ncopy.state = \"wait\"\ncopy.reason = \"deferred\"\nreturn copy", `saved + ":" + copy.state`, [3]int{0, 1, 2}, false, func(r record) string { return r.Title + ":ready" }},
+		{"scalar_snapshot", "let copy = input0\ncopy.title = \"draft\"\nlet saved = copy.title\ncopy.state = \"wait\"\ncopy.reason = saved\nreturn copy", `saved + ":" + copy.state`, [3]int{0, 1, 2}, false, func(r record) string { return r.Title + ":ready" }},
 		{"self_append", "let copy = input0\ncopy.title = \"draft\"\ncopy.state = \"wait\"\ncopy.reason = copy.reason\nreturn copy", `copy.reason + ":accepted"`, [3]int{0, 1, 2}, false, func(r record) string { return r.Reason + ":accepted" }},
 		{"second_copy", "let copy = input0\nlet other = copy\nother.title = \"ignored\"\ncopy.title = \"draft\"\ncopy.state = \"wait\"\ncopy.reason = \"deferred\"\nreturn Candidate{title: copy.title, state: copy.state, reason: copy.reason + other.reason}", `other.state + ":" + copy.title`, [3]int{1, 2, 3}, false, func(r record) string { return r.State + ":" + r.Title + r.Reason }},
 	}

@@ -24,6 +24,19 @@ input cases. Count selection fields, compiled fields, named outputs, attempts,
 prediction time, command wall/CPU and peak RSS separately. Preserve every failure
 and partial result. Reconstruction and compiled execution make zero predictions.
 
+## Source preparation diagnostic (before the valid-program comparison)
+
+The initial observer at0c641c5 completed48 graphs;24 snapshot graphs were
+rejected at type preflight because their saved locals appeared only in the
+alternative expression. Preserve all72 initial captures separately. Repair the
+snapshot baseline RHS from`"deferred"` to`saved.state` (record) or`saved` (scalar),
+so every baseline and every alternative uses its declaration. The six shapes,
+goals, case values, budgets and frozen weights remain the same. Run the full
+72-tuple comparison with these valid baselines, retain both phases, and label
+them separately. The144 native executions refer to the valid-program phase;
+initial48 graphs also ran96 executions. This amendment is published before
+the repaired comparison and does not count as another approach.
+
 This tests frozen expression-only ranking on sequential programs. Its context
 does not resolve local reaching definitions or learn cross-field dependencies.
 Case outcomes choose a complete or partial program under the declared budget.
