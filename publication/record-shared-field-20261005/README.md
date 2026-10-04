@@ -13,6 +13,23 @@ tags:
 
 # Gooo shared record field judge v1
 
+## 순차 필드 조립으로 확장 중
+
+같은 공개 가중치를 사용해 지역 레코드의 필드를 하나씩 갱신하는
+[새 실험](https://github.com/kimjooyoon/gooo-neural-decision-experiments/tree/main/publication/record-field-updates-20261005)을
+실행했습니다. 앞에서 바꾼 상태를 다음 설명 필드가 읽고,저장한 레코드와
+문자열 값을 사용하는 여섯 코드 형태입니다. Gooo의`field_update` 선택을
+연결한 [PR1233](https://github.com/kimjooyoon/meta-ontology-go/pull/1233)이 병합 검사 중입니다.
+
+72개 유효한 그래프·144회 실행에서 QAT는 첫 후보로 필드144/144개와
+활동 출력96/96개를 맞췄습니다(각 시도 예산의12개 그래프).
+모든 목표가 같은 mask7이므로 이 수치에는 대안식을 선호하는 편향이
+작용할 수 있습니다. 학습0회,추론 중앙값17.50~18.46µs,전체 명령은약310ms입니다.
+초기24개 미사용 변수 오류와 수정 계획을 포함한 원본을
+[여기](experiments/record-field-updates-20261005)에서 읽을 수 있습니다.
+현재 입력 배열에서는`copy.state`와`saved.state`가 동일해 실제 모델 응답도
+같습니다. 다음 개선은 지역 변수의 현재 정의와 값의 출처를 표현하는 작업입니다.
+
 Gooo에서 제목·상태·사유 필드에 들어갈 두 후보식을 준비하고, 작은 자체 모델이
 요구 문장을 읽어 조립 순서를 고르는 실험입니다. 같은 판단기를 필드 세 곳에
 쓰고, 그 점수를 합쳐 여덟 코드 경로를 정렬합니다. 설계도에서 부품을 하나씩

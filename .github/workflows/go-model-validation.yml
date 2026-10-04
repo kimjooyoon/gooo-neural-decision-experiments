@@ -10,6 +10,45 @@ permissions:
   contents: read
 
 jobs:
+  sequential-record-update-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GOTOOLCHAIN: local
+      GOWORK: "off"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.27.1'
+          cache: false
+      - uses: actions/checkout@v7
+        with:
+          repository: kimjooyoon/meta-ontology-go
+          ref: f070e7743688815db7684134a42d01256ea3f9a0
+          path: .sequential-source-compiler
+          persist-credentials: false
+      - name: Execute frozen-model sequential programs and recount every value
+        run: |
+          study=publication/record-field-updates-20261005
+          (cd "$study" && sha256sum -c SHA256SUMS)
+          go test -race ./cmd/record-update-study
+          (cd .sequential-source-compiler && go build -trimpath -o "$RUNNER_TEMP/gooo-sequential" ./cmd/gooo)
+          go run ./cmd/record-update-study --gooo "$RUNNER_TEMP/gooo-sequential" --go-bin "$(command -v go)" \
+            --model publication/record-shared-field-20261005/models/qat_ternary/model.json \
+            --out "$RUNNER_TEMP/sequential-native"
+          go run ./cmd/record-update-study --audit "$RUNNER_TEMP/sequential-native" \
+            --audit-report "$RUNNER_TEMP/sequential-audit.json" --pack "$RUNNER_TEMP/sequential-native.zip"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: sequential-record-update-replay
+          path: |
+            ${{ runner.temp }}/sequential-native
+            ${{ runner.temp }}/sequential-audit.json
+            ${{ runner.temp }}/sequential-native.zip
+          if-no-files-found: error
+
   shared-record-field-replay:
     runs-on: ubuntu-latest
     timeout-minutes: 10
