@@ -25,6 +25,7 @@ func writeText(out io.Writer, m measurement, raw []byte) error {
 		fmt.Fprintf(&text, "Suite %d: outputs %d/%d (%.2f%%); record fields %d/%d (%.2f%%); %s; current runtime %.2f ms\n",
 			i+1, f.Passed, f.Total, 100*float64(f.Passed)/float64(f.Total), f.FieldsPassed, f.FieldsTotal,
 			100*float64(f.FieldsPassed)/float64(f.FieldsTotal), action, f.RuntimeMS)
+		fmt.Fprintf(&text, "  Current build %.2f ms; native first/replay %.2f/%.2f ms\n", f.BuildMS, f.FirstRunMS, f.ReplayRunMS)
 		for _, trace := range e.History[i].Traces {
 			for _, d := range trace.Deliveries {
 				if d.Passed != nil && !*d.Passed {

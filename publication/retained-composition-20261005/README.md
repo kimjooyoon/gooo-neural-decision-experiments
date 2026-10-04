@@ -58,6 +58,12 @@ frames have a **22.001ms** median. The initial disconnected request took
 1,743.89ms end-to-end; the other two took 509.76/515.24ms. Original first and warm
 observations remain in the data. These costs depend on the local cache/device.
 
+The first saved FP32 trial separates a96.49ms build, a248.26ms first native
+launch/execution and an8.32ms second execution of the same suite. This identifies
+both build and first-execution wall cost. The underlying cause of the first-run
+delay is unmeasured. Keeping the executable avoids repeating both stages;
+the text reader shows build and both native times separately.
+
 One fresh PTQ and one QAT request also retain the same generated program and
 finite results. Each has 18,752 resident tensor bytes versus FP32's 74,624.
 Prediction observations are 19.041µs/19.000µs. The `ternary_base3_5` matrices pack

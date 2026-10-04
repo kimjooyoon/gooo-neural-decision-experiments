@@ -64,6 +64,8 @@ type frameMeasurement struct {
 	BuildMS      float64 `json:"current_build_ms"`
 	RuntimeMS    float64 `json:"runtime_ms"`
 	ChildCPUms   float64 `json:"current_child_cpu_ms"`
+	FirstRunMS   float64 `json:"first_native_run_ms"`
+	ReplayRunMS  float64 `json:"replay_native_run_ms"`
 }
 type measurement struct {
 	Profile     string             `json:"profile"`
@@ -197,6 +199,7 @@ func measureFrame(f frame, s suite, sha string) (frameMeasurement, error) {
 			return r, fmt.Errorf("missing native run")
 		}
 	}
+	r.FirstRunMS, r.ReplayRunMS = float64(f.Runs[0].Wall)/1e6, float64(f.Runs[1].Wall)/1e6
 	for i, trace := range f.Traces {
 		if trace.Index != i || len(trace.Deliveries) != 2 {
 			return r, fmt.Errorf("current case trace differs")
