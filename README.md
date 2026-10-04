@@ -1,5 +1,13 @@
 # Gooo neural decision experiments
 
+[Record field assembly](publication/record-field-assembly-20261004) lets Gooo
+declare alternatives inside record constructors and retain partial field
+completion. One authored two-node graph reaches 40/60/80/100% of its 15 declared
+selection fields with 1/2/4/8 attempts. The existing own model and deterministic
+controls reach equal counts on this shape; model prediction median is about
+29µs. The original clean candidate, compiled runtime values, Go observer and
+separate partial/whole-case metrics are retained.
+
 [Native record values](publication/native-record-values-20261004) let a Gooo body
 construct a `Candidate`, read its title/state, and pass it into a `Review` body.
 One six-activity graph met 432/432 named expectations in twelve repeated controls,
