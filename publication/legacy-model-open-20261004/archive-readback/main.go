@@ -39,7 +39,8 @@ func main() {
 		if prefix != "installed-model-swap-v2" && prefix != "regular-control" && prefix != "inputs" && prefix != "expected" &&
 			prefix != "candidate-model-swap" && prefix != "candidate-native" && prefix != "candidate-native-isolated" &&
 			prefix != "installed-native-same-window" && prefix != "candidate-shared-worker-observations" &&
-			prefix != "direct-order-example-model" && prefix != "direct-order-example-deterministic" && prefix != "hf-downloaded-compound-example" {
+			prefix != "direct-order-example-model" && prefix != "direct-order-example-deterministic" && prefix != "hf-downloaded-compound-example" &&
+			prefix != "arithmetic-delta-arm64" {
 			panic("unexpected archive root")
 		}
 		roots[prefix] = true
