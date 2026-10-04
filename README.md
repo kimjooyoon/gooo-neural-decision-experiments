@@ -1,5 +1,13 @@
 # Gooo neural decision experiments
 
+[Native record values](publication/native-record-values-20261004) let a Gooo body
+construct a `Candidate`, read its title/state, and pass it into a `Review` body.
+One six-activity graph met 432/432 named expectations in twelve repeated controls,
+with 1,152 actual field observations. The unchanged own model ranks the scalar
+Score assembly; record bodies come from Gooo source. Median prediction was 26.9µs,
+but whole generation took 12.80ms with the model versus 11.77ms deterministically.
+Saved replay makes zero predictions. [한국어 설명](publication/native-record-values-20261004/README.ko.md).
+
 [Ordered native input joins](publication/native-input-joins-20261004) connect
 repeated-type and mixed-type inputs, including ports supplied partly by the caller
 and partly by producer results. One authored seven-activity graph passed 588

@@ -10,6 +10,60 @@ permissions:
   contents: read
 
 jobs:
+  native-record-values-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GOTOOLCHAIN: local
+      GOWORK: "off"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.27.1'
+          cache: false
+      - name: Verify retained record values and field observations
+        run: |
+          (cd publication/native-record-values-20261004 && sha256sum -c SHA256SUMS)
+          go test -race ./cmd/native-record-observe
+          go build -o "$RUNNER_TEMP/record-observe" ./cmd/native-record-observe
+      - uses: actions/checkout@v7
+        with:
+          repository: kimjooyoon/meta-ontology-go
+          ref: fa3c892791a2fd775a265c7524c9ee59adce45bf
+          path: .record-values-compiler
+          persist-credentials: false
+      - name: Construct native records and replay actual field delivery
+        run: |
+          (cd .record-values-compiler && go build -o "$RUNNER_TEMP/gooo-records" ./cmd/gooo)
+          study=publication/native-record-values-20261004
+          model=models/own-three-feedback-v1/set-feedback/models/fp32/model.json
+          for mode in model deterministic; do
+            model_args=()
+            if [ "$mode" = model ]; then model_args=(--model "$model"); fi
+            "$RUNNER_TEMP/gooo-records" body-compose --source "$study/source.gooo.fixture" \
+              --cases "$study/cases.json" "${model_args[@]}" > "$RUNNER_TEMP/$mode-records.json"
+            "$RUNNER_TEMP/record-observe" --verify-json "$RUNNER_TEMP/$mode-records.json" \
+              --compiler-source fa3c892791a2fd775a265c7524c9ee59adce45bf --mode "$mode"
+            jq .composition "$RUNNER_TEMP/$mode-records.json" > "$RUNNER_TEMP/$mode-composition.json"
+            "$RUNNER_TEMP/gooo-records" body-compose --source "$study/source.gooo.fixture" \
+              --cases "$study/cases.json" --composition "$RUNNER_TEMP/$mode-composition.json" > "$RUNNER_TEMP/$mode-records-replay.json"
+            "$RUNNER_TEMP/record-observe" --verify-json "$RUNNER_TEMP/$mode-records-replay.json" \
+              --compiler-source fa3c892791a2fd775a265c7524c9ee59adce45bf --mode "$mode" --saved
+            jq -S '{source:.composition.gooo_source,go:.composition.generated_sha256,driver:.composition.driver_sha256}' "$RUNNER_TEMP/$mode-records.json" > "$RUNNER_TEMP/$mode-program.json"
+            jq -S '{source:.composition.gooo_source,go:.composition.generated_sha256,driver:.composition.driver_sha256}' "$RUNNER_TEMP/$mode-records-replay.json" > "$RUNNER_TEMP/$mode-replay-program.json"
+            cmp "$RUNNER_TEMP/$mode-program.json" "$RUNNER_TEMP/$mode-replay-program.json"
+          done
+          cmp "$RUNNER_TEMP/model-program.json" "$RUNNER_TEMP/deterministic-program.json"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: native-record-values-replay
+          path: |
+            ${{ runner.temp }}/*-records*.json
+            ${{ runner.temp }}/*-program.json
+          if-no-files-found: error
+
   owned-native-example:
     runs-on: ubuntu-latest
     timeout-minutes: 8
