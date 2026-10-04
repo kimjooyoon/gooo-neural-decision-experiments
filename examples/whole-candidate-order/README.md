@@ -16,6 +16,39 @@ Go1.27.1과 [main `8c6ec01c`](https://github.com/kimjooyoon/meta-ontology-go/tre
 
 ## 한 명령으로 조립하고 실행하기
 
+현재 `body-path-run`을 지원하는 컴파일러에서는 이 저장소의 원본 파일을 바로
+사용할 수 있습니다. 활동 이름은 `Compose`이며 별도 입력 준비 도구가 필요하지
+않습니다. Go1.27.1과 컴파일러를 PATH에 두고 연구 저장소 루트에서 실행합니다.
+
+```sh
+gooo body-path-run \
+  --source examples/whole-candidate-order/source.gooo --activity Compose \
+  --path-plan examples/whole-candidate-order/recipe.json \
+  --cases examples/whole-candidate-order/cases.json \
+  --model publication/order-judge-initial-20261003/model.json \
+  --repeat 2 --timing --out order-model-results
+
+gooo body-path-run \
+  --source examples/whole-candidate-order/source.gooo --activity Compose \
+  --path-plan examples/whole-candidate-order/recipe.json \
+  --cases examples/whole-candidate-order/cases.json \
+  --repeat 2 --timing --out order-deterministic-results
+```
+
+두 번째 명령은 모델 없이 실행합니다. 각 출력 경로는 새 이름이어야 합니다.
+`run-N-generated.go`에서 조립한 코드를, `summary.json`에서 요청별 실제 충족 수를
+읽습니다. `run-N-runtime.json`에는 현재 입력의 두 실행이 남습니다. `--timing`으로
+기록한 구간은 `gooo body-path-run --verify-timing --out order-model-results`로
+다시 확인할 수 있습니다. Go 위치가 다르면 `--go-bin`을 지정합니다.
+
+깨끗한 후보 `2420ad19`·SDK v0.2.21에서 위 두 명령은 생성 4회·실제 실행 8회로
+32/32 기존 기대값을 유지했습니다. 원본 첫/재사용 응답은 모델 1085.37/77.26ms,
+결정론 622.54/72.42ms였습니다. 이 값은 생성과 실행을 포함하며 모델 준비와
+저장·출력을 제외합니다. 기존 한 과제의 실행법 확인이며 학습은 추가하지 않았습니다.
+[원본 파일·판단 수·int64 기대값 검산](../../publication/direct-body-quickstart-20261004).
+
+### Go 클라이언트에서 요청과 즉시 실행을 연결하기
+
 아래 Go 예제는 소스·레시피·기대값을 읽고 `gooo body-path-stream`에 보냅니다.
 응답 하나가 도착하면 바로 `body-execute`로 컴파일하고 실행한 뒤 다음 요청을 보냅니다.
 기본 두 요청 동안 입력을 열어 두어 후보 준비를 재사용합니다.

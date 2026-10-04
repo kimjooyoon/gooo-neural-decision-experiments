@@ -14,22 +14,28 @@ installed study; the small model is already included here.
 
 ```sh
 GOTOOLCHAIN=go1.27.1 go install github.com/kimjooyoon/meta-ontology-go/cmd/gooo@d1bfd273ab4e21d0191548b066a27bcb77d7ed86
-GOTOOLCHAIN=go1.27.1 go run ./examples/file-body-run examples/whole-candidate-order file-body-inputs
-gooo body-path-run --source file-body-inputs/ko-source.gooo \
-  --activity AssembleKorean --path-plan file-body-inputs/ko-recipe.json \
-  --cases file-body-inputs/cases-128.json \
+gooo body-path-run --source examples/whole-candidate-order/source.gooo \
+  --activity Compose --path-plan examples/whole-candidate-order/recipe.json \
+  --cases examples/whole-candidate-order/cases.json \
   --model publication/order-judge-initial-20261003/model.json \
-  --repeat 2 --timing --out korean-body-results
-gooo body-path-run --verify-timing --out korean-body-results
+  --repeat 2 --timing --out order-body-results
+gooo body-path-run --verify-timing --out order-body-results
 ```
 
-Use fresh input/output directory names. Omit `--model` for deterministic
-construction. The example declares a pure `Integer -> Integer` body and 128
+Use a fresh output directory name. Omit `--model` for deterministic
+construction. The example declares a pure `Integer -> Integer` body and eight
 caller expectations. Read its generated Go and actual runtime outputs in the
 result directory. `unobserved` means no usable output was measured; `0/128`
 means measured outputs missed every expectation. [Full usage and next actions](https://github.com/kimjooyoon/meta-ontology-go/wiki/File-Based-Body-Run).
 
 ## Start here — 2026-10-04
+
+- [Direct construction and selective model download](publication/direct-body-quickstart-20261004):
+  source, recipe and expectations can run in one compiler command. Model and
+  deterministic order examples kept 32/32; two compound requests using the
+  actual Hub-downloaded shared pair kept 6/6. Six existing-task constructions,
+  four predictions and twelve native runs retain their exact original outputs
+  and source-bound readback. No new training was performed.
 
 - [Close the remaining legacy model-file wait](publication/legacy-model-open-20261004):
   an actual shared-model request on installed `d1bfd273` reproduced a metadata
